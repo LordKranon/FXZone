@@ -21,8 +21,9 @@ public class FXZoneGameApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("FXZone");
 
+        gameController = new GameController(stage);
+        stage.setTitle("FXZone");
         try {
             stage.getIcons().add(AssetHandler.getImage("/images/icon_tank_red.png"));
         } catch (Throwable e) {

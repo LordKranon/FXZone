@@ -6,6 +6,6 @@ public class DefaultConfig {
         {"CONFIG_VERSION", "0"},
         {"WINDOW_WIDTH", "1280"},
         {"WINDOW_HEIGHT", "720"},
-        {"ANTIALIASING", "true"},
+        {"ANTIALIASING", "false"},
     };
 }
