@@ -2,11 +2,16 @@ package fxzone.game.controller;
 
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.handler.AssetHandler;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 public class MainMenuUiController extends AbstractUiController {
 
@@ -35,5 +40,24 @@ public class MainMenuUiController extends AbstractUiController {
 
         @FXML
         AnchorPane anchorPane;
+
+        @FXML
+        public void initialize(){
+
+            //resize(anchorPane, gameController.getStage());
+
+            /*
+             * TODO
+             * WARNING! Bypassing asset handler!
+             */
+            Image image = new Image("/images/icon_tank_red.png", 128, 128, true, false);
+
+            ImageView img = new ImageView(image);
+            img.setFitHeight(128);
+            img.setFitWidth(128);
+
+            GridPane gp = (GridPane) anchorPane.getChildren().get(0);
+            gp.getChildren().add(img);
+        }
     }
 }

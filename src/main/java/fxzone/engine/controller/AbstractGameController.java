@@ -37,4 +37,9 @@ public abstract class AbstractGameController extends AnimationTimer {
         gameRoot.getChildren().clear();
         activeUiController.attachToRoot(gameRoot);
     }
+
+
+    public Stage getStage(){
+        return this.stage;
+    }
 }

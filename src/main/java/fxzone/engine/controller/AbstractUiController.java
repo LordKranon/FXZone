@@ -1,11 +1,14 @@
 package fxzone.engine.controller;
 
 import fxzone.config.Config;
+import javafx.fxml.FXML;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import fxzone.engine.Initializable;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public abstract class AbstractUiController implements Initializable{
 
@@ -26,7 +29,29 @@ public abstract class AbstractUiController implements Initializable{
     }
 
 
+    /**
+     * Used when this becomes the new active UI controller.
+     *
+     * @param gameRoot root group of the game controller
+     */
     public void attachToRoot(Group gameRoot) {
         gameRoot.getChildren().addAll(subScene2D);
+    }
+
+    /**
+     * Potentially hacky resize method. Call in initialize() of UI controller implementations.
+     */
+    @FXML
+    public void resize(AnchorPane anchorPane, Stage stage) {
+        int initialHeightCorrection = stage.isFullScreen() ? 0 : 28;
+        anchorPane.setPrefWidth(stage.getWidth());
+        anchorPane.setPrefHeight(stage.getHeight() - initialHeightCorrection);
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            anchorPane.setPrefWidth(stage.getWidth());
+        });
+        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            int heightCorrection = stage.isFullScreen() ? 0 : 28;
+            anchorPane.setPrefHeight(stage.getHeight() - heightCorrection);
+        });
     }
 }
