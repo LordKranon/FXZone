@@ -25,6 +25,10 @@ public abstract class AbstractUiController implements Initializable{
             false,
             Config.getBool("ANTIALIASING") ? SceneAntialiasing.BALANCED : SceneAntialiasing.DISABLED);
 
+        Stage stage = gameController.getStage();
+        subScene2D.heightProperty().bind(stage.heightProperty());
+        subScene2D.widthProperty().bind(stage.widthProperty());
+
         this.init(gameController, root2D);
     }
 

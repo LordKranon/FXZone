@@ -44,11 +44,15 @@ public class MainMenuUiController extends AbstractUiController {
         @FXML
         public void initialize(){
 
-            //resize(anchorPane, gameController.getStage());
+            resize(anchorPane, gameController.getStage());
 
             /*
              * TODO
              * WARNING! Bypassing asset handler!
+             */
+
+            /*
+            Adding icon image
              */
             Image image = new Image("/images/icon_tank_red.png", 128, 128, true, false);
 
@@ -58,6 +62,9 @@ public class MainMenuUiController extends AbstractUiController {
 
             GridPane gp = (GridPane) anchorPane.getChildren().get(0);
             gp.getChildren().add(img);
+            /*
+            End adding icon image
+             */
         }
     }
 }
