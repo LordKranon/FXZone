@@ -97,7 +97,7 @@
                 </Button>
                 <Button fx:id="quitButton" mnemonicParsing="false"
                   prefWidth="110.0" text="QUIT" GridPane.columnIndex="2"
-                  GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                   <font>
                     <Font size="20.0"/>
                   </font>

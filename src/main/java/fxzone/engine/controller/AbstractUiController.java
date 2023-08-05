@@ -47,11 +47,13 @@ public abstract class AbstractUiController implements Initializable{
      */
     @FXML
     public void resize(AnchorPane anchorPane, Stage stage) {
+        int initialWidthCorrection = stage.isFullScreen() ? 0 : 16;
         int initialHeightCorrection = stage.isFullScreen() ? 0 : 28;
-        anchorPane.setPrefWidth(stage.getWidth());
+        anchorPane.setPrefWidth(stage.getWidth() - initialWidthCorrection);
         anchorPane.setPrefHeight(stage.getHeight() - initialHeightCorrection);
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            anchorPane.setPrefWidth(stage.getWidth());
+            int widthCorrection = stage.isFullScreen() ? 0 : 16;
+            anchorPane.setPrefWidth(stage.getWidth() - widthCorrection);
         });
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
             int heightCorrection = stage.isFullScreen() ? 0 : 28;

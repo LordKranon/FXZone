@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
@@ -62,9 +63,17 @@ public class MainMenuUiController extends AbstractUiController {
             ImageView img = new ImageView(image);
             img.setFitHeight(128);
             img.setFitWidth(128);
+            ImageView img2 = new ImageView(image);
+            img2.setFitHeight(128);
+            img2.setFitWidth(128);
+
+            BorderPane bp = new BorderPane();
+            bp.setRight(img);
+            bp.setLeft(img2);
+
 
             GridPane gp = (GridPane) anchorPane.getChildren().get(0);
-            gp.getChildren().add(img);
+            gp.getChildren().add(bp);
 
 
             /*
