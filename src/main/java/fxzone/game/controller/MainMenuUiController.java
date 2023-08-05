@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 public class MainMenuUiController extends AbstractUiController {
 
@@ -54,6 +55,8 @@ public class MainMenuUiController extends AbstractUiController {
             /*
             Adding icon image
              */
+
+
             Image image = new Image("/images/icon_tank_red.png", 128, 128, true, false);
 
             ImageView img = new ImageView(image);
@@ -62,6 +65,8 @@ public class MainMenuUiController extends AbstractUiController {
 
             GridPane gp = (GridPane) anchorPane.getChildren().get(0);
             gp.getChildren().add(img);
+
+
             /*
             End adding icon image
              */
