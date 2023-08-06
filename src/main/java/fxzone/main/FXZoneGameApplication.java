@@ -25,7 +25,7 @@ public class FXZoneGameApplication extends Application {
         gameController = new GameController(stage);
         stage.setTitle("FXZone");
         try {
-            stage.getIcons().add(AssetHandler.getImage("/images/icon_tank_red.png"));
+            stage.getIcons().add(AssetHandler.getImage("/images/icon_tank_red.png", 128, 128));
         } catch (Throwable e) {
             e.printStackTrace();
             System.err.println("Couldn't load icon!");

@@ -49,16 +49,9 @@ public class MainMenuUiController extends AbstractUiController {
             resize(anchorPane, gameController.getStage());
 
             /*
-             * TODO
-             * WARNING! Bypassing asset handler!
-             */
-
-            /*
             Adding icon image
              */
-
-
-            Image image = new Image("/images/icon_tank_red.png", 128, 128, true, false);
+            Image image = AssetHandler.getImage("/images/icon_tank_red.png", 128, 128);
 
             ImageView img = new ImageView(image);
             img.setFitHeight(128);
@@ -71,11 +64,8 @@ public class MainMenuUiController extends AbstractUiController {
             bp.setRight(img);
             bp.setLeft(img2);
 
-
             GridPane gp = (GridPane) anchorPane.getChildren().get(0);
             gp.getChildren().add(bp);
-
-
             /*
             End adding icon image
              */
