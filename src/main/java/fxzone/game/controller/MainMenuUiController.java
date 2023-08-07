@@ -52,17 +52,18 @@ public class MainMenuUiController extends AbstractUiController {
             Adding icon image
              */
             Image image = AssetHandler.getImage("/images/icon_tank_red.png", 128, 128);
+            Image image2 = AssetHandler.getImage("/images/icon_tank_blue.png", 128, 128);
 
             ImageView img = new ImageView(image);
             img.setFitHeight(128);
             img.setFitWidth(128);
-            ImageView img2 = new ImageView(image);
+            ImageView img2 = new ImageView(image2);
             img2.setFitHeight(128);
             img2.setFitWidth(128);
 
             BorderPane bp = new BorderPane();
-            bp.setRight(img);
-            bp.setLeft(img2);
+            bp.setRight(img2);
+            bp.setLeft(img);
 
             GridPane gp = (GridPane) anchorPane.getChildren().get(0);
             gp.getChildren().add(bp);
