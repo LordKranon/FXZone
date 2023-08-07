@@ -89,7 +89,8 @@
                 </Button>
                 <Button fx:id="quitButton" mnemonicParsing="false"
                   prefWidth="110.0" text="QUIT" GridPane.columnIndex="2"
-                  GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                  onAction="#quit" >
                   <font>
                     <Font size="20.0"/>
                   </font>

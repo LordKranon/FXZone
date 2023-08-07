@@ -22,7 +22,7 @@ public class FXZoneGameApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        gameController = new GameController(stage);
+        gameController = new GameController(stage, this);
         stage.setTitle("FXZone");
         try {
             stage.getIcons().add(AssetHandler.getImage("/images/icon_tank_red.png", 128, 128));
@@ -32,5 +32,11 @@ public class FXZoneGameApplication extends Application {
         }
 
         stage.show();
+    }
+
+    @Override
+    public void stop(){
+        gameController.close();
+        System.exit(0);
     }
 }

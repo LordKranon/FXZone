@@ -76,5 +76,14 @@ public class MainMenuUiController extends AbstractUiController {
         public void settings(){
             gameController.setActiveUiController(new SettingsUiController(gameController));
         }
+
+        @FXML
+        public void quit(){
+            try {
+                gameController.getApplication().stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

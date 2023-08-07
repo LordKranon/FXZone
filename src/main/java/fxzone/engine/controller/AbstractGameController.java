@@ -2,6 +2,7 @@ package fxzone.engine.controller;
 
 import fxzone.config.Config;
 import javafx.animation.AnimationTimer;
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
@@ -16,7 +17,9 @@ public abstract class AbstractGameController extends AnimationTimer {
 
     private final Group gameRoot;
 
-    public AbstractGameController(Stage stage){
+    private final Application application;
+
+    public AbstractGameController(Stage stage, Application application){
         gameRoot = new Group();
         Scene scene = new Scene(gameRoot,
             Config.getInt("WINDOW_WIDTH"), Config.getInt("WINDOW_HEIGHT"),
@@ -24,6 +27,7 @@ public abstract class AbstractGameController extends AnimationTimer {
             Config.getBool("ANTIALIASING") ? SceneAntialiasing.BALANCED : SceneAntialiasing.DISABLED);
         stage.setScene(scene);
         this.stage = stage;
+        this.application = application;
     }
 
     @Override
@@ -41,5 +45,15 @@ public abstract class AbstractGameController extends AnimationTimer {
 
     public Stage getStage(){
         return this.stage;
+    }
+
+    public Application getApplication(){
+        return this.application;
+    }
+
+    public void close(){
+        super.stop();
+        //TODO
+        //activeUiController.onExit();
     }
 }
