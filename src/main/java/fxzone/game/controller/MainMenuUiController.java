@@ -71,5 +71,10 @@ public class MainMenuUiController extends AbstractUiController {
             End adding icon image
              */
         }
+
+        @FXML
+        public void settings(){
+            gameController.setActiveUiController(new SettingsUiController(gameController));
+        }
     }
 }

@@ -2,11 +2,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx/16"
   xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="fxzone.game.controller.MainMenuUiController$MainMenuUiControllerFxml"
+  fx:controller="fxzone.game.controller.SettingsUiController$SettingsUiControllerFxml"
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -15,49 +15,19 @@
     <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-
         <Pane style="-fx-background-color: #303030;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
 
         </Pane>
 
-        <!--
-        <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true"
-          GridPane.halignment="LEFT" GridPane.valignment="CENTER">
 
-          <image>
-            <Image url="@../images/icon_tank_red.png"/>
-          </image>
-        </ImageView>
-        -->
-
-        <!--
-        <HBox>
-          <GridPane.margin>
-            <Insets right="400.0"/>
-          </GridPane.margin>
-        </HBox>
-        -->
-
-        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="ZONE" textFill="WHITE"
+        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="Settings" textFill="WHITE"
           GridPane.halignment="CENTER" GridPane.valignment="CENTER">
           <font>
             <Font size="50.0"/>
           </font>
-          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="FX" textFill="WHITE">
-              <padding>
-                <Insets top="40.0"/>
-              </padding>
-              <font>
-                <Font size="20.0"/>
-              </font>
-            </Label>
-          </graphic>
-
         </Label>
 
-        <!--START Experimental body-->
-
+        <!-- START body -->
 
         <GridPane GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
           <columnConstraints>
@@ -79,6 +49,7 @@
               <rowConstraints>
                 <RowConstraints vgrow="SOMETIMES"/>
               </rowConstraints>
+              <!--
               <children>
                 <Button fx:id="creditsButton" mnemonicParsing="false"
                   prefWidth="110.0" text="CREDITS" GridPane.columnIndex="0"
@@ -95,24 +66,25 @@
                   </font>
                 </Button>
               </children>
+              -->
             </GridPane>
             <VBox alignment="CENTER" spacing="40.0">
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="PLAY">
+                  prefWidth="400.0" text="SETTING 1">
                   <font>
                     <Font size="36.0"/>
                   </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="TUTORIAL">
+                  prefWidth="400.0" text="SETTING 2">
                   <font>
                     <Font size="36.0"/>
                   </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="SETTINGS"
-                  onAction="#settings" >
+                  prefWidth="400.0" text="BACK"
+                  onAction="#back" >
                   <font>
                     <Font size="36.0"/>
                   </font>
@@ -122,21 +94,9 @@
           </children>
         </GridPane>
 
-        <!--END Experimental body -->
-
-
+        <!-- END body -->
       </children>
-      <!--TEST-->
-      <!--
-      <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES"/>
-      </columnConstraints>
-      <rowConstraints>
-        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES"/>
-        <RowConstraints vgrow="SOMETIMES"/>
-      </rowConstraints>
-      -->
-      <!--END TEST-->
     </GridPane>
   </children>
+
 </AnchorPane>
