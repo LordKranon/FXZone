@@ -28,6 +28,11 @@ public class SettingsUiController extends AbstractUiController {
         }
     }
 
+    @Override
+    public void update(AbstractGameController gameController, double delta) {
+
+    }
+
     class SettingsUiControllerFxml {
 
         private final AbstractGameController gameController;

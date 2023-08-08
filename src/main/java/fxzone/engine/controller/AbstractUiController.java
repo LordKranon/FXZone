@@ -1,6 +1,7 @@
 package fxzone.engine.controller;
 
 import fxzone.config.Config;
+import fxzone.engine.Updatable;
 import javafx.fxml.FXML;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
@@ -10,7 +11,7 @@ import fxzone.engine.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public abstract class AbstractUiController implements Initializable{
+public abstract class AbstractUiController implements Initializable, Updatable {
 
     private final SubScene subScene2D;
 

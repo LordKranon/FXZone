@@ -21,6 +21,7 @@ public class MainMenuUiController extends AbstractUiController {
         super(gameController);
     }
 
+    @Override
     public void init(AbstractGameController gameController, Group root2D){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MainMenuView.fxml"));
@@ -31,6 +32,11 @@ public class MainMenuUiController extends AbstractUiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update(AbstractGameController gameController, double delta) {
+
     }
 
     class MainMenuUiControllerFxml{
@@ -70,6 +76,11 @@ public class MainMenuUiController extends AbstractUiController {
             /*
             End adding icon image
              */
+        }
+
+        @FXML
+        public void play(){
+            gameController.setActiveUiController(new InGameUiController(gameController));
         }
 
         @FXML

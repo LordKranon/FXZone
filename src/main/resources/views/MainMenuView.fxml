@@ -100,7 +100,8 @@
             <VBox alignment="CENTER" spacing="40.0">
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="PLAY">
+                  prefWidth="400.0" text="PLAY"
+                  onAction="#play" >
                   <font>
                     <Font size="36.0"/>
                   </font>
