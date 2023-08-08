@@ -17,7 +17,7 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void init(AbstractGameController gameController, Group root2D) {
-        Image testTile = AssetHandler.getImage("/images/icon_tank_red.png", 128, 128);
+        Image testTile = AssetHandler.getImage("/images/terrain/tiles/tile_plains.png", 128, 128);
         ImageView testTileView = new ImageView(testTile);
         testTileView.setFitWidth(128);
         testTileView.setFitHeight(128);
