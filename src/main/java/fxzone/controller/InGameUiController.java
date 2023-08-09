@@ -16,6 +16,8 @@ public class InGameUiController extends AbstractUiController {
      */
     private double cumulativeDelta = 0;
 
+    private ImageView testUnitView;
+
     public InGameUiController(AbstractGameController gameController) {
         super(gameController);
     }
@@ -28,7 +30,7 @@ public class InGameUiController extends AbstractUiController {
         testTileView.setFitHeight(128);
 
         Image testUnit = AssetHandler.getImage("/images/icon_tank_blue.png", 128, 128);
-        ImageView testUnitView = new ImageView(testUnit);
+        testUnitView = new ImageView(testUnit);
         testUnitView.setFitWidth(128);
         testUnitView.setFitHeight(128);
 
@@ -51,6 +53,7 @@ public class InGameUiController extends AbstractUiController {
         if(this.cumulativeDelta > 1){
             System.out.println("[secondPrinter] !!!");
             this.cumulativeDelta -= 1;
+            testUnitView.setX(testUnitView.getX() + 128);
         }
     }
 }
