@@ -22,6 +22,8 @@ public class InGameUiController extends AbstractUiController {
         testTileView.setFitWidth(128);
         testTileView.setFitHeight(128);
 
+
+
         root2D.getChildren().add(testTileView);
     }
 
