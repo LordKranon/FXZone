@@ -11,6 +11,11 @@ public class InGameUiController extends AbstractUiController {
 
     Group root2D;
 
+    /**
+     * Used in secondsPrinter.
+     */
+    private double cumulativeDelta = 0;
+
     public InGameUiController(AbstractGameController gameController) {
         super(gameController);
     }
@@ -34,6 +39,18 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
+        //System.out.println("[InGameUiController] update()");
+        secondsPrinter(delta);
+    }
 
+    /**
+     * Prints a line every second.
+     */
+    private void secondsPrinter(double delta){
+        this.cumulativeDelta += delta;
+        if(this.cumulativeDelta > 1){
+            System.out.println("[secondPrinter] !!!");
+            this.cumulativeDelta -= 1;
+        }
     }
 }

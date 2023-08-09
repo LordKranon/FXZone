@@ -19,6 +19,18 @@ public abstract class AbstractGameController extends AnimationTimer {
 
     private final Application application;
 
+
+
+    private long lastNanoTime;
+
+    private int framesCounter;
+
+    private long fpsTimer;
+
+    private final boolean printFps = Config.getBool("PRINT_FPS");
+
+
+
     public AbstractGameController(Stage stage, Application application){
         gameRoot = new Group();
         Scene scene = new Scene(gameRoot,
@@ -28,11 +40,44 @@ public abstract class AbstractGameController extends AnimationTimer {
         stage.setScene(scene);
         this.stage = stage;
         this.application = application;
+        this.lastNanoTime = System.nanoTime();
+        this.fpsTimer = System.currentTimeMillis();
+        this.framesCounter = 0;
     }
 
     @Override
     public void handle(long currentNanoTime) {
+        // calculate time delta
+        double deltaTime = (currentNanoTime - lastNanoTime) / 1e9f;
+        lastNanoTime = currentNanoTime;
+        framesCounter++;
 
+        // game logic
+        //inputHandler.startFrame();
+        if (activeUiController != null) {
+            activeUiController.update(this, deltaTime);
+        }
+        //inputHandler.endFrame();
+
+        // FPS cap
+        long updateTime = System.nanoTime() - currentNanoTime;
+        long wait = ((1000000000 / Config.getInt("MAX_FPS")) - updateTime) / 1000000;
+
+        if (wait > 0) {
+            try {
+                Thread.sleep(wait);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (System.currentTimeMillis() - fpsTimer > 1000) {
+            fpsTimer += 1000;
+            if (printFps) {
+                System.out.println("FPS: " + framesCounter);
+            }
+            framesCounter = 0;
+        }
     }
 
     public void setActiveUiController(AbstractUiController activeUiController){

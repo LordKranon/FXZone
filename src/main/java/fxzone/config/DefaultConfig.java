@@ -7,5 +7,8 @@ public class DefaultConfig {
         {"WINDOW_WIDTH", "1280"},
         {"WINDOW_HEIGHT", "720"},
         {"ANTIALIASING", "false"},
+
+        {"PRINT_FPS", "true"},
+        {"MAX_FPS", "60"},
     };
 }
