@@ -2,7 +2,7 @@ package fxzone.main;
 
 import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
-import fxzone.game.controller.GameController;
+import fxzone.controller.GameController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

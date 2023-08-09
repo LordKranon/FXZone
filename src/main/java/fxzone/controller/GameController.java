@@ -1,4 +1,4 @@
-package fxzone.game.controller;
+package fxzone.controller;
 
 import fxzone.engine.controller.AbstractGameController;
 import javafx.application.Application;
