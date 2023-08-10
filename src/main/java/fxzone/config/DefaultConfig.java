@@ -10,5 +10,7 @@ public class DefaultConfig {
 
         {"PRINT_FPS", "true"},
         {"MAX_FPS", "60"},
+
+        {"MAP_SCROLL_SPEED", "3"},
     };
 }

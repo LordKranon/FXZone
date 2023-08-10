@@ -37,9 +37,11 @@ public class Config {
     public static int getInt(String property) {
         return Integer.parseInt(getString(property));
     }
-
     public static boolean getBool(String property) {
         return Boolean.parseBoolean(getString(property));
+    }
+    public static double getDouble(String property){
+        return Double.parseDouble(getString(property));
     }
 
 }

@@ -1,5 +1,6 @@
 package fxzone.controller;
 
+import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
@@ -35,7 +36,7 @@ public class InGameUiController extends AbstractUiController {
 
         DummyGameObject tank = new DummyGameObject("/images/icon_tank_blue.png", 0, 0, 128, 128, root2D);
         //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
-        map = new Map(3, 3, root2D);
+        map = new Map(5, 3, root2D);
 
         tank.setViewOrder(-1);
     }
@@ -64,21 +65,24 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Move the map on screen as the camera moves via arrow keys
      *
-     * @param delta time since last update
+     * @param delta time (in seconds) since last update
      */
     private void moveMap(double delta){
+
         double totalExtraOffsetX = 0, totalExtraOffsetY = 0;
+        double mapMovementUnit = delta * map.getTileRenderSize() * Config.getDouble("MAP_SCROLL_SPEED");
+
         if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT)){
-            totalExtraOffsetX -= delta * map.getTileRenderSize() * 3;
+            totalExtraOffsetX -= mapMovementUnit;
         }
         if(gameController.getInputHandler().isKeyPressed(KeyCode.LEFT)){
-            totalExtraOffsetX += delta * map.getTileRenderSize() * 3;
+            totalExtraOffsetX += mapMovementUnit;
         }
         if(gameController.getInputHandler().isKeyPressed(KeyCode.UP)){
-            totalExtraOffsetY += delta * map.getTileRenderSize() * 3;
+            totalExtraOffsetY += mapMovementUnit;
         }
         if(gameController.getInputHandler().isKeyPressed(KeyCode.DOWN)){
-            totalExtraOffsetY -= delta * map.getTileRenderSize() * 3;
+            totalExtraOffsetY -= mapMovementUnit;
         }
 
         map.setGraphicalOffset(map.getOffsetX() + totalExtraOffsetX, map.getOffsetY() + totalExtraOffsetY);
