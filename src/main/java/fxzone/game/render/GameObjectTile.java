@@ -7,11 +7,6 @@ import javafx.scene.Group;
 public class GameObjectTile extends AbstractGameObject {
 
     /**
-     * The game-logic tile this object is representing graphically.
-     */
-    private Tile tile;
-
-    /**
      * Graphical position without offset.
      * Equal to the game logical tile position times the graphical tile size.
      */

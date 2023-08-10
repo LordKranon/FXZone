@@ -1,6 +1,7 @@
 package fxzone.engine.controller;
 
 import fxzone.config.Config;
+import fxzone.engine.handler.InputHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -31,6 +32,10 @@ public abstract class AbstractGameController extends AnimationTimer {
 
 
 
+    private final InputHandler inputHandler;
+
+
+
     public AbstractGameController(Stage stage, Application application){
         gameRoot = new Group();
         Scene scene = new Scene(gameRoot,
@@ -43,6 +48,7 @@ public abstract class AbstractGameController extends AnimationTimer {
         this.lastNanoTime = System.nanoTime();
         this.fpsTimer = System.currentTimeMillis();
         this.framesCounter = 0;
+        this.inputHandler = new InputHandler(scene);
     }
 
     @Override
@@ -100,5 +106,9 @@ public abstract class AbstractGameController extends AnimationTimer {
         super.stop();
         //TODO
         //activeUiController.onExit();
+    }
+
+    public InputHandler getInputHandler(){
+        return inputHandler;
     }
 }

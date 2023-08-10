@@ -71,4 +71,7 @@ public class Map {
     public double getOffsetY(){
         return offsetY;
     }
+    public double getTileRenderSize(){
+        return tileRenderSize;
+    }
 }
