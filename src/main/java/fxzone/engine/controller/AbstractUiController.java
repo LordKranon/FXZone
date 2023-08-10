@@ -9,6 +9,7 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import fxzone.engine.Initializable;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public abstract class AbstractUiController implements Initializable, Updatable {
@@ -22,13 +23,15 @@ public abstract class AbstractUiController implements Initializable, Updatable {
         root2D.setDepthTest(DepthTest.ENABLE);
 
         subScene2D = new SubScene(root2D,
-            Config.getInt("WINDOW_WIDTH"), Config.getInt("WINDOW_HEIGHT"),
+            Config.getInt("WINDOW_WIDTH"),
+            Config.getInt("WINDOW_HEIGHT"),
             false,
-            Config.getBool("ANTIALIASING") ? SceneAntialiasing.BALANCED : SceneAntialiasing.DISABLED);
+            SceneAntialiasing.DISABLED);
 
         Stage stage = gameController.getStage();
         subScene2D.heightProperty().bind(stage.heightProperty());
         subScene2D.widthProperty().bind(stage.widthProperty());
+        subScene2D.setFill(Color.web("#202020"));
 
         this.init(gameController, root2D);
     }

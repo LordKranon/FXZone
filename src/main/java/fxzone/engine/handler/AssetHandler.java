@@ -19,7 +19,7 @@ public class AssetHandler {
      */
     public static Image getImage(String path) {
         if (!imageLoaded(path)) {
-            loadImage(path);
+            loadImage(path, 256, 256);
         }
         return images.get(path);
     }

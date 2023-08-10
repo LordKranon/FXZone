@@ -3,6 +3,8 @@ package fxzone.controller;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.game.DummyGameObject;
+import fxzone.game.logic.Map;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +18,7 @@ public class InGameUiController extends AbstractUiController {
      */
     private double cumulativeDelta = 0;
 
-    private ImageView testUnitView;
+    private Map map;
 
     public InGameUiController(AbstractGameController gameController) {
         super(gameController);
@@ -24,19 +26,14 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void init(AbstractGameController gameController, Group root2D) {
-        Image testTile = AssetHandler.getImage("/images/terrain/tiles/tile_plains.png", 24, 24);
-        ImageView testTileView = new ImageView(testTile);
-        testTileView.setFitWidth(128);
-        testTileView.setFitHeight(128);
-
-        Image testUnit = AssetHandler.getImage("/images/icon_tank_blue.png", 128, 128);
-        testUnitView = new ImageView(testUnit);
-        testUnitView.setFitWidth(128);
-        testUnitView.setFitHeight(128);
 
 
-        root2D.getChildren().add(testTileView);
-        root2D.getChildren().add(testUnitView);
+
+        DummyGameObject tank = new DummyGameObject("/images/icon_tank_blue.png", 0, 0, 128, 128, root2D);
+        //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
+        map = new Map(3, 3, root2D);
+
+        tank.setViewOrder(-1);
     }
 
     @Override
@@ -53,7 +50,9 @@ public class InGameUiController extends AbstractUiController {
         if(this.cumulativeDelta > 1){
             System.out.println("[secondPrinter] !!!");
             this.cumulativeDelta -= 1;
-            testUnitView.setX(testUnitView.getX() + 128);
+            //testUnitView.setX(testUnitView.getX() + 128);
+            map.setGraphicalOffset(map.getOffsetX()+32, map.getOffsetY()+16);
+
         }
     }
 }

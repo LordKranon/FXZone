@@ -55,8 +55,8 @@ public class MainMenuUiController extends AbstractUiController {
             /*
             Adding icon image
              */
-            Image image = AssetHandler.getImage("/images/icon_tank_red.png", 128, 128);
-            Image image2 = AssetHandler.getImage("/images/icon_tank_blue.png", 128, 128);
+            Image image = AssetHandler.getImage("/images/icon_tank_red.png");
+            Image image2 = AssetHandler.getImage("/images/icon_tank_blue.png");
 
             ImageView img = new ImageView(image);
             img.setFitHeight(128);
