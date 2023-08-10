@@ -44,9 +44,7 @@ public class InGameUiController extends AbstractUiController {
     public void update(AbstractGameController gameController, double delta) {
         //System.out.println("[InGameUiController] update()");
         //secondsPrinter(delta);
-        if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT)){
-            map.setGraphicalOffset(map.getOffsetX()+ delta*map.getTileRenderSize()*3, map.getOffsetY());
-        }
+        moveMap(delta);
     }
 
     /**
@@ -61,5 +59,28 @@ public class InGameUiController extends AbstractUiController {
             //map.setGraphicalOffset(map.getOffsetX()+32, map.getOffsetY()+16);
 
         }
+    }
+
+    /**
+     * Move the map on screen as the camera moves via arrow keys
+     *
+     * @param delta time since last update
+     */
+    private void moveMap(double delta){
+        double totalExtraOffsetX = 0, totalExtraOffsetY = 0;
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT)){
+            totalExtraOffsetX -= delta * map.getTileRenderSize() * 3;
+        }
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.LEFT)){
+            totalExtraOffsetX += delta * map.getTileRenderSize() * 3;
+        }
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.UP)){
+            totalExtraOffsetY += delta * map.getTileRenderSize() * 3;
+        }
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.DOWN)){
+            totalExtraOffsetY -= delta * map.getTileRenderSize() * 3;
+        }
+
+        map.setGraphicalOffset(map.getOffsetX() + totalExtraOffsetX, map.getOffsetY() + totalExtraOffsetY);
     }
 }
