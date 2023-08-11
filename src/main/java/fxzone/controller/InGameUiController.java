@@ -3,12 +3,13 @@ package fxzone.controller;
 import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
-import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.InputHandler;
+import fxzone.engine.render.AbstractGameObject;
 import fxzone.game.DummyGameObject;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Tile;
+import fxzone.game.render.GameObjectInTileSpace;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 public class InGameUiController extends AbstractUiController {
@@ -24,6 +25,16 @@ public class InGameUiController extends AbstractUiController {
 
     private Map map;
 
+    /**
+     * Game logical tile of the map that the mouse pointer is hovering over.
+     */
+    private int tileHoveredX = 0, tileHoveredY = 0;
+
+    /**
+     * Small indicator that marks the tile that the mouse pointer is hovering over.
+     */
+    private GameObjectInTileSpace tileSelector;
+
     public InGameUiController(AbstractGameController gameController) {
         super(gameController);
         this.gameController = gameController;
@@ -34,8 +45,12 @@ public class InGameUiController extends AbstractUiController {
 
         this.root2D = root2D;
 
-        DummyGameObject tank = new DummyGameObject("/images/icon_tank_blue.png", 0, 0, 128, 128, root2D);
+        DummyGameObject tank = new DummyGameObject("/images/units/ship_battleship_cl.png", 0, 0, 128, 128, root2D);
         //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
+
+        tileSelector = new GameObjectInTileSpace("/images/misc/selector.png", 0, 0, 128, root2D);
+        tileSelector.setViewOrder(-1);
+
         map = new Map(5, 3, root2D);
 
         tank.setViewOrder(-1);
@@ -46,6 +61,8 @@ public class InGameUiController extends AbstractUiController {
         //System.out.println("[InGameUiController] update()");
         //secondsPrinter(delta);
         moveMap(delta);
+        findHoveredTile();
+        moveSelector();
     }
 
     /**
@@ -86,5 +103,28 @@ public class InGameUiController extends AbstractUiController {
         }
 
         map.setGraphicalOffset(map.getOffsetX() + totalExtraOffsetX, map.getOffsetY() + totalExtraOffsetY);
+    }
+
+    /**
+     * Draw the tile selector over the tile that the mouse is hovering over.
+     */
+    private void moveSelector(){
+        tileSelector.setPositionInMap(tileHoveredX, tileHoveredY, map);
+    }
+
+    /**
+     * Determine the game logical tile of the map that the mouse is hovering over.
+     */
+    private void findHoveredTile(){
+        try {
+            Tile hoveredTile = map
+                .getTileAt(gameController.getInputHandler().getLastMousePosition().getX(),
+                    gameController.getInputHandler().getLastMousePosition().getY());
+            tileHoveredX = hoveredTile.getX();
+            tileHoveredY = hoveredTile.getY();
+        }
+        catch (ArrayIndexOutOfBoundsException ignored){
+
+        }
     }
 }

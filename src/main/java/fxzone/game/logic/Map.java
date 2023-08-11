@@ -74,4 +74,16 @@ public class Map {
     public double getTileRenderSize(){
         return tileRenderSize;
     }
+
+    /**
+     * Find the game logical tile at given unprocessed graphical coordinates.
+     * @param graphicalX screen coordinate x
+     * @param graphicalY screen coordinate y
+     * @return tile at given screen coordinates
+     */
+    public Tile getTileAt(double graphicalX, double graphicalY) throws ArrayIndexOutOfBoundsException{
+        int tileX = (int)((graphicalX - offsetX) / tileRenderSize);
+        int tileY = (int)((graphicalY - offsetY) / tileRenderSize);
+        return tiles[tileX][tileY];
+    }
 }

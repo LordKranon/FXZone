@@ -1,12 +1,19 @@
 package fxzone.engine.handler;
 
 import java.util.HashSet;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 public class InputHandler {
 
     private HashSet<KeyCode> keysPressed;
+
+    private HashSet<MouseButton> mouseButtonsPressed;
+
+    private Point2D lastMousePosition;
+
 
     public InputHandler(Scene scene){
 
@@ -18,9 +25,29 @@ public class InputHandler {
         scene.setOnKeyReleased(keyEvent -> {
             keysPressed.remove(keyEvent.getCode());
         });
+
+
+        mouseButtonsPressed = new HashSet<>();
+
+        scene.setOnMousePressed(mouseEvent -> {
+            mouseButtonsPressed.add(mouseEvent.getButton());
+        });
+        scene.setOnMouseReleased(mouseEvent -> {
+            mouseButtonsPressed.remove(mouseEvent.getButton());
+        });
+
+        scene.setOnMouseMoved(mouseEvent -> {
+            lastMousePosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+        });
     }
 
     public boolean isKeyPressed(KeyCode keyCode){
         return keysPressed.contains(keyCode);
+    }
+    public boolean isMouseButtonPressed(MouseButton mouseButton){
+        return mouseButtonsPressed.contains(mouseButton);
+    }
+    public Point2D getLastMousePosition(){
+        return new Point2D(lastMousePosition.getX(), lastMousePosition.getY());
     }
 }

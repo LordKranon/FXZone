@@ -50,4 +50,7 @@ public abstract class AbstractGameObject {
         this.y = y;
         imageView.setY(y);
     }
+    public void setVisible(boolean visible){
+        imageView.setVisible(visible);
+    }
 }

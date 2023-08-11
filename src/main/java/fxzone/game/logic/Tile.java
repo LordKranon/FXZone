@@ -1,6 +1,6 @@
 package fxzone.game.logic;
 
-import fxzone.game.render.GameObjectTile;
+import fxzone.game.render.GameObjectInTileSpace;
 import javafx.scene.Group;
 
 public class Tile {
@@ -14,7 +14,7 @@ public class Tile {
     /**
      * Graphical representation of this tile.
      */
-    private GameObjectTile gameObjectTile;
+    private GameObjectInTileSpace gameObjectTile;
 
 
     /**
@@ -29,10 +29,17 @@ public class Tile {
         this.x = x;
         this.y = y;
 
-        this.gameObjectTile = new GameObjectTile("/images/terrain/tiles/tile_plains.png", x, y, tileRenderSize, group);
+        this.gameObjectTile = new GameObjectInTileSpace("/images/terrain/tiles/tile_plains.png", x, y, tileRenderSize, group);
     }
 
     public void setGraphicalOffset(double offsetX, double offsetY){
         this.gameObjectTile.setOffset(offsetX, offsetY);
+    }
+
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
     }
 }
