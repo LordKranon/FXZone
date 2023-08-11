@@ -53,4 +53,11 @@ public abstract class AbstractGameObject {
     public void setVisible(boolean visible){
         imageView.setVisible(visible);
     }
+
+    public void setFit(double fit){
+        this.fitWidth = fit;
+        this.fitHeight = fit;
+        this.imageView.setFitWidth(fitWidth);
+        this.imageView.setFitHeight(fitHeight);
+    }
 }

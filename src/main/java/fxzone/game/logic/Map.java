@@ -77,6 +77,7 @@ public class Map {
 
     /**
      * Find the game logical tile at given unprocessed graphical coordinates.
+     *
      * @param graphicalX screen coordinate x
      * @param graphicalY screen coordinate y
      * @return tile at given screen coordinates
@@ -85,5 +86,18 @@ public class Map {
         int tileX = (int)((graphicalX - offsetX) / tileRenderSize);
         int tileY = (int)((graphicalY - offsetY) / tileRenderSize);
         return tiles[tileX][tileY];
+    }
+
+    /**
+     * Change graphical size of all map contents.
+     * @param tileRenderSize new size (in pixels) of one tile
+     */
+    public void setTileRenderSize(double tileRenderSize){
+        this.tileRenderSize = tileRenderSize;
+        for(int i = 0; i < getWidth(); i++){
+            for(int j = 0; j < getHeight(); j++){
+                tiles[i][j].changeTileRenderSize(this);
+            }
+        }
     }
 }

@@ -36,4 +36,9 @@ public class GameObjectInTileSpace extends AbstractGameObject {
         this.yScaled = y * map.getTileRenderSize();
         setOffset(map.getOffsetX(), map.getOffsetY());
     }
+
+    public void changeTileRenderSize(int x, int y, Map map){
+        setPositionInMap(x, y, map);
+        setFit(map.getTileRenderSize());
+    }
 }

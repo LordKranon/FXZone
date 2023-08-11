@@ -61,6 +61,7 @@ public class InGameUiController extends AbstractUiController {
         //System.out.println("[InGameUiController] update()");
         //secondsPrinter(delta);
         moveMap(delta);
+        zoomMap();
         findHoveredTile();
         moveSelector();
     }
@@ -75,6 +76,7 @@ public class InGameUiController extends AbstractUiController {
             this.cumulativeDelta -= 1;
 
             //map.setGraphicalOffset(map.getOffsetX()+32, map.getOffsetY()+16);
+            //System.out.println(gameController.getInputHandler().getCumulativeScrollDelta());
 
         }
     }
@@ -125,6 +127,28 @@ public class InGameUiController extends AbstractUiController {
         }
         catch (ArrayIndexOutOfBoundsException ignored){
 
+        }
+    }
+
+    /**
+     * Change the graphical size of all map contents as the camera zooms in/out via mouse wheel
+     */
+    private void zoomMap(){
+        double scrollDelta = gameController.getInputHandler().getCumulativeScrollDelta();
+        if(scrollDelta != 0){
+
+            double newTileRenderSize = map.getTileRenderSize() + scrollDelta;
+
+            if(newTileRenderSize >= Config.getDouble("MIN_TILE_SIZE_ON_ZOOM") &&
+            newTileRenderSize <= Config.getDouble("MAX_TILE_SIZE_ON_ZOOM")){
+
+                map.setTileRenderSize(newTileRenderSize);
+
+                /*
+                Also adjust size of selector
+                */
+                tileSelector.changeTileRenderSize(tileHoveredX, tileHoveredY, map);
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ public class InputHandler {
 
     private Point2D lastMousePosition;
 
+    private double cumulativeScrollDelta;
+
 
     public InputHandler(Scene scene){
 
@@ -39,6 +41,10 @@ public class InputHandler {
         scene.setOnMouseMoved(mouseEvent -> {
             lastMousePosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
         });
+
+        scene.setOnScroll(scrollEvent -> {
+            cumulativeScrollDelta += scrollEvent.getDeltaY();
+        });
     }
 
     public boolean isKeyPressed(KeyCode keyCode){
@@ -49,5 +55,10 @@ public class InputHandler {
     }
     public Point2D getLastMousePosition(){
         return new Point2D(lastMousePosition.getX(), lastMousePosition.getY());
+    }
+    public double getCumulativeScrollDelta(){
+        double returnedScrollDelta = cumulativeScrollDelta;
+        cumulativeScrollDelta = 0;
+        return returnedScrollDelta;
     }
 }

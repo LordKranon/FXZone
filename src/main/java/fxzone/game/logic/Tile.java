@@ -35,6 +35,9 @@ public class Tile {
     public void setGraphicalOffset(double offsetX, double offsetY){
         this.gameObjectTile.setOffset(offsetX, offsetY);
     }
+    public void changeTileRenderSize(Map map){
+        this.gameObjectTile.changeTileRenderSize(x, y, map);
+    }
 
     public int getX(){
         return x;
