@@ -11,6 +11,7 @@ import fxzone.game.DummyGameObject;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
 import fxzone.game.render.GameObjectInTileSpace;
+import fxzone.game.render.GameObjectUnit;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 
@@ -47,8 +48,10 @@ public class InGameUiController extends AbstractUiController {
 
         this.root2D = root2D;
 
-        DummyGameObject tank = new DummyGameObject(AssetHandler.getImageUnitVehicle(new KeyUnitVehicle("car", 0)), 0, 0, 128, 128, root2D);
+        //DummyGameObject tank = new DummyGameObject(AssetHandler.getImageUnitVehicle(new KeyUnitVehicle("car", 0)), 0, 0, 128, 128, root2D);
         //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
+
+        GameObjectUnit tank = new GameObjectUnit("tank", 0, 0, 128, root2D);
 
         tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
         tileSelector.setViewOrder(-1);

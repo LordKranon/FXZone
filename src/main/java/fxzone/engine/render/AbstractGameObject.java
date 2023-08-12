@@ -60,4 +60,9 @@ public abstract class AbstractGameObject {
         this.imageView.setFitWidth(fitWidth);
         this.imageView.setFitHeight(fitHeight);
     }
+
+    public void setImage(Image image){
+        this.image = image;
+        this.imageView.setImage(image);
+    }
 }
