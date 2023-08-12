@@ -20,8 +20,8 @@ public abstract class AbstractGameObject {
         initialize();
     }
 
-    public AbstractGameObject(String pathToImage, double x, double y, double w, double h, Group group){
-        this.image = AssetHandler.getImage(pathToImage);
+    public AbstractGameObject(Image image, double x, double y, double w, double h, Group group){
+        this.image = image;
         this.x = x;
         this.y = y;
         this.fitWidth = w;

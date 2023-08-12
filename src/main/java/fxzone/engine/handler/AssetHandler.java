@@ -2,13 +2,17 @@ package fxzone.engine.handler;
 
 import java.util.HashMap;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 
 public class AssetHandler {
 
     /**
-     * Links image paths to loaded images.
+     * Links image paths to loaded raw images.
      */
     private static final HashMap<String, Image> images = new HashMap<>();
+
+    private static final HashMap<KeyUnitVehicle, Image> imagesUnitsVehicles = new HashMap<>();
 
     /**
      * Returns image from 'images' HashMap. If the image is not yet in the HashMap, it is loaded and
@@ -65,4 +69,17 @@ public class AssetHandler {
     public static void loadImage(String path, int width, int height){
         images.put(path, new Image(AssetHandler.class.getResourceAsStream(path), width, height, true, false));
     }
+
+    public static Image getImageUnitVehicle(KeyUnitVehicle keyUnitVehicle){
+        if(!imagesUnitsVehicles.containsKey(keyUnitVehicle)){
+            Image imageUnitVehicleRaw = getImage("/images/units/"+keyUnitVehicle.keyName+"_cl.png", 512, 256);
+            PixelReader reader = imageUnitVehicleRaw.getPixelReader();
+            WritableImage imageUnitVehicleCropped = new WritableImage(
+                reader, keyUnitVehicle.keyStance == 0 ? 0 : 256, 0, 256, 256
+            );
+            imagesUnitsVehicles.put(keyUnitVehicle, imageUnitVehicleCropped);
+        }
+        return imagesUnitsVehicles.get(keyUnitVehicle);
+    }
+
 }

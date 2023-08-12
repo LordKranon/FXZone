@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.handler.AssetHandler;
 import fxzone.game.render.GameObjectInTileSpace;
 import javafx.scene.Group;
 
@@ -29,7 +30,8 @@ public class Tile {
         this.x = x;
         this.y = y;
 
-        this.gameObjectTile = new GameObjectInTileSpace("/images/terrain/tiles/tile_plains.png", x, y, tileRenderSize, group);
+        this.gameObjectTile = new GameObjectInTileSpace(AssetHandler.getImage(
+            "/images/terrain/tiles/tile_plains.png"), x, y, tileRenderSize, group);
     }
 
     public void setGraphicalOffset(double offsetX, double offsetY){

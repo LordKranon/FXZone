@@ -4,6 +4,7 @@ import fxzone.engine.render.AbstractGameObject;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 
 public class GameObjectInTileSpace extends AbstractGameObject {
 
@@ -14,8 +15,8 @@ public class GameObjectInTileSpace extends AbstractGameObject {
     private double xScaled, yScaled;
 
 
-    public GameObjectInTileSpace(String path, int x, int y, double tileRenderSize, Group group){
-        super(path, x * tileRenderSize, y * tileRenderSize, tileRenderSize, tileRenderSize, group);
+    public GameObjectInTileSpace(Image image, int x, int y, double tileRenderSize, Group group){
+        super(image, x * tileRenderSize, y * tileRenderSize, tileRenderSize, tileRenderSize, group);
         this.xScaled = x * tileRenderSize;
         this.yScaled = y * tileRenderSize;
     }

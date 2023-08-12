@@ -3,7 +3,9 @@ package fxzone.controller;
 import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.InputHandler;
+import fxzone.engine.handler.KeyUnitVehicle;
 import fxzone.engine.render.AbstractGameObject;
 import fxzone.game.DummyGameObject;
 import fxzone.game.logic.Map;
@@ -45,10 +47,10 @@ public class InGameUiController extends AbstractUiController {
 
         this.root2D = root2D;
 
-        DummyGameObject tank = new DummyGameObject("/images/units/ship_battleship_cl.png", 0, 0, 128, 128, root2D);
+        DummyGameObject tank = new DummyGameObject(AssetHandler.getImageUnitVehicle(new KeyUnitVehicle("car", 0)), 0, 0, 128, 128, root2D);
         //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
 
-        tileSelector = new GameObjectInTileSpace("/images/misc/selector.png", 0, 0, 128, root2D);
+        tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
         tileSelector.setViewOrder(-1);
 
         map = new Map(5, 3, root2D);
