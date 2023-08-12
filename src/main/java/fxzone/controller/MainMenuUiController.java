@@ -78,7 +78,7 @@ public class MainMenuUiController extends AbstractUiController {
 
         @FXML
         public void play(){
-            gameController.setActiveUiController(new InGameUiController(gameController));
+            gameController.setActiveUiController(new PlayMenuUiController(gameController));
         }
 
         @FXML
