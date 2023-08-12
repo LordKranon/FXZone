@@ -1,10 +1,9 @@
 package fxzone.game.logic;
 
-import fxzone.engine.handler.AssetHandler;
-import fxzone.game.render.GameObjectInTileSpace;
+import fxzone.game.render.GameObjectUnit;
 import javafx.scene.Group;
 
-public class Tile extends TileSpaceObject{
+public class Unit extends TileSpaceObject{
 
     /**
      * Constructor
@@ -14,9 +13,8 @@ public class Tile extends TileSpaceObject{
      * @param tileRenderSize graphical size
      * @param group          graphical object group
      */
-    public Tile(int x, int y, double tileRenderSize, Group group) {
+    public Unit(String unitName, int x, int y, double tileRenderSize, Group group) {
         super(x, y, tileRenderSize, group);
-        this.gameObjectInTileSpace = new GameObjectInTileSpace(AssetHandler.getImage(
-            "/images/terrain/tiles/tile_plains.png"), x, y, tileRenderSize, group);
+        this.gameObjectInTileSpace = new GameObjectUnit(unitName, x, y, tileRenderSize, group);
     }
 }

@@ -2,7 +2,6 @@ package fxzone.game.render;
 
 import fxzone.engine.render.AbstractGameObject;
 import fxzone.game.logic.Map;
-import fxzone.game.logic.Tile;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 

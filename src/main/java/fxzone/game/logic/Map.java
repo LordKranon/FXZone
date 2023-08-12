@@ -1,5 +1,7 @@
 package fxzone.game.logic;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Group;
 
 public class Map {
@@ -8,6 +10,11 @@ public class Map {
      * Game logic tiles
      */
     private Tile[][] tiles;
+
+    /**
+     * Game logic units
+     */
+    private List<Unit> units;
 
     /**
      * Graphical size of one tile
@@ -33,6 +40,7 @@ public class Map {
                 this.tiles[i][j] = new Tile(i, j, tileRenderSize, group);
             }
         }
+        this.units = new ArrayList<Unit>();
     }
 
     /**
@@ -57,6 +65,12 @@ public class Map {
                 tiles[i][j].setGraphicalOffset(offsetX, offsetY);
             }
         }
+        for(Unit unit : units){
+            propagateGraphicalOffsetToUnit(unit);
+        }
+    }
+    private void propagateGraphicalOffsetToUnit(Unit unit){
+        unit.setGraphicalOffset(offsetX, offsetY);
     }
 
     public double getWidth(){
@@ -94,10 +108,25 @@ public class Map {
      */
     public void setTileRenderSize(double tileRenderSize){
         this.tileRenderSize = tileRenderSize;
+        propagateTileRenderSize();
+    }
+    private void propagateTileRenderSize(){
         for(int i = 0; i < getWidth(); i++){
             for(int j = 0; j < getHeight(); j++){
                 tiles[i][j].changeTileRenderSize(this);
             }
         }
+        for (Unit unit : units){
+            propagateTileRenderSizeToUnit(unit);
+        }
+    }
+    private void propagateTileRenderSizeToUnit(Unit unit){
+        unit.changeTileRenderSize(this);
+    }
+
+    public void addUnit(Unit unit){
+        units.add(unit);
+        propagateGraphicalOffsetToUnit(unit);
+        propagateTileRenderSizeToUnit(unit);
     }
 }
