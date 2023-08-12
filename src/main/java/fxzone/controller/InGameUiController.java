@@ -100,16 +100,16 @@ public class InGameUiController extends AbstractUiController {
         double totalExtraOffsetX = 0, totalExtraOffsetY = 0;
         double mapMovementUnit = delta * map.getTileRenderSize() * Config.getDouble("MAP_SCROLL_SPEED");
 
-        if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT)){
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT) || gameController.getInputHandler().isKeyPressed(KeyCode.D)){
             totalExtraOffsetX -= mapMovementUnit;
         }
-        if(gameController.getInputHandler().isKeyPressed(KeyCode.LEFT)){
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.LEFT) || gameController.getInputHandler().isKeyPressed(KeyCode.A)){
             totalExtraOffsetX += mapMovementUnit;
         }
-        if(gameController.getInputHandler().isKeyPressed(KeyCode.UP)){
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.UP) || gameController.getInputHandler().isKeyPressed(KeyCode.W)){
             totalExtraOffsetY += mapMovementUnit;
         }
-        if(gameController.getInputHandler().isKeyPressed(KeyCode.DOWN)){
+        if(gameController.getInputHandler().isKeyPressed(KeyCode.DOWN) || gameController.getInputHandler().isKeyPressed(KeyCode.S)){
             totalExtraOffsetY -= mapMovementUnit;
         }
 

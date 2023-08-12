@@ -14,5 +14,7 @@ public class DefaultConfig {
         {"MAP_SCROLL_SPEED", "3"},
         {"MIN_TILE_SIZE_ON_ZOOM", "40"},
         {"MAX_TILE_SIZE_ON_ZOOM", "256"},
+
+        {"SERVER_PORT", "21337"}
     };
 }
