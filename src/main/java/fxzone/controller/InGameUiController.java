@@ -58,6 +58,10 @@ public class InGameUiController extends AbstractUiController {
         Unit tank = new Unit("tank", 1, 1, map.getTileRenderSize(), root2D);
         map.addUnit(tank);
 
+        map.addUnit(new Unit("hunter_tank", 2, 1, 0, root2D));
+        map.addUnit(new Unit("artillery", 3, 1, 0, root2D));
+        map.addUnit(new Unit("tank", 5, 3, 0, root2D));
+
         //tank.setViewOrder(-1);
     }
 
