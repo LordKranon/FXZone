@@ -3,6 +3,7 @@ package fxzone.controller;
 import fxzone.controller.PlayMenuUiController.PlayMenuUiControllerFxml;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.net.client.Client;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class LobbyJoinedUiController extends AbstractUiController {
 
-    public LobbyJoinedUiController(AbstractGameController gameController) {
+    public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
     }
 

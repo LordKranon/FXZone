@@ -1,7 +1,10 @@
 package fxzone.controller;
 
+import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.net.client.Client;
+import fxzone.net.server.Server;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,17 +52,28 @@ public class PlayMenuUiController extends AbstractUiController {
 
         @FXML
         public void host(){
-            gameController.setActiveUiController(new LobbyHostUiController(gameController));
+            gameController.setActiveUiController(new LobbyHostUiController(gameController, handleHostGame()));
         }
 
         @FXML
         public void join(){
-            gameController.setActiveUiController(new LobbyJoinedUiController(gameController));
+            gameController.setActiveUiController(new LobbyJoinedUiController(gameController, handleJoinGame()));
         }
 
         @FXML
         private void back(){
             gameController.setActiveUiController(new MainMenuUiController(gameController));
         }
+    }
+
+    private Server handleHostGame(){
+        Server server = new Server();
+        server.start();
+        return server;
+    }
+    private Client handleJoinGame(){
+        Client client = new Client();
+        client.connectToServer("127.0.0.1", Config.getInt("SERVER_PORT"));
+        return client;
     }
 }

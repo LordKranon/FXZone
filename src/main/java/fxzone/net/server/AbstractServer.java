@@ -13,7 +13,7 @@ public abstract class AbstractServer extends Thread{
 
     private boolean running;
 
-    private List<AbstractServerProtocol> clients;
+    private List<ServerProtocol> clients;
 
     AbstractServer(){
         this.running = false;
@@ -26,7 +26,8 @@ public abstract class AbstractServer extends Thread{
             while(running){
                 serverSocket = new ServerSocket(Config.getInt("SERVER_PORT"));
                 Socket clientSocket = serverSocket.accept();
-                AbstractServerProtocol serverProtocol = createServerProtocol(clientSocket);
+                System.out.println("[SERVER] Client socket accepted");
+                ServerProtocol serverProtocol = createServerProtocol(clientSocket);
                 clients.add(serverProtocol);
                 try{
                     serverProtocol.start();
@@ -40,5 +41,5 @@ public abstract class AbstractServer extends Thread{
         }
     }
 
-    protected abstract AbstractServerProtocol createServerProtocol(Socket socket);
+    protected abstract ServerProtocol createServerProtocol(Socket socket);
 }
