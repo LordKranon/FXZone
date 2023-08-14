@@ -23,10 +23,14 @@ public abstract class AbstractConnectionProtocol extends Thread{
     public void run(){
         running = true;
         Packet packet;
+        System.out.println("[CONNECTION-PROTOCOL] started");
         try{
             while (running){
+                System.out.println("[CONNECTION-PROTOCOL] try receiving packet");
                 packet = (Packet) in.readObject();
+                System.out.println("[CONNECTION-PROTOCOL] packet read from InputStream");
                 receivePacket(packet);
+                System.out.println("[CONNECTION-PROTOCOL] handled packet");
             }
         } catch (IOException | ClassNotFoundException e){
             e.printStackTrace();

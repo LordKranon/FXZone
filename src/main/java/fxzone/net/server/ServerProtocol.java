@@ -14,8 +14,11 @@ public class ServerProtocol extends AbstractConnectionProtocol {
         this.socket = socket;
         this.running = false;
         try{
+            System.out.println("[SERVER-PROTOCOL] try");
             this.in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("[SERVER-PROTOCOL] InputStream connected");
             this.out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("[SERVER-PROTOCOL] OutputStream connected");
         } catch (IOException e){
             e.printStackTrace();
         }

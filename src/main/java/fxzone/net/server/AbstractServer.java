@@ -23,6 +23,7 @@ public abstract class AbstractServer extends Thread{
 
     public void run(){
         running = true;
+        System.out.println("[SERVER] Server started");
         try{
             while(running){
                 serverSocket = new ServerSocket(Config.getInt("SERVER_PORT"));
@@ -45,6 +46,7 @@ public abstract class AbstractServer extends Thread{
     protected abstract ServerProtocol createServerProtocol(Socket socket);
 
     public void sendTestMessageToAll(String message){
+        System.out.println("[SERVER] Sending test message to all");
         for (ServerProtocol serverProtocol : clients){
             serverProtocol.sendPacket(new TestPacket(message));
         }
