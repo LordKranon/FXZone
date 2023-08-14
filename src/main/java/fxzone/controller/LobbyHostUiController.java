@@ -12,8 +12,11 @@ import javafx.scene.layout.AnchorPane;
 
 public class LobbyHostUiController extends AbstractUiController {
 
+    private Server server;
+
     public LobbyHostUiController(AbstractGameController gameController, Server server) {
         super(gameController);
+        this.server = server;
     }
 
     @Override
@@ -51,7 +54,8 @@ public class LobbyHostUiController extends AbstractUiController {
 
         @FXML
         public void start(){
-            gameController.setActiveUiController(new InGameUiController(gameController));
+            //gameController.setActiveUiController(new InGameUiController(gameController));
+            server.sendTestMessageToAll("[MESSAGE] (Server): Kappa 123");
         }
 
         @FXML

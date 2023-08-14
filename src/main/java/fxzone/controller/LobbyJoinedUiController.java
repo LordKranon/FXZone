@@ -12,8 +12,11 @@ import javafx.scene.layout.AnchorPane;
 
 public class LobbyJoinedUiController extends AbstractUiController {
 
+    private Client client;
+
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
+        this.client = client;
     }
 
     @Override

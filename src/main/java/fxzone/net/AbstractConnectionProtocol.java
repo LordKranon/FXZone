@@ -35,7 +35,7 @@ public abstract class AbstractConnectionProtocol extends Thread{
 
     protected abstract void receivePacket(Packet packet);
 
-    protected synchronized void sendPacket(Packet packet){
+    public synchronized void sendPacket(Packet packet){
         try{
             out.writeObject(packet);
             out.flush();

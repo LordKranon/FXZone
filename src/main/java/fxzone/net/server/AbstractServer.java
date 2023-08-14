@@ -1,6 +1,7 @@
 package fxzone.net.server;
 
 import fxzone.config.Config;
+import fxzone.net.packet.TestPacket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,4 +43,10 @@ public abstract class AbstractServer extends Thread{
     }
 
     protected abstract ServerProtocol createServerProtocol(Socket socket);
+
+    public void sendTestMessageToAll(String message){
+        for (ServerProtocol serverProtocol : clients){
+            serverProtocol.sendPacket(new TestPacket(message));
+        }
+    }
 }

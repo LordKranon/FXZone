@@ -2,6 +2,7 @@ package fxzone.net.client;
 
 import fxzone.net.AbstractConnectionProtocol;
 import fxzone.net.packet.Packet;
+import fxzone.net.packet.TestPacket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,6 +30,19 @@ public class ClientProtocol extends AbstractConnectionProtocol {
 
     @Override
     protected void receivePacket(Packet packet) {
+        switch (packet.getPacketType()){
+            case TEST: testPacketReceived((TestPacket) packet); break;
+            case CHAT_MESSAGE: break;
+            default: unknownPacketReceived(packet); break;
+        }
+    }
 
+    private void testPacketReceived(TestPacket testPacket){
+        System.out.println("[CLIENT-PROTOCOL] Received test message packet:");
+        System.out.println(testPacket.getMessage());
+    }
+
+    private void unknownPacketReceived(Packet packet){
+        System.out.println("[CLIENT-PROTOCOL] Received unknown packet");
     }
 }
