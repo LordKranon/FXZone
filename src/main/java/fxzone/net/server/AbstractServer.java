@@ -25,8 +25,8 @@ public abstract class AbstractServer extends Thread{
         running = true;
         System.out.println("[SERVER] Server started");
         try{
+            serverSocket = new ServerSocket(Config.getInt("SERVER_PORT"));
             while(running){
-                serverSocket = new ServerSocket(Config.getInt("SERVER_PORT"));
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("[SERVER] Client socket accepted");
                 ServerProtocol serverProtocol = createServerProtocol(clientSocket);
