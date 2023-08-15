@@ -15,7 +15,7 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     @Override
     protected void initializeOuter(AnchorPane anchorPane) {
-
+        super.initializeOuter(anchorPane);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     @Override
     protected void sendTestMessageOuter() {
-
+        client.sendClientConnectPacket();
     }
 }

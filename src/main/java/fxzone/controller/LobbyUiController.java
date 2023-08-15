@@ -9,6 +9,9 @@ import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class LobbyUiController extends AbstractUiController {
+
+    protected AnchorPane anchorPane;
+
     public LobbyUiController(AbstractGameController gameController) {
         super(gameController);
     }
@@ -63,7 +66,9 @@ public abstract class LobbyUiController extends AbstractUiController {
         }
     }
 
-    protected abstract void initializeOuter(AnchorPane anchorPane);
+    protected void initializeOuter(AnchorPane anchorPane){
+        this.anchorPane = anchorPane;
+    }
 
     protected abstract void startOuter(AbstractGameController gameController);
 

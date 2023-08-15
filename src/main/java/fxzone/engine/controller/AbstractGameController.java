@@ -77,10 +77,10 @@ public abstract class AbstractGameController extends AnimationTimer {
             }
         }
 
-        if (System.currentTimeMillis() - fpsTimer > 1000) {
-            fpsTimer += 1000;
+        if (System.currentTimeMillis() - fpsTimer > 5000) {
+            fpsTimer += 5000;
             if (printFps) {
-                System.out.println("FPS: " + framesCounter);
+                System.out.println("FPS: " + framesCounter / 5);
             }
             framesCounter = 0;
         }

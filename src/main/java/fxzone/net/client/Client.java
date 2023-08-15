@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.config.Config;
+import fxzone.net.packet.ClientConnectPacket;
 
 public class Client extends Thread{
 
@@ -26,5 +27,9 @@ public class Client extends Thread{
         System.out.println("[CLIENT] ClientProtocol created");
         this.clientProtocol.start();
         System.out.println("[CLIENT] ClientProtocol started");
+    }
+
+    public void sendClientConnectPacket(){
+        clientProtocol.sendPacket(new ClientConnectPacket());
     }
 }
