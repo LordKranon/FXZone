@@ -37,9 +37,9 @@
 
         <GridPane GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
           <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3"/>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3"/>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3"/>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="20"/>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="45"/>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="35"/>
           </columnConstraints>
           <rowConstraints>
             <RowConstraints vgrow="SOMETIMES"/>
@@ -83,7 +83,11 @@
             <!-- END Buttons -->
 
             <!-- START Player list -->
-            <VBox alignment="CENTER" spacing="40.0" GridPane.columnIndex="1">
+            <VBox alignment="CENTER_LEFT" spacing="40.0" GridPane.columnIndex="1">
+              <GridPane.margin>
+                <Insets left="20.0"/>
+                <Insets top="20"/>
+              </GridPane.margin>
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="PLAYER 1"
@@ -106,30 +110,40 @@
                     <Font size="36.0"/>
                   </font>
                 </Button>
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="PLAYER 4"
+                >
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
               </children>
             </VBox>
             <!-- END Player list -->
 
             <!-- START Player icons -->
-            <VBox alignment="CENTER" spacing="00.0" GridPane.columnIndex="0">
+            <VBox alignment="CENTER_RIGHT" spacing="7.0" GridPane.columnIndex="0">
               <children>
-                <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true"
-                  GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-
+                <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true"
+                  >
                   <image>
                     <Image url="@../images/icon_tank_red.png"/>
                   </image>
                 </ImageView>
-                <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true"
-                  GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-
+                <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true"
+                  >
                   <image>
                     <Image url="@../images/icon_tank_red.png"/>
                   </image>
                 </ImageView>
-                <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true"
-                  GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-
+                <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true"
+                  >
+                  <image>
+                    <Image url="@../images/icon_tank_red.png"/>
+                  </image>
+                </ImageView>
+                <ImageView fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true"
+                  >
                   <image>
                     <Image url="@../images/icon_tank_red.png"/>
                   </image>
