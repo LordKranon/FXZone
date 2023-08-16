@@ -4,6 +4,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Player;
 import fxzone.net.server.Server;
+import java.util.Collection;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +32,7 @@ public class LobbyHostUiController extends LobbyUiController {
     @Override
     public void update(AbstractGameController gameController, double delta){
         if(playerListUpdateFlag){
-            addNewPlayerCard();
+            updatePlayerList(server.getPlayers());
             playerListUpdateFlag = false;
         }
     }
@@ -54,12 +55,15 @@ public class LobbyHostUiController extends LobbyUiController {
         server.sendTestMessageToAll("[MESSAGE] (Server): Kappa 123");
     }
 
-    private void addNewPlayerCard(){
-        GridPane gridPaneOuter = (GridPane) anchorPane.getChildren().get(0);
-        GridPane gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
-        VBox vBoxPlayerList = (VBox) gridPaneInner.getChildren().get(1);
-        VBox vBoxIcons = (VBox) gridPaneInner.getChildren().get(2);
+    private void updatePlayerList(Collection<Player> players){
+        vBoxPlayerList.getChildren().clear();
+        vBoxIcons.getChildren().clear();
+        for (Player player: players){
+            addNewPlayerCard();
+        }
+    }
 
+    private void addNewPlayerCard(){
         Font font = new Font(36);
         Button button = new Button();
         button.setFont(font);

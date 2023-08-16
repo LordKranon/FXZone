@@ -3,7 +3,9 @@ package fxzone.net.server;
 import fxzone.controller.LobbyHostUiController;
 import fxzone.game.logic.Player;
 import java.net.Socket;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import javafx.scene.paint.Color;
 
 public class Server extends AbstractServer{
@@ -35,5 +37,9 @@ public class Server extends AbstractServer{
 
     public void setLobbyHostUiController(LobbyHostUiController lobbyHostUiController){
         this.lobbyHostUiController = lobbyHostUiController;
+    }
+
+    public Collection<Player> getPlayers(){
+        return players.values();
     }
 }
