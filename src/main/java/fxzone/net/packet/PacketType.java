@@ -6,4 +6,6 @@ public enum PacketType {
     CHAT_MESSAGE,
 
     TEST,
+
+    LOBBY_PLAYER_LIST,
 }

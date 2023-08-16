@@ -30,7 +30,7 @@ public class Server extends AbstractServer{
      * Then that client will be added as a player.
      */
     public void clientConnected(ServerProtocol serverProtocol){
-        Player player = new Player(Color.web("#ff0000"));
+        Player player = new Player("New Player", Color.web("#ff0000"));
         players.put(serverProtocol, player);
         lobbyHostUiController.playerJoinedLobby(player);
     }

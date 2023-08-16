@@ -2,13 +2,20 @@ package fxzone.controller;
 
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.handler.AssetHandler;
+import fxzone.game.logic.Player;
 import java.io.IOException;
+import java.util.Collection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public abstract class LobbyUiController extends AbstractUiController {
 
@@ -18,6 +25,11 @@ public abstract class LobbyUiController extends AbstractUiController {
     protected GridPane gridPaneInner;
     protected VBox vBoxPlayerList;
     protected VBox vBoxIcons;
+
+    /**
+     * Indicates that the lobby status has updated and needs graphical adjustments.
+     */
+    protected boolean playerListUpdateFlag;
 
     public LobbyUiController(AbstractGameController gameController) {
         super(gameController);
@@ -84,4 +96,40 @@ public abstract class LobbyUiController extends AbstractUiController {
     protected abstract void startOuter(AbstractGameController gameController);
 
     protected abstract void sendTestMessageOuter();
+
+    /**
+     * Updates the displayed graphical player list.
+     * @param players players to show
+     */
+    protected void updatePlayerList(Collection<Player> players){
+        vBoxPlayerList.getChildren().clear();
+        vBoxIcons.getChildren().clear();
+        for (Player player: players){
+            addNewPlayerCard();
+        }
+    }
+
+    protected void addNewPlayerCard(){
+        Font font = new Font(36);
+        Button button = new Button();
+        button.setFont(font);
+        button.setText("New Player");
+        button.setGraphicTextGap(20);
+        button.setAlignment(Pos.CENTER);
+        button.setMnemonicParsing(false);
+        button.setPrefWidth(400);
+
+        vBoxPlayerList.getChildren().add(button);
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(AssetHandler.getImage("/images/icon_tank_red.png"));
+        imageView.setFitHeight(110);
+        imageView.setFitWidth(110);
+
+        vBoxIcons.getChildren().add(imageView);
+    }
+
+    public void lobbyPlayerListChanged(){
+        this.playerListUpdateFlag = true;
+    }
 }

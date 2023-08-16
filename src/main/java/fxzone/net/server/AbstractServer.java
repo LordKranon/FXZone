@@ -1,6 +1,7 @@
 package fxzone.net.server;
 
 import fxzone.config.Config;
+import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -47,8 +48,13 @@ public abstract class AbstractServer extends Thread{
 
     public void sendTestMessageToAll(String message){
         System.out.println("[SERVER] Sending test message to all");
+        sendPacketToAll(new TestPacket(message));
+    }
+
+    public void sendPacketToAll(Packet packet){
+        System.out.println("[SERVER] Sending packet to all");
         for (ServerProtocol serverProtocol : clients){
-            serverProtocol.sendPacket(new TestPacket(message));
+            serverProtocol.sendPacket(packet);
         }
     }
 }

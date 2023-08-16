@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.net.AbstractConnectionProtocol;
+import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
 import java.io.IOException;
@@ -11,8 +12,11 @@ import java.net.Socket;
 
 public class ClientProtocol extends AbstractConnectionProtocol {
 
-    public ClientProtocol(String ip, int port) {
+    private Client client;
+
+    public ClientProtocol(Client client, String ip, int port) {
         super();
+        this.client = client;
         this.socket = new Socket();
         this.running = false;
         try{
@@ -33,6 +37,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
         switch (packet.getPacketType()){
             case TEST: testPacketReceived((TestPacket) packet); break;
             case CHAT_MESSAGE: break;
+            case LOBBY_PLAYER_LIST: lobbyPlayerListPacketReceived((LobbyPlayerListPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -44,5 +49,10 @@ public class ClientProtocol extends AbstractConnectionProtocol {
 
     private void unknownPacketReceived(Packet packet){
         System.out.println("[CLIENT-PROTOCOL] Received unknown packet");
+    }
+
+    private void lobbyPlayerListPacketReceived(LobbyPlayerListPacket lobbyPlayerListPacket){
+        System.out.println("[CLIENT-PROTOCOL] Received lobby player list packet");
+        client.lobbyPlayerListHasUpdated(lobbyPlayerListPacket.getPlayers());
     }
 }
