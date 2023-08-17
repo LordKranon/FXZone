@@ -1,40 +1,45 @@
 package fxzone.controller;
 
 import fxzone.engine.controller.AbstractGameController;
-import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
+import java.util.ArrayList;
 import java.util.Collection;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
 
 public class LobbyHostUiController extends LobbyUiController {
 
     private Server server;
 
-
+    private Player hostingPlayer;
 
     public LobbyHostUiController(AbstractGameController gameController, Server server) {
         super(gameController);
         this.server = server;
         this.server.setLobbyHostUiController(this);
+        this.hostingPlayer = new Player("Hosting Player", Color.web("#ff0000"));
+        updatePlayerListOfHostLobby();
     }
 
     @Override
-    public void update(AbstractGameController gameController, double delta){
-        if(playerListUpdateFlag){
-            Collection<Player> players = server.getPlayers();
-            updatePlayerList(players);
+    public void update(AbstractGameController gameController, double delta) {
+        if (playerListUpdateFlag) {
+            ArrayList<Player> players = updatePlayerListOfHostLobby();
             playerListUpdateFlag = false;
             server.sendPacketToAll(new LobbyPlayerListPacket(players));
         }
+    }
+
+    private ArrayList<Player> updatePlayerListOfHostLobby(){
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(hostingPlayer);
+        players.addAll(server.getPlayers());
+        updatePlayerList(players);
+        return players;
     }
 
     @Override
@@ -56,8 +61,7 @@ public class LobbyHostUiController extends LobbyUiController {
     }
 
 
-
-    public void playerJoinedLobby(Player player){
+    public void playerJoinedLobby(Player player) {
         playerListUpdateFlag = true;
     }
 }

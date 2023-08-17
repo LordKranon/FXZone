@@ -3,6 +3,7 @@ package fxzone.controller;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.net.client.Client;
+import java.util.ArrayList;
 import java.util.Collection;
 import javafx.scene.layout.AnchorPane;
 
@@ -10,12 +11,13 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     private Client client;
 
-    private Collection<Player> latestPlayerList;
+    private ArrayList<Player> latestPlayerList;
 
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
         this.client = client;
         this.client.setLobbyJoinedUiController(this);
+        this.client.sendClientConnectPacket();
     }
 
     @Override
@@ -38,10 +40,10 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     @Override
     protected void sendTestMessageOuter() {
-        client.sendClientConnectPacket();
+        //client.sendClientConnectPacket();
     }
 
-    public void setLatestPlayerList(Collection<Player> latestPlayerList){
+    public void setLatestPlayerList(ArrayList<Player> latestPlayerList){
         this.latestPlayerList = latestPlayerList;
     }
 }

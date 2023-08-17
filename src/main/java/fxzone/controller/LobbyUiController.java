@@ -3,8 +3,10 @@ package fxzone.controller;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Player;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -101,23 +103,24 @@ public abstract class LobbyUiController extends AbstractUiController {
      * Updates the displayed graphical player list.
      * @param players players to show
      */
-    protected void updatePlayerList(Collection<Player> players){
+    protected void updatePlayerList(ArrayList<Player> players){
         vBoxPlayerList.getChildren().clear();
         vBoxIcons.getChildren().clear();
         for (Player player: players){
-            addNewPlayerCard();
+            addNewPlayerCard(player);
         }
     }
 
-    protected void addNewPlayerCard(){
+    protected void addNewPlayerCard(Player player){
         Font font = new Font(36);
         Button button = new Button();
         button.setFont(font);
-        button.setText("New Player");
+        button.setText(player.getName());
         button.setGraphicTextGap(20);
         button.setAlignment(Pos.CENTER);
         button.setMnemonicParsing(false);
         button.setPrefWidth(400);
+        button.setStyle("-fx-text-fill: "+ FxUtils.toRGBCode(player.getColor()) +";");
 
         vBoxPlayerList.getChildren().add(button);
 
