@@ -61,6 +61,13 @@ public class Client extends Thread{
         this.running = false;
     }
 
+    /**
+     * Called by client protocol when connection to server is closed/lost.
+     */
+    public void connectionProtocolHasClosed(){
+        lobbyJoinedUiController.connectionClosed();
+    }
+
     public void sendClientConnectPacket(){
         clientProtocol.sendPacket(new ClientConnectPacket());
     }

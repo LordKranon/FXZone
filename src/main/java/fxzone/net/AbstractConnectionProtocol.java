@@ -1,6 +1,7 @@
 package fxzone.net;
 
 import fxzone.net.packet.Packet;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -34,11 +35,15 @@ public abstract class AbstractConnectionProtocol extends Thread{
                 System.out.println("[CONNECTION-PROTOCOL] handled packet");
             }
         }
+        catch (EOFException e){
+            System.out.println("[CONNECTION-PROTOCOL] EOF exception. This might have happened unintentionally. This connection is being closed.");
+            running = false;
+            onSocketClosed();
+        }
         catch (SocketException e){
             System.out.println("[CONNECTION-PROTOCOL] Socket exception. Sure hope the Socket is closed intentionally. This connection is being closed.");
             running = false;
             onSocketClosed();
-
         }
         catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -47,6 +52,9 @@ public abstract class AbstractConnectionProtocol extends Thread{
 
     protected abstract void receivePacket(Packet packet);
 
+    /**
+     * Called when an exception that requires a socket close occurs while this connection is running.
+     */
     protected abstract void onSocketClosed();
 
     public synchronized void sendPacket(Packet packet){

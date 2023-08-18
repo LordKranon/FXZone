@@ -13,6 +13,8 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     private ArrayList<Player> latestPlayerList;
 
+    private boolean exitFlag;
+
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
         this.client = client;
@@ -30,6 +32,9 @@ public class LobbyJoinedUiController extends LobbyUiController {
         if(playerListUpdateFlag){
             updatePlayerList(latestPlayerList);
             playerListUpdateFlag = false;
+        }
+        if(exitFlag){
+            quitOuter(gameController);
         }
     }
 
@@ -50,5 +55,14 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     public void setLatestPlayerList(ArrayList<Player> latestPlayerList){
         this.latestPlayerList = latestPlayerList;
+    }
+
+    /**
+     * Called by client when the connection to server is closed.
+     * Set the exit-flag to stop displaying the lobby UI and go back to menu asap.
+     */
+    public void connectionClosed(){
+        System.out.println("[LOBBY-JOINED-UI-CONTROLLER] Connection closed. Exiting lobby.");
+        exitFlag = true;
     }
 }

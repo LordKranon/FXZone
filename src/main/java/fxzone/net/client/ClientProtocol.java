@@ -49,7 +49,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
 
     @Override
     protected void onSocketClosed() {
-
+        client.connectionProtocolHasClosed();
     }
 
     private void testPacketReceived(TestPacket testPacket){
