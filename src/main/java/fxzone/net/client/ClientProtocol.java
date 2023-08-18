@@ -9,12 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class ClientProtocol extends AbstractConnectionProtocol {
 
     private Client client;
 
-    public ClientProtocol(Client client, String ip, int port) {
+    public ClientProtocol(Client client, String ip, int port) throws SocketTimeoutException {
         super();
         this.client = client;
         this.socket = new Socket();
@@ -27,7 +28,11 @@ public class ClientProtocol extends AbstractConnectionProtocol {
             System.out.println("[CLIENT-PROTOCOL] OutputStream connected");
             this.in = new ObjectInputStream(socket.getInputStream());
             System.out.println("[CLIENT-PROTOCOL] InputStream connected");
-        } catch (IOException e){
+        }
+        catch (SocketTimeoutException e){
+            throw e;
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
     }

@@ -13,6 +13,12 @@ import javafx.scene.layout.AnchorPane;
 
 public class JoinMenuUiController extends AbstractUiController {
 
+    private JoinMenuUiControllerFxml joinMenuUiControllerFxml;
+
+    private Client client;
+
+    private boolean tryingToJoin;
+
     public JoinMenuUiController(AbstractGameController gameController) {
         super(gameController);
     }
@@ -22,7 +28,9 @@ public class JoinMenuUiController extends AbstractUiController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/JoinMenuView.fxml"));
             loader.setControllerFactory(c -> {  //Override the controller factory to pass constructor args
-                return new JoinMenuUiControllerFxml(gameController);
+                JoinMenuUiControllerFxml joinMenuUiControllerFxml = new JoinMenuUiControllerFxml(gameController);
+                this.joinMenuUiControllerFxml = joinMenuUiControllerFxml;
+                return joinMenuUiControllerFxml;
             });
             root2D.getChildren().add(loader.load());
         } catch (IOException e) {
@@ -32,7 +40,7 @@ public class JoinMenuUiController extends AbstractUiController {
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
-
+        joinMenuUiControllerFxml.update();
     }
 
     class JoinMenuUiControllerFxml{
@@ -60,20 +68,37 @@ public class JoinMenuUiController extends AbstractUiController {
         }
         @FXML
         public void join(){
-            gameController.setActiveUiController(new LobbyJoinedUiController(gameController, handleJoinGame(ipAddress.getText(), username.getText(), color.getText())));
+            if(!tryingToJoin){
+                handleJoinGame(ipAddress.getText(), username.getText(), color.getText());
+            }
+            //gameController.setActiveUiController(new LobbyJoinedUiController(gameController, client));
         }
 
         @FXML
         public void back(){
-            gameController.setActiveUiController(new PlayMenuUiController(gameController));
+            if(!tryingToJoin) {
+                gameController.setActiveUiController(new PlayMenuUiController(gameController));
+            }
+        }
+
+        private void update(){
+            if(tryingToJoin){
+                if(!client.isRunning()){
+                    if(client.isSuccessfullyConnected()){
+                        gameController.setActiveUiController(new LobbyJoinedUiController(gameController, client));
+                    } else {
+                        tryingToJoin = false;
+                    }
+                }
+            }
         }
     }
 
-    private Client handleJoinGame(String ip, String name, String colorRGBCode){
+    private void handleJoinGame(String ip, String name, String colorRGBCode){
         System.out.println("[JOIN-MENU-UI-CONTROLLER] IP:");
         System.out.println(ip);
-        Client client = new Client();
+        client = new Client();
         client.connectToServer(ip, Config.getInt("SERVER_PORT"));
-        return client;
+        tryingToJoin = true;
     }
 }

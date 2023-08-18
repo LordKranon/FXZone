@@ -4,6 +4,7 @@ import fxzone.config.Config;
 import fxzone.controller.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.ClientConnectPacket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,9 +18,20 @@ public class Client extends Thread{
 
     private LobbyJoinedUiController lobbyJoinedUiController;
 
+    /**
+     * Indicates the client is currently in the process of creating a connection protocol and connecting to the server.
+     */
+    private boolean running;
+
+    /**
+     * Set to true once a ClientProtocol is connected to the server with no errors.
+     */
+    private boolean successfullyConnected;
+
     public void connectToServer(String ip, int port){
         this.ip = ip;
         this.port = port;
+        this.running = true;
         start();
 
     }
@@ -35,11 +47,18 @@ public class Client extends Thread{
         System.out.println("[CLIENT] connectToServer()");
 
         //This command in particular can take time, that's why it's on an extra thread.
-        this.clientProtocol = new ClientProtocol(this, ip, port);
-
+        try {
+            this.clientProtocol = new ClientProtocol(this, ip, port);
+        } catch (SocketTimeoutException e){
+            this.running = false;
+            System.out.println("[CLIENT] Connection timed out. ClientProtocol is not established and this client is closed.");
+            return;
+        }
         System.out.println("[CLIENT] ClientProtocol created");
         this.clientProtocol.start();
         System.out.println("[CLIENT] ClientProtocol started");
+        this.successfullyConnected = true;
+        this.running = false;
     }
 
     public void sendClientConnectPacket(){
@@ -49,5 +68,13 @@ public class Client extends Thread{
     public void lobbyPlayerListHasUpdated(ArrayList<Player> players){
         lobbyJoinedUiController.setLatestPlayerList(players);
         lobbyJoinedUiController.lobbyPlayerListChanged();
+    }
+
+    public boolean isRunning(){
+        return running;
+    }
+
+    public boolean isSuccessfullyConnected(){
+        return successfullyConnected;
     }
 }
