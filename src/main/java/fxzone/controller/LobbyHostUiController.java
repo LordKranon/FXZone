@@ -56,6 +56,12 @@ public class LobbyHostUiController extends LobbyUiController {
     }
 
     @Override
+    protected void quitOuter(AbstractGameController gameController){
+        server.stopServerRaw();
+        gameController.setActiveUiController(new PlayMenuUiController(gameController));
+    }
+
+    @Override
     protected void sendTestMessageOuter() {
         server.sendTestMessageToAll("[MESSAGE] (Server): Kappa 123");
     }

@@ -7,7 +7,6 @@ import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Player;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -78,7 +77,8 @@ public abstract class LobbyUiController extends AbstractUiController {
 
         @FXML
         private void quit(){
-            gameController.setActiveUiController(new PlayMenuUiController(gameController));
+            quitOuter(gameController);
+            //gameController.setActiveUiController(new PlayMenuUiController(gameController));
         }
 
         @FXML
@@ -96,6 +96,8 @@ public abstract class LobbyUiController extends AbstractUiController {
     }
 
     protected abstract void startOuter(AbstractGameController gameController);
+
+    protected abstract void quitOuter(AbstractGameController gameController);
 
     protected abstract void sendTestMessageOuter();
 

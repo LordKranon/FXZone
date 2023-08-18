@@ -46,8 +46,8 @@ public class Client extends Thread{
     public void run(){
         System.out.println("[CLIENT] connectToServer()");
 
-        //This command in particular can take time, that's why it's on an extra thread.
         try {
+            //This command in particular can take time, that's why it's on an extra thread.
             this.clientProtocol = new ClientProtocol(this, ip, port);
         } catch (SocketTimeoutException e){
             this.running = false;

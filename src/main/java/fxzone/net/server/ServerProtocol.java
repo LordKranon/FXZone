@@ -39,6 +39,11 @@ public class ServerProtocol extends AbstractConnectionProtocol {
         }
     }
 
+    @Override
+    protected void onSocketClosed() {
+
+    }
+
     private void clientConnectPacketReceived(ClientConnectPacket clientConnectPacket){
         System.out.println("[SERVER-PROTOCOL] Received client connect packet");
         server.clientConnected(this);

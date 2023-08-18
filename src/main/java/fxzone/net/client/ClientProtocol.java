@@ -47,6 +47,11 @@ public class ClientProtocol extends AbstractConnectionProtocol {
         }
     }
 
+    @Override
+    protected void onSocketClosed() {
+
+    }
+
     private void testPacketReceived(TestPacket testPacket){
         System.out.println("[CLIENT-PROTOCOL] Received test message packet:");
         System.out.println(testPacket.getMessage());

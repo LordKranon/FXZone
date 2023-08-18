@@ -39,6 +39,11 @@ public class LobbyJoinedUiController extends LobbyUiController {
     }
 
     @Override
+    protected void quitOuter(AbstractGameController gameController) {
+        gameController.setActiveUiController(new PlayMenuUiController(gameController));
+    }
+
+    @Override
     protected void sendTestMessageOuter() {
         //client.sendClientConnectPacket();
     }
