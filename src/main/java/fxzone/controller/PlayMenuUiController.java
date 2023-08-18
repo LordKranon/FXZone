@@ -57,7 +57,8 @@ public class PlayMenuUiController extends AbstractUiController {
 
         @FXML
         public void join(){
-            gameController.setActiveUiController(new LobbyJoinedUiController(gameController, handleJoinGame()));
+            //gameController.setActiveUiController(new LobbyJoinedUiController(gameController, handleJoinGame()));
+            gameController.setActiveUiController(new JoinMenuUiController(gameController));
         }
 
         @FXML
@@ -70,10 +71,5 @@ public class PlayMenuUiController extends AbstractUiController {
         Server server = new Server();
         server.start();
         return server;
-    }
-    private Client handleJoinGame(){
-        Client client = new Client();
-        client.connectToServer("127.0.0.1", Config.getInt("SERVER_PORT"));
-        return client;
     }
 }
