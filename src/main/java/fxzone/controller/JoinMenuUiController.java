@@ -65,6 +65,9 @@ public class JoinMenuUiController extends AbstractUiController {
         @FXML
         public void initialize(){
             resize(anchorPane, gameController.getStage());
+            ipAddress.setText(Config.getString("LAST_USED_IP_ON_JOIN"));
+            username.setText(Config.getString("LAST_USED_NAME_ON_JOIN"));
+            color.setText(Config.getString("LAST_USED_COLOR_ON_JOIN"));
         }
         @FXML
         public void join(){
@@ -95,6 +98,9 @@ public class JoinMenuUiController extends AbstractUiController {
     }
 
     private void handleJoinGame(String ip, String name, String colorRGBCode){
+        Config.set("LAST_USED_IP_ON_JOIN", ip);
+        Config.set("LAST_USED_NAME_ON_JOIN", name);
+        Config.set("LAST_USED_COLOR_ON_JOIN", colorRGBCode);
         System.out.println("[JOIN-MENU-UI-CONTROLLER] IP:");
         System.out.println(ip);
         client = new Client();

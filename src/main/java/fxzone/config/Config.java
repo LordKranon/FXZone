@@ -97,4 +97,7 @@ public class Config {
         return Double.parseDouble(getString(property));
     }
 
+    public static void set(String property, String value) {
+        properties.setProperty(property, value);
+    }
 }
