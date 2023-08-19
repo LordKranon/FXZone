@@ -3,6 +3,8 @@ package fxzone.controller;
 import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.utils.FxUtils;
+import fxzone.game.logic.Player;
 import fxzone.net.client.Client;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 public class JoinMenuUiController extends AbstractUiController {
 
@@ -104,7 +107,7 @@ public class JoinMenuUiController extends AbstractUiController {
         System.out.println("[JOIN-MENU-UI-CONTROLLER] IP:");
         System.out.println(ip);
         client = new Client();
-        client.connectToServer(ip, Config.getInt("SERVER_PORT"));
+        client.connectToServer(ip, Config.getInt("SERVER_PORT"), new Player(name, FxUtils.toColor(colorRGBCode)));
         tryingToJoin = true;
     }
 }

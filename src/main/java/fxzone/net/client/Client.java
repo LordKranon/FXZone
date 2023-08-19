@@ -28,12 +28,17 @@ public class Client extends Thread{
      */
     private boolean successfullyConnected;
 
-    public void connectToServer(String ip, int port){
+    /**
+     * Holds data for the server to create a player.
+     */
+    private Player playerCreationData;
+
+    public void connectToServer(String ip, int port, Player playerCreationData){
         this.ip = ip;
         this.port = port;
         this.running = true;
+        this.playerCreationData = playerCreationData;
         start();
-
     }
 
     public void setLobbyJoinedUiController(LobbyJoinedUiController lobbyJoinedUiController){
@@ -69,7 +74,7 @@ public class Client extends Thread{
     }
 
     public void sendClientConnectPacket(){
-        clientProtocol.sendPacket(new ClientConnectPacket());
+        clientProtocol.sendPacket(new ClientConnectPacket(playerCreationData));
     }
 
     public void lobbyPlayerListHasUpdated(ArrayList<Player> players){

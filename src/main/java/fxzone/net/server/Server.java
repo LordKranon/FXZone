@@ -29,8 +29,7 @@ public class Server extends AbstractServer{
      * Clients are treated as fully connected once they've sent a ClientConnectPacket.
      * Then that client will be added as a player.
      */
-    public void clientConnected(ServerProtocol serverProtocol){
-        Player player = new Player("New Player", Color.web("#ff0000"));
+    public void clientConnected(ServerProtocol serverProtocol, Player player){
         players.put(serverProtocol, player);
         lobbyHostUiController.playerJoinedLobby(player);
     }
