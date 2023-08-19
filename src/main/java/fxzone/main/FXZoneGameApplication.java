@@ -15,7 +15,7 @@ public class FXZoneGameApplication extends Application {
 
 
     public static void init(String[] args){
-        Config.loadDefaultConfig();
+        Config.loadConfig();
         launch(args);
     }
 
@@ -37,6 +37,7 @@ public class FXZoneGameApplication extends Application {
     @Override
     public void stop(){
         gameController.close();
+        Config.saveConfig();
         System.exit(0);
     }
 }
