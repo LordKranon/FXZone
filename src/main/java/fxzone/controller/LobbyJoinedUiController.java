@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class LobbyJoinedUiController extends LobbyUiController {
 
-    private Client client;
+    private final Client client;
 
     private ArrayList<Player> latestPlayerList;
 
@@ -45,6 +45,7 @@ public class LobbyJoinedUiController extends LobbyUiController {
 
     @Override
     protected void quitOuter(AbstractGameController gameController) {
+        client.closeConnectionRaw();
         gameController.setActiveUiController(new PlayMenuUiController(gameController));
     }
 

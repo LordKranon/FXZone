@@ -16,7 +16,7 @@ public abstract class AbstractServer extends Thread{
 
     private boolean running;
 
-    private List<ServerProtocol> clients;
+    private final List<ServerProtocol> clients;
 
     AbstractServer(){
         this.running = false;

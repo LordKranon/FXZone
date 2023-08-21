@@ -89,4 +89,9 @@ public class Client extends Thread{
     public boolean isSuccessfullyConnected(){
         return successfullyConnected;
     }
+
+    public void closeConnectionRaw(){
+        System.out.println("[CLIENT] Stopping client connection protocol RAW");
+        clientProtocol.stopConnectionRaw();
+    }
 }

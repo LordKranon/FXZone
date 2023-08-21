@@ -30,6 +30,7 @@ public class Server extends AbstractServer{
     @Override
     protected void connectionProtocolHasClosed(ServerProtocol serverProtocol) {
         super.connectionProtocolHasClosed(serverProtocol);
+        System.out.println("[SERVER] Removing disconnected player");
         players.remove(serverProtocol);
         lobbyHostUiController.lobbyPlayerListChanged();
     }

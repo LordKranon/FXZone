@@ -13,9 +13,9 @@ import javafx.scene.paint.Color;
 
 public class LobbyHostUiController extends LobbyUiController {
 
-    private Server server;
+    private final Server server;
 
-    private Player hostingPlayer;
+    private final Player hostingPlayer;
 
     public LobbyHostUiController(AbstractGameController gameController, Server server) {
         super(gameController);
