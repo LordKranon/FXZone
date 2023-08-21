@@ -2,7 +2,9 @@ package fxzone.net.server;
 
 import fxzone.controller.LobbyHostUiController;
 import fxzone.game.logic.Player;
+import fxzone.net.packet.Packet;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +12,7 @@ import javafx.scene.paint.Color;
 
 public class Server extends AbstractServer{
 
-    private HashMap<ServerProtocol, Player> players;
+    private final HashMap<ServerProtocol, Player> players;
 
     private LobbyHostUiController lobbyHostUiController;
 
@@ -23,6 +25,13 @@ public class Server extends AbstractServer{
     protected ServerProtocol createServerProtocol(Socket socket) {
         System.out.println("[SERVER] Creating ServerProtocol");
         return new ServerProtocol(socket, this);
+    }
+
+    @Override
+    protected void connectionProtocolHasClosed(ServerProtocol serverProtocol) {
+        super.connectionProtocolHasClosed(serverProtocol);
+        players.remove(serverProtocol);
+        lobbyHostUiController.lobbyPlayerListChanged();
     }
 
     /**
@@ -40,5 +49,9 @@ public class Server extends AbstractServer{
 
     public Collection<Player> getPlayers(){
         return players.values();
+    }
+
+    public void sendPacketToAllVerifiedPlayers(Packet packet){
+        sendPacketTo(new ArrayList<ServerProtocol>(players.keySet()), packet);
     }
 }

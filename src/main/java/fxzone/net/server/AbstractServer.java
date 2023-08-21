@@ -59,6 +59,10 @@ public abstract class AbstractServer extends Thread{
 
     protected abstract ServerProtocol createServerProtocol(Socket socket);
 
+    protected void connectionProtocolHasClosed(ServerProtocol serverProtocol){
+        clients.remove(serverProtocol);
+    }
+
     public void sendTestMessageToAll(String message){
         System.out.println("[SERVER] Sending test message to all");
         sendPacketToAll(new TestPacket(message));
@@ -66,7 +70,11 @@ public abstract class AbstractServer extends Thread{
 
     public void sendPacketToAll(Packet packet){
         System.out.println("[SERVER] Sending packet to all");
-        for (ServerProtocol serverProtocol : clients){
+        sendPacketTo(clients, packet);
+    }
+
+    public void sendPacketTo(List<ServerProtocol> serverProtocols, Packet packet){
+        for (ServerProtocol serverProtocol : serverProtocols){
             serverProtocol.sendPacket(packet);
         }
     }

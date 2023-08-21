@@ -41,7 +41,7 @@ public class ServerProtocol extends AbstractConnectionProtocol {
 
     @Override
     protected void onSocketClosed() {
-
+        server.connectionProtocolHasClosed(this);
     }
 
     private void clientConnectPacketReceived(ClientConnectPacket clientConnectPacket){

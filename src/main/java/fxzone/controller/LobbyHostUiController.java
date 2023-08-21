@@ -30,7 +30,7 @@ public class LobbyHostUiController extends LobbyUiController {
         if (playerListUpdateFlag) {
             ArrayList<Player> players = updatePlayerListOfHostLobby();
             playerListUpdateFlag = false;
-            server.sendPacketToAll(new LobbyPlayerListPacket(players));
+            server.sendPacketToAllVerifiedPlayers(new LobbyPlayerListPacket(players));
         }
     }
 
