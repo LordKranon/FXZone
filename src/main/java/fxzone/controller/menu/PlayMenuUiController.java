@@ -1,9 +1,8 @@
-package fxzone.controller;
+package fxzone.controller.menu;
 
-import fxzone.config.Config;
+import fxzone.controller.lobby.LobbyHostUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
-import fxzone.net.client.Client;
 import fxzone.net.server.Server;
 import java.io.IOException;
 import javafx.fxml.FXML;

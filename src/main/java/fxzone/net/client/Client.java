@@ -1,13 +1,11 @@
 package fxzone.net.client;
 
-import fxzone.config.Config;
 import fxzone.controller.ClientJoinedController;
-import fxzone.controller.LobbyJoinedUiController;
+import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.ClientConnectPacket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Client extends Thread{
 

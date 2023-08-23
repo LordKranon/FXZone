@@ -1,7 +1,7 @@
 package fxzone.net.server;
 
-import fxzone.controller.InGameHostUiController;
-import fxzone.controller.LobbyHostUiController;
+import fxzone.controller.ingame.InGameHostUiController;
+import fxzone.controller.lobby.LobbyHostUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.Packet;
@@ -9,8 +9,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import javafx.scene.paint.Color;
 
 public class Server extends AbstractServer{
 

@@ -1,6 +1,7 @@
-package fxzone.controller;
+package fxzone.controller.menu;
 
 import fxzone.config.Config;
+import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.utils.FxUtils;
@@ -12,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 
 public class JoinMenuUiController extends AbstractUiController {
 

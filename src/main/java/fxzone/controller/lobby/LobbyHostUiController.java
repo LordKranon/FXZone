@@ -1,17 +1,18 @@
-package fxzone.controller;
+package fxzone.controller.lobby;
 
+import fxzone.controller.menu.PlayMenuUiController;
+import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
 import java.util.ArrayList;
-import java.util.Collection;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class LobbyHostUiController extends LobbyUiController implements ServerHostController{
+public class LobbyHostUiController extends LobbyUiController implements ServerHostController {
 
     private final Server server;
 

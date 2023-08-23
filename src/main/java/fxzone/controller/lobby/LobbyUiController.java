@@ -1,5 +1,6 @@
-package fxzone.controller;
+package fxzone.controller.lobby;
 
+import fxzone.controller.NetworkController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
@@ -18,7 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public abstract class LobbyUiController extends AbstractUiController implements NetworkController{
+public abstract class LobbyUiController extends AbstractUiController implements NetworkController {
 
     protected AnchorPane anchorPane;
 

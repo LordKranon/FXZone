@@ -1,13 +1,14 @@
-package fxzone.controller;
+package fxzone.controller.lobby;
 
+import fxzone.controller.ClientJoinedController;
+import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.net.client.Client;
 import java.util.ArrayList;
-import java.util.Collection;
 import javafx.scene.layout.AnchorPane;
 
-public class LobbyJoinedUiController extends LobbyUiController implements ClientJoinedController{
+public class LobbyJoinedUiController extends LobbyUiController implements ClientJoinedController {
 
     private final Client client;
 

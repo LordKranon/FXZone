@@ -1,4 +1,4 @@
-package fxzone.controller;
+package fxzone.controller.ingame;
 
 import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;

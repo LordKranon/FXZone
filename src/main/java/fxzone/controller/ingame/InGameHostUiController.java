@@ -1,10 +1,11 @@
-package fxzone.controller;
+package fxzone.controller.ingame;
 
+import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.net.server.Server;
 
-public class InGameHostUiController extends InGameNetworkUiController implements ServerHostController{
+public class InGameHostUiController extends InGameNetworkUiController implements ServerHostController {
 
     private final Server server;
 

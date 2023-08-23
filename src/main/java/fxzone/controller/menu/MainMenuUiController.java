@@ -1,4 +1,4 @@
-package fxzone.controller;
+package fxzone.controller.menu;
 
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
