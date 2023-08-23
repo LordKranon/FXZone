@@ -1,5 +1,6 @@
 package fxzone.net.server;
 
+import fxzone.controller.InGameHostUiController;
 import fxzone.controller.LobbyHostUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.game.logic.Player;
@@ -48,6 +49,10 @@ public class Server extends AbstractServer{
 
     public void setLobbyHostUiController(LobbyHostUiController lobbyHostUiController){
         this.serverHostController = lobbyHostUiController;
+    }
+
+    public void setInGameHostUiController(InGameHostUiController inGameHostUiController){
+        this.serverHostController = inGameHostUiController;
     }
 
     public Collection<Player> getPlayers(){
