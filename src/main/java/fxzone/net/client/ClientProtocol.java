@@ -13,7 +13,7 @@ import java.net.SocketTimeoutException;
 
 public class ClientProtocol extends AbstractConnectionProtocol {
 
-    private Client client;
+    private final Client client;
 
     public ClientProtocol(Client client, String ip, int port) throws SocketTimeoutException {
         super();

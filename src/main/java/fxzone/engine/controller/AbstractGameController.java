@@ -87,7 +87,7 @@ public abstract class AbstractGameController extends AnimationTimer {
     }
 
     public void setActiveUiController(AbstractUiController activeUiController){
-        System.out.println("[GameController] set new active UI controller");
+        System.out.println("[GAME-CONTROLLER] set new active UI controller");
         this.activeUiController = activeUiController;
         gameRoot.getChildren().clear();
         activeUiController.attachToRoot(gameRoot);

@@ -52,6 +52,7 @@ public class LobbyHostUiController extends LobbyUiController {
 
     @Override
     protected void startOuter(AbstractGameController gameController) {
+        //server.startGameForAll();
 
     }
 

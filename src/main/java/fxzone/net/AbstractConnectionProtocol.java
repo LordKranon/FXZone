@@ -17,6 +17,8 @@ public abstract class AbstractConnectionProtocol extends Thread{
 
     protected ObjectOutputStream out;
 
+    private final boolean verbose = false;
+
     public AbstractConnectionProtocol(){
 
     }
@@ -25,23 +27,23 @@ public abstract class AbstractConnectionProtocol extends Thread{
     public void run(){
         running = true;
         Packet packet;
-        System.out.println("[CONNECTION-PROTOCOL] started");
+        if(verbose) System.out.println("[CONNECTION-PROTOCOL] started");
         try{
             while (running){
-                System.out.println("[CONNECTION-PROTOCOL] try receiving packet");
+                if(verbose) System.out.println("[CONNECTION-PROTOCOL] try receiving packet");
                 packet = (Packet) in.readObject();
-                System.out.println("[CONNECTION-PROTOCOL] packet read from InputStream");
+                if(verbose) System.out.println("[CONNECTION-PROTOCOL] packet read from InputStream");
                 receivePacket(packet);
-                System.out.println("[CONNECTION-PROTOCOL] handled packet");
+                if(verbose) System.out.println("[CONNECTION-PROTOCOL] handled packet");
             }
         }
         catch (EOFException e){
-            System.out.println("[CONNECTION-PROTOCOL] EOF exception. This might have happened unintentionally. This connection is being closed.");
+            if(verbose) System.out.println("[CONNECTION-PROTOCOL] EOF exception. This might have happened unintentionally. This connection is being closed.");
             running = false;
             onSocketClosed();
         }
         catch (SocketException e){
-            System.out.println("[CONNECTION-PROTOCOL] Socket exception. Sure hope the Socket is closed intentionally. This connection is being closed.");
+            if(verbose) System.out.println("[CONNECTION-PROTOCOL] Socket exception. Sure hope the Socket is closed intentionally. This connection is being closed.");
             running = false;
             onSocketClosed();
         }
@@ -68,12 +70,12 @@ public abstract class AbstractConnectionProtocol extends Thread{
     }
 
     public void stopConnectionRaw(){
-        System.out.println("[CONNECTION-PROTOCOL] stopping connection protocol RAW");
+        if(verbose) System.out.println("[CONNECTION-PROTOCOL] stopping connection protocol RAW");
         running = false;
         try {
             socket.close();
         } catch (IOException e) {
-            System.out.println("[CONNECTION-PROTOCOL] Exception on intentional socket close");
+            if(verbose) System.out.println("[CONNECTION-PROTOCOL] Exception on intentional socket close");
             e.printStackTrace();
         }
     }
