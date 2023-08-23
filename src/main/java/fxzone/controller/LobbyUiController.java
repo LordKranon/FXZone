@@ -18,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public abstract class LobbyUiController extends AbstractUiController {
+public abstract class LobbyUiController extends AbstractUiController implements NetworkController{
 
     protected AnchorPane anchorPane;
 

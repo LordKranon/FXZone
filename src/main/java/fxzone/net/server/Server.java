@@ -1,6 +1,7 @@
 package fxzone.net.server;
 
 import fxzone.controller.LobbyHostUiController;
+import fxzone.controller.ServerHostController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.Packet;
 import java.net.Socket;
@@ -14,7 +15,8 @@ public class Server extends AbstractServer{
 
     private final HashMap<ServerProtocol, Player> players;
 
-    private LobbyHostUiController lobbyHostUiController;
+    private ServerHostController serverHostController;
+
 
     public Server(){
         super();
@@ -32,7 +34,7 @@ public class Server extends AbstractServer{
         super.connectionProtocolHasClosed(serverProtocol);
         System.out.println("[SERVER] Removing disconnected player");
         players.remove(serverProtocol);
-        lobbyHostUiController.lobbyPlayerListChanged();
+        serverHostController.lobbyPlayerListChanged();
     }
 
     /**
@@ -41,11 +43,11 @@ public class Server extends AbstractServer{
      */
     public void clientConnected(ServerProtocol serverProtocol, Player player){
         players.put(serverProtocol, player);
-        lobbyHostUiController.playerJoinedLobby(player);
+        serverHostController.playerJoinedLobby(player);
     }
 
     public void setLobbyHostUiController(LobbyHostUiController lobbyHostUiController){
-        this.lobbyHostUiController = lobbyHostUiController;
+        this.serverHostController = lobbyHostUiController;
     }
 
     public Collection<Player> getPlayers(){

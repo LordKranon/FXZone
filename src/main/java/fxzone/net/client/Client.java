@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.config.Config;
+import fxzone.controller.ClientJoinedController;
 import fxzone.controller.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.ClientConnectPacket;
@@ -16,7 +17,7 @@ public class Client extends Thread{
 
     private int port;
 
-    private LobbyJoinedUiController lobbyJoinedUiController;
+    private ClientJoinedController clientJoinedController;
 
     /**
      * Indicates the client is currently in the process of creating a connection protocol and connecting to the server.
@@ -42,7 +43,7 @@ public class Client extends Thread{
     }
 
     public void setLobbyJoinedUiController(LobbyJoinedUiController lobbyJoinedUiController){
-        this.lobbyJoinedUiController = lobbyJoinedUiController;
+        this.clientJoinedController = lobbyJoinedUiController;
     }
 
     /**
@@ -70,7 +71,7 @@ public class Client extends Thread{
      * Called by client protocol when connection to server is closed/lost.
      */
     public void connectionProtocolHasClosed(){
-        lobbyJoinedUiController.connectionClosed();
+        clientJoinedController.connectionClosed();
     }
 
     public void sendClientConnectPacket(){
@@ -78,8 +79,8 @@ public class Client extends Thread{
     }
 
     public void lobbyPlayerListHasUpdated(ArrayList<Player> players){
-        lobbyJoinedUiController.setLatestPlayerList(players);
-        lobbyJoinedUiController.lobbyPlayerListChanged();
+        clientJoinedController.setLatestPlayerList(players);
+        clientJoinedController.lobbyPlayerListChanged();
     }
 
     public boolean isRunning(){

@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class LobbyHostUiController extends LobbyUiController {
+public class LobbyHostUiController extends LobbyUiController implements ServerHostController{
 
     private final Server server;
 

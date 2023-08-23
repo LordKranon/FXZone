@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javafx.scene.layout.AnchorPane;
 
-public class LobbyJoinedUiController extends LobbyUiController {
+public class LobbyJoinedUiController extends LobbyUiController implements ClientJoinedController{
 
     private final Client client;
 
