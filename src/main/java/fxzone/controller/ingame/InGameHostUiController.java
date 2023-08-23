@@ -12,7 +12,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     public InGameHostUiController(AbstractGameController gameController, Server server) {
         super(gameController);
         this.server = server;
-        this.server.setInGameHostUiController(this);
+        //this.server.setInGameHostUiController(this);
     }
 
     @Override
@@ -22,6 +22,6 @@ public class InGameHostUiController extends InGameNetworkUiController implements
 
     @Override
     public void playerJoinedLobby(Player player) {
-
+        System.out.println("[IN-GAME-HOST-UI-CONTROLLER] Player joined lobby but game is already running.");
     }
 }

@@ -4,6 +4,7 @@ import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.lobby.LobbyHostUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.game.logic.Player;
+import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.Packet;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -59,5 +60,11 @@ public class Server extends AbstractServer{
 
     public void sendPacketToAllVerifiedPlayers(Packet packet){
         sendPacketTo(new ArrayList<ServerProtocol>(players.keySet()), packet);
+    }
+
+    public boolean startGameForAll(InGameHostUiController inGameHostUiController){
+        sendPacketToAllVerifiedPlayers(new GameStartPacket());
+        this.serverHostController = inGameHostUiController;
+        return true;
     }
 }

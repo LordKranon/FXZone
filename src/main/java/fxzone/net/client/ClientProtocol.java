@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.net.AbstractConnectionProtocol;
+import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
@@ -43,6 +44,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
             case TEST: testPacketReceived((TestPacket) packet); break;
             case CHAT_MESSAGE: break;
             case LOBBY_PLAYER_LIST: lobbyPlayerListPacketReceived((LobbyPlayerListPacket) packet); break;
+            case GAME_START: gameStartPacketReceived((GameStartPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -64,5 +66,10 @@ public class ClientProtocol extends AbstractConnectionProtocol {
     private void lobbyPlayerListPacketReceived(LobbyPlayerListPacket lobbyPlayerListPacket){
         System.out.println("[CLIENT-PROTOCOL] Received lobby player list packet");
         client.lobbyPlayerListHasUpdated(lobbyPlayerListPacket.getPlayers());
+    }
+
+    private void gameStartPacketReceived(GameStartPacket gameStartPacket){
+        System.out.println("[CLIENT-PROTOCOL] Received game start packet");
+        client.gameStart();
     }
 }

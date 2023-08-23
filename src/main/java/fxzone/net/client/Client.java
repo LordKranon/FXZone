@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.controller.ClientJoinedController;
+import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.net.packet.ClientConnectPacket;
@@ -42,6 +43,10 @@ public class Client extends Thread{
 
     public void setLobbyJoinedUiController(LobbyJoinedUiController lobbyJoinedUiController){
         this.clientJoinedController = lobbyJoinedUiController;
+    }
+
+    public void setInGameJoinedUiController(InGameJoinedUiController inGameJoinedUiController){
+        this.clientJoinedController = inGameJoinedUiController;
     }
 
     /**
@@ -92,5 +97,12 @@ public class Client extends Thread{
     public void closeConnectionRaw(){
         System.out.println("[CLIENT] Stopping client connection protocol RAW");
         clientProtocol.stopConnectionRaw();
+    }
+
+    /**
+     * Server has sent notice that the host has started the game from the lobby. Set UI controller to in-game.
+     */
+    public void gameStart(){
+        clientJoinedController.gameStart();
     }
 }

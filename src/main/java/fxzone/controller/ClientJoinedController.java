@@ -7,4 +7,5 @@ public interface ClientJoinedController extends NetworkController{
 
     void setLatestPlayerList(ArrayList<Player> players);
     void connectionClosed();
+    void gameStart();
 }

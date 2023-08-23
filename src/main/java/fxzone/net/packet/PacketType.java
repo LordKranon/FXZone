@@ -8,4 +8,6 @@ public enum PacketType {
     TEST,
 
     LOBBY_PLAYER_LIST,
+
+    GAME_START,
 }

@@ -1,5 +1,6 @@
 package fxzone.controller.lobby;
 
+import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
@@ -53,8 +54,10 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
 
     @Override
     protected void startOuter(AbstractGameController gameController) {
-        //server.startGameForAll();
-
+        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server);
+        if(server.startGameForAll(inGameHostUiController)){
+            gameController.setActiveUiController(inGameHostUiController);
+        }
     }
 
     @Override

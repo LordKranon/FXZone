@@ -1,6 +1,7 @@
 package fxzone.controller.lobby;
 
 import fxzone.controller.ClientJoinedController;
+import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
@@ -15,6 +16,8 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     private ArrayList<Player> latestPlayerList;
 
     private boolean exitFlag;
+
+    private boolean gameStartFlag;
 
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
@@ -37,6 +40,18 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
         if(exitFlag){
             quitOuter(gameController);
         }
+        if(gameStartFlag){
+            goIntoGame(gameController);
+        }
+    }
+
+    /**
+     * Go into game because the host has started the game.
+     */
+    private void goIntoGame(AbstractGameController gameController){
+        InGameJoinedUiController inGameJoinedUiController = new InGameJoinedUiController(gameController, client);
+        client.setInGameJoinedUiController(inGameJoinedUiController);
+        gameController.setActiveUiController(inGameJoinedUiController);
     }
 
     @Override
@@ -66,5 +81,10 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     public void connectionClosed(){
         System.out.println("[LOBBY-JOINED-UI-CONTROLLER] Connection closed. Exiting lobby.");
         exitFlag = true;
+    }
+
+    @Override
+    public void gameStart() {
+        gameStartFlag = true;
     }
 }
