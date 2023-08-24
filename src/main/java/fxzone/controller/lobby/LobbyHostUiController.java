@@ -4,7 +4,10 @@ import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.Unit;
+import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
 import java.util.ArrayList;
@@ -54,8 +57,22 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
 
     @Override
     protected void startOuter(AbstractGameController gameController) {
-        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server);
-        if(server.startGameForAll(inGameHostUiController)){
+
+        /*
+        START Creating map.
+        */
+        Map map = new Map(5, 3, null);
+        map.addUnit(new Unit("tank", 1, 1, map.getTileRenderSize(), null));
+        map.addUnit(new Unit("hunter_tank", 2, 1, 0, null));
+        map.addUnit(new Unit("artillery", 3, 1, 0, null));
+        map.addUnit(new Unit("tank", 5, 3, 0, null));
+        MapSerializable mapSerializable = new MapSerializable(map);
+        /*
+        END Creating map.
+        */
+
+        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, mapSerializable);
+        if(server.startGameForAll(inGameHostUiController, mapSerializable)){
             gameController.setActiveUiController(inGameHostUiController);
         }
     }

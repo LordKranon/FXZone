@@ -3,6 +3,7 @@ package fxzone.controller.ingame;
 import fxzone.controller.ClientJoinedController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import java.util.ArrayList;
 
@@ -10,8 +11,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     private final Client client;
 
-    public InGameJoinedUiController(AbstractGameController gameController, Client client) {
-        super(gameController);
+    public InGameJoinedUiController(AbstractGameController gameController, Client client, MapSerializable mapSerializable) {
+        super(gameController, mapSerializable);
         this.client = client;
     }
 
@@ -26,7 +27,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
-    public void gameStart() {
+    public void gameStart(MapSerializable mapSerializable) {
 
     }
 

@@ -27,7 +27,7 @@ public abstract class AbstractGameObject {
         this.fitWidth = w;
         this.fitHeight = h;
         initialize();
-        group.getChildren().add(imageView);
+        if(group != null) group.getChildren().add(imageView);
     }
 
     private void initialize(){

@@ -5,6 +5,7 @@ import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import java.util.ArrayList;
 import javafx.scene.layout.AnchorPane;
@@ -18,6 +19,8 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     private boolean exitFlag;
 
     private boolean gameStartFlag;
+
+    private MapSerializable latestGameStartMap;
 
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
@@ -49,7 +52,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
      * Go into game because the host has started the game.
      */
     private void goIntoGame(AbstractGameController gameController){
-        InGameJoinedUiController inGameJoinedUiController = new InGameJoinedUiController(gameController, client);
+        InGameJoinedUiController inGameJoinedUiController = new InGameJoinedUiController(gameController, client, latestGameStartMap);
         client.setInGameJoinedUiController(inGameJoinedUiController);
         gameController.setActiveUiController(inGameJoinedUiController);
     }
@@ -84,7 +87,8 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    public void gameStart() {
+    public void gameStart(MapSerializable mapSerializable) {
+        this.latestGameStartMap = mapSerializable;
         gameStartFlag = true;
     }
 }

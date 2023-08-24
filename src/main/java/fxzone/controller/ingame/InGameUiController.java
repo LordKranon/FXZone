@@ -7,6 +7,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectUnit;
 import javafx.scene.Group;
@@ -35,9 +36,10 @@ public class InGameUiController extends AbstractUiController {
      */
     private GameObjectInTileSpace tileSelector;
 
-    public InGameUiController(AbstractGameController gameController) {
+    public InGameUiController(AbstractGameController gameController, MapSerializable initialMap) {
         super(gameController);
         this.gameController = gameController;
+        initializeMap(initialMap);
     }
 
     @Override
@@ -50,9 +52,11 @@ public class InGameUiController extends AbstractUiController {
 
         //GameObjectUnit tank = new GameObjectUnit("tank", 0, 0, 128, root2D);
 
-        tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
-        tileSelector.setViewOrder(-1);
+        //tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
+        //tileSelector.setViewOrder(-1);
+        createTileSelector();
 
+        /*
         map = new Map(5, 3, root2D);
 
         Unit tank = new Unit("tank", 1, 1, map.getTileRenderSize(), root2D);
@@ -61,6 +65,7 @@ public class InGameUiController extends AbstractUiController {
         map.addUnit(new Unit("hunter_tank", 2, 1, 0, root2D));
         map.addUnit(new Unit("artillery", 3, 1, 0, root2D));
         map.addUnit(new Unit("tank", 5, 3, 0, root2D));
+        */
 
         //tank.setViewOrder(-1);
     }
@@ -73,6 +78,15 @@ public class InGameUiController extends AbstractUiController {
         zoomMap();
         findHoveredTile();
         moveSelector();
+    }
+
+    protected void createTileSelector(){
+        tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
+        tileSelector.setViewOrder(-1);
+    }
+
+    protected void initializeMap(MapSerializable initialMap){
+        map = new Map(initialMap, root2D);
     }
 
     /**
