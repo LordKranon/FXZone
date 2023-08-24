@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.game.logic.serializable.TileSpaceObjectSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import javafx.scene.Group;
 
@@ -9,7 +10,7 @@ public class TileSpaceObject {
      * Tile position in map.
      * min = 0; max = map width/height - 1
      */
-    private int x, y;
+    int x, y;
 
     /**
      * Graphical representation of this tile space object.
@@ -28,6 +29,11 @@ public class TileSpaceObject {
     public TileSpaceObject(int x, int y, double tileRenderSize, Group group){
         this.x = x;
         this.y = y;
+    }
+
+    public TileSpaceObject(TileSpaceObjectSerializable tileSpaceObjectSerializable){
+        this.x = tileSpaceObjectSerializable.x;
+        this.y = tileSpaceObjectSerializable.y;
     }
 
     public void setGraphicalOffset(double offsetX, double offsetY){
