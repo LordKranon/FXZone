@@ -6,10 +6,8 @@ import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
-import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
-import fxzone.game.render.GameObjectUnit;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 
@@ -32,6 +30,11 @@ public class InGameUiController extends AbstractUiController {
     private int tileHoveredX = 0, tileHoveredY = 0;
 
     /**
+     * Indicates that the mouse pointer is in bounds of the map.
+     */
+    private boolean mousePointerInBounds;
+
+    /**
      * Small indicator that marks the tile that the mouse pointer is hovering over.
      */
     private GameObjectInTileSpace tileSelector;
@@ -44,30 +47,8 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void init(AbstractGameController gameController, Group root2D) {
-
         this.root2D = root2D;
-
-        //DummyGameObject tank = new DummyGameObject(AssetHandler.getImageUnitVehicle(new KeyUnitVehicle("car", 0)), 0, 0, 128, 128, root2D);
-        //DummyGameObject tile = new DummyGameObject("/images/terrain/tiles/tile_plains.png", 0, 0, 128, 128, root2D);
-
-        //GameObjectUnit tank = new GameObjectUnit("tank", 0, 0, 128, root2D);
-
-        //tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
-        //tileSelector.setViewOrder(-1);
         createTileSelector();
-
-        /*
-        map = new Map(5, 3, root2D);
-
-        Unit tank = new Unit("tank", 1, 1, map.getTileRenderSize(), root2D);
-        map.addUnit(tank);
-
-        map.addUnit(new Unit("hunter_tank", 2, 1, 0, root2D));
-        map.addUnit(new Unit("artillery", 3, 1, 0, root2D));
-        map.addUnit(new Unit("tank", 5, 3, 0, root2D));
-        */
-
-        //tank.setViewOrder(-1);
     }
 
     @Override
@@ -147,10 +128,16 @@ public class InGameUiController extends AbstractUiController {
                     gameController.getInputHandler().getLastMousePosition().getY());
             tileHoveredX = hoveredTile.getX();
             tileHoveredY = hoveredTile.getY();
+            setMousePointerInBounds(true);
         }
-        catch (ArrayIndexOutOfBoundsException ignored){
+        catch (ArrayIndexOutOfBoundsException e){
+            setMousePointerInBounds(false);
+        }
+    }
 
-        }
+    private void setMousePointerInBounds(boolean mousePointerInBounds){
+        this.mousePointerInBounds = mousePointerInBounds;
+        tileSelector.setVisible(mousePointerInBounds);
     }
 
     /**
