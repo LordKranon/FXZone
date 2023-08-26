@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public abstract class AbstractUiController implements Initializable, Updatable {
 
-    private final SubScene subScene2D;
+    protected final SubScene subScene2D;
 
 
     public AbstractUiController(AbstractGameController gameController){

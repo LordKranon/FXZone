@@ -11,9 +11,24 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     private final Client client;
 
+    private boolean exitFlag;
+
     public InGameJoinedUiController(AbstractGameController gameController, Client client, MapSerializable mapSerializable) {
         super(gameController, mapSerializable);
         this.client = client;
+    }
+
+    @Override
+    public void update(AbstractGameController gameController, double delta){
+        if(exitFlag){
+            quitGame();
+        }
+    }
+
+    @Override
+    protected void quitGame(){
+        client.closeConnectionRaw();
+        super.quitGame();
     }
 
     @Override
@@ -23,7 +38,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     @Override
     public void connectionClosed() {
-
+        System.out.println("[IN-GAME-JOINED-UI-CONTROLLER] Connection closed. Exiting game.");
+        exitFlag = true;
     }
 
     @Override

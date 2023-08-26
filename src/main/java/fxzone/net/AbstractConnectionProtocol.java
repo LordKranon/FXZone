@@ -17,7 +17,7 @@ public abstract class AbstractConnectionProtocol extends Thread{
 
     protected ObjectOutputStream out;
 
-    private final boolean verbose = false;
+    private final boolean verbose = true;
 
     public AbstractConnectionProtocol(){
 

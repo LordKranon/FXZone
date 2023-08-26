@@ -25,4 +25,9 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     public void playerJoinedLobby(Player player) {
         System.out.println("[IN-GAME-HOST-UI-CONTROLLER] Player joined lobby but game is already running.");
     }
+
+    protected void quitGame(){
+        server.stopServerRaw();
+        super.quitGame();
+    }
 }

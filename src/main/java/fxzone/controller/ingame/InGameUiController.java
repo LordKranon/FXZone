@@ -1,6 +1,8 @@
 package fxzone.controller.ingame;
 
 import fxzone.config.Config;
+import fxzone.controller.menu.MainMenuUiController;
+import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
@@ -8,14 +10,21 @@ import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 public class InGameUiController extends AbstractUiController {
 
     private Group root2D;
 
     private final AbstractGameController gameController;
+
+    private Button quitButton;
 
     /**
      * Used in secondsPrinter.
@@ -49,12 +58,25 @@ public class InGameUiController extends AbstractUiController {
     public void init(AbstractGameController gameController, Group root2D) {
         this.root2D = root2D;
         createTileSelector();
+
+        /*
+        Font font = new Font(20);
+        quitButton = new Button("Quit");
+        quitButton.setViewOrder(-10);
+        quitButton.setVisible(true);
+        quitButton.setFont(font);
+        quitButton.setOnMouseClicked(mouseEvent -> {
+            quitGame();
+        });
+        root2D.getChildren().add(quitButton);
+         */
     }
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
         //System.out.println("[InGameUiController] update()");
         //secondsPrinter(delta);
+        //refreshUi();
         moveMap(delta);
         zoomMap();
         findHoveredTile();
@@ -70,6 +92,10 @@ public class InGameUiController extends AbstractUiController {
         map = new Map(initialMap, root2D);
     }
 
+    protected void quitGame(){
+        gameController.setActiveUiController(new MainMenuUiController(gameController));
+    }
+
     /**
      * Prints a line every second.
      */
@@ -83,6 +109,14 @@ public class InGameUiController extends AbstractUiController {
             //System.out.println(gameController.getInputHandler().getCumulativeScrollDelta());
 
         }
+    }
+
+    /**
+     * Redraw UI elements to adjust for window size changes
+     */
+    private void refreshUi(){
+        quitButton.setTranslateX(subScene2D.getWidth() - quitButton.getWidth() - 24);
+        quitButton.setTranslateY(subScene2D.getHeight() - quitButton.getHeight() - 46);
     }
 
     /**
