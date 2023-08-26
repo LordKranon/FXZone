@@ -89,7 +89,8 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     }
 
 
-    public void playerJoinedLobby(Player player) {
+    public boolean playerJoinedLobby(Player player) {
         playerListUpdateFlag = true;
+        return true;
     }
 }

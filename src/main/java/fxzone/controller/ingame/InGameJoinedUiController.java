@@ -20,6 +20,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     @Override
     public void update(AbstractGameController gameController, double delta){
+        super.update(gameController, delta);
         if(exitFlag){
             quitGame();
         }

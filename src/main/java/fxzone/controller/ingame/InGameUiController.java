@@ -59,7 +59,7 @@ public class InGameUiController extends AbstractUiController {
         this.root2D = root2D;
         createTileSelector();
 
-        /*
+
         Font font = new Font(20);
         quitButton = new Button("Quit");
         quitButton.setViewOrder(-10);
@@ -69,14 +69,14 @@ public class InGameUiController extends AbstractUiController {
             quitGame();
         });
         root2D.getChildren().add(quitButton);
-         */
+
     }
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
         //System.out.println("[InGameUiController] update()");
         //secondsPrinter(delta);
-        //refreshUi();
+        refreshUi();
         moveMap(delta);
         zoomMap();
         findHoveredTile();

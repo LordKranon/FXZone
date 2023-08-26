@@ -44,8 +44,13 @@ public class Server extends AbstractServer{
      * Then that client will be added as a player.
      */
     public void clientConnected(ServerProtocol serverProtocol, Player player){
-        players.put(serverProtocol, player);
-        serverHostController.playerJoinedLobby(player);
+        if(serverHostController.playerJoinedLobby(player)){
+            players.put(serverProtocol, player);
+        }
+        else {
+            System.out.println("[SERVER] Player tried to join but is rejected. Closing connection with that player.");
+            serverProtocol.stopConnectionRaw();
+        }
     }
 
     public void setLobbyHostUiController(LobbyHostUiController lobbyHostUiController){
