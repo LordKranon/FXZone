@@ -9,6 +9,8 @@ public class Tile extends TileSpaceObject{
 
     private final TileType tileType;
 
+    private Unit unitOnTile;
+
     /**
      * Constructor
      *
@@ -33,5 +35,13 @@ public class Tile extends TileSpaceObject{
 
     public TileType getTileType(){
         return tileType;
+    }
+
+    public void setUnitOnTile(Unit unit){
+        this.unitOnTile = unit;
+    }
+
+    public Unit getUnitOnTile(){
+        return unitOnTile;
     }
 }

@@ -14,6 +14,12 @@ public class InputHandler {
 
     private Point2D lastMousePosition;
 
+    /**
+     * Used for handling mouse clicks. A "click" is when the left mouse button enters the "pressed" position.
+     */
+    private Point2D lastMousePrimaryButtonPressedPosition;
+    private boolean mousePrimaryButtonPressProcessed = true;
+
     private double cumulativeScrollDelta;
 
 
@@ -33,6 +39,10 @@ public class InputHandler {
 
         scene.setOnMousePressed(mouseEvent -> {
             mouseButtonsPressed.add(mouseEvent.getButton());
+            if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                lastMousePrimaryButtonPressedPosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                mousePrimaryButtonPressProcessed = false;
+            }
         });
         scene.setOnMouseReleased(mouseEvent -> {
             mouseButtonsPressed.remove(mouseEvent.getButton());
@@ -60,5 +70,12 @@ public class InputHandler {
         double returnedScrollDelta = cumulativeScrollDelta;
         cumulativeScrollDelta = 0;
         return returnedScrollDelta;
+    }
+    public boolean wasMousePrimaryButtonPressed(){
+        return !mousePrimaryButtonPressProcessed;
+    }
+    public Point2D getLastMousePrimaryButtonPressedPosition(){
+        mousePrimaryButtonPressProcessed = true;
+        return new Point2D(lastMousePrimaryButtonPressedPosition.getX(), lastMousePrimaryButtonPressedPosition.getY());
     }
 }

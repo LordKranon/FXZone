@@ -142,6 +142,11 @@ public class Map {
 
     public void addUnit(Unit unit){
         units.add(unit);
+        try{
+            tiles[unit.x][unit.y].setUnitOnTile(unit);
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.err.println("[MAP] Unit is not in bounds of map.");
+        }
         propagateGraphicalOffsetToUnit(unit);
         propagateTileRenderSizeToUnit(unit);
     }

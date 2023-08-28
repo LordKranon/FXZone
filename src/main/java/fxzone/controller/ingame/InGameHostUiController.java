@@ -14,6 +14,8 @@ public class InGameHostUiController extends InGameNetworkUiController implements
         super(gameController, mapSerializable);
         this.server = server;
         //this.server.setInGameHostUiController(this);
+        //selectedUnit = map.getUnits().get(0);
+        //selectUnit(map.getUnits().get(0));
     }
 
     @Override

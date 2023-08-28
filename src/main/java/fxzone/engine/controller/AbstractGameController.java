@@ -30,6 +30,7 @@ public abstract class AbstractGameController extends AnimationTimer {
 
     private final boolean printFps = Config.getBool("PRINT_FPS");
 
+    private final boolean verbose = false;
 
 
     private final InputHandler inputHandler;
@@ -87,7 +88,7 @@ public abstract class AbstractGameController extends AnimationTimer {
     }
 
     public void setActiveUiController(AbstractUiController activeUiController){
-        System.out.println("[GAME-CONTROLLER] set new active UI controller");
+        if(verbose) System.out.println("[GAME-CONTROLLER] set new active UI controller");
         this.activeUiController = activeUiController;
         gameRoot.getChildren().clear();
         activeUiController.attachToRoot(gameRoot);

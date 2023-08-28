@@ -20,4 +20,12 @@ public class GameObjectUnit extends GameObjectInTileSpace{
         this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitName, 1));
         this.setImage(imageStance0);
     }
+
+    public void setStance(int stance){
+        if(stance == 0){
+            this.setImage(imageStance0);
+        } else {
+            this.setImage(imageStance1);
+        }
+    }
 }

@@ -18,6 +18,8 @@ public abstract class AbstractServer extends Thread{
 
     private final List<ServerProtocol> clients;
 
+    protected final boolean verbose = false;
+
     AbstractServer(){
         this.running = false;
         this.clients = new ArrayList<>();
@@ -25,7 +27,7 @@ public abstract class AbstractServer extends Thread{
 
     public void run(){
         running = true;
-        System.out.println("[SERVER] Server started");
+        if (verbose) System.out.println("[SERVER] Server started");
         try {
             serverSocket = new ServerSocket(Config.getInt("SERVER_PORT"));
         } catch (IOException e) {
@@ -37,7 +39,7 @@ public abstract class AbstractServer extends Thread{
                 clientSocket = serverSocket.accept();
             }
             catch (SocketException e){
-                System.out.println("[SERVER] Socket exception. Sure hope the Socket is closed intentionally. Server is being closed.");
+                if (verbose) System.out.println("[SERVER] Socket exception. Sure hope the Socket is closed intentionally. Server is being closed.");
                 running = false;
                 return;
             }
@@ -45,7 +47,7 @@ public abstract class AbstractServer extends Thread{
                 e.printStackTrace();
                 continue;
             }
-            System.out.println("[SERVER] Client socket accepted");
+            if (verbose) System.out.println("[SERVER] Client socket accepted");
             ServerProtocol serverProtocol = createServerProtocol(clientSocket);
             clients.add(serverProtocol);
             try{
@@ -64,12 +66,12 @@ public abstract class AbstractServer extends Thread{
     }
 
     public void sendTestMessageToAll(String message){
-        System.out.println("[SERVER] Sending test message to all");
+        if (verbose) System.out.println("[SERVER] Sending test message to all");
         sendPacketToAll(new TestPacket(message));
     }
 
     public void sendPacketToAll(Packet packet){
-        System.out.println("[SERVER] Sending packet to all");
+        if (verbose) System.out.println("[SERVER] Sending packet to all");
         sendPacketTo(clients, packet);
     }
 
@@ -80,7 +82,7 @@ public abstract class AbstractServer extends Thread{
     }
 
     public void stopServerRaw(){
-        System.out.println("[SERVER] Stopping server RAW");
+        if (verbose) System.out.println("[SERVER] Stopping server RAW");
         this.running = false;
         for(ServerProtocol serverProtocol : clients){
             serverProtocol.stopConnectionRaw();
@@ -88,7 +90,7 @@ public abstract class AbstractServer extends Thread{
         try {
             serverSocket.close();
         } catch (IOException e) {
-            System.out.println("[SERVER] Exception on intentional server-socket close");
+            if (verbose) System.out.println("[SERVER] Exception on intentional server-socket close");
             e.printStackTrace();
         }
     }

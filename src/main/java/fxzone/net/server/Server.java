@@ -27,14 +27,14 @@ public class Server extends AbstractServer{
 
     @Override
     protected ServerProtocol createServerProtocol(Socket socket) {
-        System.out.println("[SERVER] Creating ServerProtocol");
+        if (verbose) System.out.println("[SERVER] Creating ServerProtocol");
         return new ServerProtocol(socket, this);
     }
 
     @Override
     protected void connectionProtocolHasClosed(ServerProtocol serverProtocol) {
         super.connectionProtocolHasClosed(serverProtocol);
-        System.out.println("[SERVER] Removing disconnected player");
+        if (verbose) System.out.println("[SERVER] Removing disconnected player");
         players.remove(serverProtocol);
         serverHostController.lobbyPlayerListChanged();
     }
@@ -48,7 +48,7 @@ public class Server extends AbstractServer{
             players.put(serverProtocol, player);
         }
         else {
-            System.out.println("[SERVER] Player tried to join but is rejected. Closing connection with that player.");
+            if (verbose) System.out.println("[SERVER] Player tried to join but is rejected. Closing connection with that player.");
             serverProtocol.stopConnectionRaw();
         }
     }
