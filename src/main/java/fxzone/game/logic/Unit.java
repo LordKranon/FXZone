@@ -76,16 +76,22 @@ public class Unit extends TileSpaceObject{
         }
     }
 
-    public void performFullTileMove(Map map){
+    /**
+     * Move to the next tile in queued path.
+     * @return true if this unit is still moving afterwards
+     */
+    public boolean performFullTileMove(Map map){
         if(unitState == UnitState.MOVING){
             Point nextPoint = movePath.poll();
             if(nextPoint == null){
                 unitState = UnitState.NEUTRAL;
-                return;
+                return false;
             } else {
                 setPositionInMap(nextPoint.x, nextPoint.y, map);
+                return movePath.peek() != null;
             }
         }
+        return false;
     }
 
     @Override

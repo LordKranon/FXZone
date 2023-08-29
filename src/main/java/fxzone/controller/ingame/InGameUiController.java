@@ -226,13 +226,23 @@ public class InGameUiController extends AbstractUiController {
         map.setGraphicalOffset(map.getOffsetX() + totalExtraOffsetX, map.getOffsetY() + totalExtraOffsetY);
     }
 
+    /**
+     * Move every moving unit for which the required cumulative delta has been reached.
+     * Update every moving units delta, whether it went a full tile or not.
+     * Moving units with no more tiles in queued path are removed from moving unit list.
+     *
+     * @param delta time (in seconds) since last update
+     */
     private void moveMovingUnits(double delta){
         for(Unit unit : unitsMoving.keySet()){
             double cumulativeDelta = unitsMoving.get(unit);
             cumulativeDelta += delta;
             if(cumulativeDelta > 1){
                 cumulativeDelta -= 1;
-                unit.performFullTileMove(map);
+                if(!unit.performFullTileMove(map)){
+                    unitsMoving.remove(unit);
+                    return;
+                }
             }
             unitsMoving.put(unit, cumulativeDelta);
         }

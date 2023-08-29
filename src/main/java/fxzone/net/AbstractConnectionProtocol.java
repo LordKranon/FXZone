@@ -75,7 +75,7 @@ public abstract class AbstractConnectionProtocol extends Thread{
         try {
             socket.close();
         } catch (IOException e) {
-            if(verbose) System.out.println("[CONNECTION-PROTOCOL] Exception on intentional socket close");
+            if(verbose) System.err.println("[CONNECTION-PROTOCOL] Exception on intentional socket close");
             e.printStackTrace();
         }
     }
