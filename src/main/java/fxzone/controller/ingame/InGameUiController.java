@@ -14,6 +14,10 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import java.awt.Point;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Queue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -71,11 +75,21 @@ public class InGameUiController extends AbstractUiController {
 
     protected TurnState turnState = TurnState.NEUTRAL;
 
+    private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
+
 
     public InGameUiController(AbstractGameController gameController, MapSerializable initialMap) {
         super(gameController);
         this.gameController = gameController;
         initializeMap(initialMap);
+
+        //BEGIN TEST
+        Queue<Point> path = new ArrayDeque<>();
+        path.add(new Point(0, 0));
+        path.add(new Point(1, 0));
+        path.add(new Point(2, 0));
+        commandUnitToMove(map.getUnits().get(0), path);
+        //END TEST
     }
 
     @Override
@@ -96,6 +110,7 @@ public class InGameUiController extends AbstractUiController {
         findHoveredTile();
         moveSelector();
         updateSelectedUnit(delta);
+        moveMovingUnits(delta);
     }
 
     private void createTileSelector(){
@@ -148,7 +163,10 @@ public class InGameUiController extends AbstractUiController {
 
     private void handleClicks(){
         if(gameController.getInputHandler().wasMousePrimaryButtonPressed()){
+
+            //This call to input handler clarifies that the click has been processed.
             Point2D pointClicked = gameController.getInputHandler().getLastMousePrimaryButtonPressedPosition();
+
             if(mousePointerInBounds){
                 tileClicked(tileHoveredX, tileHoveredY);
             }
@@ -206,6 +224,18 @@ public class InGameUiController extends AbstractUiController {
         }
 
         map.setGraphicalOffset(map.getOffsetX() + totalExtraOffsetX, map.getOffsetY() + totalExtraOffsetY);
+    }
+
+    private void moveMovingUnits(double delta){
+        for(Unit unit : unitsMoving.keySet()){
+            double cumulativeDelta = unitsMoving.get(unit);
+            cumulativeDelta += delta;
+            if(cumulativeDelta > 1){
+                cumulativeDelta -= 1;
+                unit.performFullTileMove(map);
+            }
+            unitsMoving.put(unit, cumulativeDelta);
+        }
     }
 
     /**
@@ -267,6 +297,12 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.NEUTRAL){
             selectedUnit = unit;
             turnState = TurnState.UNIT_SELECTED;
+        }
+    }
+
+    private void commandUnitToMove(Unit unit, Queue<Point> path){
+        if(unit.moveCommand(path)){
+            unitsMoving.put(unit, 0.);
         }
     }
 }

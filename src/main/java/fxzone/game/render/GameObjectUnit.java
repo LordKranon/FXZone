@@ -13,6 +13,13 @@ public class GameObjectUnit extends GameObjectInTileSpace{
     private final Image imageStance0;
     private final Image imageStance1;
 
+    /**
+     * A unit goes in between tiles while moving, these values range from 0 - 1
+     * with 0 meaning the unit is exactly on the center of the tile it's on
+     * and 1 meaning the unit has reached the center of the very next tile.
+     */
+    private double tileCenterOffsetX, tileCenterOffsetY;
+
     public GameObjectUnit(String unitName, int x, int y, double tileRenderSize,
         Group group) {
         super(null, x, y, tileRenderSize, group);

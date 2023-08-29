@@ -49,4 +49,9 @@ public class TileSpaceObject {
     public int getY(){
         return y;
     }
+    public void setPositionInMap(int x, int y, Map map){
+        this.x = x;
+        this.y = y;
+        gameObjectInTileSpace.setPositionInMap(x, y, map);
+    }
 }
