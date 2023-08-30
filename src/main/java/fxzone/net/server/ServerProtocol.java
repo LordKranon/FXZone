@@ -4,6 +4,7 @@ import fxzone.net.AbstractConnectionProtocol;
 import fxzone.net.packet.ClientConnectPacket;
 import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
+import fxzone.net.packet.UnitMoveCommandPacket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -35,6 +36,7 @@ public class ServerProtocol extends AbstractConnectionProtocol {
             case TEST: testPacketReceived((TestPacket) packet); break;
             case CHAT_MESSAGE: break;
             case CLIENT_CONNECT: clientConnectPacketReceived((ClientConnectPacket) packet); break;
+            case UNIT_MOVE_COMMAND: unitMoveCommandPacketReceived((UnitMoveCommandPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -54,7 +56,12 @@ public class ServerProtocol extends AbstractConnectionProtocol {
         System.out.println(testPacket.getMessage());
     }
 
+    private void unitMoveCommandPacketReceived(UnitMoveCommandPacket unitMoveCommandPacket){
+        System.out.println("[SERVER-PROTOCOL] Received unit move command packet");
+        server.unitMoveCommandByClient(unitMoveCommandPacket.getUnitPosition(), unitMoveCommandPacket.getPath());
+    }
+
     private void unknownPacketReceived(Packet packet){
-        System.out.println("[SERVER-PROTOCOL] Received unknown packet");
+        System.err.println("[SERVER-PROTOCOL] Received unknown packet");
     }
 }

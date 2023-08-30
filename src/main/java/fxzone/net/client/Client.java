@@ -6,8 +6,11 @@ import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.ClientConnectPacket;
+import fxzone.net.packet.Packet;
+import java.awt.Point;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class Client extends Thread{
 
@@ -78,6 +81,10 @@ public class Client extends Thread{
         clientJoinedController.connectionClosed();
     }
 
+    public void sendPacket(Packet packet){
+        clientProtocol.sendPacket(packet);
+    }
+
     public void sendClientConnectPacket(){
         clientProtocol.sendPacket(new ClientConnectPacket(playerCreationData));
     }
@@ -105,5 +112,9 @@ public class Client extends Thread{
      */
     public void gameStart(MapSerializable mapSerializable){
         clientJoinedController.gameStart(mapSerializable);
+    }
+
+    public void unitMoveCommandReceived(Point unitPosition, Queue<Point> path){
+        clientJoinedController.unitMoveCommandReceived(unitPosition, path);
     }
 }

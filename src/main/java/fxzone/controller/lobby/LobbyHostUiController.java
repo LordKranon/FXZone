@@ -10,7 +10,9 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Queue;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -92,5 +94,10 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     public boolean playerJoinedLobby(Player player) {
         playerListUpdateFlag = true;
         return true;
+    }
+
+    @Override
+    public void unitMoveCommandByClient(Point unitPosition, Queue<Point> path) {
+        System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received unit move command while still in lobby.");
     }
 }

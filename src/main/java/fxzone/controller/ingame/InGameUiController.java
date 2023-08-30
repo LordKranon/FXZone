@@ -320,7 +320,7 @@ public class InGameUiController extends AbstractUiController {
         }
     }
 
-    private void commandUnitToMove(Unit unit, Queue<Point> path){
+    protected void commandUnitToMove(Unit unit, Queue<Point> path){
         if(unit.moveCommand(path)){
             unitsMoving.put(unit, 0.);
         }
@@ -329,7 +329,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * A player gives a unit a move command during their turn.
      */
-    private void onPlayerUnitMoveCommand(Queue<Point> path){
+    protected void onPlayerUnitMoveCommand(Queue<Point> path){
         commandUnitToMove(selectedUnit, path);
         turnState = TurnState.NEUTRAL;
     }

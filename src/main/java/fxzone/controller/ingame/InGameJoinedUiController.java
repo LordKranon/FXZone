@@ -5,7 +5,10 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
+import fxzone.net.packet.UnitMoveCommandPacket;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class InGameJoinedUiController extends InGameNetworkUiController implements ClientJoinedController {
 
@@ -49,7 +52,17 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
+    public void unitMoveCommandReceived(Point unitPosition, Queue<Point> path) {
+        onNetworkPlayerUnitMoveCommandReceived(unitPosition, path);
+    }
+
+    @Override
     public void lobbyPlayerListChanged() {
 
+    }
+
+    @Override
+    protected void onPlayerUnitMoveCommand(Queue<Point> path){
+        client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path));
     }
 }

@@ -10,4 +10,6 @@ public enum PacketType {
     LOBBY_PLAYER_LIST,
 
     GAME_START,
+
+    UNIT_MOVE_COMMAND,
 }

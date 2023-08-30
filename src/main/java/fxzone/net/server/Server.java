@@ -8,10 +8,12 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.Packet;
+import java.awt.Point;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Queue;
 
 public class Server extends AbstractServer{
 
@@ -73,5 +75,9 @@ public class Server extends AbstractServer{
         sendPacketToAllVerifiedPlayers(new GameStartPacket(mapSerializable));
         this.serverHostController = inGameHostUiController;
         return true;
+    }
+
+    public void unitMoveCommandByClient(Point unitPosition, Queue<Point> path){
+        serverHostController.unitMoveCommandByClient(unitPosition, path);
     }
 }

@@ -5,6 +5,7 @@ import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
+import fxzone.net.packet.UnitMoveCommandPacket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -45,6 +46,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
             case CHAT_MESSAGE: break;
             case LOBBY_PLAYER_LIST: lobbyPlayerListPacketReceived((LobbyPlayerListPacket) packet); break;
             case GAME_START: gameStartPacketReceived((GameStartPacket) packet); break;
+            case UNIT_MOVE_COMMAND: unitMoveCommandPacketReceived((UnitMoveCommandPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -71,5 +73,10 @@ public class ClientProtocol extends AbstractConnectionProtocol {
     private void gameStartPacketReceived(GameStartPacket gameStartPacket){
         System.out.println("[CLIENT-PROTOCOL] Received game start packet");
         client.gameStart(gameStartPacket.getMapSerializable());
+    }
+
+    private void unitMoveCommandPacketReceived(UnitMoveCommandPacket unitMoveCommandPacket){
+        System.out.println("[CLIENT-PROTOCOL] Received unit move command packet");
+        client.unitMoveCommandReceived(unitMoveCommandPacket.getUnitPosition(), unitMoveCommandPacket.getPath());
     }
 }
