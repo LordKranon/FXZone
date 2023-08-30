@@ -157,4 +157,11 @@ public class Map {
     public List<Unit> getUnits(){
         return units;
     }
+
+    /**
+     * Whether a point with tile coordinates x and y is in bounds of the map.
+     */
+    public boolean isInBounds(int x, int y){
+        return (x >= 0) && (y >= 0) && (x < getWidth()) && (y < getHeight());
+    }
 }

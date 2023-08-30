@@ -88,7 +88,11 @@ public class Unit extends TileSpaceObject{
                 return false;
             } else {
                 setPositionInMap(nextPoint.x, nextPoint.y, map);
-                return movePath.peek() != null;
+                boolean continueMove = (movePath.peek() != null);
+                if(!continueMove){
+                    unitState = UnitState.NEUTRAL;
+                }
+                return continueMove;
             }
         }
         return false;
@@ -101,4 +105,7 @@ public class Unit extends TileSpaceObject{
         map.getTiles()[x][y].setUnitOnTile(this);
     }
 
+    public UnitState getUnitState(){
+        return unitState;
+    }
 }

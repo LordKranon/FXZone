@@ -11,6 +11,7 @@ import fxzone.game.logic.Map;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import java.awt.Point;
@@ -84,11 +85,13 @@ public class InGameUiController extends AbstractUiController {
         initializeMap(initialMap);
 
         //BEGIN TEST
+        /*
         Queue<Point> path = new ArrayDeque<>();
         path.add(new Point(0, 0));
         path.add(new Point(1, 0));
         path.add(new Point(2, 0));
         commandUnitToMove(map.getUnits().get(0), path);
+         */
         //END TEST
     }
 
@@ -182,6 +185,13 @@ public class InGameUiController extends AbstractUiController {
         } else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
                 turnState = TurnState.NEUTRAL;
+            }
+
+            //TEMPORARY UNIT MOVE COMMANDS
+            else if(map.isInBounds(x, y)){
+                Queue<Point> path = new ArrayDeque<>();
+                path.add(new Point(x, y));
+                onPlayerUnitMoveCommand(path);
             }
         }
     }
@@ -304,7 +314,7 @@ public class InGameUiController extends AbstractUiController {
      * @param unit unit being selected
      */
     protected void selectUnit(Unit unit){
-        if(turnState == TurnState.NEUTRAL){
+        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL){
             selectedUnit = unit;
             turnState = TurnState.UNIT_SELECTED;
         }
@@ -314,5 +324,13 @@ public class InGameUiController extends AbstractUiController {
         if(unit.moveCommand(path)){
             unitsMoving.put(unit, 0.);
         }
+    }
+
+    /**
+     * A player gives a unit a move command during their turn.
+     */
+    private void onPlayerUnitMoveCommand(Queue<Point> path){
+        commandUnitToMove(selectedUnit, path);
+        turnState = TurnState.NEUTRAL;
     }
 }
