@@ -78,6 +78,8 @@ public class InGameUiController extends AbstractUiController {
 
     private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
 
+    private ArrayDeque<Point> selectedUnitQueuedPath;
+
 
     public InGameUiController(AbstractGameController gameController, MapSerializable initialMap) {
         super(gameController);
@@ -112,6 +114,7 @@ public class InGameUiController extends AbstractUiController {
         zoomMap();
         findHoveredTile();
         moveSelector();
+        handleSelectedUnitPathQueue();
         updateSelectedUnit(delta);
         moveMovingUnits(delta);
     }
@@ -149,10 +152,6 @@ public class InGameUiController extends AbstractUiController {
         if(this.cumulativeDelta > 1){
             System.out.println("[secondPrinter] !!!");
             this.cumulativeDelta -= 1;
-
-            //map.setGraphicalOffset(map.getOffsetX()+32, map.getOffsetY()+16);
-            //System.out.println(gameController.getInputHandler().getCumulativeScrollDelta());
-
         }
     }
 
@@ -176,6 +175,15 @@ public class InGameUiController extends AbstractUiController {
         }
     }
 
+    private void handleSelectedUnitPathQueue(){
+        if(turnState == TurnState.UNIT_SELECTED){
+            Point hoveredPoint = new Point(tileHoveredX, tileHoveredY);
+            if(!hoveredPoint.equals(selectedUnitQueuedPath.peekLast())){
+                selectedUnitQueuedPath.add(hoveredPoint);
+            }
+        }
+    }
+
     private void tileClicked(int x, int y){
         if(turnState == TurnState.NEUTRAL){
             Unit unitOnTileClicked = map.getTiles()[x][y].getUnitOnTile();
@@ -189,9 +197,8 @@ public class InGameUiController extends AbstractUiController {
 
             //TEMPORARY UNIT MOVE COMMANDS
             else if(map.isInBounds(x, y)){
-                Queue<Point> path = new ArrayDeque<>();
-                path.add(new Point(x, y));
-                onPlayerUnitMoveCommand(path);
+
+                onPlayerUnitMoveCommand(selectedUnitQueuedPath);
             }
         }
     }
@@ -316,6 +323,7 @@ public class InGameUiController extends AbstractUiController {
     protected void selectUnit(Unit unit){
         if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL){
             selectedUnit = unit;
+            selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;
         }
     }
