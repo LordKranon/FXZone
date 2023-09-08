@@ -3,11 +3,18 @@ package fxzone.game.logic;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUnit;
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import javafx.scene.Group;
 
 public class Unit extends TileSpaceObject{
+
+    /**
+     * Tile position in map.
+     * Alters from actual position when unit is moving.
+     */
+    private int visualTileX, visualTileY;
 
     private final String unitName;
 
@@ -20,7 +27,7 @@ public class Unit extends TileSpaceObject{
 
     private UnitState unitState = UnitState.NEUTRAL;
 
-    private Queue<Point> movePath;
+    private ArrayDeque<Point> movePath;
 
     /**
      * Constructor
@@ -64,9 +71,11 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public boolean moveCommand(Queue<Point> path){
+    public boolean moveCommand(ArrayDeque<Point> path, Map map){
         if(unitState == UnitState.NEUTRAL){
             this.movePath = path;
+            setPositionInMap(path.peekLast().x, path.peekLast().y, map);
+            setPositionInMapVisual(path.peek().x, path.peek().y, map);
             unitState = UnitState.MOVING;
             return true;
         }
@@ -87,7 +96,7 @@ public class Unit extends TileSpaceObject{
                 unitState = UnitState.NEUTRAL;
                 return false;
             } else {
-                setPositionInMap(nextPoint.x, nextPoint.y, map);
+                setPositionInMapVisual(nextPoint.x, nextPoint.y, map);
                 boolean continueMove = (movePath.peek() != null);
                 if(!continueMove){
                     unitState = UnitState.NEUTRAL;
@@ -105,7 +114,18 @@ public class Unit extends TileSpaceObject{
         map.getTiles()[x][y].setUnitOnTile(this);
     }
 
+    /**
+     * Used while the unit is performing its move command. The unit will update it's position only visually while actually
+     * being on the destination tile.
+     */
+    private void setPositionInMapVisual(int x, int y, Map map){
+        visualTileX = x;
+        visualTileY = y;
+        gameObjectInTileSpace.setPositionInMap(x, y, map);
+    }
+
     public UnitState getUnitState(){
         return unitState;
     }
+
 }

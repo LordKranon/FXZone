@@ -7,6 +7,7 @@ import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class InGameHostUiController extends InGameNetworkUiController implements ServerHostController {
@@ -30,7 +31,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     }
 
     @Override
-    public void unitMoveCommandByClient(Point unitPosition, Queue<Point> path) {
+    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path) {
         onNetworkPlayerUnitMoveCommandReceived(unitPosition, path);
         server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(unitPosition, path));
     }
@@ -41,7 +42,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     }
 
     @Override
-    protected void onPlayerUnitMoveCommand(Queue<Point> path){
+    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         super.onPlayerUnitMoveCommand(path);
         server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path));
     }

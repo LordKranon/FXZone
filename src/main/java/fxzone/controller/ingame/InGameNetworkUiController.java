@@ -6,6 +6,7 @@ import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.MapSerializable;
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 public abstract class InGameNetworkUiController extends InGameUiController implements NetworkController {
@@ -15,14 +16,14 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     }
 
     @Override
-    protected void onPlayerUnitMoveCommand(Queue<Point> path){
+    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         super.onPlayerUnitMoveCommand(path);
     }
 
     /**
      * Upon receiving info about a move command over the network.
      */
-    protected void onNetworkPlayerUnitMoveCommandReceived(Point unitPosition, Queue<Point> path){
+    protected void onNetworkPlayerUnitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         commandUnitToMove(unit, path);
         turnState = TurnState.NEUTRAL;

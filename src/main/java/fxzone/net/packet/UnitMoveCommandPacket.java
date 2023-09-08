@@ -1,14 +1,15 @@
 package fxzone.net.packet;
 
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class UnitMoveCommandPacket extends Packet{
 
     private final Point unitPosition;
-    private final Queue<Point> path;
+    private final ArrayDeque<Point> path;
 
-    public UnitMoveCommandPacket(Point unitPosition, Queue<Point> path) {
+    public UnitMoveCommandPacket(Point unitPosition, ArrayDeque<Point> path) {
         super(PacketType.UNIT_MOVE_COMMAND);
         this.unitPosition = unitPosition;
         this.path = path;
@@ -17,7 +18,7 @@ public class UnitMoveCommandPacket extends Packet{
     public Point getUnitPosition(){
         return unitPosition;
     }
-    public Queue<Point> getPath(){
+    public ArrayDeque<Point> getPath(){
         return path;
     }
 }

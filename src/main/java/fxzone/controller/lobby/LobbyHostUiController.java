@@ -11,6 +11,7 @@ import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import javafx.scene.control.Label;
@@ -97,7 +98,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     }
 
     @Override
-    public void unitMoveCommandByClient(Point unitPosition, Queue<Point> path) {
+    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path) {
         System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received unit move command while still in lobby.");
     }
 }

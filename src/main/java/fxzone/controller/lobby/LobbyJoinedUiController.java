@@ -8,6 +8,7 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import javafx.scene.layout.AnchorPane;
@@ -95,7 +96,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    public void unitMoveCommandReceived(Point unitPosition, Queue<Point> path) {
+    public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path) {
         System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received unit move command while still in lobby.");
     }
 }

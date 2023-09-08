@@ -10,6 +10,7 @@ import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.Packet;
 import java.awt.Point;
 import java.net.Socket;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public class Server extends AbstractServer{
         return true;
     }
 
-    public void unitMoveCommandByClient(Point unitPosition, Queue<Point> path){
+    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path){
         serverHostController.unitMoveCommandByClient(unitPosition, path);
     }
 }

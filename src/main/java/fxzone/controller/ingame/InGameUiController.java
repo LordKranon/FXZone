@@ -196,7 +196,7 @@ public class InGameUiController extends AbstractUiController {
             }
 
             //TEMPORARY UNIT MOVE COMMANDS
-            else if(map.isInBounds(x, y)){
+            else if(map.isInBounds(x, y) && map.getTiles()[x][y].getUnitOnTile() == null){
 
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath);
             }
@@ -328,8 +328,8 @@ public class InGameUiController extends AbstractUiController {
         }
     }
 
-    protected void commandUnitToMove(Unit unit, Queue<Point> path){
-        if(unit.moveCommand(path)){
+    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path){
+        if(unit.moveCommand(path, map)){
             unitsMoving.put(unit, 0.);
         }
     }
@@ -337,7 +337,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * A player gives a unit a move command during their turn.
      */
-    protected void onPlayerUnitMoveCommand(Queue<Point> path){
+    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         commandUnitToMove(selectedUnit, path);
         turnState = TurnState.NEUTRAL;
     }
