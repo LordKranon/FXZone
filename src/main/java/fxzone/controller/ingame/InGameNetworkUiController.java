@@ -24,6 +24,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
      * Upon receiving info about a move command over the network.
      */
     protected void onNetworkPlayerUnitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){
+        //TODO Handle desync
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         commandUnitToMove(unit, path);
         turnState = TurnState.NEUTRAL;

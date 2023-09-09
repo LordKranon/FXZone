@@ -29,6 +29,8 @@ public class Unit extends TileSpaceObject{
 
     private ArrayDeque<Point> movePath;
 
+    private Player owner;
+
     /**
      * Constructor
      *
