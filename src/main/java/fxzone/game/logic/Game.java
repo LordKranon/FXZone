@@ -45,4 +45,8 @@ public class Game {
             whoseTurn = 0;
         }
     }
+
+    public boolean itsMyTurn(Player player){
+        return players.get(whoseTurn) == player;
+    }
 }

@@ -2,21 +2,26 @@ package fxzone.controller.ingame;
 
 import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Game;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class InGameHostUiController extends InGameNetworkUiController implements ServerHostController {
 
     private final Server server;
 
-    public InGameHostUiController(AbstractGameController gameController, Server server, MapSerializable mapSerializable) {
+    public InGameHostUiController(AbstractGameController gameController, Server server, MapSerializable mapSerializable, ArrayList<Player> playerList) {
         super(gameController, mapSerializable);
         this.server = server;
+
+        this.game = new Game(playerList);
+        this.thisPlayer = game.getPlayers().get(0);
     }
 
     @Override

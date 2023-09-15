@@ -7,7 +7,9 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.InputHandler;
+import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
@@ -71,6 +73,10 @@ public class InGameUiController extends AbstractUiController {
     GAME LOGIC
      */
     protected Map map;
+
+    protected Game game;
+
+    protected Player thisPlayer;
 
     protected Unit selectedUnit;
 
@@ -185,7 +191,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void tileClicked(int x, int y){
-        if(turnState == TurnState.NEUTRAL){
+        if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             Unit unitOnTileClicked = map.getTiles()[x][y].getUnitOnTile();
             if(unitOnTileClicked != null){
                 selectUnit(unitOnTileClicked);

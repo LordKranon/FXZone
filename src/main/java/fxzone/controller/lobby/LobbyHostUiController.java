@@ -74,7 +74,10 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         END Creating map.
         */
 
-        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, mapSerializable);
+        ArrayList<Player> playerList = new ArrayList<>();
+        playerList.add(hostingPlayer);
+        playerList.addAll(server.getPlayers());
+        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, mapSerializable, playerList);
         if(server.startGameForAll(inGameHostUiController, mapSerializable)){
             gameController.setActiveUiController(inGameHostUiController);
         }
