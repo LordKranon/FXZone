@@ -327,7 +327,7 @@ public class InGameUiController extends AbstractUiController {
      * @param unit unit being selected
      */
     protected void selectUnit(Unit unit){
-        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL){
+        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer.equals(unit.getOwner())){
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;

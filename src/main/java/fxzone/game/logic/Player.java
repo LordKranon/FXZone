@@ -1,14 +1,15 @@
 package fxzone.game.logic;
 
 
+import fxzone.engine.handler.KeyUnitVehicle;
 import fxzone.game.logic.serializable.PlayerSerializable;
 import javafx.scene.paint.Color;
 
 public class Player {
 
-    private Color color;
+    private final Color color;
 
-    private String name;
+    private final String name;
 
     public Player(String name, Color color){
         this.name = name;
@@ -26,5 +27,13 @@ public class Player {
 
     public String getName(){
         return name;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (!(object instanceof Player))
+            return false;
+        Player ref = (Player) object;
+        return this.name.equals(ref.name);
     }
 }

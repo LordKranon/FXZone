@@ -47,6 +47,6 @@ public class Game {
     }
 
     public boolean itsMyTurn(Player player){
-        return players.get(whoseTurn) == player;
+        return players.get(whoseTurn).equals(player);
     }
 }

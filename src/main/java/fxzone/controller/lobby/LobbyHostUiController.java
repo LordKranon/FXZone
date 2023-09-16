@@ -65,7 +65,9 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         START Creating map.
         */
         Map map = new Map(5, 3, null);
-        map.addUnit(new Unit("tank", 1, 1, map.getTileRenderSize(), null));
+        Unit tank1 = new Unit("tank", 1, 1, map.getTileRenderSize(), null);
+        tank1.setOwner(hostingPlayer);
+        map.addUnit(tank1);
         map.addUnit(new Unit("hunter_tank", 2, 1, 0, null));
         map.addUnit(new Unit("artillery", 3, 1, 0, null));
         map.addUnit(new Unit("tank", 5, 3, 0, null));

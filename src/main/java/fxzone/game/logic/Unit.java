@@ -49,6 +49,9 @@ public class Unit extends TileSpaceObject{
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group){
         super(unitSerializable);
         this.unitName = unitSerializable.unitName;
+        if(unitSerializable.owner != null){
+            this.owner = new Player(unitSerializable.owner);
+        }
         this.gameObjectUnit = new GameObjectUnit(unitName, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
     }
@@ -128,6 +131,13 @@ public class Unit extends TileSpaceObject{
 
     public UnitState getUnitState(){
         return unitState;
+    }
+
+    public Player getOwner(){
+        return owner;
+    }
+    public void setOwner(Player player){
+        this.owner = player;
     }
 
 }
