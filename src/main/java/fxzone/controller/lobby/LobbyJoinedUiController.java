@@ -5,6 +5,7 @@ import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import java.awt.Point;
@@ -23,7 +24,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
 
     private boolean gameStartFlag;
 
-    private MapSerializable latestGameStartMap;
+    private GameSerializable latestGameStartMap;
 
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
@@ -90,8 +91,8 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    public void gameStart(MapSerializable mapSerializable) {
-        this.latestGameStartMap = mapSerializable;
+    public void gameStart(GameSerializable gameSerializable) {
+        this.latestGameStartMap = gameSerializable;
         gameStartFlag = true;
     }
 

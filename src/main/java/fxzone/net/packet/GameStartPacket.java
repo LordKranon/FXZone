@@ -1,22 +1,24 @@
 package fxzone.net.packet;
 
+import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 
 public class GameStartPacket extends Packet{
 
-    private MapSerializable mapSerializable;
+    private GameSerializable gameSerializable;
 
-    public GameStartPacket(Map map) {
+    public GameStartPacket(Game game) {
         super(PacketType.GAME_START);
-        this.mapSerializable = new MapSerializable(map);
+        this.gameSerializable = new GameSerializable(game);
     }
-    public GameStartPacket(MapSerializable mapSerializable){
+    public GameStartPacket(GameSerializable gameSerializable){
         super(PacketType.GAME_START);
-        this.mapSerializable = mapSerializable;
+        this.gameSerializable = gameSerializable;
     }
 
-    public MapSerializable getMapSerializable(){
-        return mapSerializable;
+    public GameSerializable getGameSerializable(){
+        return gameSerializable;
     }
 }

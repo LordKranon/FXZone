@@ -4,9 +4,11 @@ import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
@@ -71,7 +73,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         map.addUnit(new Unit("hunter_tank", 2, 1, 0, null));
         map.addUnit(new Unit("artillery", 3, 1, 0, null));
         map.addUnit(new Unit("tank", 5, 3, 0, null));
-        MapSerializable mapSerializable = new MapSerializable(map);
+        //MapSerializable mapSerializable = new MapSerializable(map);
         /*
         END Creating map.
         */
@@ -79,8 +81,18 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(hostingPlayer);
         playerList.addAll(server.getPlayers());
-        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, mapSerializable, playerList);
-        if(server.startGameForAll(inGameHostUiController, mapSerializable)){
+
+        /*
+        * START Creating game.
+        * */
+        Game game = new Game(playerList, map);
+        GameSerializable gameSerializable = new GameSerializable(game);
+        /*
+         * END Creating game.
+         * */
+
+        InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, gameSerializable);
+        if(server.startGameForAll(inGameHostUiController, gameSerializable)){
             gameController.setActiveUiController(inGameHostUiController);
         }
     }

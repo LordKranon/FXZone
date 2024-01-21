@@ -1,6 +1,7 @@
 package fxzone.controller;
 
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -11,6 +12,6 @@ public interface ClientJoinedController extends NetworkController{
 
     void setLatestPlayerList(ArrayList<Player> players);
     void connectionClosed();
-    void gameStart(MapSerializable mapSerializable);
+    void gameStart(GameSerializable gameSerializable);
     void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path);
 }

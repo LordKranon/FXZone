@@ -4,6 +4,7 @@ import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
@@ -16,11 +17,11 @@ public class InGameHostUiController extends InGameNetworkUiController implements
 
     private final Server server;
 
-    public InGameHostUiController(AbstractGameController gameController, Server server, MapSerializable mapSerializable, ArrayList<Player> playerList) {
-        super(gameController, mapSerializable);
+    public InGameHostUiController(AbstractGameController gameController, Server server, GameSerializable gameSerializable) {
+        super(gameController, gameSerializable);
         this.server = server;
 
-        this.game = new Game(playerList);
+        //this.game = new Game(playerList);
         this.thisPlayer = game.getPlayers().get(0);
     }
 

@@ -3,6 +3,7 @@ package fxzone.controller.ingame;
 import fxzone.controller.ClientJoinedController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import fxzone.net.packet.UnitMoveCommandPacket;
@@ -17,9 +18,10 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     private boolean exitFlag;
 
-    public InGameJoinedUiController(AbstractGameController gameController, Client client, MapSerializable mapSerializable) {
-        super(gameController, mapSerializable);
+    public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable) {
+        super(gameController, gameSerializable);
         this.client = client;
+        //TODO InGameUiControllers "Game game" is null
     }
 
     @Override
@@ -48,7 +50,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
-    public void gameStart(MapSerializable mapSerializable) {
+    public void gameStart(GameSerializable gameSerializable) {
 
     }
 

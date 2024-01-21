@@ -2,11 +2,9 @@ package fxzone.controller.ingame;
 
 import fxzone.config.Config;
 import fxzone.controller.menu.MainMenuUiController;
-import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
-import fxzone.engine.handler.InputHandler;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
@@ -14,20 +12,16 @@ import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.UnitState;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import java.awt.Point;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Queue;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
 public class InGameUiController extends AbstractUiController {
@@ -86,11 +80,16 @@ public class InGameUiController extends AbstractUiController {
 
     private ArrayDeque<Point> selectedUnitQueuedPath;
 
+    /*
+    DEBUG
+    * */
+    static final boolean verbose = false;
 
-    public InGameUiController(AbstractGameController gameController, MapSerializable initialMap) {
+
+    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController);
         this.gameController = gameController;
-        initializeMap(initialMap);
+        initializeGame(initialGame);
 
         //BEGIN TEST
         /*
@@ -142,8 +141,9 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(quitButton);
     }
 
-    private void initializeMap(MapSerializable initialMap){
-        map = new Map(initialMap, root2D);
+    private void initializeGame(GameSerializable initialGame){
+        game = new Game(initialGame, root2D);
+        map = game.getMap();
     }
 
     protected void quitGame(){
@@ -192,8 +192,10 @@ public class InGameUiController extends AbstractUiController {
 
     private void tileClicked(int x, int y){
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
+            if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] tileClicked during your turn with turn-state neutral");
             Unit unitOnTileClicked = map.getTiles()[x][y].getUnitOnTile();
             if(unitOnTileClicked != null){
+                if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] starting selectUnit");
                 selectUnit(unitOnTileClicked);
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
@@ -331,6 +333,7 @@ public class InGameUiController extends AbstractUiController {
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;
+            System.out.println("[IN-GAME-UI-CONTROLLER] selectUnit finalized");
         }
     }
 

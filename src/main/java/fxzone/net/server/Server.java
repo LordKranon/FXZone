@@ -5,6 +5,7 @@ import fxzone.controller.lobby.LobbyHostUiController;
 import fxzone.controller.ServerHostController;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.Packet;
@@ -72,8 +73,8 @@ public class Server extends AbstractServer{
         sendPacketTo(new ArrayList<ServerProtocol>(players.keySet()), packet);
     }
 
-    public boolean startGameForAll(InGameHostUiController inGameHostUiController, MapSerializable mapSerializable){
-        sendPacketToAllVerifiedPlayers(new GameStartPacket(mapSerializable));
+    public boolean startGameForAll(InGameHostUiController inGameHostUiController, GameSerializable gameSerializable){
+        sendPacketToAllVerifiedPlayers(new GameStartPacket(gameSerializable));
         this.serverHostController = inGameHostUiController;
         return true;
     }

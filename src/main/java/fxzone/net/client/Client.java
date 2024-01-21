@@ -4,6 +4,7 @@ import fxzone.controller.ClientJoinedController;
 import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.ClientConnectPacket;
 import fxzone.net.packet.Packet;
@@ -111,8 +112,8 @@ public class Client extends Thread{
     /**
      * Server has sent notice that the host has started the game from the lobby. Set UI controller to in-game.
      */
-    public void gameStart(MapSerializable mapSerializable){
-        clientJoinedController.gameStart(mapSerializable);
+    public void gameStart(GameSerializable gameSerializable){
+        clientJoinedController.gameStart(gameSerializable);
     }
 
     public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){

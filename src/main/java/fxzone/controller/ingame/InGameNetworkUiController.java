@@ -4,6 +4,7 @@ import fxzone.controller.NetworkController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -11,8 +12,8 @@ import java.util.Queue;
 
 public abstract class InGameNetworkUiController extends InGameUiController implements NetworkController {
 
-    public InGameNetworkUiController(AbstractGameController gameController, MapSerializable mapSerializable) {
-        super(gameController, mapSerializable);
+    public InGameNetworkUiController(AbstractGameController gameController, GameSerializable gameSerializable) {
+        super(gameController, gameSerializable);
     }
 
     @Override
