@@ -11,6 +11,11 @@ public class Tile extends TileSpaceObject{
 
     private Unit unitOnTile;
 
+    /*
+    * DEBUG
+    * */
+    static final boolean verbose = true;
+
     /**
      * Constructor
      *
@@ -42,6 +47,7 @@ public class Tile extends TileSpaceObject{
     }
 
     public Unit getUnitOnTile(){
+        if (verbose && unitOnTile == null) System.err.println("[TILE] No unit on tile ("+x+"; "+y+")");
         return unitOnTile;
     }
 }

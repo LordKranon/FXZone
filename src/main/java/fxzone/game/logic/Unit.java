@@ -128,6 +128,12 @@ public class Unit extends TileSpaceObject{
         visualTileY = y;
         gameObjectInTileSpace.setPositionInMap(x, y, map);
     }
+    public int getVisualTileX(){
+        return visualTileX;
+    }
+    public int getVisualTileY(){
+        return visualTileY;
+    }
 
     public UnitState getUnitState(){
         return unitState;

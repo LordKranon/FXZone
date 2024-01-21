@@ -329,7 +329,7 @@ public class InGameUiController extends AbstractUiController {
      * @param unit unit being selected
      */
     protected void selectUnit(Unit unit){
-        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer.equals(unit.getOwner())){
+        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && thisPlayer.equals(unit.getOwner())){
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;
@@ -344,7 +344,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     /**
-     * A player gives a unit a move command during their turn.
+     * The player gives a unit a move command during their turn.
      */
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         commandUnitToMove(selectedUnit, path);

@@ -19,7 +19,7 @@ public class Game {
     /*
      * DEBUG
      */
-    static final boolean verbose = false;
+    static final boolean verbose = true;
 
     public Game(List<Player> players, Map map){
         this.players = new ArrayList<>();
@@ -63,7 +63,10 @@ public class Game {
 
     public boolean itsMyTurn(Player player){
         if (verbose) System.out.println("[GAME] [ItsMyTurn] Player: "+player+"; WhoseTurn: "+players.get(whoseTurn));
-        return players.get(whoseTurn).equals(player);
+
+        return true;
+        //TODO Undebugmode
+        //return players.get(whoseTurn).equals(player);
     }
 
     public Map getMap(){

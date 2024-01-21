@@ -21,7 +21,6 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable) {
         super(gameController, gameSerializable);
         this.client = client;
-        //TODO InGameUiControllers "Game game" is null
     }
 
     @Override
