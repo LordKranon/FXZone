@@ -21,18 +21,17 @@ public class InGameHostUiController extends InGameNetworkUiController implements
         super(gameController, gameSerializable);
         this.server = server;
 
-        //this.game = new Game(playerList);
         this.thisPlayer = game.getPlayers().get(0);
     }
 
     @Override
     public void lobbyPlayerListChanged() {
-        System.err.println("[IN-GAME-HOST-UI-CONTROLLER] Lobby player list changed but game is already running.");
+        if(verbose) System.err.println("[IN-GAME-HOST-UI-CONTROLLER] Lobby player list changed but game is already running.");
     }
 
     @Override
     public boolean playerJoinedLobby(Player player) {
-        System.err.println("[IN-GAME-HOST-UI-CONTROLLER] Player tried to join lobby but game is already running.");
+        if(verbose) System.err.println("[IN-GAME-HOST-UI-CONTROLLER] Player tried to join lobby but game is already running.");
         return false;
     }
 

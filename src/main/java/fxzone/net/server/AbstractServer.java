@@ -81,6 +81,10 @@ public abstract class AbstractServer extends Thread{
         }
     }
 
+    public void sendPacketTo(ServerProtocol serverProtocol, Packet packet){
+        serverProtocol.sendPacket(packet);
+    }
+
     public void stopServerRaw(){
         if (verbose) System.out.println("[SERVER] Stopping server RAW");
         this.running = false;

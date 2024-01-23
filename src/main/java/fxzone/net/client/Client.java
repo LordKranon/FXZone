@@ -112,8 +112,8 @@ public class Client extends Thread{
     /**
      * Server has sent notice that the host has started the game from the lobby. Set UI controller to in-game.
      */
-    public void gameStart(GameSerializable gameSerializable){
-        clientJoinedController.gameStart(gameSerializable);
+    public void gameStart(GameSerializable gameSerializable, String playerName){
+        clientJoinedController.gameStart(gameSerializable, playerName);
     }
 
     public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){

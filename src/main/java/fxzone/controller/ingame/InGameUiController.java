@@ -83,7 +83,7 @@ public class InGameUiController extends AbstractUiController {
     /*
     DEBUG
     * */
-    static final boolean verbose = false;
+    static final boolean verbose = true;
 
 
     public InGameUiController(AbstractGameController gameController, GameSerializable initialGame) {

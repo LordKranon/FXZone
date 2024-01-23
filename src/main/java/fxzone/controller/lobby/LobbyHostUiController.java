@@ -68,12 +68,12 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         */
         Map map = new Map(5, 3, null);
         Unit tank1 = new Unit("tank", 1, 1, map.getTileRenderSize(), null);
-        tank1.setOwner(hostingPlayer);
         map.addUnit(tank1);
-        map.addUnit(new Unit("hunter_tank", 2, 1, 0, null));
-        map.addUnit(new Unit("artillery", 3, 1, 0, null));
+        Unit tank2 = new Unit("hunter_tank", 2, 1, 0, null);
+        map.addUnit(tank2);
+        Unit tank3 = new Unit("artillery", 3, 1, 0, null);
+        map.addUnit(tank3);
         map.addUnit(new Unit("tank", 5, 3, 0, null));
-        //MapSerializable mapSerializable = new MapSerializable(map);
         /*
         END Creating map.
         */
@@ -81,6 +81,11 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(hostingPlayer);
         playerList.addAll(server.getPlayers());
+
+        //Set unit ownership for debug
+        tank1.setOwner(hostingPlayer);
+        tank2.setOwner(playerList.size() > 1 ? playerList.get(1): null);
+        tank3.setOwner(playerList.size() > 2 ? playerList.get(2): null);
 
         /*
         * START Creating game.

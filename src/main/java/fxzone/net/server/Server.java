@@ -73,8 +73,19 @@ public class Server extends AbstractServer{
         sendPacketTo(new ArrayList<ServerProtocol>(players.keySet()), packet);
     }
 
+    /**
+     * Sends an individually specialized packet to each client in the lobby,
+     * containing all information about the game (same for all clients)
+     * and additionally, indicating to each client which player from the lobby list they are.
+     *
+     * @param inGameHostUiController the new controller, replacing LobbyHostUiController
+     * @param gameSerializable the initial game & map & units
+     */
     public boolean startGameForAll(InGameHostUiController inGameHostUiController, GameSerializable gameSerializable){
-        sendPacketToAllVerifiedPlayers(new GameStartPacket(gameSerializable));
+        //sendPacketToAllVerifiedPlayers(new GameStartPacket(gameSerializable));
+        for(ServerProtocol serverProtocol : players.keySet()){
+            sendPacketTo(serverProtocol, new GameStartPacket(gameSerializable, players.get(serverProtocol).getName()));
+        }
         this.serverHostController = inGameHostUiController;
         return true;
     }
