@@ -22,6 +22,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
 public class InGameUiController extends AbstractUiController {
@@ -64,6 +65,11 @@ public class InGameUiController extends AbstractUiController {
     private double cumulativeDeltaUnitStance = 0;
 
     /*
+    SOUND
+     */
+    MediaPlayer mediaPlayer;
+
+    /*
     GAME LOGIC
      */
     protected Map map;
@@ -92,13 +98,8 @@ public class InGameUiController extends AbstractUiController {
         initializeGame(initialGame);
 
         //BEGIN TEST
-        /*
-        Queue<Point> path = new ArrayDeque<>();
-        path.add(new Point(0, 0));
-        path.add(new Point(1, 0));
-        path.add(new Point(2, 0));
-        commandUnitToMove(map.getUnits().get(0), path);
-         */
+        mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/test_sound_uiInteraction.mp3"));
+        mediaPlayer.play();
         //END TEST
     }
 
@@ -192,10 +193,9 @@ public class InGameUiController extends AbstractUiController {
 
     private void tileClicked(int x, int y){
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
-            if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] tileClicked during your turn with turn-state neutral");
+            if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [tileClicked] during your turn with turn-state neutral");
             Unit unitOnTileClicked = map.getTiles()[x][y].getUnitOnTile();
             if(unitOnTileClicked != null){
-                if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] starting selectUnit");
                 selectUnit(unitOnTileClicked);
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
@@ -329,11 +329,12 @@ public class InGameUiController extends AbstractUiController {
      * @param unit unit being selected
      */
     protected void selectUnit(Unit unit){
+        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] trying");
         if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && thisPlayer.equals(unit.getOwner())){
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;
-            System.out.println("[IN-GAME-UI-CONTROLLER] selectUnit finalized");
+            System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
     }
 

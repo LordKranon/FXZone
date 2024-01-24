@@ -4,6 +4,7 @@ import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.media.Media;
 
 public class AssetHandler {
 
@@ -13,6 +14,8 @@ public class AssetHandler {
     private static final HashMap<String, Image> images = new HashMap<>();
 
     private static final HashMap<KeyUnitVehicle, Image> imagesUnitsVehicles = new HashMap<>();
+
+    private static final HashMap<String, Media> sounds = new HashMap<>();
 
     /**
      * Returns image from 'images' HashMap. If the image is not yet in the HashMap, it is loaded and
@@ -80,6 +83,17 @@ public class AssetHandler {
             imagesUnitsVehicles.put(keyUnitVehicle, imageUnitVehicleCropped);
         }
         return imagesUnitsVehicles.get(keyUnitVehicle);
+    }
+
+    public static Media getSound(String path){
+        if(!sounds.containsKey(path)){
+            loadSound(path);
+        }
+        return sounds.get(path);
+    }
+
+    public static void loadSound(String path){
+        sounds.put(path, new Media(AssetHandler.class.getResource(path).toExternalForm()));
     }
 
 }
