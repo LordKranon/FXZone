@@ -14,7 +14,7 @@ public class Tile extends TileSpaceObject{
     /*
     * DEBUG
     * */
-    static final boolean verbose = true;
+    static final boolean verbose = false;
 
     /**
      * Constructor

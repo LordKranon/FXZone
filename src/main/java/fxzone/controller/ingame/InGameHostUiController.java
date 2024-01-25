@@ -6,6 +6,7 @@ import fxzone.game.logic.Game;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.net.packet.EndTurnPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
@@ -40,6 +41,11 @@ public class InGameHostUiController extends InGameNetworkUiController implements
         onNetworkPlayerUnitMoveCommandReceived(unitPosition, path);
         server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(unitPosition, path));
     }
+    @Override
+    public void endTurnByClient(){
+        onNetworkPlayerEndTurn();
+        server.sendPacketToAllVerifiedPlayers(new EndTurnPacket());
+    }
 
     protected void quitGame(){
         server.stopServerRaw();
@@ -50,5 +56,11 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         super.onPlayerUnitMoveCommand(path);
         server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path));
+    }
+
+    @Override
+    protected void onPlayerEndTurn(){
+        super.onPlayerEndTurn();
+        server.sendPacketToAllVerifiedPlayers(new EndTurnPacket());
     }
 }

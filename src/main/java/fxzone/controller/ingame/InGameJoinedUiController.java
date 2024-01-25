@@ -6,6 +6,7 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
+import fxzone.net.packet.EndTurnPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -70,6 +71,11 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
+    public void endTurnReceived(){
+        onNetworkPlayerEndTurn();
+    }
+
+    @Override
     public void lobbyPlayerListChanged() {
 
     }
@@ -77,5 +83,14 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     @Override
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path));
+    }
+
+    @Override
+    protected void onPlayerEndTurn(){
+        /*
+        The case that a client hits the end turn button multiple times, thus potentially ending the turn of the next player,
+        is prevented via not
+         */
+        client.sendPacket(new EndTurnPacket());
     }
 }

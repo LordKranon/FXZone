@@ -55,10 +55,12 @@ public class Game {
     }
 
     public void goNextTurn(){
+        if (verbose) System.out.println("[GAME] [goNextTurn] Player: "+players.get(whoseTurn)+" 's turn ended");
         whoseTurn += 1;
         if (whoseTurn >= amountPlayers){
             whoseTurn = 0;
         }
+        if (verbose) System.out.println("[GAME] [goNextTurn] Player: "+players.get(whoseTurn)+" 's turn begins");
     }
 
     public boolean itsMyTurn(Player player){

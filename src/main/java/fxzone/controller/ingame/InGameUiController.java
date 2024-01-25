@@ -39,6 +39,8 @@ public class InGameUiController extends AbstractUiController {
      */
     private Button quitButton;
 
+    private Button endTurnButton;
+
     /**
      * Used in secondsPrinter.
      */
@@ -140,6 +142,15 @@ public class InGameUiController extends AbstractUiController {
             quitGame();
         });
         root2D.getChildren().add(quitButton);
+
+        endTurnButton = new Button("End Turn");
+        endTurnButton.setViewOrder(-10);
+        endTurnButton.setVisible(true);
+        endTurnButton.setFont(font);
+        endTurnButton.setOnMouseClicked(mouseEvent -> {
+            endTurnButtonClicked();
+        });
+        root2D.getChildren().add(endTurnButton);
     }
 
     private void initializeGame(GameSerializable initialGame){
@@ -168,6 +179,8 @@ public class InGameUiController extends AbstractUiController {
     private void refreshUi(){
         quitButton.setTranslateX(subScene2D.getWidth() - quitButton.getWidth() - 24);
         quitButton.setTranslateY(subScene2D.getHeight() - quitButton.getHeight() - 46);
+        endTurnButton.setTranslateX(subScene2D.getWidth() - endTurnButton.getWidth() - 24);
+        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 46 - quitButton.getHeight());
     }
 
     private void handleClicks(){
@@ -351,4 +364,32 @@ public class InGameUiController extends AbstractUiController {
         commandUnitToMove(selectedUnit, path);
         turnState = TurnState.NEUTRAL;
     }
+
+    /**
+     * The player has clicked the "end turn" button.
+     * Now, depending on the turn state, the "end turn demand" may or may not be given.
+     */
+    private void endTurnButtonClicked(){
+        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [endTurnButtonClicked] trying");
+        if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
+            turnState = TurnState.ENDING_TURN;
+            onPlayerEndTurn();
+        }
+    }
+
+    /**
+     * The player demands to end their turn.
+     */
+    protected void onPlayerEndTurn(){
+        endTurn();
+    }
+
+    /**
+     * End the turn.
+     */
+    protected void endTurn(){
+        turnState = TurnState.NEUTRAL;
+        game.goNextTurn();
+    }
+
 }

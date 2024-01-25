@@ -119,4 +119,7 @@ public class Client extends Thread{
     public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){
         clientJoinedController.unitMoveCommandReceived(unitPosition, path);
     }
+    public void endTurnReceived(){
+        clientJoinedController.endTurnReceived();
+    }
 }

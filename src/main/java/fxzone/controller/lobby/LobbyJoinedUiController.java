@@ -103,4 +103,9 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path) {
         System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received unit move command while still in lobby.");
     }
+
+    @Override
+    public void endTurnReceived(){
+        System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received end turn while still in lobby.");
+    }
 }

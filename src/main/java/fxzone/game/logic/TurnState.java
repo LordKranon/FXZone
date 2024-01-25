@@ -7,4 +7,5 @@ public enum TurnState {
     NO_TURN,
     NEUTRAL,
     UNIT_SELECTED,
+    ENDING_TURN,
 }

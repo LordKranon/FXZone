@@ -123,4 +123,9 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path) {
         System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received unit move command while still in lobby.");
     }
+
+    @Override
+    public void endTurnByClient(){
+        System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received end turn while still in lobby.");
+    }
 }

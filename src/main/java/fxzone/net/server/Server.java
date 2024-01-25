@@ -93,4 +93,7 @@ public class Server extends AbstractServer{
     public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path){
         serverHostController.unitMoveCommandByClient(unitPosition, path);
     }
+    public void endTurnByClient(){
+        serverHostController.endTurnByClient();
+    }
 }

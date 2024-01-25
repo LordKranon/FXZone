@@ -1,6 +1,7 @@
 package fxzone.net.client;
 
 import fxzone.net.AbstractConnectionProtocol;
+import fxzone.net.packet.EndTurnPacket;
 import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.packet.Packet;
@@ -47,6 +48,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
             case LOBBY_PLAYER_LIST: lobbyPlayerListPacketReceived((LobbyPlayerListPacket) packet); break;
             case GAME_START: gameStartPacketReceived((GameStartPacket) packet); break;
             case UNIT_MOVE_COMMAND: unitMoveCommandPacketReceived((UnitMoveCommandPacket) packet); break;
+            case END_TURN: endTurnPacketReceived((EndTurnPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -78,5 +80,10 @@ public class ClientProtocol extends AbstractConnectionProtocol {
     private void unitMoveCommandPacketReceived(UnitMoveCommandPacket unitMoveCommandPacket){
         System.out.println("[CLIENT-PROTOCOL] Received unit move command packet");
         client.unitMoveCommandReceived(unitMoveCommandPacket.getUnitPosition(), unitMoveCommandPacket.getPath());
+    }
+
+    private void endTurnPacketReceived(EndTurnPacket endTurnPacket){
+        System.out.println("[CLIENT-PROTOCOL] Received end turn packet");
+        client.endTurnReceived();
     }
 }
