@@ -5,14 +5,11 @@ import fxzone.controller.ingame.InGameJoinedUiController;
 import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.ClientConnectPacket;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.Packet;
-import java.awt.Point;
 import java.net.SocketTimeoutException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
 
 public class Client extends Thread{
 
@@ -116,10 +113,7 @@ public class Client extends Thread{
         clientJoinedController.gameStart(gameSerializable, playerName);
     }
 
-    public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){
-        clientJoinedController.unitMoveCommandReceived(unitPosition, path);
-    }
-    public void endTurnReceived(){
-        clientJoinedController.endTurnReceived();
+    public void gameActionReceived(GameActionPacket gameActionPacket){
+        clientJoinedController.gameActionReceived(gameActionPacket);
     }
 }

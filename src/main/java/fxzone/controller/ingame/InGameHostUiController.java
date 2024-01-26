@@ -2,17 +2,14 @@ package fxzone.controller.ingame;
 
 import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
-import fxzone.game.logic.Game;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.EndTurnPacket;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
 
 public class InGameHostUiController extends InGameNetworkUiController implements ServerHostController {
 
@@ -37,14 +34,9 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     }
 
     @Override
-    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path) {
-        onNetworkPlayerUnitMoveCommandReceived(unitPosition, path);
-        server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(unitPosition, path));
-    }
-    @Override
-    public void endTurnByClient(){
-        onNetworkPlayerEndTurn();
-        server.sendPacketToAllVerifiedPlayers(new EndTurnPacket());
+    public void gameActionByClient(GameActionPacket gameActionPacket){
+        onNetworkPlayerGameAction(gameActionPacket);
+        server.sendPacketToAllVerifiedPlayers(gameActionPacket);
     }
 
     protected void quitGame(){

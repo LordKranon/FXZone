@@ -66,9 +66,7 @@ public class Game {
     public boolean itsMyTurn(Player player){
         if (verbose) System.out.println("[GAME] [ItsMyTurn] Player: "+player+"; WhoseTurn: "+players.get(whoseTurn));
 
-        return true;
-        //TODO Undebugmode
-        //return players.get(whoseTurn).equals(player);
+        return players.get(whoseTurn).equals(player);
     }
 
     public Map getMap(){

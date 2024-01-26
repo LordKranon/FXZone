@@ -6,12 +6,9 @@ import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
-import java.awt.Point;
-import java.util.ArrayDeque;
+import fxzone.net.packet.GameActionPacket;
 import java.util.ArrayList;
-import java.util.Queue;
 import javafx.scene.layout.AnchorPane;
 
 public class LobbyJoinedUiController extends LobbyUiController implements ClientJoinedController {
@@ -100,12 +97,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path) {
-        System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received unit move command while still in lobby.");
-    }
-
-    @Override
-    public void endTurnReceived(){
-        System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received end turn while still in lobby.");
+    public void gameActionReceived(GameActionPacket gameActionPacket){
+        System.err.println("[LOBBY-JOINED-UI-CONTROLLER] Received in-game action while still in lobby.");
     }
 }

@@ -1,21 +1,18 @@
 package fxzone.controller.lobby;
 
+import fxzone.controller.ServerHostController;
 import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
-import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
-import java.awt.Point;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -120,12 +117,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     }
 
     @Override
-    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path) {
-        System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received unit move command while still in lobby.");
-    }
-
-    @Override
-    public void endTurnByClient(){
-        System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received end turn while still in lobby.");
+    public void gameActionByClient(GameActionPacket gameActionPacket){
+        System.err.println("[LOBBY-HOST-UI-CONTROLLER] Received in-game action by a client while still in lobby.");
     }
 }

@@ -6,6 +6,8 @@ import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.net.packet.GameActionPacket;
+import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -19,12 +21,14 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     /**
      * Upon receiving info about a move command over the network.
      */
-    protected void onNetworkPlayerUnitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path){
+    private void onNetworkPlayerUnitMoveCommandReceived(UnitMoveCommandPacket unitMoveCommandPacket){
         //TODO Handle desync
         /*
         There may be a conflict about unit positions. Some clients might not have received some
         previous unit move commands so unit positions and their states might be desynced.
          */
+        Point unitPosition = unitMoveCommandPacket.getUnitPosition();
+        ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         commandUnitToMove(unit, path);
         turnState = TurnState.NEUTRAL;
@@ -33,7 +37,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     /**
      * Upon receiving info that the network player, whose turn it currently is, has ended their turn.
      */
-    protected void onNetworkPlayerEndTurn(){
+    private void onNetworkPlayerEndTurn(){
         //TODO Handle desync
         /*
         There may be a conflict about what players turn is next, since for some clients the previous
@@ -42,4 +46,11 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         endTurn();
     }
 
+    protected void onNetworkPlayerGameAction(GameActionPacket gameActionPacket){
+        switch (gameActionPacket.getGameActionSpecification()){
+            case UNIT_MOVE_COMMAND: onNetworkPlayerUnitMoveCommandReceived((UnitMoveCommandPacket) gameActionPacket); break;
+            case END_TURN: onNetworkPlayerEndTurn(); break;
+            default: break;
+        }
+    }
 }

@@ -4,14 +4,13 @@ import fxzone.controller.ClientJoinedController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.client.Client;
 import fxzone.net.packet.EndTurnPacket;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
 
 public class InGameJoinedUiController extends InGameNetworkUiController implements ClientJoinedController {
 
@@ -66,13 +65,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
-    public void unitMoveCommandReceived(Point unitPosition, ArrayDeque<Point> path) {
-        onNetworkPlayerUnitMoveCommandReceived(unitPosition, path);
-    }
-
-    @Override
-    public void endTurnReceived(){
-        onNetworkPlayerEndTurn();
+    public void gameActionReceived(GameActionPacket gameActionPacket){
+        onNetworkPlayerGameAction(gameActionPacket);
     }
 
     @Override

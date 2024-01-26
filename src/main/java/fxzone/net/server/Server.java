@@ -7,6 +7,7 @@ import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.GameStartPacket;
 import fxzone.net.packet.Packet;
 import java.awt.Point;
@@ -90,10 +91,7 @@ public class Server extends AbstractServer{
         return true;
     }
 
-    public void unitMoveCommandByClient(Point unitPosition, ArrayDeque<Point> path){
-        serverHostController.unitMoveCommandByClient(unitPosition, path);
-    }
-    public void endTurnByClient(){
-        serverHostController.endTurnByClient();
+    public void gameActionByClient(GameActionPacket gameActionPacket){
+        serverHostController.gameActionByClient(gameActionPacket);
     }
 }

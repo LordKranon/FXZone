@@ -3,6 +3,7 @@ package fxzone.net.server;
 import fxzone.net.AbstractConnectionProtocol;
 import fxzone.net.packet.ClientConnectPacket;
 import fxzone.net.packet.EndTurnPacket;
+import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.Packet;
 import fxzone.net.packet.TestPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
@@ -42,8 +43,7 @@ public class ServerProtocol extends AbstractConnectionProtocol {
             case TEST: testPacketReceived((TestPacket) packet); break;
             case CHAT_MESSAGE: break;
             case CLIENT_CONNECT: clientConnectPacketReceived((ClientConnectPacket) packet); break;
-            case UNIT_MOVE_COMMAND: unitMoveCommandPacketReceived((UnitMoveCommandPacket) packet); break;
-            case END_TURN: endTurnPacketReceived((EndTurnPacket) packet); break;
+            case GAME_ACTION: gameActionPacketReceived((GameActionPacket) packet); break;
             default: unknownPacketReceived(packet); break;
         }
     }
@@ -63,14 +63,9 @@ public class ServerProtocol extends AbstractConnectionProtocol {
         if(verbose) System.out.println(testPacket.getMessage());
     }
 
-    private void unitMoveCommandPacketReceived(UnitMoveCommandPacket unitMoveCommandPacket){
-        if(verbose) System.out.println("[SERVER-PROTOCOL] Received unit move command packet");
-        server.unitMoveCommandByClient(unitMoveCommandPacket.getUnitPosition(), unitMoveCommandPacket.getPath());
-    }
-
-    private void endTurnPacketReceived(EndTurnPacket endTurnPacket){
-        if(verbose) System.out.println("[SERVER-PROTOCOL] Received end turn packet");
-        server.endTurnByClient();
+    private void gameActionPacketReceived(GameActionPacket gameActionPacket){
+        if(verbose) System.out.println("[SERVER-PROTOCOL] Received game action packet");
+        server.gameActionByClient(gameActionPacket);
     }
 
     private void unknownPacketReceived(Packet packet){

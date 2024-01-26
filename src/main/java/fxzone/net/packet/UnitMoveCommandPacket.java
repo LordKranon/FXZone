@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class UnitMoveCommandPacket extends Packet{
+public class UnitMoveCommandPacket extends GameActionPacket{
 
     private final Point unitPosition;
     private final ArrayDeque<Point> path;
