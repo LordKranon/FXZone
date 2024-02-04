@@ -13,15 +13,22 @@ import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
@@ -108,6 +115,17 @@ public class InGameUiController extends AbstractUiController {
     @Override
     public void init(AbstractGameController gameController, Group root2D) {
         this.root2D = root2D;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/InGameView.fxml"));
+            loader.setControllerFactory(c -> {
+                return new InGameUiControllerFxml(gameController);
+            });
+            root2D.getChildren().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         createTileSelector();
         createFXSceneUI();
     }
@@ -125,6 +143,22 @@ public class InGameUiController extends AbstractUiController {
         handleSelectedUnitPathQueue();
         updateSelectedUnit(delta);
         moveMovingUnits(delta);
+    }
+
+    class InGameUiControllerFxml{
+        private final AbstractGameController gameController;
+
+        public InGameUiControllerFxml(AbstractGameController gameController) {
+            this.gameController = gameController;
+        }
+
+        @FXML
+        AnchorPane anchorPane;
+
+        @FXML
+        public void initialize(){
+            //resize(anchorPane, gameController.getStage());
+        }
     }
 
     private void createTileSelector(){
