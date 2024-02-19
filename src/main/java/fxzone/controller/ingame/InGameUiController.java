@@ -23,12 +23,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
@@ -47,6 +49,14 @@ public class InGameUiController extends AbstractUiController {
     private Button quitButton;
 
     private Button endTurnButton;
+
+    private Button uiButton1;
+
+    private Button uiButton2;
+
+    private Label uiLabel1;
+
+    private Label uiLabel2;
 
     /**
      * Used in secondsPrinter.
@@ -121,7 +131,8 @@ public class InGameUiController extends AbstractUiController {
             loader.setControllerFactory(c -> {
                 return new InGameUiControllerFxml(gameController);
             });
-            root2D.getChildren().add(loader.load());
+            loader.load();
+            //root2D.getChildren().add(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,8 +168,25 @@ public class InGameUiController extends AbstractUiController {
 
         @FXML
         public void initialize(){
-            //resize(anchorPane, gameController.getStage());
+            resize(anchorPane, gameController.getStage());
+            initializeOuter(anchorPane);
         }
+    }
+
+    private void initializeOuter(AnchorPane anchorPane){
+        //anchorPane.setViewOrder(0);
+
+        Pane uiPane = (Pane) anchorPane.getChildren().get(0);
+        GridPane gridPane = new GridPane();
+        root2D.getChildren().add(gridPane);
+        gridPane.addRow(0);
+        gridPane.addRow(1);
+        gridPane.addRow(2);
+        gridPane.getRowConstraints().get(0).setMinHeight(100);
+        gridPane.getChildren().add(uiPane);
+        //root2D.getChildren().add(uiPane);
+
+
     }
 
     private void createTileSelector(){
@@ -167,8 +195,9 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void createFXSceneUI(){
-        Font font = new Font(20);
+        Font font = new Font(36);
         quitButton = new Button("Quit");
+        quitButton.setPrefWidth(400);
         quitButton.setViewOrder(-10);
         quitButton.setVisible(true);
         quitButton.setFont(font);
@@ -178,6 +207,7 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(quitButton);
 
         endTurnButton = new Button("End Turn");
+        endTurnButton.setPrefWidth(400);
         endTurnButton.setViewOrder(-10);
         endTurnButton.setVisible(true);
         endTurnButton.setFont(font);

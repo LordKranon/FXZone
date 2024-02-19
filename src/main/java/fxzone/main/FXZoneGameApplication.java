@@ -28,7 +28,7 @@ public class FXZoneGameApplication extends Application {
             stage.getIcons().add(AssetHandler.getImage("/images/icon_tank_red.png"));
         } catch (Throwable e) {
             e.printStackTrace();
-            System.err.println("Couldn't load icon!");
+            System.err.println("[FX-ZONE-GAME-APPLICATION] Couldn't load icon");
         }
 
         stage.show();

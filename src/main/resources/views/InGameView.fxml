@@ -16,26 +16,61 @@
 >
   <children>
 
-  <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
-    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <children>
 
-        <!--
+        <Pane style="-fx-background-color: #303030;"
+          GridPane.rowIndex="3"
 
-        <Pane style="-fx-background-color: #303030;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+        >
+
+
+            <HBox spacing="40">
+              <VBox>
+                <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="TESTTEST">
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
+
+                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+              </VBox>
+
+              <VBox>
+                <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="TESTTEST2">
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
+
+                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+              </VBox>
+            </HBox>
+
+
+
+
         </Pane>
-
-        -->
-
-        <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="400.0" text="TESTTEST">
-          <font>
-            <Font size="36.0"/>
-          </font>
-        </Button>
-
-      </children>
-    </GridPane>
 
   </children>
 

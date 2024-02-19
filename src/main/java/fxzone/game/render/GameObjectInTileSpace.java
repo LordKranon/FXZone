@@ -18,6 +18,7 @@ public class GameObjectInTileSpace extends AbstractGameObject {
         super(image, x * tileRenderSize, y * tileRenderSize, tileRenderSize, tileRenderSize, group);
         this.xScaled = x * tileRenderSize;
         this.yScaled = y * tileRenderSize;
+        this.setViewOrder(1);
     }
 
     public void setOffset(double offsetX, double offsetY){
