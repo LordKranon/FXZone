@@ -31,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
@@ -179,10 +180,10 @@ public class InGameUiController extends AbstractUiController {
         Pane uiPane = (Pane) anchorPane.getChildren().get(0);
         GridPane gridPane = new GridPane();
         root2D.getChildren().add(gridPane);
-        gridPane.addRow(0);
-        gridPane.addRow(1);
-        gridPane.addRow(2);
-        gridPane.getRowConstraints().get(0).setMinHeight(100);
+        //gridPane.addRow(0);
+        RowConstraints rowConstraints = new RowConstraints(400);
+        gridPane.getRowConstraints().add(rowConstraints);
+        rowConstraints.setMinHeight(400);
         gridPane.getChildren().add(uiPane);
         //root2D.getChildren().add(uiPane);
 
