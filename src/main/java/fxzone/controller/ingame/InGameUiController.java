@@ -30,6 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.MediaPlayer;
@@ -175,18 +176,12 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void initializeOuter(AnchorPane anchorPane){
-        //anchorPane.setViewOrder(0);
 
-        Pane uiPane = (Pane) anchorPane.getChildren().get(0);
-        GridPane gridPane = new GridPane();
-        root2D.getChildren().add(gridPane);
-        //gridPane.addRow(0);
-        RowConstraints rowConstraints = new RowConstraints(400);
-        gridPane.getRowConstraints().add(rowConstraints);
-        rowConstraints.setMinHeight(400);
-        gridPane.getChildren().add(uiPane);
-        //root2D.getChildren().add(uiPane);
 
+        //Pane uiPane = (Pane) anchorPane.getChildren().get(0);
+        HBox uiPane = (HBox) anchorPane.getChildren().get(0);
+
+        root2D.getChildren().add(uiPane);
 
     }
 

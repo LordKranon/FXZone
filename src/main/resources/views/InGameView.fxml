@@ -16,12 +16,69 @@
 >
   <children>
 
+    <HBox prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 
+      <children>
+
+        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+          <children>
+            <Pane
+              VBox.vgrow="ALWAYS"
+            >
+
+
+
+            </Pane>
+            <HBox spacing="40" style="-fx-background-color: #303030;">
+              <VBox>
+                <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+
+                <Button graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="TESTTEST">
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
+
+                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+              </VBox>
+
+              <VBox>
+                <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+
+                <Button graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="TESTTEST2">
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
+
+                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
+                  <font>
+                    <Font size="50.0"/>
+                  </font>
+                </Label>
+              </VBox>
+            </HBox>
+          </children>
+        </VBox>
+        <!--
         <Pane style="-fx-background-color: #303030;"
           GridPane.rowIndex="1"
 
         >
-
 
             <HBox spacing="40">
               <VBox>
@@ -71,6 +128,10 @@
 
 
         </Pane>
+        -->
+
+      </children>
+    </HBox>
 
   </children>
 
