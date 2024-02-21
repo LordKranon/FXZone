@@ -166,22 +166,22 @@ public class InGameUiController extends AbstractUiController {
         }
 
         @FXML
-        AnchorPane anchorPane;
+        HBox hBox;
 
         @FXML
         public void initialize(){
-            resize(anchorPane, gameController.getStage());
-            initializeOuter(anchorPane);
+            resize(hBox, gameController.getStage());
+            initializeOuter(hBox);
         }
     }
 
-    private void initializeOuter(AnchorPane anchorPane){
+    private void initializeOuter(Pane hBox){
 
 
         //Pane uiPane = (Pane) anchorPane.getChildren().get(0);
-        HBox uiPane = (HBox) anchorPane.getChildren().get(0);
+        //HBox uiPane = (HBox) anchorPane.getChildren().get(0);
 
-        root2D.getChildren().add(uiPane);
+        root2D.getChildren().add(hBox);
 
     }
 

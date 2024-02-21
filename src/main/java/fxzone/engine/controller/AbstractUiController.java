@@ -9,6 +9,7 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import fxzone.engine.Initializable;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -50,7 +51,7 @@ public abstract class AbstractUiController implements Initializable, Updatable {
      * Potentially hacky resize method. Call in initialize() of UI controller implementations.
      */
     @FXML
-    public void resize(AnchorPane anchorPane, Stage stage) {
+    public void resize(Pane anchorPane, Stage stage) {
         int initialWidthCorrection = stage.isFullScreen() ? 0 : 16;
         int initialHeightCorrection = stage.isFullScreen() ? 0 : 28;
         anchorPane.setPrefWidth(stage.getWidth() - initialWidthCorrection);

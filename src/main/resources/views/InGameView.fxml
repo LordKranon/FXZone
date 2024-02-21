@@ -7,18 +7,15 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx/16"
+<HBox xmlns="http://javafx.com/javafx/16"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="fxzone.controller.ingame.InGameUiController$InGameUiControllerFxml"
-  prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #808080;"
-  fx:id="anchorPane"
+  prefHeight="400.0" prefWidth="600.0"
+  fx:id="hBox"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 >
   <children>
 
-    <HBox prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-
-      <children>
 
         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
           <children>
@@ -74,65 +71,7 @@
             </HBox>
           </children>
         </VBox>
-        <!--
-        <Pane style="-fx-background-color: #303030;"
-          GridPane.rowIndex="1"
-
-        >
-
-            <HBox spacing="40">
-              <VBox>
-                <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE">
-                  <font>
-                    <Font size="50.0"/>
-                  </font>
-                </Label>
-
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="TESTTEST">
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
-                </Button>
-
-                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
-                  <font>
-                    <Font size="50.0"/>
-                  </font>
-                </Label>
-              </VBox>
-
-              <VBox>
-                <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE">
-                  <font>
-                    <Font size="50.0"/>
-                  </font>
-                </Label>
-
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="TESTTEST2">
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
-                </Button>
-
-                <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
-                  <font>
-                    <Font size="50.0"/>
-                  </font>
-                </Label>
-              </VBox>
-            </HBox>
-
-
-
-
-        </Pane>
-        -->
-
-      </children>
-    </HBox>
 
   </children>
 
-</AnchorPane>
+</HBox>
