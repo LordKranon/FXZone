@@ -16,10 +16,10 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     private final Server server;
 
     public InGameHostUiController(AbstractGameController gameController, Server server, GameSerializable gameSerializable) {
-        super(gameController, gameSerializable);
+        super(gameController, gameSerializable, "host");
         this.server = server;
 
-        this.thisPlayer = game.getPlayers().get(0);
+        //this.thisPlayer = game.getPlayers().get(0);
     }
 
     @Override
@@ -39,6 +39,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
         server.sendPacketToAllVerifiedPlayers(gameActionPacket);
     }
 
+    @Override
     protected void quitGame(){
         server.stopServerRaw();
         super.quitGame();
@@ -54,5 +55,11 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     protected void onPlayerEndTurn(){
         super.onPlayerEndTurn();
         server.sendPacketToAllVerifiedPlayers(new EndTurnPacket());
+    }
+
+    @Override
+    protected void initializeGameSpecifics(){
+        this.thisPlayer = game.getPlayers().get(0);
+        super.initializeGameSpecifics();
     }
 }

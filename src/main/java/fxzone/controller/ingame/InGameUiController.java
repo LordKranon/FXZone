@@ -33,7 +33,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class InGameUiController extends AbstractUiController {
@@ -52,13 +54,8 @@ public class InGameUiController extends AbstractUiController {
 
     private Button endTurnButton;
 
-    private Button uiButton1;
+    private Label labelPlayerName;
 
-    private Button uiButton2;
-
-    private Label uiLabel1;
-
-    private Label uiLabel2;
 
     /**
      * Used in secondsPrinter.
@@ -99,6 +96,11 @@ public class InGameUiController extends AbstractUiController {
 
     protected Player thisPlayer;
 
+    /**
+     * Only used at initialization to determine players.
+     */
+    protected String thisPlayerName;
+
     protected Unit selectedUnit;
 
     protected TurnState turnState = TurnState.NEUTRAL;
@@ -113,10 +115,12 @@ public class InGameUiController extends AbstractUiController {
     static final boolean verbose = true;
 
 
-    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame) {
+    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame, String thisPlayerName) {
         super(gameController);
         this.gameController = gameController;
+        this.thisPlayerName = thisPlayerName;
         initializeGame(initialGame);
+        initializeGameSpecifics();
 
         //BEGIN TEST
         mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/test_sound_uiInteraction.mp3"));
@@ -134,7 +138,6 @@ public class InGameUiController extends AbstractUiController {
                 return new InGameUiControllerFxml(gameController);
             });
             loader.load();
-            //root2D.getChildren().add(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -177,12 +180,21 @@ public class InGameUiController extends AbstractUiController {
 
     private void initializeOuter(Pane hBox){
 
-
-        //Pane uiPane = (Pane) anchorPane.getChildren().get(0);
-        //HBox uiPane = (HBox) anchorPane.getChildren().get(0);
-
         root2D.getChildren().add(hBox);
+        VBox vBox = (VBox) hBox.getChildren().get(0);
+        HBox hBoxInner = (HBox) vBox.getChildren().get(1);
+        VBox vBoxInner1 = (VBox) hBoxInner.getChildren().get(0);
+        labelPlayerName = (Label) vBoxInner1.getChildren().get(0);
 
+    }
+
+    protected void initializeGameSpecifics(){
+        initializeGameSpecificUi();
+    }
+
+    private void initializeGameSpecificUi(){
+        labelPlayerName.setText(thisPlayer.getName());
+        labelPlayerName.setTextFill(Color.web(thisPlayer.getColor().toString()));
     }
 
     private void createTileSelector(){

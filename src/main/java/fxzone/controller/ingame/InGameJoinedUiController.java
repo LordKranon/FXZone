@@ -19,17 +19,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     private boolean exitFlag;
 
     public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable, String thisPlayerName) {
-        super(gameController, gameSerializable);
+        super(gameController, gameSerializable, thisPlayerName);
         this.client = client;
-
-        Player thisPlayerToBe = null;
-        for(Player player : this.game.getPlayers()){
-            if(player.getName().equals(thisPlayerName)){
-                thisPlayerToBe = player;
-                break;
-            }
-        }
-        this.thisPlayer = thisPlayerToBe;
 
         if(verbose && this.thisPlayer == null) System.err.println("[IN-GAME-JOINED-UI-CONTROLLER");
     }
@@ -86,5 +77,18 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
         is prevented via not
          */
         client.sendPacket(new EndTurnPacket());
+    }
+
+    @Override
+    protected void initializeGameSpecifics(){
+        Player thisPlayerToBe = null;
+        for(Player player : this.game.getPlayers()){
+            if(player.getName().equals(thisPlayerName)){
+                thisPlayerToBe = player;
+                break;
+            }
+        }
+        this.thisPlayer = thisPlayerToBe;
+        super.initializeGameSpecifics();
     }
 }
