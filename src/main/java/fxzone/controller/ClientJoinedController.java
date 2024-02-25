@@ -11,6 +11,6 @@ public interface ClientJoinedController extends NetworkController{
 
     void setLatestPlayerList(ArrayList<Player> players);
     void connectionClosed();
-    void gameStart(GameSerializable gameSerializable, String playerName);
+    void gameStart(GameSerializable gameSerializable, int playerId);
     void gameActionReceived(GameActionPacket gameActionPacket);
 }

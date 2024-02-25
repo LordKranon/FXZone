@@ -99,7 +99,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Only used at initialization to determine players.
      */
-    protected String thisPlayerName;
+    protected int thisPlayerId;
 
     protected Unit selectedUnit;
 
@@ -115,10 +115,10 @@ public class InGameUiController extends AbstractUiController {
     static final boolean verbose = true;
 
 
-    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame, String thisPlayerName) {
+    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame, int thisPlayerId) {
         super(gameController);
         this.gameController = gameController;
-        this.thisPlayerName = thisPlayerName;
+        this.thisPlayerId = thisPlayerId;
         initializeGame(initialGame);
         initializeGameSpecifics();
 
@@ -415,7 +415,7 @@ public class InGameUiController extends AbstractUiController {
      */
     protected void selectUnit(Unit unit){
         if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] trying");
-        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && thisPlayer.equals(unit.getOwner())){
+        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && (thisPlayer.getId() == unit.getOwnerId())){
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             turnState = TurnState.UNIT_SELECTED;

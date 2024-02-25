@@ -29,7 +29,7 @@ public class Unit extends TileSpaceObject{
 
     private ArrayDeque<Point> movePath;
 
-    private Player owner;
+    private int ownerId;
 
     /**
      * Constructor
@@ -49,9 +49,8 @@ public class Unit extends TileSpaceObject{
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group){
         super(unitSerializable);
         this.unitName = unitSerializable.unitName;
-        if(unitSerializable.owner != null){
-            this.owner = new Player(unitSerializable.owner);
-        }
+        this.ownerId = unitSerializable.ownerId;
+
         this.gameObjectUnit = new GameObjectUnit(unitName, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
     }
@@ -139,11 +138,11 @@ public class Unit extends TileSpaceObject{
         return unitState;
     }
 
-    public Player getOwner(){
-        return owner;
+    public int getOwnerId(){
+        return ownerId;
     }
-    public void setOwner(Player player){
-        this.owner = player;
+    public void setOwnerId(int ownerId){
+        this.ownerId = ownerId;
     }
 
 }

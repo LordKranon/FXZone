@@ -16,7 +16,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     private final Server server;
 
     public InGameHostUiController(AbstractGameController gameController, Server server, GameSerializable gameSerializable) {
-        super(gameController, gameSerializable, "host");
+        super(gameController, gameSerializable, 1);
         this.server = server;
 
         //this.thisPlayer = game.getPlayers().get(0);

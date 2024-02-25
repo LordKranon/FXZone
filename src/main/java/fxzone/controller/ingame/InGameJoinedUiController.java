@@ -18,8 +18,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     private boolean exitFlag;
 
-    public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable, String thisPlayerName) {
-        super(gameController, gameSerializable, thisPlayerName);
+    public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable, int thisPlayerId) {
+        super(gameController, gameSerializable, thisPlayerId);
         this.client = client;
 
         if(verbose && this.thisPlayer == null) System.err.println("[IN-GAME-JOINED-UI-CONTROLLER");
@@ -51,7 +51,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
-    public void gameStart(GameSerializable gameSerializable, String playerName) {
+    public void gameStart(GameSerializable gameSerializable, int playerId) {
 
     }
 
@@ -83,7 +83,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     protected void initializeGameSpecifics(){
         Player thisPlayerToBe = null;
         for(Player player : this.game.getPlayers()){
-            if(player.getName().equals(thisPlayerName)){
+            if(player.getId() == thisPlayerId){
                 thisPlayerToBe = player;
                 break;
             }

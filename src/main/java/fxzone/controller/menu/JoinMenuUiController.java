@@ -107,7 +107,7 @@ public class JoinMenuUiController extends AbstractUiController {
         System.out.println("[JOIN-MENU-UI-CONTROLLER] IP:");
         System.out.println(ip);
         client = new Client();
-        client.connectToServer(ip, Config.getInt("SERVER_PORT"), new Player(name, FxUtils.toColor(colorRGBCode)));
+        client.connectToServer(ip, Config.getInt("SERVER_PORT"), new Player(name, FxUtils.toColor(colorRGBCode), 0));
         tryingToJoin = true;
     }
 }

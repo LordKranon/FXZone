@@ -24,6 +24,11 @@ public class Server extends AbstractServer{
 
     private ServerHostController serverHostController;
 
+    /**
+     * Statically give out rising id numbers to players.
+     * ID 1 is reserved for the host.
+     */
+    private static int playerIdDistributor = 2;
 
     public Server(){
         super();
@@ -48,12 +53,13 @@ public class Server extends AbstractServer{
      * Clients are treated as fully connected once they've sent a ClientConnectPacket.
      * Then that client will be added as a player.
      */
-    public void clientConnected(ServerProtocol serverProtocol, Player player){
-        if(serverHostController.playerJoinedLobby(player)){
-            players.put(serverProtocol, player);
+    public void clientConnected(ServerProtocol serverProtocol, Player playerProposed){
+        Player playerAccepted = new Player(playerProposed.getName(), playerProposed.getColor(), playerIdDistributor++);
+        if(serverHostController.playerJoinedLobby(playerAccepted)){
+            players.put(serverProtocol, playerAccepted);
         }
         else {
-            if (verbose) System.out.println("[SERVER] Player tried to join but is rejected. Closing connection with that player.");
+            if (verbose) System.err.println("[SERVER] Player tried to join but is rejected. Closing connection with that player.");
             serverProtocol.stopConnectionRaw();
         }
     }
@@ -85,7 +91,7 @@ public class Server extends AbstractServer{
     public boolean startGameForAll(InGameHostUiController inGameHostUiController, GameSerializable gameSerializable){
         //sendPacketToAllVerifiedPlayers(new GameStartPacket(gameSerializable));
         for(ServerProtocol serverProtocol : players.keySet()){
-            sendPacketTo(serverProtocol, new GameStartPacket(gameSerializable, players.get(serverProtocol).getName()));
+            sendPacketTo(serverProtocol, new GameStartPacket(gameSerializable, players.get(serverProtocol).getId()));
         }
         this.serverHostController = inGameHostUiController;
         return true;

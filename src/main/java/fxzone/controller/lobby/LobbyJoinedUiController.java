@@ -23,7 +23,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
 
     private GameSerializable latestGameStartMap;
 
-    private String thisPlayerName;
+    private int thisPlayerId;
 
     public LobbyJoinedUiController(AbstractGameController gameController, Client client) {
         super(gameController);
@@ -55,7 +55,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
      * Go into game because the host has started the game.
      */
     private void goIntoGame(AbstractGameController gameController){
-        InGameJoinedUiController inGameJoinedUiController = new InGameJoinedUiController(gameController, client, latestGameStartMap, thisPlayerName);
+        InGameJoinedUiController inGameJoinedUiController = new InGameJoinedUiController(gameController, client, latestGameStartMap, thisPlayerId);
         client.setInGameJoinedUiController(inGameJoinedUiController);
         gameController.setActiveUiController(inGameJoinedUiController);
     }
@@ -90,8 +90,8 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    public void gameStart(GameSerializable gameSerializable, String playerName) {
-        this.thisPlayerName = playerName;
+    public void gameStart(GameSerializable gameSerializable, int playerId) {
+        this.thisPlayerId = playerId;
         this.latestGameStartMap = gameSerializable;
         gameStartFlag = true;
     }

@@ -109,8 +109,8 @@ public class Client extends Thread{
     /**
      * Server has sent notice that the host has started the game from the lobby. Set UI controller to in-game.
      */
-    public void gameStart(GameSerializable gameSerializable, String playerName){
-        clientJoinedController.gameStart(gameSerializable, playerName);
+    public void gameStart(GameSerializable gameSerializable, int playerId){
+        clientJoinedController.gameStart(gameSerializable, playerId);
     }
 
     public void gameActionReceived(GameActionPacket gameActionPacket){

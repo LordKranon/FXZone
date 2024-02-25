@@ -72,7 +72,7 @@ public class ClientProtocol extends AbstractConnectionProtocol {
 
     private void gameStartPacketReceived(GameStartPacket gameStartPacket){
         System.out.println("[CLIENT-PROTOCOL] Received game start packet");
-        client.gameStart(gameStartPacket.getGameSerializable(), gameStartPacket.getPlayerName());
+        client.gameStart(gameStartPacket.getGameSerializable(), gameStartPacket.getPlayerId());
     }
 
     private void gameActionPacketReceived(GameActionPacket gameActionPacket){

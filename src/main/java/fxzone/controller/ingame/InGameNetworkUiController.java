@@ -14,8 +14,8 @@ import java.util.Queue;
 
 public abstract class InGameNetworkUiController extends InGameUiController implements NetworkController {
 
-    public InGameNetworkUiController(AbstractGameController gameController, GameSerializable gameSerializable, String thisPlayerName) {
-        super(gameController, gameSerializable, thisPlayerName);
+    public InGameNetworkUiController(AbstractGameController gameController, GameSerializable gameSerializable, int thisPlayerId) {
+        super(gameController, gameSerializable, thisPlayerId);
     }
 
     /**

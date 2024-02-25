@@ -11,14 +11,18 @@ public class Player {
 
     private final String name;
 
-    public Player(String name, Color color){
+    private final int id;
+
+    public Player(String name, Color color, int id){
         this.name = name;
         this.color = color;
+        this.id = id;
     }
 
     public Player(PlayerSerializable playerSerializable){
         this.name = playerSerializable.name;
         this.color = Color.web(playerSerializable.color);
+        this.id = playerSerializable.id;
     }
 
     public Color getColor(){
@@ -34,6 +38,10 @@ public class Player {
         if (!(object instanceof Player))
             return false;
         Player ref = (Player) object;
-        return this.name.equals(ref.name);
+        return this.id == ref.id;
+    }
+
+    public int getId(){
+        return id;
     }
 }

@@ -28,7 +28,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         super(gameController);
         this.server = server;
         this.server.setLobbyHostUiController(this);
-        this.hostingPlayer = new Player("Hosting Player", Color.web("#ff0000"));
+        this.hostingPlayer = new Player("Hosting Player", Color.web("#ff0000"), 1);
         updatePlayerListOfHostLobby();
     }
 
@@ -80,9 +80,9 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         playerList.addAll(server.getPlayers());
 
         //Set unit ownership for debug
-        tank1.setOwner(hostingPlayer);
-        tank2.setOwner(playerList.size() > 1 ? playerList.get(1): null);
-        tank3.setOwner(playerList.size() > 2 ? playerList.get(2): null);
+        tank1.setOwnerId(hostingPlayer.getId());
+        tank2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): 0);
+        tank3.setOwnerId(playerList.size() > 2 ? playerList.get(2).getId(): 0);
 
         /*
         * START Creating game.

@@ -10,19 +10,19 @@ public class GameStartPacket extends Packet{
      * Indicates to each client/player, which in-game player from the lobby list they are.
      * This way, every client can correctly set their Player "thisPlayer"
      */
-    private String playerName;
+    private int playerId;
 
 
-    public GameStartPacket(GameSerializable gameSerializable, String playerName){
+    public GameStartPacket(GameSerializable gameSerializable, int playerId){
         super(PacketType.GAME_START);
         this.gameSerializable = gameSerializable;
-        this.playerName = playerName;
+        this.playerId = playerId;
     }
 
     public GameSerializable getGameSerializable(){
         return gameSerializable;
     }
-    public String getPlayerName(){
-        return playerName;
+    public int getPlayerId(){
+        return playerId;
     }
 }
