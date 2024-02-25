@@ -64,7 +64,7 @@ public class Game {
     }
 
     public boolean itsMyTurn(Player player){
-        if (verbose) System.out.println("[GAME] [itsMyTurn?] Player: "+player+"; WhoseTurn: "+players.get(whoseTurn));
+        if (verbose) System.out.println("[GAME] [itsMyTurn?]\n[GAME] [PlayerIsAsking] "+player+"\n[GAME] [PlayerWithTurn] "+players.get(whoseTurn));
 
         return players.get(whoseTurn).equals(player);
     }

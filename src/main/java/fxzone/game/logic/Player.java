@@ -44,4 +44,9 @@ public class Player {
     public int getId(){
         return id;
     }
+
+    @Override
+    public String toString(){
+        return "PLAYER"+id+":"+name+":"+super.toString();
+    }
 }
