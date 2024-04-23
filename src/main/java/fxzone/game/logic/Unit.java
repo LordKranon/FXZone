@@ -35,6 +35,11 @@ public class Unit extends TileSpaceObject{
 
     private int ownerId;
 
+    /*
+    DEBUG
+     */
+    static final boolean verbose = true;
+
     /**
      * Constructor
      *
@@ -83,9 +88,11 @@ public class Unit extends TileSpaceObject{
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= UnitCodex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
+            Point oldPosition = new Point(x, y);
             setPositionInMap(path.peekLast().x, path.peekLast().y, map);
-            setPositionInMapVisual(path.peek().x, path.peek().y, map);
+            setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
             unitState = UnitState.MOVING;
+            if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
             return true;
         }
         else {

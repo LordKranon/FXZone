@@ -78,9 +78,15 @@ public class InGameUiController extends AbstractUiController {
     private GameObjectInTileSpace tileSelector;
 
     /**
-     * Used to switch graphical stance of selected unit
+     * Used to switch graphical stance of selected unit.
      */
     private double cumulativeDeltaUnitStance = 0;
+
+    /**
+     * For Unit Move Commands.
+     * Saves the last tile that was hovered over while issuing a path.
+     */
+    private Point lastTileForUnitPathQueue;
 
     /*
     SOUND
@@ -270,8 +276,9 @@ public class InGameUiController extends AbstractUiController {
     private void handleSelectedUnitPathQueue(){
         if(turnState == TurnState.UNIT_SELECTED){
             Point hoveredPoint = new Point(tileHoveredX, tileHoveredY);
-            if(!hoveredPoint.equals(selectedUnitQueuedPath.peekLast())){
+            if(!hoveredPoint.equals(lastTileForUnitPathQueue)){
                 selectedUnitQueuedPath.add(hoveredPoint);
+                lastTileForUnitPathQueue = hoveredPoint;
             }
         }
     }
@@ -418,6 +425,7 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && (thisPlayer.getId() == unit.getOwnerId())){
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
+            lastTileForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
             turnState = TurnState.UNIT_SELECTED;
             System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
