@@ -16,6 +16,8 @@ public class AssetHandler {
 
     private static final HashMap<KeyUnitVehicle, Image> imagesUnitsVehicles = new HashMap<>();
 
+    private static final HashMap<KeyMoveCommandArrow, Image> imagesMoveCommandArrows = new HashMap<>();
+
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
     /**

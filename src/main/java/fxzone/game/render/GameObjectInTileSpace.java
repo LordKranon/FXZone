@@ -26,6 +26,10 @@ public class GameObjectInTileSpace extends AbstractGameObject {
         setY(offsetY + this.yScaled);
     }
 
+    public void setOffset(Map map){
+        setOffset(map.getOffsetX(), map.getOffsetY());
+    }
+
     /**
      * Change the game logical position of this object in a given map.
      * @param x tile space x

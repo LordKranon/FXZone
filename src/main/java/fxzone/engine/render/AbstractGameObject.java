@@ -65,4 +65,15 @@ public abstract class AbstractGameObject {
         this.image = image;
         this.imageView.setImage(image);
     }
+
+    /**
+     * Remove this objects imageView from the root group.
+     * Called when this object will no longer be rendered again,
+     * E.g. a UI Unit move command arrow after the move command is issued/cancelled.
+     *
+     * @param group the root group that the image was visible in
+     */
+    public void removeSelfFromRoot(Group group){
+        group.getChildren().remove(imageView);
+    }
 }

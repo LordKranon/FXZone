@@ -14,9 +14,11 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
+import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -87,6 +89,12 @@ public class InGameUiController extends AbstractUiController {
      * Saves the last tile that was hovered over while issuing a path.
      */
     private Point lastTileForUnitPathQueue;
+
+    /**
+     * For Unit Move Commands.
+     * Stores the graphical objects representing the current move command queue while issuing a path.
+     */
+    private ArrayList<GameObjectUiMoveCommandArrowTile> moveCommandArrowTiles;
 
     /*
     SOUND
@@ -162,6 +170,7 @@ public class InGameUiController extends AbstractUiController {
         zoomMap();
         findHoveredTile();
         moveSelector();
+        moveMoveCommandArrowTiles();
         handleSelectedUnitPathQueue();
         updateSelectedUnit(delta);
         moveMovingUnits(delta);
@@ -277,10 +286,19 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.UNIT_SELECTED){
             Point hoveredPoint = new Point(tileHoveredX, tileHoveredY);
             if(!hoveredPoint.equals(lastTileForUnitPathQueue)){
-                selectedUnitQueuedPath.add(hoveredPoint);
-                lastTileForUnitPathQueue = hoveredPoint;
+                addPointToSelectedUnitPathQueue(hoveredPoint);
             }
         }
+    }
+
+    private void addPointToSelectedUnitPathQueue(Point point){
+        /*Logic*/
+        selectedUnitQueuedPath.add(point);
+        lastTileForUnitPathQueue = point;
+
+        /*Graphics*/
+        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(point.x, point.y, map, root2D);
+        moveCommandArrowTiles.add(arrowTile);
     }
 
     private void tileClicked(int x, int y){
@@ -292,7 +310,7 @@ public class InGameUiController extends AbstractUiController {
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
-                turnState = TurnState.NEUTRAL;
+                turnStateToNeutral();
             }
 
             //TEMPORARY UNIT MOVE COMMANDS
@@ -366,10 +384,21 @@ public class InGameUiController extends AbstractUiController {
     }
 
     /**
-     * Draw the tile selector over the tile that the mouse is hovering over.
+     * Draw the tile selector over the tile that the mouse is hovering over and adjust for map offset.
      */
     private void moveSelector(){
         tileSelector.setPositionInMap(tileHoveredX, tileHoveredY, map);
+    }
+
+    /**
+     * Redraw the UI move command arrow to adjust for map offset.
+     */
+    private void moveMoveCommandArrowTiles(){
+        if(turnState == TurnState.UNIT_SELECTED){
+            for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+                arrowTile.setOffset(map);
+            }
+        }
     }
 
     /**
@@ -407,10 +436,16 @@ public class InGameUiController extends AbstractUiController {
 
                 map.setTileRenderSize(newTileRenderSize);
 
-                /*
-                Also adjust size of selector
-                */
-                tileSelector.changeTileRenderSize(tileHoveredX, tileHoveredY, map);
+                adjustUiElementsInTileSpaceOnZoom();
+            }
+        }
+    }
+
+    private void adjustUiElementsInTileSpaceOnZoom(){
+        tileSelector.changeTileRenderSize(tileHoveredX, tileHoveredY, map);
+        if(turnState == TurnState.UNIT_SELECTED){
+            for (GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+                arrowTile.changeTileRenderSize(map);
             }
         }
     }
@@ -426,6 +461,7 @@ public class InGameUiController extends AbstractUiController {
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             lastTileForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+            moveCommandArrowTiles = new ArrayList<>();
             turnState = TurnState.UNIT_SELECTED;
             System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
@@ -442,7 +478,7 @@ public class InGameUiController extends AbstractUiController {
      */
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
         commandUnitToMove(selectedUnit, path);
-        turnState = TurnState.NEUTRAL;
+        turnStateToNeutral();
     }
 
     /**
@@ -468,8 +504,19 @@ public class InGameUiController extends AbstractUiController {
      * End the turn.
      */
     protected void endTurn(){
-        turnState = TurnState.NEUTRAL;
+        turnStateToNeutral();
         game.goNextTurn();
+    }
+
+    /**
+     * Set the turnState to NEUTRAL.
+     * Handle and close all the stuff from any preceding turn states.
+     */
+    private void turnStateToNeutral(){
+        for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+            arrowTile.removeSelfFromRoot(root2D);
+        }
+        turnState = TurnState.NEUTRAL;
     }
 
 }
