@@ -2,16 +2,17 @@ package fxzone.game.logic.serializable;
 
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.UnitType;
 
 public class UnitSerializable extends TileSpaceObjectSerializable{
 
-    public String unitName;
+    public UnitType unitType;
 
     public int ownerId;
 
     public UnitSerializable(Unit unit) {
         super(unit);
-        this.unitName = unit.getUnitName();
+        this.unitType = unit.getUnitType();
         this.ownerId = unit.getOwnerId();
     }
 }

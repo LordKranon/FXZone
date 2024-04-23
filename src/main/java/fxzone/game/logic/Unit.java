@@ -16,7 +16,11 @@ public class Unit extends TileSpaceObject{
      */
     private int visualTileX, visualTileY;
 
-    private final String unitName;
+    /**
+     * Identifies what kind of unit this is.
+     * E. g. "Battle Tank" or "RPG Infantry"
+     */
+    private final UnitType unitType;
 
     /**
      * Graphical representation. Superclass already has a pointer, this one specifies it further.
@@ -39,24 +43,24 @@ public class Unit extends TileSpaceObject{
      * @param tileRenderSize graphical size
      * @param group          graphical object group
      */
-    public Unit(String unitName, int x, int y, double tileRenderSize, Group group) {
+    public Unit(UnitType unitType, int x, int y, double tileRenderSize, Group group) {
         super(x, y, tileRenderSize, group);
-        this.unitName = unitName;
-        this.gameObjectUnit = new GameObjectUnit(unitName, x, y, tileRenderSize, group);
+        this.unitType = unitType;
+        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
     }
 
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group){
         super(unitSerializable);
-        this.unitName = unitSerializable.unitName;
+        this.unitType = unitSerializable.unitType;
         this.ownerId = unitSerializable.ownerId;
 
-        this.gameObjectUnit = new GameObjectUnit(unitName, x, y, tileRenderSize, group);
+        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
     }
 
-    public String getUnitName(){
-        return unitName;
+    public UnitType getUnitType(){
+        return unitType;
     }
 
     /**
@@ -84,7 +88,7 @@ public class Unit extends TileSpaceObject{
             return true;
         }
         else {
-            System.err.println("[UNIT "+unitName+"] received a move command it can't perform");
+            System.err.println("[UNIT "+unitType+"] received a move command it can't perform");
             return false;
         }
     }

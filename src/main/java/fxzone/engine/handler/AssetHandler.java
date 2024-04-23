@@ -1,5 +1,6 @@
 package fxzone.engine.handler;
 
+import fxzone.game.logic.UnitCodex;
 import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -75,7 +76,7 @@ public class AssetHandler {
 
     public static Image getImageUnitVehicle(KeyUnitVehicle keyUnitVehicle){
         if(!imagesUnitsVehicles.containsKey(keyUnitVehicle)){
-            Image imageUnitVehicleRaw = getImage("/images/units/"+keyUnitVehicle.keyName+"_cl.png", 512, 256);
+            Image imageUnitVehicleRaw = getImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnitVehicle.keyType))+"_cl.png", 512, 256);
             PixelReader reader = imageUnitVehicleRaw.getPixelReader();
             WritableImage imageUnitVehicleCropped = new WritableImage(
                 reader, keyUnitVehicle.keyStance == 0 ? 0 : 256, 0, 256, 256

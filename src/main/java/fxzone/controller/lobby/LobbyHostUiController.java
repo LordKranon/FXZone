@@ -8,6 +8,8 @@ import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.UnitCodex;
+import fxzone.game.logic.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
@@ -64,13 +66,13 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         START Creating map.
         */
         Map map = new Map(5, 3, null);
-        Unit tank1 = new Unit("tank", 1, 1, map.getTileRenderSize(), null);
+        Unit tank1 = new Unit(UnitType.BATTLE_TANK, 1, 1, map.getTileRenderSize(), null);
         map.addUnit(tank1);
-        Unit tank2 = new Unit("hunter_tank", 2, 1, 0, null);
+        Unit tank2 = new Unit(UnitType.HUNTER_TANK, 2, 1, 0, null);
         map.addUnit(tank2);
-        Unit tank3 = new Unit("artillery", 3, 1, 0, null);
+        Unit tank3 = new Unit(UnitType.ARTILLERY, 3, 1, 0, null);
         map.addUnit(tank3);
-        map.addUnit(new Unit("tank", 5, 3, 0, null));
+        map.addUnit(new Unit(UnitType.BATTLE_TANK, 5, 3, 0, null));
         /*
         END Creating map.
         */

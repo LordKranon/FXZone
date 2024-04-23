@@ -2,6 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnitVehicle;
+import fxzone.game.logic.UnitType;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 
@@ -20,11 +21,11 @@ public class GameObjectUnit extends GameObjectInTileSpace{
      */
     private double tileCenterOffsetX, tileCenterOffsetY;
 
-    public GameObjectUnit(String unitName, int x, int y, double tileRenderSize,
+    public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize,
         Group group) {
         super(null, x, y, tileRenderSize, group);
-        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitName, 0));
-        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitName, 1));
+        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 0));
+        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 1));
         this.setImage(imageStance0);
     }
 

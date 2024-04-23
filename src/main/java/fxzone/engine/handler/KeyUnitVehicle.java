@@ -1,11 +1,13 @@
 package fxzone.engine.handler;
 
+import fxzone.game.logic.UnitType;
+
 public class KeyUnitVehicle {
-    public String keyName;
+    public UnitType keyType;
     public Integer keyStance;
 
-    public KeyUnitVehicle(String keyName, int keyStance) {
-        this.keyName = keyName;
+    public KeyUnitVehicle(UnitType keyType, int keyStance) {
+        this.keyType = keyType;
         this.keyStance = keyStance;
     }
 
@@ -14,12 +16,12 @@ public class KeyUnitVehicle {
         if (!(obj instanceof KeyUnitVehicle))
             return false;
         KeyUnitVehicle ref = (KeyUnitVehicle) obj;
-        return this.keyName.equals(ref.keyName) &&
+        return this.keyType.equals(ref.keyType) &&
             this.keyStance.equals(ref.keyStance);
     }
 
     @Override
     public int hashCode() {
-        return keyName.hashCode() ^ keyStance.hashCode();
+        return keyType.hashCode() ^ keyStance.hashCode();
     }
 }
