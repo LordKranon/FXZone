@@ -8,10 +8,10 @@ import java.util.HashMap;
 
 public class UnitCodex {
 
-    public static final HashMap<UnitType, int[]> UNIT_PROFILE_VALUES = new HashMap<UnitType, int[]>() {{
-        put(BATTLE_TANK, new int[]{0, 3});
-        put(HUNTER_TANK, new int[]{1, 4});
-        put(ARTILLERY, new int[]{2, 5});
+    public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
+        put(BATTLE_TANK, new UnitProfile(0, 3));
+        put(HUNTER_TANK, new UnitProfile(1, 4));
+        put(ARTILLERY, new UnitProfile(2, 5));
     }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{
@@ -20,4 +20,15 @@ public class UnitCodex {
         put(ARTILLERY, "artillery");
     }};
 
+    static class UnitProfile{
+        int ID, SPEED;
+        UnitProfile(int ID, int SPEED){
+            this.ID = ID;
+            this.SPEED = SPEED;
+        }
+    }
+
+    public static UnitProfile getUnitProfile(UnitType unitType){
+        return UNIT_PROFILE_VALUES.get(unitType);
+    }
 }

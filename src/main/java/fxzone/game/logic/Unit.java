@@ -80,7 +80,8 @@ public class Unit extends TileSpaceObject{
      * @param path the path of tiles this unit will take
      */
     public boolean moveCommand(ArrayDeque<Point> path, Map map){
-        if(unitState == UnitState.NEUTRAL){
+        /* TODO Remove second condition, it is temporary for testing */
+        if(unitState == UnitState.NEUTRAL && path.size() <= UnitCodex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
             setPositionInMap(path.peekLast().x, path.peekLast().y, map);
             setPositionInMapVisual(path.peek().x, path.peek().y, map);
