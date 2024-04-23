@@ -504,6 +504,11 @@ public class InGameUiController extends AbstractUiController {
      * End the turn.
      */
     protected void endTurn(){
+        /*TODO
+        If turn is ended via network packet reception, the turnStateToNeutral() cleanup function may not clean up
+        graphical elements as it is not on the FX thread. This should, in theory, never occur since you can't end your turn
+        while still having a unit selected and with move command arrows being displayed.
+        */
         turnStateToNeutral();
         game.goNextTurn();
     }
@@ -512,9 +517,11 @@ public class InGameUiController extends AbstractUiController {
      * Set the turnState to NEUTRAL.
      * Handle and close all the stuff from any preceding turn states.
      */
-    private void turnStateToNeutral(){
-        for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
-            arrowTile.removeSelfFromRoot(root2D);
+    protected void turnStateToNeutral(){
+        if(moveCommandArrowTiles != null){
+            for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+                arrowTile.removeSelfFromRoot(root2D);
+            }
         }
         turnState = TurnState.NEUTRAL;
     }

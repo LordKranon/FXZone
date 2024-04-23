@@ -31,7 +31,6 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         commandUnitToMove(unit, path);
-        turnState = TurnState.NEUTRAL;
     }
 
     /**
