@@ -209,7 +209,7 @@ public class InGameUiController extends AbstractUiController {
 
     private void createTileSelector(){
         tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
-        tileSelector.setViewOrder(-1);
+        tileSelector.setViewOrder(ViewOrder.UI_SELECTOR);
     }
 
     private void createFXSceneUI(){
