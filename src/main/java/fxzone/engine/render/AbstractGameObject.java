@@ -66,6 +66,11 @@ public abstract class AbstractGameObject {
         this.imageView.setImage(image);
     }
 
+    public void setScale(double scaleX, double scaleY){
+        this.imageView.setScaleX(scaleX);
+        this.imageView.setScaleY(scaleY);
+    }
+
     /**
      * Remove this objects imageView from the root group.
      * Called when this object will no longer be rendered again,

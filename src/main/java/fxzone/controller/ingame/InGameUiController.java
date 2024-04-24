@@ -5,6 +5,7 @@ import fxzone.controller.menu.MainMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
@@ -289,10 +290,24 @@ public class InGameUiController extends AbstractUiController {
     private void addPointToSelectedUnitPathQueue(Point point){
         /*Logic*/
         selectedUnitQueuedPath.add(point);
+
+        // Determine direction of previous point from perspective of new point
+        // TODO
+        Direction directionPredecessor;
+        if(lastTileForUnitPathQueue.x < point.x){
+            directionPredecessor = Direction.LEFT;
+        } else if (lastTileForUnitPathQueue.x > point.x){
+            directionPredecessor = Direction.RIGHT;
+        } else {
+            directionPredecessor = Direction.NONE;
+        }
+
         lastTileForUnitPathQueue = point;
 
         /*Graphics*/
-        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(point.x, point.y, map, root2D);
+        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
+            point.x, point.y, map, root2D, directionPredecessor
+        );
         moveCommandArrowTiles.add(arrowTile);
     }
 
@@ -452,7 +467,12 @@ public class InGameUiController extends AbstractUiController {
      */
     protected void selectUnit(Unit unit){
         if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] trying");
-        if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && (thisPlayer.getId() == unit.getOwnerId())){
+        if(
+            turnState == TurnState.NEUTRAL &&
+            unit.getUnitState() == UnitState.NEUTRAL &&
+            thisPlayer != null &&
+            (thisPlayer.getId() == unit.getOwnerId())
+        ){
             selectedUnit = unit;
 
             // Initialize unit path queue
@@ -463,7 +483,9 @@ public class InGameUiController extends AbstractUiController {
             moveCommandArrowTiles = new ArrayList<>();
 
             // Add the first part of the arrow, which is on the tile that the selected unit is standing on
-            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(selectedUnit.getX(), selectedUnit.getY(), map, root2D);
+            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
+                selectedUnit.getX(), selectedUnit.getY(), map, root2D, Direction.NONE
+            );
             moveCommandArrowTiles.add(arrowTile);
 
             turnState = TurnState.UNIT_SELECTED;
