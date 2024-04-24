@@ -1,7 +1,6 @@
 package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
-import fxzone.engine.handler.KeyMoveCommandArrow;
 import fxzone.engine.utils.Direction;
 import fxzone.game.logic.Map;
 import javafx.scene.Group;
@@ -39,7 +38,6 @@ public class GameObjectUiMoveCommandArrowTile extends GameObjectInTileSpace{
     }
 
     private void calculateImage(){
-
         this.setScale(1, 1);
         switch (directionOfSuccessor){
             case NONE:
@@ -97,17 +95,6 @@ public class GameObjectUiMoveCommandArrowTile extends GameObjectInTileSpace{
                     case LEFT: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight.png"); break;
                 }; break;
         }
-
-
-        /*
-        switch (directionOfPredecessor){
-            case DOWN: this.setScale(1, -1);
-            case NONE:
-            case UP: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow_2.png"); break;
-            case LEFT: this.setScale(-1, 1);
-            case RIGHT: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow.png"); break;
-        }
-         */
         this.setImage(imageArrow0);
 
     }

@@ -16,8 +16,6 @@ public class AssetHandler {
 
     private static final HashMap<KeyUnitVehicle, Image> imagesUnitsVehicles = new HashMap<>();
 
-    private static final HashMap<KeyMoveCommandArrow, Image> imagesMoveCommandArrows = new HashMap<>();
-
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
     /**
@@ -86,27 +84,6 @@ public class AssetHandler {
             imagesUnitsVehicles.put(keyUnitVehicle, imageUnitVehicleCropped);
         }
         return imagesUnitsVehicles.get(keyUnitVehicle);
-    }
-
-    public static Image getImageMoveCommandArrow(KeyMoveCommandArrow keyMoveCommandArrow){
-        if(!imagesMoveCommandArrows.containsKey(keyMoveCommandArrow)){
-            Image imageMoveCommandArrowRaw = getImage("/images/misc/"+keyMoveCommandArrow.keyPath+".png", 256, 256);
-
-            /*
-            PixelReader reader = imageMoveCommandArrowRaw.getPixelReader();
-            WritableImage imageMoveCommandArrowEdited = new WritableImage(
-                reader,
-                keyMoveCommandArrow.mirrorOnX ? 256 : 0,
-                keyMoveCommandArrow.mirrorOnY ? 256 : 0,
-                keyMoveCommandArrow.mirrorOnX ? 0 : 256,
-                keyMoveCommandArrow.mirrorOnY ? 0 : 256
-            );
-             */
-
-
-            imagesMoveCommandArrows.put(keyMoveCommandArrow, imageMoveCommandArrowRaw);
-        }
-        return imagesMoveCommandArrows.get(keyMoveCommandArrow);
     }
 
     public static Media getSound(String path){
