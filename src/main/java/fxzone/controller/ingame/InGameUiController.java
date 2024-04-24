@@ -454,6 +454,8 @@ public class InGameUiController extends AbstractUiController {
         if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] trying");
         if(turnState == TurnState.NEUTRAL && unit.getUnitState() == UnitState.NEUTRAL && thisPlayer != null && (thisPlayer.getId() == unit.getOwnerId())){
             selectedUnit = unit;
+
+            // Initialize unit path queue
             selectedUnitQueuedPath = new ArrayDeque<>();
             lastTileForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
 
@@ -465,7 +467,7 @@ public class InGameUiController extends AbstractUiController {
             moveCommandArrowTiles.add(arrowTile);
 
             turnState = TurnState.UNIT_SELECTED;
-            System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
+            if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
     }
 
