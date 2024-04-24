@@ -5,6 +5,7 @@ import fxzone.controller.menu.MainMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
@@ -26,15 +27,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -221,7 +216,7 @@ public class InGameUiController extends AbstractUiController {
         Font font = new Font(36);
         quitButton = new Button("Quit");
         quitButton.setPrefWidth(400);
-        quitButton.setViewOrder(-10);
+        quitButton.setViewOrder(ViewOrder.UI_BUTTON);
         quitButton.setVisible(true);
         quitButton.setFont(font);
         quitButton.setOnMouseClicked(mouseEvent -> {
@@ -231,7 +226,7 @@ public class InGameUiController extends AbstractUiController {
 
         endTurnButton = new Button("End Turn");
         endTurnButton.setPrefWidth(400);
-        endTurnButton.setViewOrder(-10);
+        endTurnButton.setViewOrder(ViewOrder.UI_BUTTON);
         endTurnButton.setVisible(true);
         endTurnButton.setFont(font);
         endTurnButton.setOnMouseClicked(mouseEvent -> {
@@ -461,7 +456,14 @@ public class InGameUiController extends AbstractUiController {
             selectedUnit = unit;
             selectedUnitQueuedPath = new ArrayDeque<>();
             lastTileForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+
+            // Initialize move command arrow
             moveCommandArrowTiles = new ArrayList<>();
+
+            // Add the first part of the arrow, which is on the tile that the selected unit is standing on
+            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(selectedUnit.getX(), selectedUnit.getY(), map, root2D);
+            moveCommandArrowTiles.add(arrowTile);
+
             turnState = TurnState.UNIT_SELECTED;
             System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }

@@ -1,6 +1,7 @@
 package fxzone.game.render;
 
 import fxzone.engine.render.AbstractGameObject;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -18,7 +19,7 @@ public class GameObjectInTileSpace extends AbstractGameObject {
         super(image, x * tileRenderSize, y * tileRenderSize, tileRenderSize, tileRenderSize, group);
         this.xScaled = x * tileRenderSize;
         this.yScaled = y * tileRenderSize;
-        this.setViewOrder(1);
+        this.setViewOrder(ViewOrder.MAP_TILE);
     }
 
     public void setOffset(double offsetX, double offsetY){

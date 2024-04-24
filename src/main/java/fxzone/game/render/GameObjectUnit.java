@@ -2,6 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnitVehicle;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.UnitType;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -27,6 +28,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
         this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 0));
         this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 1));
         this.setImage(imageStance0);
+        this.setViewOrder(ViewOrder.GAME_UNIT);
     }
 
     public void setStance(int stance){
