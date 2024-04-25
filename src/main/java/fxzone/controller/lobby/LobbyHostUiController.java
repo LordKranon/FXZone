@@ -65,14 +65,16 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         /*
         START Creating map.
         */
-        Map map = new Map(5, 3, null);
+        Map map = new Map(25, 15, null);
         Unit tank1 = new Unit(UnitType.BATTLE_TANK, 1, 1, map.getTileRenderSize(), null);
         map.addUnit(tank1);
         Unit tank2 = new Unit(UnitType.HUNTER_TANK, 2, 1, 0, null);
         map.addUnit(tank2);
         Unit tank3 = new Unit(UnitType.ARTILLERY, 3, 1, 0, null);
         map.addUnit(tank3);
-        map.addUnit(new Unit(UnitType.BATTLE_TANK, 5, 3, 0, null));
+        Unit tank4 = new Unit(UnitType.ARTILLERY, 4, 1, 0, null);
+        map.addUnit(tank4);
+        map.addUnit(new Unit(UnitType.BATTLE_TANK, 25, 15, 0, null));
         /*
         END Creating map.
         */
@@ -83,6 +85,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
 
         //Set unit ownership for debug
         tank1.setOwnerId(hostingPlayer.getId());
+        tank4.setOwnerId(hostingPlayer.getId());
         tank2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): 0);
         tank3.setOwnerId(playerList.size() > 2 ? playerList.get(2).getId(): 0);
 
