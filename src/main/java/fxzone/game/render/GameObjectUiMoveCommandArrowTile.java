@@ -6,30 +6,18 @@ import fxzone.game.logic.Map;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 
-public class GameObjectUiMoveCommandArrowTile extends GameObjectInTileSpace{
+public class GameObjectUiMoveCommandArrowTile extends GameObjectUiTile{
 
     private Image imageArrow0;
 
     private final Direction directionOfPredecessor;
     private Direction directionOfSuccessor;
 
-    /**
-     * The in-game tile this arrowTile is on.
-     */
-    private final int tileX, tileY;
-
     public GameObjectUiMoveCommandArrowTile(int x, int y, Map map, Group group, Direction directionOfPredecessor) {
-        super(null, x, y, map.getTileRenderSize(), group);
-        this.tileX = x;
-        this.tileY = y;
+        super(x, y, map, group);
         this.directionOfPredecessor = directionOfPredecessor;
         this.directionOfSuccessor = Direction.NONE;
-        this.setOffset(map);
         calculateImage();
-    }
-    public void changeTileRenderSize(Map map){
-        setPositionInMap(tileX, tileY, map);
-        setFit(map.getTileRenderSize());
     }
 
     public void setDirectionOfSuccessor(Direction direction){
