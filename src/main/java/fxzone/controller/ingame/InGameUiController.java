@@ -430,6 +430,9 @@ public class InGameUiController extends AbstractUiController {
             for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
                 arrowTile.setOffset(map);
             }
+            for(GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
+                gridTile.setOffset(map);
+            }
         }
     }
 
@@ -618,6 +621,11 @@ public class InGameUiController extends AbstractUiController {
         if(moveCommandArrowTiles != null){
             for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
                 arrowTile.removeSelfFromRoot(root2D);
+            }
+        }
+        if(moveCommandGridTiles != null){
+            for(GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
+                gridTile.removeSelfFromRoot(root2D);
             }
         }
         turnState = TurnState.NEUTRAL;
