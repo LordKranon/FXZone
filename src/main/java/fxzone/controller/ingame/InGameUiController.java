@@ -171,7 +171,7 @@ public class InGameUiController extends AbstractUiController {
         zoomMap();
         findHoveredTile();
         moveSelector();
-        moveMoveCommandArrowTiles();
+        moveMoveCommandArrowAndGridTiles();
         handleSelectedUnitPathQueue();
         updateSelectedUnit(delta);
         moveMovingUnits(delta);
@@ -423,9 +423,9 @@ public class InGameUiController extends AbstractUiController {
     }
 
     /**
-     * Redraw the UI move command arrow to adjust for map offset.
+     * Redraw the UI move command arrow and the UI move command green grid to adjust for map offset.
      */
-    private void moveMoveCommandArrowTiles(){
+    private void moveMoveCommandArrowAndGridTiles(){
         if(turnState == TurnState.UNIT_SELECTED){
             for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
                 arrowTile.setOffset(map);
