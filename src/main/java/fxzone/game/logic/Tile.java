@@ -50,4 +50,10 @@ public class Tile extends TileSpaceObject{
         if (verbose && unitOnTile == null) System.err.println("[TILE] No unit on tile ("+x+"; "+y+")");
         return unitOnTile;
     }
+
+    public boolean isMovableThroughBy(Unit unit){
+        //TODO
+        //Implement more intelligent checks for whether a unit can move through this tile or not
+        return this.unitOnTile == null;
+    }
 }

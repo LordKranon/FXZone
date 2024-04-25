@@ -164,4 +164,17 @@ public class Map {
     public boolean isInBounds(int x, int y){
         return (x >= 0) && (y >= 0) && (x < getWidth()) && (y < getHeight());
     }
+
+    /**
+     * Used for pathfinding.
+     * Whether a given unit can move through a specific tile.
+     */
+    public boolean checkTileForMoveThroughByUnit(int x, int y, Unit unit){
+        if(x < 0 || x >= getWidth() || y < 0 || y >= getHeight()){
+            return false;
+        }
+        else {
+            return this.tiles[x][y].isMovableThroughBy(unit);
+        }
+    }
 }

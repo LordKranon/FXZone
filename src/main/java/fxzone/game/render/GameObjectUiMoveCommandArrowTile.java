@@ -2,6 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ public class GameObjectUiMoveCommandArrowTile extends GameObjectUiTile{
         this.directionOfPredecessor = directionOfPredecessor;
         this.directionOfSuccessor = Direction.NONE;
         calculateImage();
+        this.setViewOrder(ViewOrder.UI_MOVE_COMMAND_ARROW);
     }
 
     public void setDirectionOfSuccessor(Direction direction){

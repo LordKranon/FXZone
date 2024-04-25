@@ -13,10 +13,12 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
+import fxzone.game.logic.UnitCodex;
 import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
+import fxzone.game.render.GameObjectUiMoveCommandGridTile;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -91,6 +93,9 @@ public class InGameUiController extends AbstractUiController {
      * Stores the graphical objects representing the current move command queue while issuing a path.
      */
     private ArrayList<GameObjectUiMoveCommandArrowTile> moveCommandArrowTiles;
+
+    private boolean[][] moveCommandGridMovableSquares;
+    private ArrayList<GameObjectUiMoveCommandGridTile> moveCommandGridTiles;
 
     /*
     SOUND
@@ -505,10 +510,56 @@ public class InGameUiController extends AbstractUiController {
             );
             moveCommandArrowTiles.add(arrowTile);
 
+            // Calculate the move command grid
+            onSelectUnitCalculateMoveCommandGrid();
+
+            // Initialize move command grid graphics
+            moveCommandGridTiles = new ArrayList<>();
+
+            // For all squares the selected unit can move to, add a green tile to the move command grid
+            for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
+                for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
+                    if(moveCommandGridMovableSquares[i_x][i_y]){
+                        moveCommandGridTiles.add(
+                            new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, false)
+                        );
+                    }
+                }
+            }
+
             turnState = TurnState.UNIT_SELECTED;
             if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
     }
+
+    private void onSelectUnitCalculateMoveCommandGrid(){
+        // Initialize move command grid logic
+        moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
+
+        onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), UnitCodex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
+    }
+
+    private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
+        if(remainingSteps > 0){
+            if(map.checkTileForMoveThroughByUnit(x, y-1, selectedUnit)){
+                moveCommandGridMovableSquares[x][y-1] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1);
+            }
+            if(map.checkTileForMoveThroughByUnit(x-1, y, selectedUnit)){
+                moveCommandGridMovableSquares[x-1][y] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1);
+            }
+            if(map.checkTileForMoveThroughByUnit(x, y+1, selectedUnit)){
+                moveCommandGridMovableSquares[x][y+1] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1);
+            }
+            if(map.checkTileForMoveThroughByUnit(x+1, y, selectedUnit)){
+                moveCommandGridMovableSquares[x+1][y] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1);
+            }
+        }
+    }
+
 
     protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path){
         if(unit.moveCommand(path, map)){

@@ -20,8 +20,8 @@ public class UnitCodex {
         put(ARTILLERY, "artillery");
     }};
 
-    static class UnitProfile{
-        int ID, SPEED;
+    public static class UnitProfile{
+        public int ID, SPEED;
         UnitProfile(int ID, int SPEED){
             this.ID = ID;
             this.SPEED = SPEED;
