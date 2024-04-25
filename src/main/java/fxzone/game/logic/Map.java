@@ -170,6 +170,8 @@ public class Map {
      * Whether a given unit can move through a specific tile.
      */
     public boolean checkTileForMoveThroughByUnit(int x, int y, Unit unit){
+        //TODO
+        //See Tile.isMovableThroughBy(Unit unit)
         if(x < 0 || x >= getWidth() || y < 0 || y >= getHeight()){
             return false;
         }

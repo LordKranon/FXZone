@@ -479,6 +479,9 @@ public class InGameUiController extends AbstractUiController {
             for (GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
                 arrowTile.changeTileRenderSize(map);
             }
+            for (GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
+                gridTile.changeTileRenderSize(map);
+            }
         }
     }
 
