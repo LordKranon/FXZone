@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.game.logic.serializable.UnitSerializable;
+import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -27,6 +28,11 @@ public class Unit extends TileSpaceObject{
      */
     GameObjectUnit gameObjectUnit;
 
+    /**
+     * Graphical indicator of this units health.
+     */
+    GameObjectUiUnitHealth gameObjectUiUnitHealth;
+
     private int stance = 0;
 
     private UnitState unitState = UnitState.NEUTRAL;
@@ -51,8 +57,11 @@ public class Unit extends TileSpaceObject{
     public Unit(UnitType unitType, int x, int y, double tileRenderSize, Group group) {
         super(x, y, tileRenderSize, group);
         this.unitType = unitType;
+
         this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
+
+        this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
     }
 
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group){
@@ -62,6 +71,8 @@ public class Unit extends TileSpaceObject{
 
         this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
         this.gameObjectInTileSpace = this.gameObjectUnit;
+
+        this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
     }
 
     public UnitType getUnitType(){
@@ -123,11 +134,27 @@ public class Unit extends TileSpaceObject{
         return false;
     }
 
+    /**
+     * Render methods are overwritten to include the UI health indicator object in render operations.
+     */
     @Override
     public void setPositionInMap(int x, int y, Map map){
         map.getTiles()[this.x][this.y].setUnitOnTile(null);
         super.setPositionInMap(x, y, map);
         map.getTiles()[x][y].setUnitOnTile(this);
+        this.gameObjectUiUnitHealth.setPositionInMap(x, y, map);
+    }
+
+    @Override
+    public void changeTileRenderSize(Map map){
+        super.changeTileRenderSize(map);
+        this.gameObjectUiUnitHealth.changeTileRenderSize(x, y, map);
+    }
+
+    @Override
+    public void setGraphicalOffset(double offsetX, double offsetY){
+        super.setGraphicalOffset(offsetX, offsetY);
+        this.gameObjectUiUnitHealth.setOffset(offsetX, offsetY);
     }
 
     /**
