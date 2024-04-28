@@ -1,5 +1,7 @@
 package fxzone.game.logic;
 
+import fxzone.engine.utils.Direction;
+import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
@@ -38,6 +40,11 @@ public class Unit extends TileSpaceObject{
     private UnitState unitState = UnitState.NEUTRAL;
 
     private ArrayDeque<Point> movePath;
+
+    /**
+     * As the unit moves between tiles, this is the direction of the next neighboring tile along its path.
+     */
+    private Direction directionNextPointOnMovePath;
 
     private int ownerId;
 
@@ -102,6 +109,7 @@ public class Unit extends TileSpaceObject{
             Point oldPosition = new Point(x, y);
             setPositionInMap(path.peekLast().x, path.peekLast().y, map);
             setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
+            directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
             unitState = UnitState.MOVING;
             if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
             return true;
@@ -127,7 +135,10 @@ public class Unit extends TileSpaceObject{
                 boolean continueMove = (movePath.peek() != null);
                 if(!continueMove){
                     unitStateToNeutral(map);
+                } else{
+                    directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(nextPoint, movePath.peek());
                 }
+
                 return continueMove;
             }
         }
@@ -140,7 +151,15 @@ public class Unit extends TileSpaceObject{
      */
     public void performInBetweenTileMove(double fractionOfTile, Map map){
         if(unitState == UnitState.MOVING){
-            gameObjectUnit.setTileCenterOffset(fractionOfTile, 0, visualTileX, visualTileY, map);
+            double tileCenterOffsetX, tileCenterOffsetY;
+            switch(directionNextPointOnMovePath){
+                case RIGHT: tileCenterOffsetX = fractionOfTile; tileCenterOffsetY = 0; break;
+                case DOWN: tileCenterOffsetX = 0; tileCenterOffsetY = fractionOfTile; break;
+                case LEFT: tileCenterOffsetX = -fractionOfTile; tileCenterOffsetY = 0; break;
+                case UP: tileCenterOffsetX = 0; tileCenterOffsetY = -fractionOfTile; break;
+                default: tileCenterOffsetX = 0; tileCenterOffsetY = 0; break;
+            }
+            gameObjectUnit.setTileCenterOffset(tileCenterOffsetX, tileCenterOffsetY, visualTileX, visualTileY, map);
         } else {
             System.err.println("[UNIT "+unitType+"] [performInBetweenTileMove] Unit is not in MOVING state");
         }
