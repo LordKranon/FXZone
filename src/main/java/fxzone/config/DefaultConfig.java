@@ -21,5 +21,7 @@ public class DefaultConfig {
         {"LAST_USED_IP_ON_JOIN", "localhost"},
         {"LAST_USED_NAME_ON_JOIN", "Player"},
         {"LAST_USED_COLOR_ON_JOIN", "#ff0000"},
+
+        {"GAME_SPEED_UNIT_MOVEMENT_INTERVAL", ".5"}
     };
 }

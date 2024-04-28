@@ -3,6 +3,7 @@ package fxzone.game.render;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnitVehicle;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Map;
 import fxzone.game.logic.UnitType;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -37,5 +38,21 @@ public class GameObjectUnit extends GameObjectInTileSpace{
         } else {
             this.setImage(imageStance1);
         }
+    }
+
+    @Override
+    public void setPositionInMap(double x, double y, Map map){
+        super.setPositionInMap(x + tileCenterOffsetX, y + tileCenterOffsetY, map);
+    }
+
+    public void setTileCenterOffset(double tileCenterOffsetX, double tileCenterOffsetY, double x, double y, Map map){
+        this.tileCenterOffsetX = tileCenterOffsetX;
+        this.tileCenterOffsetY = tileCenterOffsetY;
+        this.setPositionInMap(x, y, map);
+    }
+
+    public void setTileCenterOffset(double tileCenterOffsetX, double tileCenterOffsetY){
+        this.tileCenterOffsetX = tileCenterOffsetX;
+        this.tileCenterOffsetY = tileCenterOffsetY;
     }
 }

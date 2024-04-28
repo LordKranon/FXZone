@@ -125,6 +125,11 @@ public class InGameUiController extends AbstractUiController {
     private ArrayDeque<Point> selectedUnitQueuedPath;
 
     /*
+    GAME DECOR SETTINGS
+     */
+    private final double totalUnitMovementInterval = Config.getDouble("GAME_SPEED_UNIT_MOVEMENT_INTERVAL");
+
+    /*
     DEBUG
     * */
     static final boolean verbose = true;
@@ -404,12 +409,14 @@ public class InGameUiController extends AbstractUiController {
         for(Unit unit : unitsMoving.keySet()){
             double cumulativeDelta = unitsMoving.get(unit);
             cumulativeDelta += delta;
-            if(cumulativeDelta > 1){
-                cumulativeDelta -= 1;
+            if(cumulativeDelta > totalUnitMovementInterval){
+                cumulativeDelta -= totalUnitMovementInterval;
                 if(!unit.performFullTileMove(map)){
                     unitsMoving.remove(unit);
                     return;
                 }
+            } else {
+                unit.performInBetweenTileMove(cumulativeDelta / totalUnitMovementInterval, map);
             }
             unitsMoving.put(unit, cumulativeDelta);
         }

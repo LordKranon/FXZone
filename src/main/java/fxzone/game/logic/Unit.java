@@ -120,18 +120,30 @@ public class Unit extends TileSpaceObject{
         if(unitState == UnitState.MOVING){
             Point nextPoint = movePath.poll();
             if(nextPoint == null){
-                unitState = UnitState.NEUTRAL;
+                unitStateToNeutral(map);
                 return false;
             } else {
                 setPositionInMapVisual(nextPoint.x, nextPoint.y, map);
                 boolean continueMove = (movePath.peek() != null);
                 if(!continueMove){
-                    unitState = UnitState.NEUTRAL;
+                    unitStateToNeutral(map);
                 }
                 return continueMove;
             }
         }
         return false;
+    }
+
+    /**
+     * While moving, increase in-between-tile-offset to graphically represent the unit moving from one tile to a neighboring tile.
+     * @param fractionOfTile at what position between tiles should this unit be placed
+     */
+    public void performInBetweenTileMove(double fractionOfTile, Map map){
+        if(unitState == UnitState.MOVING){
+            gameObjectUnit.setTileCenterOffset(fractionOfTile, 0, visualTileX, visualTileY, map);
+        } else {
+            System.err.println("[UNIT "+unitType+"] [performInBetweenTileMove] Unit is not in MOVING state");
+        }
     }
 
     /**
@@ -164,7 +176,8 @@ public class Unit extends TileSpaceObject{
     private void setPositionInMapVisual(int x, int y, Map map){
         visualTileX = x;
         visualTileY = y;
-        gameObjectInTileSpace.setPositionInMap(x, y, map);
+        gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
+        //gameObjectInTileSpace.setPositionInMap(x, y, map);
     }
     public int getVisualTileX(){
         return visualTileX;
@@ -182,6 +195,11 @@ public class Unit extends TileSpaceObject{
     }
     public void setOwnerId(int ownerId){
         this.ownerId = ownerId;
+    }
+
+    private void unitStateToNeutral(Map map){
+        gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
+        unitState = UnitState.NEUTRAL;
     }
 
 }

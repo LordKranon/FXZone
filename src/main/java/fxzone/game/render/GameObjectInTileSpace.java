@@ -37,7 +37,7 @@ public class GameObjectInTileSpace extends AbstractGameObject {
      * @param y tile space y
      * @param map map this object is in the tile space of
      */
-    public void setPositionInMap(int x, int y, Map map){
+    public void setPositionInMap(double x, double y, Map map){
         this.xScaled = x * map.getTileRenderSize();
         this.yScaled = y * map.getTileRenderSize();
         setOffset(map.getOffsetX(), map.getOffsetY());
