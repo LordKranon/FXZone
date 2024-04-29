@@ -12,7 +12,7 @@ public class DefaultConfig {
         {"PRINT_FPS", "true"},
         {"MAX_FPS", "60"},
 
-        {"MAP_SCROLL_SPEED", "3"},
+        {"MAP_SCROLL_SPEED", "100"},
         {"MIN_TILE_SIZE_ON_ZOOM", "40"},
         {"MAX_TILE_SIZE_ON_ZOOM", "256"},
 
