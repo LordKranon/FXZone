@@ -28,6 +28,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         previous unit move commands so unit positions and their states might be desynced.
          */
         Point unitPosition = unitMoveCommandPacket.getUnitPosition();
+        if(verbose) System.out.println("[IN-GAME-NETWORK-UI-CONTROLLER] Received unit move command for unit at X="+unitPosition.x+" Y="+unitPosition.y);
         ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         commandUnitToMove(unit, path);
