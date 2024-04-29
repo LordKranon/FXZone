@@ -34,7 +34,7 @@ public class Game {
         for(PlayerSerializable playerSerializable : gameSerializable.players){
             addPlayer(new Player(playerSerializable));
         }
-        this.map = new Map(gameSerializable.map, group);
+        this.map = new Map(gameSerializable.map, group, this);
     }
 
     public void addPlayer(Player player){
@@ -44,6 +44,16 @@ public class Game {
 
     public ArrayList<Player> getPlayers(){
         return players;
+    }
+
+    public Player getPlayer(int playerId){
+        for(Player player : players){
+            if(player.getId() == playerId){
+                return player;
+            }
+        }
+        System.err.println("[GAME] [getPlayer] Player with ID: "+playerId+" not found");
+        return null;
     }
 
     public void setWhoseTurn(int whoseTurn){

@@ -23,11 +23,10 @@ public class GameObjectUnit extends GameObjectInTileSpace{
      */
     private double tileCenterOffsetX, tileCenterOffsetY;
 
-    public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize,
-        Group group) {
+    public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
-        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 0));
-        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 1));
+        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 0, playerColor));
+        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 1, playerColor));
         this.setImage(imageStance0);
         this.setViewOrder(ViewOrder.GAME_UNIT);
     }

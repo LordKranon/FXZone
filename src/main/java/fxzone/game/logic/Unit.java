@@ -5,6 +5,7 @@ import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -65,18 +66,34 @@ public class Unit extends TileSpaceObject{
         super(x, y, tileRenderSize, group);
         this.unitType = unitType;
 
-        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
+        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group, Color.WHITE);
         this.gameObjectInTileSpace = this.gameObjectUnit;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
     }
 
-    public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group){
+    public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);
         this.unitType = unitSerializable.unitType;
         this.ownerId = unitSerializable.ownerId;
 
-        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group);
+
+        java.awt.Color playerColor;
+        try {
+            javafx.scene.paint.Color fx = game.getPlayer(ownerId).getColor();
+            playerColor = new java.awt.Color(
+                (float) fx.getRed(),
+                (float) fx.getGreen(),
+                (float) fx.getBlue(),
+                (float) fx.getOpacity()
+            );
+        }catch (NullPointerException e){
+            playerColor = Color.WHITE;
+        }
+
+        this.gameObjectUnit = new GameObjectUnit(
+            unitType, x, y, tileRenderSize, group, playerColor
+        );
         this.gameObjectInTileSpace = this.gameObjectUnit;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);

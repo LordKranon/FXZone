@@ -96,7 +96,7 @@ public class AssetHandler {
             BufferedImage bufferedImageUnitVehicleRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnitVehicle.keyType))+"_cl.png");
             BufferedImage bufferedImageUnitVehicleCropped = bufferedImageUnitVehicleRaw.getSubimage(keyUnitVehicle.keyStance == 0 ? 0 : 24, 0, 24, 24);
 
-            BufferedImage bufferedImageUnitVehicleRecolored = applyColor(bufferedImageUnitVehicleCropped, Color.RED);
+            BufferedImage bufferedImageUnitVehicleRecolored = applyColor(bufferedImageUnitVehicleCropped, keyUnitVehicle.keyColor);
 
             java.awt.Image awtImageUnitVehicleResized = bufferedImageUnitVehicleRecolored.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
             BufferedImage bufferedImageUnitVehicleResized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);

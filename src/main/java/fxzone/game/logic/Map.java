@@ -44,7 +44,7 @@ public class Map {
         }
         this.units = new ArrayList<Unit>();
     }
-    public Map(MapSerializable mapSerializable, Group group){
+    public Map(MapSerializable mapSerializable, Group group, Game game){
         int width = mapSerializable.tiles.length;
         int height = mapSerializable.tiles[0].length;
         this.tiles = new Tile[width][height];
@@ -55,7 +55,7 @@ public class Map {
         }
         this.units = new ArrayList<Unit>();
         for(UnitSerializable unitSerializable : mapSerializable.units){
-            addUnit(new Unit(unitSerializable, tileRenderSize, group));
+            addUnit(new Unit(unitSerializable, tileRenderSize, group, game));
         }
     }
 
