@@ -490,6 +490,19 @@ public class InGameUiController extends AbstractUiController {
                 map.setTileRenderSize(newTileRenderSize);
 
                 adjustUiElementsInTileSpaceOnZoom();
+
+                /*
+                Magic from Legacy Code
+                 */
+                Point2D lastMousePosition = gameController.getInputHandler().getLastMousePosition();
+                int mouseX = (int) lastMousePosition.getX();
+                int mouseY = (int) lastMousePosition.getY();
+                double drawOffsetX = map.getOffsetX();
+                double drawOffsetY = map.getOffsetY();
+                drawOffsetX = (int)(mouseX - (mouseX - drawOffsetX) * newTileRenderSize / (newTileRenderSize - scrollDelta));
+                drawOffsetY = (int)(mouseY - (mouseY - drawOffsetY) * newTileRenderSize / (newTileRenderSize - scrollDelta));
+
+                map.setGraphicalOffset(drawOffsetX, drawOffsetY);
             }
         }
     }
