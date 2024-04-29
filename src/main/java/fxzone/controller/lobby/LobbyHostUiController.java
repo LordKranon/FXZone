@@ -30,7 +30,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         super(gameController);
         this.server = server;
         this.server.setLobbyHostUiController(this);
-        this.hostingPlayer = new Player("Hosting Player", Color.web("#ff0000"), 1);
+        this.hostingPlayer = new Player("Alpha", Color.web("#ff0000"), 1);
         updatePlayerListOfHostLobby();
     }
 
