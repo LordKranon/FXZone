@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.engine.utils.Direction;
+import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
@@ -78,17 +79,11 @@ public class Unit extends TileSpaceObject{
         this.ownerId = unitSerializable.ownerId;
 
 
-        java.awt.Color playerColor;
+        java.awt.Color playerColor = null;
         try {
-            javafx.scene.paint.Color fx = game.getPlayer(ownerId).getColor();
-            playerColor = new java.awt.Color(
-                (float) fx.getRed(),
-                (float) fx.getGreen(),
-                (float) fx.getBlue(),
-                (float) fx.getOpacity()
-            );
+            playerColor = FxUtils.toAwtColor(game.getPlayer(ownerId).getColor());
         }catch (NullPointerException e){
-            playerColor = Color.WHITE;
+            System.err.println("[UNIT "+unitType+"] Initialized without owner color");
         }
 
         this.gameObjectUnit = new GameObjectUnit(

@@ -118,6 +118,9 @@ public class AssetHandler {
      * WARNING: To save performance, use this on a small image and then resize afterwards.
      */
     private static BufferedImage applyColor(BufferedImage bufferedImage, java.awt.Color color){
+        if(color == null){
+            return bufferedImage;
+        }
         /*
         MAGIC from old Zone
          */

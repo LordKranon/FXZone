@@ -20,4 +20,14 @@ public class FxUtils
         }
         return color;
     }
+
+    public static java.awt.Color toAwtColor(javafx.scene.paint.Color color) {
+        java.awt.Color awtColor = new java.awt.Color(
+            (float) color.getRed(),
+            (float) color.getGreen(),
+            (float) color.getBlue(),
+            (float) color.getOpacity()
+        );
+        return awtColor;
+    }
 }

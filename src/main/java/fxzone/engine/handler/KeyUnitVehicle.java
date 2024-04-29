@@ -20,7 +20,11 @@ public class KeyUnitVehicle {
         KeyUnitVehicle ref = (KeyUnitVehicle) obj;
         return this.keyType.equals(ref.keyType) &&
             this.keyStance.equals(ref.keyStance) &&
-            this.keyColor.equals(ref.keyColor);
+            (
+                (this.keyColor == null && ref.keyColor == null) ||
+                    ((this.keyColor != null && ref.keyColor != null) &&
+                        (this.keyColor.equals(ref.keyColor)))
+            );
     }
 
     @Override
