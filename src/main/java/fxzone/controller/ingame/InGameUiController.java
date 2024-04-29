@@ -17,6 +17,7 @@ import fxzone.game.logic.UnitCodex;
 import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
+import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
 import java.awt.Point;
@@ -75,7 +76,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Small indicator that marks the tile that the mouse pointer is hovering over.
      */
-    private GameObjectInTileSpace tileSelector;
+    private GameObjectTileSelector tileSelector;
 
     /**
      * Used to switch graphical stance of selected unit.
@@ -173,6 +174,7 @@ public class InGameUiController extends AbstractUiController {
         refreshUi();
         handleClicks();
         moveMap(delta);
+        handlePulsatingElements(delta);
         zoomMap();
         findHoveredTile();
         moveSelector();
@@ -219,8 +221,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void createTileSelector(){
-        tileSelector = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/selector.png"), 0, 0, 128, root2D);
-        tileSelector.setViewOrder(ViewOrder.UI_SELECTOR);
+        tileSelector = new GameObjectTileSelector(0, 0, 128, root2D);
     }
 
     private void createFXSceneUI(){
@@ -427,6 +428,16 @@ public class InGameUiController extends AbstractUiController {
      */
     private void moveSelector(){
         tileSelector.setPositionInMap(tileHoveredX, tileHoveredY, map);
+    }
+
+    /**
+     * Handle all elements that constantly change with passing time
+     * E.g. the tile selector changing its image back and forth
+     *
+     * @param delta time (in seconds) since last update
+     */
+    private void handlePulsatingElements(double delta){
+        tileSelector.updateTickingImage(delta);
     }
 
     /**
