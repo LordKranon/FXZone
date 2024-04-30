@@ -93,21 +93,26 @@ public class AssetHandler {
     public static Image getImageUnitVehicle(KeyUnitVehicle keyUnitVehicle){
         if(!imagesUnitsVehicles.containsKey(keyUnitVehicle)){
 
-            BufferedImage bufferedImageUnitVehicleRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnitVehicle.keyType))+"_cl.png");
-            BufferedImage bufferedImageUnitVehicleCropped = bufferedImageUnitVehicleRaw.getSubimage(keyUnitVehicle.keyStance == 0 ? 0 : 24, 0, 24, 24);
+            BufferedImage bImgColoredPartRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnitVehicle.keyType))+"_cp.png");
+            BufferedImage bImgColoredPartCropped = bImgColoredPartRaw.getSubimage(keyUnitVehicle.keyStance == 0 ? 0 : 24, 0, 24, 24);
 
-            BufferedImage bufferedImageUnitVehicleRecolored = applyColor(bufferedImageUnitVehicleCropped, keyUnitVehicle.keyColor);
+            BufferedImage bImgUncoloredPartRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnitVehicle.keyType))+"_up.png");
+            BufferedImage bImgUncoloredPartCropped = bImgUncoloredPartRaw.getSubimage(keyUnitVehicle.keyStance == 0 ? 0 : 24, 0, 24, 24);
 
-            java.awt.Image awtImageUnitVehicleResized = bufferedImageUnitVehicleRecolored.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-            BufferedImage bufferedImageUnitVehicleResized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bImgColoredPartRecolored = applyColor(bImgColoredPartCropped, keyUnitVehicle.keyColor);
 
-            Graphics2D graphics2D = bufferedImageUnitVehicleResized.createGraphics();
-            graphics2D.drawImage(awtImageUnitVehicleResized, 0, 0, null);
+            java.awt.Image awtImgColoredPartResized = bImgColoredPartRecolored.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+            java.awt.Image awtImgUncoloredPartResized = bImgUncoloredPartCropped.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+            BufferedImage bImgCombined = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D graphics2D = bImgCombined.createGraphics();
+            graphics2D.drawImage(awtImgColoredPartResized, 0, 0, null);
+            graphics2D.drawImage(awtImgUncoloredPartResized, 0, 0, null);
             graphics2D.dispose();
 
-            Image imageUnitVehicleCropped = SwingFXUtils.toFXImage(bufferedImageUnitVehicleResized, null);
+            Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
 
-            imagesUnitsVehicles.put(keyUnitVehicle, imageUnitVehicleCropped);
+            imagesUnitsVehicles.put(keyUnitVehicle, imgFinished);
         }
         return imagesUnitsVehicles.get(keyUnitVehicle);
     }
