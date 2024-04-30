@@ -300,18 +300,11 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void addPointToSelectedUnitPathQueue(Point point){
-        /*Logic*/
+
         selectedUnitQueuedPath.add(point);
 
-        // Determine direction of previous point from perspective of new point
-        // Simultaneously do this the other way around, to correctly set the successor direction of preceding arrow tile
-        Direction directionOfThisAsSuccessor;
-
-        directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileForUnitPathQueue, point);
-
-        if(directionOfThisAsSuccessor == Direction.NONE){
-            System.err.println("[IN-GAME-UI-CONTROLLER] Error in move command path issuing process");
-        }
+        // Determine direction of this new point from perspective of previous point
+        Direction directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileForUnitPathQueue, point);
 
         // Set successor direction of preceding arrow tile
         if(!moveCommandArrowTiles.isEmpty()){
@@ -321,7 +314,7 @@ public class InGameUiController extends AbstractUiController {
 
         lastTileForUnitPathQueue = point;
 
-        /*Graphics*/
+        // This new arrow tile gets the earlier calculated direction as its predecessor direction
         GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
             point.x, point.y, map, root2D, directionOfThisAsSuccessor
         );

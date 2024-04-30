@@ -14,6 +14,7 @@ public class GeometryUtils {
         } else if(a.y > b.y){
             return Direction.UP;
         } else {
+            System.err.println("[GEOMETRY-UTILS] ERROR! Could not determine direction from Point "+a+" to Point "+b);
             return Direction.NONE;
         }
     }
