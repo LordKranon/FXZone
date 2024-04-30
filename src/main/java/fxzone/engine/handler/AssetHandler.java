@@ -1,15 +1,12 @@
 package fxzone.engine.handler;
 
 import fxzone.game.logic.UnitCodex;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.media.Media;
 import javax.imageio.ImageIO;
 

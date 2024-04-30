@@ -76,7 +76,6 @@ public class Unit extends TileSpaceObject{
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
     }
-
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);
         this.unitType = unitSerializable.unitType;
@@ -192,13 +191,11 @@ public class Unit extends TileSpaceObject{
         map.getTiles()[x][y].setUnitOnTile(this);
         this.gameObjectUiUnitHealth.setPositionInMap(x, y, map);
     }
-
     @Override
     public void changeTileRenderSize(Map map){
         super.changeTileRenderSize(map);
         this.gameObjectUiUnitHealth.changeTileRenderSize(x, y, map);
     }
-
     @Override
     public void setGraphicalOffset(double offsetX, double offsetY){
         super.setGraphicalOffset(offsetX, offsetY);
@@ -241,7 +238,6 @@ public class Unit extends TileSpaceObject{
             unitStateToBlackedOut();
         }
     }
-
     private void unitStateToNeutral(){
         gameObjectUnit.setBlackedOut(false);
         unitState = UnitState.NEUTRAL;
