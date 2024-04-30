@@ -6,6 +6,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
+import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
@@ -306,22 +307,12 @@ public class InGameUiController extends AbstractUiController {
         // Simultaneously do this the other way around, to correctly set the successor direction of preceding arrow tile
         Direction directionPredecessor;
         Direction directionOfThisAsSuccessor;
-        if(lastTileForUnitPathQueue.x < point.x){
-            directionPredecessor = Direction.LEFT;
-            directionOfThisAsSuccessor = Direction.RIGHT;
-        } else if (lastTileForUnitPathQueue.x > point.x){
-            directionPredecessor = Direction.RIGHT;
-            directionOfThisAsSuccessor = Direction.LEFT;
-        } else if (lastTileForUnitPathQueue.y < point.y){
-            directionPredecessor = Direction.UP;
-            directionOfThisAsSuccessor = Direction.DOWN;
-        } else if (lastTileForUnitPathQueue.y > point.y){
-            directionPredecessor = Direction.DOWN;
-            directionOfThisAsSuccessor = Direction.UP;
-        } else {
+
+        directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileForUnitPathQueue, point);
+        directionPredecessor = GeometryUtils.getPointToPointDirection(point, lastTileForUnitPathQueue);
+
+        if(directionPredecessor == Direction.NONE || directionOfThisAsSuccessor == Direction.NONE){
             System.err.println("[IN-GAME-UI-CONTROLLER] Error in move command path issuing process");
-            directionPredecessor = Direction.NONE;
-            directionOfThisAsSuccessor = Direction.NONE;
         }
 
         // Set successor direction of preceding arrow tile
