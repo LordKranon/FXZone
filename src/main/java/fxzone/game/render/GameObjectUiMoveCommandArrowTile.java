@@ -32,57 +32,57 @@ public class GameObjectUiMoveCommandArrowTile extends GameObjectUiTile{
         switch (directionOfSuccessor){
             case NONE:
                 switch (directionOfPredecessor){
-                    case UP: this.setScale(1, -1);
+                    case DOWN: this.setScale(1, -1);
                     case NONE:
-                    case DOWN: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow_2.png"); break;
-                    case RIGHT: this.setScale(-1, 1);
-                    case LEFT: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow.png"); break;
+                    case UP: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow_2.png"); break;
+                    case LEFT: this.setScale(-1, 1);
+                    case RIGHT: imageArrow0 = AssetHandler.getImage("/images/misc/move_arrow.png"); break;
                 }; break;
             case UP:
                 switch (directionOfPredecessor){
                     case NONE:
-                    case UP:
+                    case DOWN:
                         this.setScale(1, -1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_deadend_2.png"); break;
-                    case RIGHT: this.setScale(-1, 1);
-                    case LEFT: imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case DOWN: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight_2.png"); break;
+                    case LEFT: this.setScale(-1, 1);
+                    case RIGHT: imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
+                    case UP: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight_2.png"); break;
                 }; break;
             case DOWN:
                 switch (directionOfPredecessor){
                     case NONE:
-                    case DOWN:
+                    case UP:
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_deadend_2.png"); break;
-                    case RIGHT:
+                    case LEFT:
                         this.setScale(-1, -1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case LEFT:
+                    case RIGHT:
                         this.setScale(1, -1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case UP: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight_2.png"); break;
+                    case DOWN: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight_2.png"); break;
                 }; break;
             case LEFT:
                 switch (directionOfPredecessor){
                     case NONE:
-                    case LEFT:
+                    case RIGHT:
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_deadend.png"); break;
-                    case DOWN: this.setScale(1, -1);
-                    case UP: imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case RIGHT: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight.png"); break;
+                    case UP: this.setScale(1, -1);
+                    case DOWN: imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
+                    case LEFT: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight.png"); break;
                 }; break;
             case RIGHT:
                 switch (directionOfPredecessor){
                     case NONE:
-                    case RIGHT:
+                    case LEFT:
                         this.setScale(-1, 1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_deadend.png"); break;
-                    case UP:
+                    case DOWN:
                         this.setScale(-1, 1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case DOWN:
+                    case UP:
                         this.setScale(-1, -1);
                         imageArrow0 = AssetHandler.getImage("/images/misc/move_edge.png"); break;
-                    case LEFT: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight.png"); break;
+                    case RIGHT: imageArrow0 = AssetHandler.getImage("/images/misc/move_straight.png"); break;
                 }; break;
         }
         this.setImage(imageArrow0);
