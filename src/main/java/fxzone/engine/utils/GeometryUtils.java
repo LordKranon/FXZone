@@ -18,4 +18,8 @@ public class GeometryUtils {
             return Direction.NONE;
         }
     }
+
+    public static boolean isPointNeighborOf(Point a, Point b){
+        return Math.abs(a.x-b.x) + Math.abs(a.y-b.y) == 1;
+    }
 }

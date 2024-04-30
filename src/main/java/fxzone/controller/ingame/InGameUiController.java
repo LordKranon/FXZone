@@ -17,7 +17,6 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.UnitCodex;
 import fxzone.game.logic.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
@@ -88,7 +87,13 @@ public class InGameUiController extends AbstractUiController {
      * For Unit Move Commands.
      * Saves the last tile that was hovered over while issuing a path.
      */
-    private Point lastTileForUnitPathQueue;
+    private Point lastTileHoveredForUnitPathQueue;
+
+    /**
+     * For Unit Move Commands.
+     * Saves the last tile that was actually added to the move command queue while issuing a path.
+     */
+    private Point lastTileAddedToPathQueue;
 
     /**
      * For Unit Move Commands.
@@ -293,8 +298,16 @@ public class InGameUiController extends AbstractUiController {
     private void handleSelectedUnitPathQueue(){
         if(turnState == TurnState.UNIT_SELECTED){
             Point hoveredPoint = new Point(tileHoveredX, tileHoveredY);
-            if(!hoveredPoint.equals(lastTileForUnitPathQueue)){
-                addPointToSelectedUnitPathQueue(hoveredPoint);
+            if(!hoveredPoint.equals(lastTileHoveredForUnitPathQueue)){
+                lastTileHoveredForUnitPathQueue = hoveredPoint;
+
+                if(
+                    GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
+                        selectedUnitQueuedPath.size() < UnitCodex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
+                        moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
+                ){
+                    addPointToSelectedUnitPathQueue(hoveredPoint);
+                }
             }
         }
     }
@@ -304,7 +317,7 @@ public class InGameUiController extends AbstractUiController {
         selectedUnitQueuedPath.add(point);
 
         // Determine direction of this new point from perspective of previous point
-        Direction directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileForUnitPathQueue, point);
+        Direction directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileAddedToPathQueue, point);
 
         // Set successor direction of preceding arrow tile
         if(!moveCommandArrowTiles.isEmpty()){
@@ -312,7 +325,7 @@ public class InGameUiController extends AbstractUiController {
             predecessorArrowTile.setDirectionOfSuccessor(directionOfThisAsSuccessor);
         }
 
-        lastTileForUnitPathQueue = point;
+        lastTileAddedToPathQueue = point;
 
         // This new arrow tile gets the earlier calculated direction as its predecessor direction
         GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
@@ -518,7 +531,8 @@ public class InGameUiController extends AbstractUiController {
 
             // Initialize unit path queue
             selectedUnitQueuedPath = new ArrayDeque<>();
-            lastTileForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+            lastTileHoveredForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+            lastTileAddedToPathQueue = lastTileHoveredForUnitPathQueue;
 
             // Initialize move command arrow
             moveCommandArrowTiles = new ArrayList<>();
