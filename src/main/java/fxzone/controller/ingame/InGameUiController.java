@@ -345,12 +345,10 @@ public class InGameUiController extends AbstractUiController {
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
                 turnStateToNeutral();
             }
-
-            //TEMPORARY UNIT MOVE COMMANDS
-            else if(map.isInBounds(x, y) && map.getTiles()[x][y].getUnitOnTile() == null){
-
+            else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath);
             }
+
         }
     }
 
