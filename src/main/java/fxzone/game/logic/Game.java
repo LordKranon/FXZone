@@ -70,6 +70,9 @@ public class Game {
         if (whoseTurn >= amountPlayers){
             whoseTurn = 0;
         }
+        for(Unit unit : map.getUnits()){
+            unit.setActionableThisTurn(true);
+        }
         if (verbose) System.out.println("[GAME] [goNextTurn] Player: "+players.get(whoseTurn)+" 's turn begins");
     }
 

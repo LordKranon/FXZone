@@ -6,6 +6,7 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.UnitType;
 import javafx.scene.Group;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 
 /**
@@ -22,6 +23,8 @@ public class GameObjectUnit extends GameObjectInTileSpace{
      * and 1 meaning the unit has reached the center of the very next tile.
      */
     private double tileCenterOffsetX, tileCenterOffsetY;
+
+    private boolean blackedOut;
 
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
@@ -50,8 +53,17 @@ public class GameObjectUnit extends GameObjectInTileSpace{
         this.setPositionInMap(x, y, map);
     }
 
-    public void setTileCenterOffset(double tileCenterOffsetX, double tileCenterOffsetY){
-        this.tileCenterOffsetX = tileCenterOffsetX;
-        this.tileCenterOffsetY = tileCenterOffsetY;
+    public void setBlackedOut(boolean blackedOut){
+        if(this.blackedOut == blackedOut){
+            return;
+        }
+        this.blackedOut = blackedOut;
+        if(blackedOut){
+            ColorAdjust colorAdjustBlackout = new ColorAdjust();
+            colorAdjustBlackout.setBrightness(-.5);
+            getImageView().setEffect(colorAdjustBlackout);
+        } else {
+            getImageView().setEffect(null);
+        }
     }
 }

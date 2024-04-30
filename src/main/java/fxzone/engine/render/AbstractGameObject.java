@@ -81,4 +81,8 @@ public abstract class AbstractGameObject {
     public void removeSelfFromRoot(Group group){
         group.getChildren().remove(imageView);
     }
+
+    protected ImageView getImageView(){
+        return this.imageView;
+    }
 }

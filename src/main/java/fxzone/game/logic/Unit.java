@@ -9,8 +9,6 @@ import fxzone.game.render.GameObjectUnit;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
 import javafx.scene.Group;
 
 public class Unit extends TileSpaceObject{
@@ -40,6 +38,12 @@ public class Unit extends TileSpaceObject{
     private int stance = 0;
 
     private UnitState unitState = UnitState.NEUTRAL;
+
+    /**
+     * Whether this unit can be selected for commands or if its blacked out.
+     * Closely related to UnitStates NEUTRAL & BLACKED_OUT
+     */
+    private boolean actionableThisTurn = true;
 
     private ArrayDeque<Point> movePath;
 
@@ -122,6 +126,7 @@ public class Unit extends TileSpaceObject{
             setPositionInMap(path.peekLast().x, path.peekLast().y, map);
             setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
             directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+            actionableThisTurn = false;
             unitState = UnitState.MOVING;
             if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
             return true;
@@ -140,13 +145,13 @@ public class Unit extends TileSpaceObject{
         if(unitState == UnitState.MOVING){
             Point nextPoint = movePath.poll();
             if(nextPoint == null){
-                unitStateToNeutral(map);
+                onMovementEnd(map);
                 return false;
             } else {
                 setPositionInMapVisual(nextPoint.x, nextPoint.y, map);
                 boolean continueMove = (movePath.peek() != null);
                 if(!continueMove){
-                    unitStateToNeutral(map);
+                    onMovementEnd(map);
                 } else{
                     directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(nextPoint, movePath.peek());
                 }
@@ -228,9 +233,37 @@ public class Unit extends TileSpaceObject{
         this.ownerId = ownerId;
     }
 
-    private void unitStateToNeutral(Map map){
-        gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
-        unitState = UnitState.NEUTRAL;
+    private void onMovementEnd(Map map){
+        cleanUpMovingState(map);
+        if(actionableThisTurn){
+            unitStateToNeutral();
+        } else{
+            unitStateToBlackedOut();
+        }
     }
 
+    private void unitStateToNeutral(){
+        gameObjectUnit.setBlackedOut(false);
+        unitState = UnitState.NEUTRAL;
+    }
+    private void unitStateToBlackedOut(){
+        gameObjectUnit.setBlackedOut(true);
+        unitState = UnitState.BLACKED_OUT;
+    }
+    private void cleanUpMovingState(Map map){
+        gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
+    }
+
+    public void setActionableThisTurn(boolean actionable){
+        if(actionable){
+            if(unitState == UnitState.BLACKED_OUT){
+                unitStateToNeutral();
+            }
+        } else {
+            if(unitState == UnitState.NEUTRAL){
+                unitStateToBlackedOut();
+            }
+        }
+        this.actionableThisTurn = actionable;
+    }
 }
