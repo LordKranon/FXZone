@@ -56,4 +56,8 @@ public class Tile extends TileSpaceObject{
         //Implement more intelligent checks for whether a unit can move through this tile or not
         return this.unitOnTile == null;
     }
+
+    public boolean isAttackableBy(Unit unit){
+        return (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId();
+    }
 }

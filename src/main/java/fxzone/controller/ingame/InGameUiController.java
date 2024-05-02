@@ -102,6 +102,7 @@ public class InGameUiController extends AbstractUiController {
     private ArrayList<GameObjectUiMoveCommandArrowTile> moveCommandArrowTiles;
 
     private boolean[][] moveCommandGridMovableSquares;
+    private boolean[][] moveCommandGridAttackableSquares;
     private ArrayList<GameObjectUiMoveCommandGridTile> moveCommandGridTiles;
 
     /*
@@ -175,8 +176,6 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
-        //System.out.println("[InGameUiController] update()");
-        //secondsPrinter(delta);
         refreshUi();
         handleClicks();
         moveMap(delta);
@@ -548,11 +547,17 @@ public class InGameUiController extends AbstractUiController {
             moveCommandGridTiles = new ArrayList<>();
 
             // For all squares the selected unit can move to, add a green tile to the move command grid
+            // For squares with attackable enemies, add a red tile
             for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
                 for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
                     if(moveCommandGridMovableSquares[i_x][i_y]){
                         moveCommandGridTiles.add(
                             new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, false)
+                        );
+                    }
+                    if(moveCommandGridAttackableSquares[i_x][i_y]){
+                        moveCommandGridTiles.add(
+                            new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, true)
                         );
                     }
                 }
@@ -566,11 +571,13 @@ public class InGameUiController extends AbstractUiController {
     private void onSelectUnitCalculateMoveCommandGrid(){
         // Initialize move command grid logic
         moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
+        moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
         onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), UnitCodex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
     }
 
     private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
+        onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
         if(remainingSteps > 0){
             if(map.checkTileForMoveThroughByUnit(x, y-1, selectedUnit)){
                 moveCommandGridMovableSquares[x][y-1] = true;
@@ -588,6 +595,21 @@ public class InGameUiController extends AbstractUiController {
                 moveCommandGridMovableSquares[x+1][y] = true;
                 onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1);
             }
+        }
+    }
+
+    private void onCalculateMoveCommandGridAddToAttackGridFromTile(int x, int y){
+        if(map.checkTileForAttackByUnit(x, y-1, selectedUnit)){
+            moveCommandGridAttackableSquares[x][y-1] = true;
+        }
+        if(map.checkTileForAttackByUnit(x-1, y, selectedUnit)){
+            moveCommandGridAttackableSquares[x-1][y] = true;
+        }
+        if(map.checkTileForAttackByUnit(x, y+1, selectedUnit)){
+            moveCommandGridAttackableSquares[x][y+1] = true;
+        }
+        if(map.checkTileForAttackByUnit(x+1, y, selectedUnit)){
+            moveCommandGridAttackableSquares[x+1][y] = true;
         }
     }
 

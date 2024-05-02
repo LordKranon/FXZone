@@ -172,11 +172,21 @@ public class Map {
     public boolean checkTileForMoveThroughByUnit(int x, int y, Unit unit){
         //TODO
         //See Tile.isMovableThroughBy(Unit unit)
-        if(x < 0 || x >= getWidth() || y < 0 || y >= getHeight()){
+        if(!isInBounds(x, y)){
             return false;
         }
         else {
             return this.tiles[x][y].isMovableThroughBy(unit);
         }
     }
+
+    public boolean checkTileForAttackByUnit(int x, int y, Unit unit){
+        if(!isInBounds(x, y)){
+            return false;
+        }
+        else {
+            return this.tiles[x][y].isAttackableBy(unit);
+        }
+    }
+
 }
