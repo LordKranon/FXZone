@@ -129,6 +129,7 @@ public class InGameUiController extends AbstractUiController {
     protected TurnState turnState = TurnState.NEUTRAL;
 
     private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
+    private final HashMap<Unit, Double> unitsAttacking = new HashMap<Unit, Double>();
 
     private ArrayDeque<Point> selectedUnitQueuedPath;
 
@@ -136,6 +137,7 @@ public class InGameUiController extends AbstractUiController {
     GAME DECOR SETTINGS
      */
     private final double totalUnitMovementInterval = Config.getDouble("GAME_SPEED_UNIT_MOVEMENT_INTERVAL");
+    private final double totalUnitAttackInterval = Config.getDouble("GAME_SPEED_UNIT_ATTACK_INTERVAL");
 
     /*
     DEBUG
@@ -186,6 +188,7 @@ public class InGameUiController extends AbstractUiController {
         moveMoveCommandArrowAndGridTiles();
         handleSelectedUnitPathQueue();
         updateSelectedUnit(delta);
+        handleAttackingUnits(delta);
         moveMovingUnits(delta);
     }
 
@@ -345,7 +348,13 @@ public class InGameUiController extends AbstractUiController {
                 turnStateToNeutral();
             }
             else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y){
-                onPlayerUnitMoveCommand(selectedUnitQueuedPath);
+                onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);
+            }
+            // TODO
+            // This attack check is only for 1 tile melee attacks, longer ranged attack checks yet to be implemented
+            else if(moveCommandGridAttackableSquares[x][y] &&
+                GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue)){
+                onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
             }
 
         }
@@ -404,14 +413,32 @@ public class InGameUiController extends AbstractUiController {
             cumulativeDelta += delta;
             if(cumulativeDelta > totalUnitMovementInterval){
                 cumulativeDelta -= totalUnitMovementInterval;
-                if(!unit.performFullTileMove(map)){
+                UnitState nextState = unit.performFullTileMove(map);
+                if(nextState != UnitState.MOVING){
                     unitsMoving.remove(unit);
+                    if(nextState == UnitState.ATTACKING){
+                        unitsAttacking.put(unit, 0.);
+                    }
                     return;
                 }
             } else {
                 unit.performInBetweenTileMove(cumulativeDelta / totalUnitMovementInterval, map);
             }
             unitsMoving.put(unit, cumulativeDelta);
+        }
+    }
+    private void handleAttackingUnits(double delta){
+        for(Unit unit : unitsAttacking.keySet()){
+            double cumulativeDelta = unitsAttacking.get(unit);
+            cumulativeDelta += delta;
+            if(cumulativeDelta > totalUnitAttackInterval){
+                unit.performFinishAttack();
+                unitsAttacking.remove(unit);
+                return;
+            } else {
+                unit.performAttack(cumulativeDelta / totalUnitAttackInterval, map);
+            }
+            unitsAttacking.put(unit, cumulativeDelta);
         }
     }
 
@@ -614,8 +641,8 @@ public class InGameUiController extends AbstractUiController {
     }
 
 
-    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path){
-        if(unit.moveCommand(path, map)){
+    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack){
+        if(unit.moveCommand(path, map, pointToAttack)){
             unitsMoving.put(unit, 0.);
         }
     }
@@ -623,8 +650,8 @@ public class InGameUiController extends AbstractUiController {
     /**
      * The player gives a unit a move command during their turn.
      */
-    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path){
-        commandUnitToMove(selectedUnit, path);
+    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
+        commandUnitToMove(selectedUnit, path, pointToAttack);
         turnStateToNeutral();
     }
 

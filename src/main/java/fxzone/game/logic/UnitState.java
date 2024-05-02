@@ -4,4 +4,5 @@ public enum UnitState {
     NEUTRAL,
     MOVING,
     BLACKED_OUT,
+    ATTACKING,
 }

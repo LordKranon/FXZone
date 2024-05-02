@@ -23,6 +23,7 @@ public class DefaultConfig {
         {"LAST_USED_COLOR_ON_JOIN", "#ff0000"},
 
         {"GAME_SPEED_UNIT_MOVEMENT_INTERVAL", ".5"},
+        {"GAME_SPEED_UNIT_ATTACK_INTERVAL", "1"},
 
         {"UI_TIlE_SELECTOR_TICK_INTERVAL", ".5"}
     };

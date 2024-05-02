@@ -52,6 +52,9 @@ public class Unit extends TileSpaceObject{
      */
     private Direction directionNextPointOnMovePath;
 
+    private boolean hasAttackCommandAfterMoving;
+    private Point pointToAttackAfterMoving;
+
     private int ownerId;
 
     /*
@@ -117,14 +120,25 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public boolean moveCommand(ArrayDeque<Point> path, Map map){
+    public boolean moveCommand(ArrayDeque<Point> path, Map map, Point pointToAttack){
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= UnitCodex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
             Point oldPosition = new Point(x, y);
-            setPositionInMap(path.peekLast().x, path.peekLast().y, map);
+            Point finalPosition = new Point(x, y);
+            directionNextPointOnMovePath = Direction.NONE;
+            if(! path.isEmpty()){
+                finalPosition = new Point(path.peekLast());
+                directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+            }
+            setPositionInMap(finalPosition.x, finalPosition.y, map);
             setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
-            directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+
+            //If an attack is included in the command, the unit will perform it after moving to the destination.
+            if(pointToAttack != null){
+                this.hasAttackCommandAfterMoving = true;
+                this.pointToAttackAfterMoving = pointToAttack;
+            }
             actionableThisTurn = false;
             unitState = UnitState.MOVING;
             if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
@@ -140,12 +154,12 @@ public class Unit extends TileSpaceObject{
      * Move to the next tile in queued path.
      * @return true if this unit is still moving afterwards
      */
-    public boolean performFullTileMove(Map map){
+    public UnitState performFullTileMove(Map map){
         if(unitState == UnitState.MOVING){
             Point nextPoint = movePath.poll();
             if(nextPoint == null){
                 onMovementEnd(map);
-                return false;
+                return this.unitState;
             } else {
                 setPositionInMapVisual(nextPoint.x, nextPoint.y, map);
                 boolean continueMove = (movePath.peek() != null);
@@ -155,10 +169,15 @@ public class Unit extends TileSpaceObject{
                     directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(nextPoint, movePath.peek());
                 }
 
-                return continueMove;
+                return this.unitState;
             }
         }
-        return false;
+        return this.unitState;
+    }
+    public void performFinishAttack(){
+        if(unitState == UnitState.ATTACKING){
+            onAttackEnd();
+        }
     }
 
     /**
@@ -179,6 +198,10 @@ public class Unit extends TileSpaceObject{
         } else {
             System.err.println("[UNIT "+unitType+"] [performInBetweenTileMove] Unit is not in MOVING state");
         }
+    }
+    public void performAttack(double fractionOfAttack, Map map){
+        //TODO
+        // Similar to moving the unit itself in between tiles, here a bullet of sorts will be moved/adjusted.
     }
 
     /**
@@ -232,6 +255,20 @@ public class Unit extends TileSpaceObject{
 
     private void onMovementEnd(Map map){
         cleanUpMovingState(map);
+        if(hasAttackCommandAfterMoving){
+            if(verbose) System.out.println("[UNIT "+unitType+"] on movement end, going into attack");
+            unitStateToAttacking();
+        } else {
+            if(actionableThisTurn){
+                unitStateToNeutral();
+            } else{
+                unitStateToBlackedOut();
+            }
+        }
+    }
+    private void onAttackEnd(){
+        //TODO
+        gameObjectUnit.setAttackingStance(false);
         if(actionableThisTurn){
             unitStateToNeutral();
         } else{
@@ -245,6 +282,12 @@ public class Unit extends TileSpaceObject{
     private void unitStateToBlackedOut(){
         gameObjectUnit.setBlackedOut(true);
         unitState = UnitState.BLACKED_OUT;
+    }
+    private void unitStateToAttacking(){
+        this.hasAttackCommandAfterMoving = false;
+        //TODO
+        gameObjectUnit.setAttackingStance(true);
+        unitState = UnitState.ATTACKING;
     }
     private void cleanUpMovingState(Map map){
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);

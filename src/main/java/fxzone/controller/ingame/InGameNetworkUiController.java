@@ -31,7 +31,11 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         if(verbose) System.out.println("[IN-GAME-NETWORK-UI-CONTROLLER] Received unit move command for unit at X="+unitPosition.x+" Y="+unitPosition.y);
         ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
-        commandUnitToMove(unit, path);
+
+        //TODO
+        // Include pointToAttack in GameActionPacket to communicate attacks over network
+        // pointToAttack temporarily set to null
+        commandUnitToMove(unit, path, null);
     }
 
     /**
