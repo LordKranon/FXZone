@@ -48,7 +48,7 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     @Override
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
         super.onPlayerUnitMoveCommand(path, pointToAttack);
-        server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path));
+        server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path, pointToAttack));
     }
 
     @Override

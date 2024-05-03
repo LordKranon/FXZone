@@ -67,7 +67,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     @Override
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
-        client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path));
+        client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path, pointToAttack));
         turnStateToNeutral();
     }
 
