@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
@@ -10,6 +11,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import javafx.scene.Group;
+import javafx.scene.media.MediaPlayer;
 
 public class Unit extends TileSpaceObject{
 
@@ -65,6 +67,11 @@ public class Unit extends TileSpaceObject{
     private int statDamage;
 
     /*
+    SOUND
+     */
+    MediaPlayer mediaPlayerMovement;
+
+    /*
     DEBUG
      */
     static final boolean verbose = true;
@@ -86,6 +93,7 @@ public class Unit extends TileSpaceObject{
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
         initializeStats();
+        initializeMediaPlayer();
     }
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);
@@ -107,11 +115,17 @@ public class Unit extends TileSpaceObject{
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
         initializeStats();
+        initializeMediaPlayer();
     }
     private void initializeStats(){
         this.statMaxHealth = UnitCodex.getUnitProfile(unitType).HEALTH;
         this.statRemainingHealth = this.statMaxHealth;
         this.statDamage = UnitCodex.getUnitProfile(unitType).DAMAGE;
+    }
+    private void initializeMediaPlayer(){
+        //TODO Improve very rudimentary sound system
+        this.mediaPlayerMovement = new MediaPlayer(AssetHandler.getSound("/sounds/mixkit-truck-driving-steady-1621.mp3"));
+        this.mediaPlayerMovement.setRate(2);
     }
 
     public UnitType getUnitType(){
@@ -154,6 +168,7 @@ public class Unit extends TileSpaceObject{
                 this.pointToAttackAfterMoving = pointToAttack;
             }
             actionableThisTurn = false;
+            mediaPlayerMovement.play();
             unitState = UnitState.MOVING;
             if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
             return true;
@@ -317,6 +332,7 @@ public class Unit extends TileSpaceObject{
     }
     private void cleanUpMovingState(Map map){
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
+        mediaPlayerMovement.stop();
     }
 
     public void setActionableThisTurn(boolean actionable){
