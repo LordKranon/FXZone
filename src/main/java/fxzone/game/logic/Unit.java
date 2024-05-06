@@ -58,6 +58,13 @@ public class Unit extends TileSpaceObject{
     private int ownerId;
 
     /*
+    GAME BALANCE
+     */
+    private int statMaxHealth;
+    private int statRemainingHealth;
+    private int statDamage;
+
+    /*
     DEBUG
      */
     static final boolean verbose = true;
@@ -78,6 +85,7 @@ public class Unit extends TileSpaceObject{
         this.gameObjectInTileSpace = this.gameObjectUnit;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
+        initializeStats();
     }
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);
@@ -98,6 +106,12 @@ public class Unit extends TileSpaceObject{
         this.gameObjectInTileSpace = this.gameObjectUnit;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
+        initializeStats();
+    }
+    private void initializeStats(){
+        this.statMaxHealth = UnitCodex.getUnitProfile(unitType).HEALTH;
+        this.statRemainingHealth = this.statMaxHealth;
+        this.statDamage = UnitCodex.getUnitProfile(unitType).DAMAGE;
     }
 
     public UnitType getUnitType(){
@@ -174,10 +188,15 @@ public class Unit extends TileSpaceObject{
         }
         return this.unitState;
     }
-    public void performFinishAttack(){
+    public void performFinishAttack(Map map){
         if(unitState == UnitState.ATTACKING){
-            onAttackEnd();
+            onAttackEnd(map);
         }
+    }
+    public void changeStatHealth(int changeToHealth){
+        this.statRemainingHealth += changeToHealth;
+        if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
+        gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
     }
 
     /**
@@ -266,8 +285,15 @@ public class Unit extends TileSpaceObject{
             }
         }
     }
-    private void onAttackEnd(){
+    private void onAttackEnd(Map map){
         //TODO
+        // This is a temporary and rudimentary attack script
+        Tile attackedTile = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y];
+        Unit attackedUnit = attackedTile.getUnitOnTile();
+        if(attackedUnit != null){
+            attackedUnit.changeStatHealth(- this.statDamage);
+        }
+
         gameObjectUnit.setAttackingStance(false);
         if(actionableThisTurn){
             unitStateToNeutral();

@@ -432,7 +432,7 @@ public class InGameUiController extends AbstractUiController {
             double cumulativeDelta = unitsAttacking.get(unit);
             cumulativeDelta += delta;
             if(cumulativeDelta > totalUnitAttackInterval){
-                unit.performFinishAttack();
+                unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
                 return;
             } else {

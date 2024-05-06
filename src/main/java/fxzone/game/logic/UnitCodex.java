@@ -9,9 +9,15 @@ import java.util.HashMap;
 public class UnitCodex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
-        put(BATTLE_TANK, new UnitProfile(0, 3));
-        put(HUNTER_TANK, new UnitProfile(1, 4));
-        put(ARTILLERY, new UnitProfile(2, 5));
+        put(BATTLE_TANK, new UnitProfile(
+            0, 3, 100, 50
+        ));
+        put(HUNTER_TANK, new UnitProfile(
+            1, 4, 70, 30
+        ));
+        put(ARTILLERY, new UnitProfile(
+            2, 5, 40, 10
+        ));
     }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{
@@ -21,10 +27,12 @@ public class UnitCodex {
     }};
 
     public static class UnitProfile{
-        public int ID, SPEED;
-        UnitProfile(int ID, int SPEED){
+        public int ID, SPEED, HEALTH, DAMAGE;
+        UnitProfile(int ID, int SPEED, int HEALTH, int DAMAGE){
             this.ID = ID;
             this.SPEED = SPEED;
+            this.HEALTH = HEALTH;
+            this.DAMAGE = DAMAGE;
         }
     }
 
