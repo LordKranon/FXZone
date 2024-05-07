@@ -136,8 +136,8 @@ public class InGameUiController extends AbstractUiController {
     /*
     GAME DECOR SETTINGS
      */
-    private final double totalUnitMovementInterval = Config.getDouble("GAME_SPEED_UNIT_MOVEMENT_INTERVAL");
-    private final double totalUnitAttackInterval = Config.getDouble("GAME_SPEED_UNIT_ATTACK_INTERVAL");
+    public static final double TOTAL_UNIT_MOVEMENT_INTERVAL = Config.getDouble("GAME_SPEED_UNIT_MOVEMENT_INTERVAL");
+    public static final double TOTAL_UNIT_ATTACK_INTERVAL = Config.getDouble("GAME_SPEED_UNIT_ATTACK_INTERVAL");
 
     /*
     DEBUG
@@ -411,8 +411,8 @@ public class InGameUiController extends AbstractUiController {
         for(Unit unit : unitsMoving.keySet()){
             double cumulativeDelta = unitsMoving.get(unit);
             cumulativeDelta += delta;
-            if(cumulativeDelta > totalUnitMovementInterval){
-                cumulativeDelta -= totalUnitMovementInterval;
+            if(cumulativeDelta > TOTAL_UNIT_MOVEMENT_INTERVAL){
+                cumulativeDelta -= TOTAL_UNIT_MOVEMENT_INTERVAL;
                 UnitState nextState = unit.performFullTileMove(map);
                 if(nextState != UnitState.MOVING){
                     unitsMoving.remove(unit);
@@ -422,7 +422,7 @@ public class InGameUiController extends AbstractUiController {
                     return;
                 }
             } else {
-                unit.performInBetweenTileMove(cumulativeDelta / totalUnitMovementInterval, map);
+                unit.performInBetweenTileMove(cumulativeDelta / TOTAL_UNIT_MOVEMENT_INTERVAL, map);
             }
             unitsMoving.put(unit, cumulativeDelta);
         }
@@ -431,12 +431,12 @@ public class InGameUiController extends AbstractUiController {
         for(Unit unit : unitsAttacking.keySet()){
             double cumulativeDelta = unitsAttacking.get(unit);
             cumulativeDelta += delta;
-            if(cumulativeDelta > totalUnitAttackInterval){
+            if(cumulativeDelta > TOTAL_UNIT_ATTACK_INTERVAL){
                 unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
                 return;
             } else {
-                unit.performAttack(cumulativeDelta / totalUnitAttackInterval, map);
+                unit.performAttack(cumulativeDelta / TOTAL_UNIT_ATTACK_INTERVAL, map);
             }
             unitsAttacking.put(unit, cumulativeDelta);
         }

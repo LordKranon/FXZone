@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.controller.ingame.InGameUiController;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
@@ -125,7 +126,7 @@ public class Unit extends TileSpaceObject{
     private void initializeMediaPlayer(){
         //TODO Improve very rudimentary sound system
         this.mediaPlayerMovement = new MediaPlayer(AssetHandler.getSound("/sounds/mixkit-truck-driving-steady-1621.mp3"));
-        this.mediaPlayerMovement.setRate(2);
+        this.mediaPlayerMovement.setRate(1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL));
     }
 
     public UnitType getUnitType(){
