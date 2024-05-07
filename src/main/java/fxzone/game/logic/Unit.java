@@ -148,7 +148,7 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public boolean moveCommand(ArrayDeque<Point> path, Map map, Point pointToAttack){
+    public UnitState moveCommand(ArrayDeque<Point> path, Map map, Point pointToAttack){
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= UnitCodex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
@@ -168,20 +168,29 @@ public class Unit extends TileSpaceObject{
                 this.pointToAttackAfterMoving = pointToAttack;
             }
             actionableThisTurn = false;
-            mediaPlayerMovement.play();
-            unitState = UnitState.MOVING;
+
+
             if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
-            return true;
+
+            //If path is empty, movement is ended immediately and the unit goes into attack immediately
+            if(path.isEmpty()){
+                onMovementEnd(map);
+            } else {
+                mediaPlayerMovement.play();
+                unitState = UnitState.MOVING;
+            }
+
+            return this.unitState;
         }
         else {
             System.err.println("[UNIT "+unitType+"] received a move command it can't perform");
-            return false;
+            return null;
         }
     }
 
     /**
      * Move to the next tile in queued path.
-     * @return true if this unit is still moving afterwards
+     * @return UnitState.MOVING if this unit is still moving afterwards
      */
     public UnitState performFullTileMove(Map map){
         if(unitState == UnitState.MOVING){

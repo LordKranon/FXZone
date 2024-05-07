@@ -642,8 +642,11 @@ public class InGameUiController extends AbstractUiController {
 
 
     protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack){
-        if(unit.moveCommand(path, map, pointToAttack)){
+        UnitState unitStateAfterCommand = unit.moveCommand(path, map, pointToAttack);
+        if(unitStateAfterCommand == UnitState.MOVING){
             unitsMoving.put(unit, 0.);
+        } else if(unitStateAfterCommand == UnitState.ATTACKING){
+            unitsAttacking.put(unit, 0.);
         }
     }
 
