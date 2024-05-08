@@ -133,6 +133,40 @@ public class Unit extends TileSpaceObject{
     public UnitType getUnitType(){
         return unitType;
     }
+    public enum UnitState {
+        NEUTRAL,
+        MOVING,
+        BLACKED_OUT,
+        ATTACKING,
+    }
+    public enum UnitType {
+        INFANTRY,
+        INFANTRY_RPG,
+        CAR_HUMVEE,
+        TRUCK_TRANSPORT,
+        TANK_HUNTER,
+        ARTILLERY,
+        TANK_BATTLE,
+        ARTILLERY_ROCKET,
+
+        SHIP_LANDER,
+        SHIP_GUNBOAT,
+        SHIP_DESTROYER,
+        SHIP_BATTLESHIP,
+        SHIP_CARRIER,
+
+        PLANE_PROPELLER,
+        PLANE_JET,
+        HELICOPTER_CHINOOK,
+
+        INFANTRY_GUERILLA,
+    }
+    public enum UnitStance {
+        NORMAL,
+        MOVE_1,
+        MOVE_2,
+        ATTACK
+    }
 
     /**
      * Switch between the two different images of a unit.

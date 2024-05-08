@@ -1,10 +1,10 @@
 package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
-import fxzone.engine.handler.KeyUnitVehicle;
+import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
-import fxzone.game.logic.UnitType;
+import fxzone.game.logic.Unit.UnitType;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -29,8 +29,8 @@ public class GameObjectUnit extends GameObjectInTileSpace{
 
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
-        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 0, playerColor));
-        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnitVehicle(unitType, 1, playerColor));
+        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
+        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
         this.setImage(imageStance0);
         this.setViewOrder(ViewOrder.GAME_UNIT);
     }

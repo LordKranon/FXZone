@@ -1,13 +1,13 @@
 package fxzone.engine.handler;
 
-import fxzone.game.logic.UnitType;
+import fxzone.game.logic.Unit.UnitType;
 
-public class KeyUnitVehicle {
+public class KeyUnit {
     public UnitType keyType;
     public Integer keyStance;
     public java.awt.Color keyColor;
 
-    public KeyUnitVehicle(UnitType keyType, int keyStance, java.awt.Color keyColor) {
+    public KeyUnit(UnitType keyType, int keyStance, java.awt.Color keyColor) {
         this.keyType = keyType;
         this.keyStance = keyStance;
         this.keyColor = keyColor;
@@ -15,9 +15,9 @@ public class KeyUnitVehicle {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof KeyUnitVehicle))
+        if (!(obj instanceof KeyUnit))
             return false;
-        KeyUnitVehicle ref = (KeyUnitVehicle) obj;
+        KeyUnit ref = (KeyUnit) obj;
         return this.keyType.equals(ref.keyType) &&
             this.keyStance.equals(ref.keyStance) &&
             (

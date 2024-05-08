@@ -1,7 +1,6 @@
 package fxzone.game.logic;
 
 
-import fxzone.engine.handler.KeyUnitVehicle;
 import fxzone.game.logic.serializable.PlayerSerializable;
 import javafx.scene.paint.Color;
 

@@ -1,18 +1,19 @@
 package fxzone.game.logic;
 
-import static fxzone.game.logic.UnitType.ARTILLERY;
-import static fxzone.game.logic.UnitType.BATTLE_TANK;
-import static fxzone.game.logic.UnitType.HUNTER_TANK;
+import static fxzone.game.logic.Unit.UnitType.ARTILLERY;
+import static fxzone.game.logic.Unit.UnitType.TANK_BATTLE;
+import static fxzone.game.logic.Unit.UnitType.TANK_HUNTER;
 
+import fxzone.game.logic.Unit.UnitType;
 import java.util.HashMap;
 
 public class UnitCodex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
-        put(BATTLE_TANK, new UnitProfile(
+        put(TANK_BATTLE, new UnitProfile(
             0, 3, 100, 50
         ));
-        put(HUNTER_TANK, new UnitProfile(
+        put(TANK_HUNTER, new UnitProfile(
             1, 4, 70, 30
         ));
         put(ARTILLERY, new UnitProfile(
@@ -21,8 +22,8 @@ public class UnitCodex {
     }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{
-        put(BATTLE_TANK, "tank");
-        put(HUNTER_TANK, "hunter_tank");
+        put(TANK_BATTLE, "tank");
+        put(TANK_HUNTER, "hunter_tank");
         put(ARTILLERY, "artillery");
     }};
 
