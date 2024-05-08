@@ -57,6 +57,7 @@ public class Unit extends TileSpaceObject{
 
     private boolean hasAttackCommandAfterMoving;
     private Point pointToAttackAfterMoving;
+    private Unit lastAttackedUnit;
 
     private int ownerId;
 
@@ -213,15 +214,19 @@ public class Unit extends TileSpaceObject{
         }
         return this.unitState;
     }
-    public void performFinishAttack(Map map){
+    public UnitFightResult performFinishAttack(Map map){
         if(unitState == UnitState.ATTACKING){
-            onAttackEnd(map);
+            return onAttackEnd(map);
+        } else {
+            System.err.println("[UNIT "+unitType+"] [performFinishAttack] ERROR: Unit is not attacking");
+            return null;
         }
     }
-    public void changeStatHealth(int changeToHealth){
+    public boolean changeStatHealth(int changeToHealth){
         this.statRemainingHealth += changeToHealth;
         if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
+        return statRemainingHealth > 0;
     }
 
     /**
@@ -310,13 +315,15 @@ public class Unit extends TileSpaceObject{
             }
         }
     }
-    private void onAttackEnd(Map map){
+    private UnitFightResult onAttackEnd(Map map){
         //TODO
         // This is a temporary and rudimentary attack script
         Tile attackedTile = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y];
         Unit attackedUnit = attackedTile.getUnitOnTile();
+        boolean attackedUnitSurvived = true;
         if(attackedUnit != null){
-            attackedUnit.changeStatHealth(- this.statDamage);
+            attackedUnitSurvived = attackedUnit.changeStatHealth(- this.statDamage);
+            this.lastAttackedUnit = attackedUnit;
         }
 
         gameObjectUnit.setAttackingStance(false);
@@ -325,6 +332,17 @@ public class Unit extends TileSpaceObject{
         } else{
             unitStateToBlackedOut();
         }
+
+        return attackedUnitSurvived ? UnitFightResult.BOTH_LIVE : UnitFightResult.DEFENDER_DEAD;
+    }
+    public enum UnitFightResult{
+        DEFENDER_DEAD,
+        ATTACKER_DEAD,
+        BOTH_LIVE,
+        BOTH_DEAD
+    }
+    public Unit getLastAttackedUnit(){
+        return lastAttackedUnit;
     }
     private void unitStateToNeutral(){
         gameObjectUnit.setBlackedOut(false);
@@ -356,5 +374,14 @@ public class Unit extends TileSpaceObject{
             }
         }
         this.actionableThisTurn = actionable;
+    }
+
+    /**
+     * Called when this unit is killed.
+     * Remove all graphical game objects.
+     */
+    public void onRemoval(Group group){
+        gameObjectUnit.removeSelfFromRoot(group);
+        gameObjectUiUnitHealth.removeSelfFromRoot(group);
     }
 }

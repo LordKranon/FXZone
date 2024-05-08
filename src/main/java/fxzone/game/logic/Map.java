@@ -145,10 +145,22 @@ public class Map {
         try{
             tiles[unit.x][unit.y].setUnitOnTile(unit);
         } catch (ArrayIndexOutOfBoundsException e){
-            System.err.println("[MAP] Unit is not in bounds of map.");
+            System.err.println("[MAP] Unit is not in bounds of map");
         }
         propagateGraphicalOffsetToUnit(unit);
         propagateTileRenderSizeToUnit(unit);
+    }
+    public void removeUnit(Unit unit, Group group){
+        boolean successfullyRemoved = units.remove(unit);
+        if(!successfullyRemoved){
+            System.err.println("[MAP] [removeUnit] Unit not in this maps list of units");
+        }
+        try{
+            tiles[unit.x][unit.y].setUnitOnTile(null);
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.err.println("[MAP] Unit is not in bounds of map");
+        }
+        unit.onRemoval(group);
     }
 
     public Tile[][] getTiles(){
