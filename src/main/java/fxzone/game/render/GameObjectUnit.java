@@ -4,7 +4,9 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -14,8 +16,10 @@ import javafx.scene.image.Image;
  */
 public class GameObjectUnit extends GameObjectInTileSpace{
 
-    private final Image imageStance0;
-    private final Image imageStance1;
+    private final Image imageStanceNormal;
+    private final Image imageStanceMove1;
+    private final Image imageStanceMove2;
+    private final Image imageStanceAttack;
 
     /**
      * A unit goes in between tiles while moving, these values range from 0 - 1
@@ -29,17 +33,31 @@ public class GameObjectUnit extends GameObjectInTileSpace{
 
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
-        this.imageStance0 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
-        this.imageStance1 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
-        this.setImage(imageStance0);
+        switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
+            case LAND_VEHICLE:
+                this.imageStanceNormal = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceMove1 = imageStanceNormal;
+                this.imageStanceMove2 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
+                this.imageStanceAttack = imageStanceNormal;
+                break;
+            case LAND_INFANTRY:
+            default:
+                this.imageStanceNormal = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceMove1 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 2, playerColor));
+                this.imageStanceMove2 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 3, playerColor));
+                this.imageStanceAttack = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
+                break;
+        }
+        this.setImage(imageStanceNormal);
         this.setViewOrder(ViewOrder.GAME_UNIT);
     }
 
-    public void setStance(int stance){
-        if(stance == 0){
-            this.setImage(imageStance0);
-        } else {
-            this.setImage(imageStance1);
+    public void setStance(UnitStance unitStance){
+        switch (unitStance){
+            case NORMAL: this.setImage(imageStanceNormal); break;
+            case MOVE_1: this.setImage(imageStanceMove1); break;
+            case MOVE_2: this.setImage(imageStanceMove2); break;
+            case ATTACK: this.setImage(imageStanceAttack); break;
         }
     }
 

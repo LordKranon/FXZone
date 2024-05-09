@@ -74,6 +74,9 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         Unit tank4 = new Unit(UnitType.ARTILLERY, 4, 1, 0, null);
         map.addUnit(tank4);
         map.addUnit(new Unit(UnitType.TANK_BATTLE, 25, 15, 0, null));
+
+        Unit infantry1 = new Unit(UnitType.INFANTRY, 0, 0, 0, null);
+        map.addUnit(infantry1);
         /*
         END Creating map.
         */
@@ -87,6 +90,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         tank4.setOwnerId(hostingPlayer.getId());
         tank2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): 0);
         tank3.setOwnerId(playerList.size() > 2 ? playerList.get(2).getId(): 0);
+        infantry1.setOwnerId(hostingPlayer.getId());
 
         /*
         * START Creating game.

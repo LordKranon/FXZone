@@ -15,6 +15,7 @@ import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitFightResult;
+import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.UnitCodex;
 import fxzone.game.logic.serializable.GameSerializable;
@@ -370,7 +371,7 @@ public class InGameUiController extends AbstractUiController {
             this.cumulativeDeltaUnitStance += delta;
             if(this.cumulativeDeltaUnitStance > .25){
                 this.cumulativeDeltaUnitStance -= .25;
-                selectedUnit.switchStance();
+                selectedUnit.switchStanceOnMove();
             }
         }
     }
@@ -414,6 +415,11 @@ public class InGameUiController extends AbstractUiController {
             cumulativeDelta += delta;
             if(cumulativeDelta > TOTAL_UNIT_MOVEMENT_INTERVAL){
                 cumulativeDelta -= TOTAL_UNIT_MOVEMENT_INTERVAL;
+
+                /*TODO Remove this, it is temporary for testing*/
+                unit.switchStanceOnMove();
+                /* ^ remove */
+
                 UnitState nextState = unit.performFullTileMove(map);
                 if(nextState != UnitState.MOVING){
                     unitsMoving.remove(unit);
@@ -593,6 +599,9 @@ public class InGameUiController extends AbstractUiController {
                     }
                 }
             }
+
+            // To make the unit graphically move - rotating its tracks or walking in place
+            selectedUnit.setStance(UnitStance.MOVE_1);
 
             turnState = TurnState.UNIT_SELECTED;
             if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");

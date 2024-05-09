@@ -38,7 +38,7 @@ public class Unit extends TileSpaceObject{
      */
     GameObjectUiUnitHealth gameObjectUiUnitHealth;
 
-    private int stance = 0;
+    private UnitStance unitStance = UnitStance.NORMAL;
 
     private UnitState unitState = UnitState.NEUTRAL;
 
@@ -169,15 +169,18 @@ public class Unit extends TileSpaceObject{
     }
 
     /**
-     * Switch between the two different images of a unit.
+     * Switch between the different images of a unit.
      */
-    public void switchStance(){
-        if(stance == 0){
-            stance = 1;
-        } else {
-            stance = 0;
+    public void setStance(UnitStance unitStance){
+        this.unitStance = unitStance;
+        gameObjectUnit.setStance(unitStance);
+    }
+    public void switchStanceOnMove(){
+        if(this.unitStance == UnitStance.MOVE_1){
+            setStance(UnitStance.MOVE_2);
+        } else if(this.unitStance == UnitStance.MOVE_2){
+            setStance(UnitStance.MOVE_1);
         }
-        gameObjectUnit.setStance(stance);
     }
 
     /**
@@ -340,8 +343,10 @@ public class Unit extends TileSpaceObject{
         cleanUpMovingState(map);
         if(hasAttackCommandAfterMoving){
             if(verbose) System.out.println("[UNIT "+unitType+"] on movement end, going into attack");
+            setStance(UnitStance.ATTACK);
             unitStateToAttacking();
         } else {
+            setStance(UnitStance.NORMAL);
             if(actionableThisTurn){
                 unitStateToNeutral();
             } else{
@@ -358,9 +363,11 @@ public class Unit extends TileSpaceObject{
         if(attackedUnit != null){
             attackedUnitSurvived = attackedUnit.changeStatHealth(- this.statDamage);
             this.lastAttackedUnit = attackedUnit;
+        } else {
+            System.err.println("[UNIT "+unitType+"] could not find enemy to attack");
         }
 
-        gameObjectUnit.setAttackingStance(false);
+        setStance(UnitStance.NORMAL);
         if(actionableThisTurn){
             unitStateToNeutral();
         } else{
@@ -388,8 +395,6 @@ public class Unit extends TileSpaceObject{
     }
     private void unitStateToAttacking(){
         this.hasAttackCommandAfterMoving = false;
-        //TODO
-        gameObjectUnit.setAttackingStance(true);
         unitState = UnitState.ATTACKING;
     }
     private void cleanUpMovingState(Map map){
