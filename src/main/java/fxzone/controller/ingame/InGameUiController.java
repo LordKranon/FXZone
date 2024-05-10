@@ -722,5 +722,10 @@ public class InGameUiController extends AbstractUiController {
         }
         turnState = TurnState.NEUTRAL;
     }
+    protected void turnStateToNoTurn(){
+        //turnStateToNeutral();
+        map.setVisible(false);
+        turnState = TurnState.NO_TURN;
+    }
 
 }

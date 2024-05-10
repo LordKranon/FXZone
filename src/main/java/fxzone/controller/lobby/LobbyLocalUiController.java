@@ -43,6 +43,9 @@ public class LobbyLocalUiController extends LobbyUiController{
         END Creating map.
         */
 
+        tank1.setOwnerId(1);
+        infantry1.setOwnerId(2);
+
         /*
          * START Creating game.
          * */

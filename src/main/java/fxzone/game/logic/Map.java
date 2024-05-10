@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import java.util.ArrayList;
@@ -7,6 +8,9 @@ import java.util.List;
 import javafx.scene.Group;
 
 public class Map {
+
+    private Group subGroupMapTiles;
+    private Group subGroupMapUnits;
 
     /**
      * Game logic tiles
@@ -45,17 +49,23 @@ public class Map {
         this.units = new ArrayList<Unit>();
     }
     public Map(MapSerializable mapSerializable, Group group, Game game){
+        this.subGroupMapTiles = new Group();
+        this.subGroupMapTiles.setViewOrder(ViewOrder.MAP_TILE);
+        this.subGroupMapUnits = new Group();
+        this.subGroupMapUnits.setViewOrder(ViewOrder.GAME_UNIT);
+        group.getChildren().add(this.subGroupMapTiles);
+        group.getChildren().add(this.subGroupMapUnits);
         int width = mapSerializable.tiles.length;
         int height = mapSerializable.tiles[0].length;
         this.tiles = new Tile[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, group);
+                this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, subGroupMapTiles);
             }
         }
         this.units = new ArrayList<Unit>();
         for(UnitSerializable unitSerializable : mapSerializable.units){
-            addUnit(new Unit(unitSerializable, tileRenderSize, group, game));
+            addUnit(new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game));
         }
     }
 
@@ -199,6 +209,14 @@ public class Map {
         else {
             return this.tiles[x][y].isAttackableBy(unit);
         }
+    }
+
+    /**
+     * Make all map elements (units & tiles) vanish or reappear.
+     */
+    public void setVisible(boolean visible){
+        this.subGroupMapTiles.setVisible(visible);
+        this.subGroupMapUnits.setVisible(visible);
     }
 
 }
