@@ -369,8 +369,8 @@ public class InGameUiController extends AbstractUiController {
     private void updateSelectedUnit(double delta){
         if(turnState == TurnState.UNIT_SELECTED && selectedUnit != null){
             this.cumulativeDeltaUnitStance += delta;
-            if(this.cumulativeDeltaUnitStance > .25){
-                this.cumulativeDeltaUnitStance -= .25;
+            if(this.cumulativeDeltaUnitStance > TOTAL_UNIT_MOVEMENT_INTERVAL){
+                this.cumulativeDeltaUnitStance -= TOTAL_UNIT_MOVEMENT_INTERVAL;
                 selectedUnit.switchStanceOnMove();
             }
         }
