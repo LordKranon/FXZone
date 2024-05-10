@@ -227,7 +227,7 @@ public class InGameUiController extends AbstractUiController {
     private void initializeGameSpecificUi(){
         setLabelToPlayer(thisPlayer);
     }
-    private void setLabelToPlayer(Player player){
+    protected void setLabelToPlayer(Player player){
         labelPlayerName.setText(player.getName());
         labelPlayerName.setTextFill(Color.web(player.getColor().toString()));
     }
@@ -682,6 +682,9 @@ public class InGameUiController extends AbstractUiController {
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             turnState = TurnState.ENDING_TURN;
             onPlayerEndTurn();
+        } else if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NO_TURN){
+            turnState = TurnState.BEGINNING_TURN;
+            onPlayerBeginTurn();
         }
     }
 
@@ -690,6 +693,9 @@ public class InGameUiController extends AbstractUiController {
      */
     protected void onPlayerEndTurn(){
         endTurn();
+    }
+    protected void onPlayerBeginTurn(){
+        beginTurn();
     }
 
     /**
@@ -703,6 +709,10 @@ public class InGameUiController extends AbstractUiController {
         */
         turnStateToNeutral();
         game.goNextTurn();
+    }
+    protected void beginTurn(){
+        map.setVisible(true);
+        turnStateToNeutral();
     }
 
     /**

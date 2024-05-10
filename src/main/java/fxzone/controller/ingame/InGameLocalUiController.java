@@ -19,5 +19,8 @@ public class InGameLocalUiController extends InGameUiController{
     @Override
     protected void onPlayerEndTurn(){
         turnStateToNoTurn();
+        game.goNextTurn();
+        thisPlayer = game.getPlayers().get(game.whoseTurn());
+        setLabelToPlayer(thisPlayer);
     }
 }

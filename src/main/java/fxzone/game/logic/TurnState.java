@@ -7,5 +7,10 @@ public enum TurnState {
     NO_TURN,
     NEUTRAL,
     UNIT_SELECTED,
+
+    /**
+     * Only for network syncing purposes
+     */
     ENDING_TURN,
+    BEGINNING_TURN,
 }
