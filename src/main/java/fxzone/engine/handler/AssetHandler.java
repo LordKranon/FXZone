@@ -215,8 +215,8 @@ public class AssetHandler {
     }
 
     public static Media getSound(UnitType unitType){
-        switch (unitType){
-            case INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
+        switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
+            case LAND_INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
             default: return getSound("/sounds/mixkit-truck-driving-steady-1621.mp3");
         }
     }
