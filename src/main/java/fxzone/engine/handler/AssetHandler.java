@@ -1,5 +1,6 @@
 package fxzone.engine.handler;
 
+import fxzone.game.logic.Unit.UnitType;
 import fxzone.game.logic.UnitCodex;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -213,4 +214,10 @@ public class AssetHandler {
         sounds.put(path, new Media(AssetHandler.class.getResource(path).toExternalForm()));
     }
 
+    public static Media getSound(UnitType unitType){
+        switch (unitType){
+            case INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
+            default: return getSound("/sounds/mixkit-truck-driving-steady-1621.mp3");
+        }
+    }
 }

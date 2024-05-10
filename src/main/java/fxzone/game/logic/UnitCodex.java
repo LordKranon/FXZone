@@ -12,7 +12,7 @@ public class UnitCodex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(INFANTRY, new UnitProfile(
-            0, 3, 100, 10, UnitSuperType.LAND_INFANTRY
+            0, 8, 100, 10, UnitSuperType.LAND_INFANTRY
         ));
         put(TANK_BATTLE, new UnitProfile(
             0, 3, 100, 50, UnitSuperType.LAND_VEHICLE

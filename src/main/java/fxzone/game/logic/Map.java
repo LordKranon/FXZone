@@ -170,7 +170,7 @@ public class Map {
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("[MAP] Unit is not in bounds of map");
         }
-        unit.onRemoval(group);
+        unit.onRemoval(subGroupMapUnits);
     }
 
     public Tile[][] getTiles(){
