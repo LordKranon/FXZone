@@ -224,10 +224,12 @@ public class InGameUiController extends AbstractUiController {
     protected void initializeGameSpecifics(){
         initializeGameSpecificUi();
     }
-
     private void initializeGameSpecificUi(){
-        labelPlayerName.setText(thisPlayer.getName());
-        labelPlayerName.setTextFill(Color.web(thisPlayer.getColor().toString()));
+        setLabelToPlayer(thisPlayer);
+    }
+    private void setLabelToPlayer(Player player){
+        labelPlayerName.setText(player.getName());
+        labelPlayerName.setTextFill(Color.web(player.getColor().toString()));
     }
 
     private void createTileSelector(){

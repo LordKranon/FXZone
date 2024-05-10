@@ -1,6 +1,7 @@
 package fxzone.controller.menu;
 
 import fxzone.controller.lobby.LobbyHostUiController;
+import fxzone.controller.lobby.LobbyLocalUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.net.server.Server;
@@ -58,6 +59,11 @@ public class PlayMenuUiController extends AbstractUiController {
         public void join(){
             //gameController.setActiveUiController(new LobbyJoinedUiController(gameController, handleJoinGame()));
             gameController.setActiveUiController(new JoinMenuUiController(gameController));
+        }
+
+        @FXML
+        public void localGame(){
+            gameController.setActiveUiController(new LobbyLocalUiController(gameController));
         }
 
         @FXML

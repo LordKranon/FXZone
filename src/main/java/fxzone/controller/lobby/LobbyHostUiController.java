@@ -118,7 +118,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         server.sendTestMessageToAll("[MESSAGE] (Server): Kappa 123");
     }
 
-
+    @Override
     public boolean playerJoinedLobby(Player player) {
         playerListUpdateFlag = true;
         return true;

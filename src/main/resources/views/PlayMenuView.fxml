@@ -56,14 +56,21 @@
             <VBox alignment="CENTER" spacing="40.0">
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="HOST"
+                  prefWidth="400.0" text="LOCAL GAME"
+                  onAction="#localGame">
+                  <font>
+                    <Font size="36.0"/>
+                  </font>
+                </Button>
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="HOST ONLINE GAME"
                   onAction="#host">
                   <font>
                     <Font size="36.0"/>
                   </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="JOIN"
+                  prefWidth="400.0" text="JOIN ONLINE GAME"
                   onAction="#join">
                   <font>
                     <Font size="36.0"/>
