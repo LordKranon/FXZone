@@ -72,7 +72,8 @@ public class Unit extends TileSpaceObject{
     /*
     SOUND
      */
-    MediaPlayer mediaPlayerMovement;
+    private MediaPlayer mediaPlayerMovement;
+    private MediaPlayer mediaPlayerGunshot;
 
     /*
     DEBUG
@@ -129,6 +130,8 @@ public class Unit extends TileSpaceObject{
         //TODO Improve very rudimentary sound system
         this.mediaPlayerMovement = new MediaPlayer(AssetHandler.getSound(unitType));
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
+
+        this.mediaPlayerGunshot = new MediaPlayer(AssetHandler.getSound("/sounds/zone_gunshots_3.mp3"));
     }
 
     public UnitType getUnitType(){
@@ -358,6 +361,7 @@ public class Unit extends TileSpaceObject{
             setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
             currentlyAttackedUnit = attackedUnit;
+            mediaPlayerGunshot.play();
             unitStateToAttacking();
         } else {
             setStance(UnitStance.NORMAL);
@@ -378,7 +382,7 @@ public class Unit extends TileSpaceObject{
         } else {
             System.err.println("[UNIT "+unitType+"] could not find enemy to attack");
         }
-
+        mediaPlayerGunshot.stop();
         setStance(UnitStance.NORMAL);
         if(actionableThisTurn){
             unitStateToNeutral();
