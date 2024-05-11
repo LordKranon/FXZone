@@ -349,7 +349,11 @@ public class InGameUiController extends AbstractUiController {
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
+
+                // Deselect unit
+                selectedUnit.setStance(UnitStance.NORMAL);
                 turnStateToNeutral();
+
             }
             else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);

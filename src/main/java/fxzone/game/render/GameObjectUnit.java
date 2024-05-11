@@ -29,23 +29,22 @@ public class GameObjectUnit extends GameObjectInTileSpace{
     private double tileCenterOffsetX, tileCenterOffsetY;
 
     private boolean blackedOut;
-    private boolean attacking;
 
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
         switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_VEHICLE:
-                this.imageStanceNormal = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
                 this.imageStanceMove1 = imageStanceNormal;
-                this.imageStanceMove2 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
+                this.imageStanceMove2 = AssetHandler.getImageUnit(new KeyUnit(unitType, 1, playerColor));
                 this.imageStanceAttack = imageStanceNormal;
                 break;
             case LAND_INFANTRY:
             default:
-                this.imageStanceNormal = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 0, playerColor));
-                this.imageStanceMove1 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 2, playerColor));
-                this.imageStanceMove2 = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 3, playerColor));
-                this.imageStanceAttack = AssetHandler.getImageUnitVehicle(new KeyUnit(unitType, 1, playerColor));
+                this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceMove1 = AssetHandler.getImageUnit(new KeyUnit(unitType, 2, playerColor));
+                this.imageStanceMove2 = AssetHandler.getImageUnit(new KeyUnit(unitType, 3, playerColor));
+                this.imageStanceAttack = AssetHandler.getImageUnit(new KeyUnit(unitType, 1, playerColor));
                 break;
         }
         this.setImage(imageStanceNormal);
@@ -80,20 +79,6 @@ public class GameObjectUnit extends GameObjectInTileSpace{
         if(blackedOut){
             ColorAdjust colorAdjustBlackout = new ColorAdjust();
             colorAdjustBlackout.setBrightness(-.5);
-            getImageView().setEffect(colorAdjustBlackout);
-        } else {
-            getImageView().setEffect(null);
-        }
-    }
-
-    public void setAttackingStance(boolean attacking){
-        if(this.attacking == attacking){
-            return;
-        }
-        this.attacking = attacking;
-        if(attacking){
-            ColorAdjust colorAdjustBlackout = new ColorAdjust();
-            colorAdjustBlackout.setBrightness(-1);
             getImageView().setEffect(colorAdjustBlackout);
         } else {
             getImageView().setEffect(null);

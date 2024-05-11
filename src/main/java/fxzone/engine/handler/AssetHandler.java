@@ -18,7 +18,7 @@ public class AssetHandler {
      */
     private static final HashMap<String, Image> images = new HashMap<>();
 
-    private static final HashMap<KeyUnit, Image> imagesUnitsVehicles = new HashMap<>();
+    private static final HashMap<KeyUnit, Image> imagesUnits = new HashMap<>();
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
@@ -88,8 +88,8 @@ public class AssetHandler {
         return bufferedImage;
     }
 
-    public static Image getImageUnitVehicle(KeyUnit keyUnit){
-        if(!imagesUnitsVehicles.containsKey(keyUnit)){
+    public static Image getImageUnit(KeyUnit keyUnit){
+        if(!imagesUnits.containsKey(keyUnit)){
 
             BufferedImage bImgColoredPartRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnit.keyType))+"_cp.png");
             BufferedImage bImgColoredPartCropped = bImgColoredPartRaw.getSubimage(
@@ -118,9 +118,9 @@ public class AssetHandler {
 
             Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
 
-            imagesUnitsVehicles.put(keyUnit, imgFinished);
+            imagesUnits.put(keyUnit, imgFinished);
         }
-        return imagesUnitsVehicles.get(keyUnit);
+        return imagesUnits.get(keyUnit);
     }
 
     /**
