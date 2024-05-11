@@ -430,7 +430,7 @@ public class InGameUiController extends AbstractUiController {
                 if(nextState != UnitState.MOVING){
                     unitsMoving.remove(unit);
                     if(nextState == UnitState.ATTACKING){
-                        unitsAttacking.put(unit, 0.);
+                        onAttackAddFightingUnits(unit);
                     }
                     return;
                 }
@@ -665,7 +665,14 @@ public class InGameUiController extends AbstractUiController {
         if(unitStateAfterCommand == UnitState.MOVING){
             unitsMoving.put(unit, 0.);
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
-            unitsAttacking.put(unit, 0.);
+            onAttackAddFightingUnits(unit);
+        }
+    }
+    private void onAttackAddFightingUnits(Unit unit){
+        unitsAttacking.put(unit, 0.);
+        Unit attackedUnit = unit.getCurrentlyAttackedUnit();
+        if(attackedUnit.onAttacked(unit)){
+            unitsAttacking.put(attackedUnit, 0.);
         }
     }
 

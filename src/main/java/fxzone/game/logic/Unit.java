@@ -57,6 +57,7 @@ public class Unit extends TileSpaceObject{
 
     private boolean hasAttackCommandAfterMoving;
     private Point pointToAttackAfterMoving;
+    private Unit currentlyAttackedUnit;
     private Unit lastAttackedUnit;
 
     private int ownerId;
@@ -138,6 +139,7 @@ public class Unit extends TileSpaceObject{
         MOVING,
         BLACKED_OUT,
         ATTACKING,
+        COUNTERATTACKING
     }
     public enum UnitType {
         INFANTRY,
@@ -254,7 +256,7 @@ public class Unit extends TileSpaceObject{
         return this.unitState;
     }
     public UnitFightResult performFinishAttack(Map map){
-        if(unitState == UnitState.ATTACKING){
+        if(unitState == UnitState.ATTACKING || unitState == UnitState.COUNTERATTACKING){
             return onAttackEnd(map);
         } else {
             System.err.println("[UNIT "+unitType+"] [performFinishAttack] ERROR: Unit is not attacking");
@@ -354,6 +356,8 @@ public class Unit extends TileSpaceObject{
             if(verbose) System.out.println("[UNIT "+unitType+"] on movement end, going into attack");
             setStance(UnitStance.ATTACK);
             setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
+            Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
+            currentlyAttackedUnit = attackedUnit;
             unitStateToAttacking();
         } else {
             setStance(UnitStance.NORMAL);
@@ -367,12 +371,10 @@ public class Unit extends TileSpaceObject{
     private UnitFightResult onAttackEnd(Map map){
         //TODO
         // This is a temporary and rudimentary attack script
-        Tile attackedTile = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y];
-        Unit attackedUnit = attackedTile.getUnitOnTile();
         boolean attackedUnitSurvived = true;
-        if(attackedUnit != null){
-            attackedUnitSurvived = attackedUnit.changeStatHealth(- this.statDamage);
-            this.lastAttackedUnit = attackedUnit;
+        if(currentlyAttackedUnit != null){
+            attackedUnitSurvived = currentlyAttackedUnit.changeStatHealth(- this.statDamage);
+            this.lastAttackedUnit = currentlyAttackedUnit;
         } else {
             System.err.println("[UNIT "+unitType+"] could not find enemy to attack");
         }
@@ -386,11 +388,26 @@ public class Unit extends TileSpaceObject{
 
         return attackedUnitSurvived ? UnitFightResult.BOTH_LIVE : UnitFightResult.DEFENDER_DEAD;
     }
+
+    /**
+     * This unit is attacked, presumably during not its turn.
+     * @return whether this unit will be counterattacking
+     */
+    public boolean onAttacked(Unit attackingUnit){
+        setStance(UnitStance.ATTACK);
+        setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), new Point(attackingUnit.getX(), attackingUnit.getY())));
+        this.currentlyAttackedUnit = attackingUnit;
+        this.unitState = UnitState.COUNTERATTACKING;
+        return true;
+    }
     public enum UnitFightResult{
         DEFENDER_DEAD,
         ATTACKER_DEAD,
         BOTH_LIVE,
         BOTH_DEAD
+    }
+    public Unit getCurrentlyAttackedUnit(){
+        return currentlyAttackedUnit;
     }
     public Unit getLastAttackedUnit(){
         return lastAttackedUnit;
