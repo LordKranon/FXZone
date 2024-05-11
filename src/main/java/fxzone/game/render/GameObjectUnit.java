@@ -30,6 +30,8 @@ public class GameObjectUnit extends GameObjectInTileSpace{
 
     private boolean blackedOut;
 
+    private boolean facingLeft;
+
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
         switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
@@ -82,6 +84,18 @@ public class GameObjectUnit extends GameObjectInTileSpace{
             getImageView().setEffect(colorAdjustBlackout);
         } else {
             getImageView().setEffect(null);
+        }
+    }
+
+    public void setFacingLeft(boolean facingLeft){
+        if(this.facingLeft == facingLeft){
+            return;
+        }
+        this.facingLeft = facingLeft;
+        if(facingLeft){
+            getImageView().setScaleX(-1);
+        } else {
+            getImageView().setScaleX(1);
         }
     }
 }

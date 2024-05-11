@@ -197,6 +197,7 @@ public class Unit extends TileSpaceObject{
             if(! path.isEmpty()){
                 finalPosition = new Point(path.peekLast());
                 directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+                setFacingDirection(directionNextPointOnMovePath);
             }
             setPositionInMap(finalPosition.x, finalPosition.y, map);
             setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
@@ -244,6 +245,7 @@ public class Unit extends TileSpaceObject{
                     onMovementEnd(map);
                 } else{
                     directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(nextPoint, movePath.peek());
+                    setFacingDirection(directionNextPointOnMovePath);
                 }
 
                 return this.unitState;
@@ -310,6 +312,13 @@ public class Unit extends TileSpaceObject{
         super.setGraphicalOffset(offsetX, offsetY);
         this.gameObjectUiUnitHealth.setOffset(offsetX, offsetY);
     }
+    private void setFacingDirection(Direction direction){
+        if(direction == Direction.LEFT){
+            gameObjectUnit.setFacingLeft(true);
+        } else if(direction == Direction.RIGHT){
+            gameObjectUnit.setFacingLeft(false);
+        }
+    }
 
     /**
      * Used while the unit is performing its move command. The unit will update it's position only visually while actually
@@ -344,6 +353,7 @@ public class Unit extends TileSpaceObject{
         if(hasAttackCommandAfterMoving){
             if(verbose) System.out.println("[UNIT "+unitType+"] on movement end, going into attack");
             setStance(UnitStance.ATTACK);
+            setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
             unitStateToAttacking();
         } else {
             setStance(UnitStance.NORMAL);
