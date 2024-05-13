@@ -40,6 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class InGameUiController extends AbstractUiController {
 
@@ -111,6 +112,7 @@ public class InGameUiController extends AbstractUiController {
     SOUND
      */
     MediaPlayer mediaPlayer;
+    private static final boolean GAME_SOUND_MUSIC_ENABLED = Config.getBool("GAME_SOUND_MUSIC_ENABLED");
 
     /*
     GAME LOGIC
@@ -154,10 +156,16 @@ public class InGameUiController extends AbstractUiController {
         initializeGame(initialGame);
         initializeGameSpecifics();
 
-        //BEGIN TEST
-        mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/test_sound_uiInteraction.mp3"));
-        mediaPlayer.play();
-        //END TEST
+        //In-Game music
+        mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/zone_jr_v1.2.mp3"));
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer.seek(Duration.ZERO);
+                mediaPlayer.play();
+            }
+        });
+        if(GAME_SOUND_MUSIC_ENABLED) mediaPlayer.play();
     }
 
     @Override
@@ -265,6 +273,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     protected void quitGame(){
+        mediaPlayer.stop();
         gameController.setActiveUiController(new MainMenuUiController(gameController));
     }
 
