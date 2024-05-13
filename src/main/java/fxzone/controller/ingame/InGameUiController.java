@@ -14,7 +14,6 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.Unit.UnitFightResult;
 import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.UnitCodex;
@@ -454,9 +453,9 @@ public class InGameUiController extends AbstractUiController {
             double cumulativeDelta = unitsAttacking.get(unit);
             cumulativeDelta += delta;
             if(cumulativeDelta > TOTAL_UNIT_ATTACK_INTERVAL){
-                UnitFightResult fightResult = unit.performFinishAttack(map);
+                boolean attackedUnitSurvived = unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
-                if(fightResult == UnitFightResult.DEFENDER_DEAD){
+                if(!attackedUnitSurvived){
                     map.removeUnit(unit.getLastAttackedUnit(), root2D);
                 }
                 return;

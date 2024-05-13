@@ -237,12 +237,12 @@ public class Unit extends TileSpaceObject{
         }
         return this.unitState;
     }
-    public UnitFightResult performFinishAttack(Map map){
+    public boolean performFinishAttack(Map map){
         if(unitState == UnitState.ATTACKING || unitState == UnitState.COUNTERATTACKING){
             return onAttackEnd(map);
         } else {
             System.err.println("[UNIT "+unitType+"] [performFinishAttack] ERROR: Unit is not attacking");
-            return null;
+            return true;
         }
     }
     public boolean changeStatHealth(int changeToHealth){
@@ -351,7 +351,7 @@ public class Unit extends TileSpaceObject{
             }
         }
     }
-    private UnitFightResult onAttackEnd(Map map){
+    private boolean onAttackEnd(Map map){
         //TODO
         // This is a temporary and rudimentary attack script
         boolean attackedUnitSurvived = true;
@@ -369,7 +369,7 @@ public class Unit extends TileSpaceObject{
             unitStateToBlackedOut();
         }
 
-        return attackedUnitSurvived ? UnitFightResult.BOTH_LIVE : UnitFightResult.DEFENDER_DEAD;
+        return attackedUnitSurvived;
     }
 
     /**
@@ -382,12 +382,6 @@ public class Unit extends TileSpaceObject{
         this.currentlyAttackedUnit = attackingUnit;
         this.unitState = UnitState.COUNTERATTACKING;
         return true;
-    }
-    public enum UnitFightResult{
-        DEFENDER_DEAD,
-        ATTACKER_DEAD,
-        BOTH_LIVE,
-        BOTH_DEAD
     }
     public Unit getCurrentlyAttackedUnit(){
         return currentlyAttackedUnit;
