@@ -1,6 +1,6 @@
 package fxzone.engine.handler;
 
-import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex.UnitType;
 
 public class KeyUnit {
     public UnitType keyType;

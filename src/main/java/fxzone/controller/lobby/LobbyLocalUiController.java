@@ -7,7 +7,7 @@ import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;

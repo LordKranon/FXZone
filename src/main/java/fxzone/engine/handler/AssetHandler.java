@@ -1,6 +1,6 @@
 package fxzone.engine.handler;
 
-import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex.UnitType;
 import fxzone.game.logic.UnitCodex;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

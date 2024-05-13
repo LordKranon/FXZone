@@ -5,6 +5,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.game.logic.UnitCodex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
@@ -143,28 +144,6 @@ public class Unit extends TileSpaceObject{
         BLACKED_OUT,
         ATTACKING,
         COUNTERATTACKING
-    }
-    public enum UnitType {
-        INFANTRY,
-        INFANTRY_RPG,
-        CAR_HUMVEE,
-        TRUCK_TRANSPORT,
-        TANK_HUNTER,
-        ARTILLERY,
-        TANK_BATTLE,
-        ARTILLERY_ROCKET,
-
-        SHIP_LANDER,
-        SHIP_GUNBOAT,
-        SHIP_DESTROYER,
-        SHIP_BATTLESHIP,
-        SHIP_CARRIER,
-
-        PLANE_PROPELLER,
-        PLANE_JET,
-        HELICOPTER_CHINOOK,
-
-        INFANTRY_GUERILLA,
     }
     public enum UnitStance {
         NORMAL,

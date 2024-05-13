@@ -5,7 +5,7 @@ import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Unit.UnitStance;
-import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex.UnitType;
 import fxzone.game.logic.UnitCodex;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;

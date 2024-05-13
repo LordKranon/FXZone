@@ -1,7 +1,7 @@
 package fxzone.game.logic.serializable;
 
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.Unit.UnitType;
+import fxzone.game.logic.UnitCodex.UnitType;
 
 public class UnitSerializable extends TileSpaceObjectSerializable{
 
