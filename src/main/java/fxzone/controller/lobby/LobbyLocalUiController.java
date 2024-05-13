@@ -49,7 +49,6 @@ public class LobbyLocalUiController extends LobbyUiController{
             map.addUnit(v);
             v.setOwnerId(2);
         }
-
         /*
         END Creating map.
         */

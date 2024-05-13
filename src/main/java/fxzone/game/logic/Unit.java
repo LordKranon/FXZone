@@ -69,7 +69,6 @@ public class Unit extends TileSpaceObject{
     private int statMaxHealth;
     private int statRemainingHealth;
     private int statRemainingHealthOnAttack;
-    private int statDamage;
 
     /*
     SOUND
@@ -126,7 +125,6 @@ public class Unit extends TileSpaceObject{
     private void initializeStats(){
         this.statMaxHealth = UnitCodex.getUnitProfile(unitType).HEALTH;
         this.statRemainingHealth = this.statMaxHealth;
-        this.statDamage = UnitCodex.getUnitProfile(unitType).DAMAGE;
     }
     private void initializeMediaPlayer(){
         //TODO Improve very rudimentary sound system
@@ -246,12 +244,6 @@ public class Unit extends TileSpaceObject{
             return true;
         }
     }
-    public boolean changeStatHealth(int changeToHealth){
-        this.statRemainingHealth += changeToHealth;
-        if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
-        gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
-        return statRemainingHealth > 0;
-    }
     private boolean onAttackHitBy(Unit attackingUnit){
         this.statRemainingHealth -= UnitCodex.calculateDamageOnAttack(attackingUnit, this);
         if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
@@ -319,7 +311,6 @@ public class Unit extends TileSpaceObject{
         visualTileX = x;
         visualTileY = y;
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
-        //gameObjectInTileSpace.setPositionInMap(x, y, map);
     }
     public int getVisualTileX(){
         return visualTileX;
