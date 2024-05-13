@@ -7,48 +7,56 @@ public class UnitCodex {
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
             0, 8, 10, 100, 3, 0, 1, 1,
+            1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
             1, 8, 10, 100, 4, 0, 1, 1,
+            .5, 1.5, 1.5,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
             2, 8, 10, 100, 4, 2, 1, 1,
+            1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
             3, 5, 10, 100, 0, 1, 1, 1,
+            1, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_HUNTER, new UnitProfile(
             4, 4, 10, 100, 6, 5, 1, 1,
+            1, 1.25, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY, new UnitProfile(
             5, 5, 10, 100, 6, 4, 1, 1,
+            1.5, 1, 1,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_BATTLE, new UnitProfile(
             6, 3, 10, 100, 9, 7, 1, 1,
+            1, 1, 1.5,
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
             7, 5, 10, 100, 6, 2, 1, 1,
+            1, 1.5, 1.5,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
@@ -69,16 +77,19 @@ public class UnitCodex {
 
     public static class UnitProfile{
         public int ID, SPEED, VISION, HEALTH, DAMAGE, DEFENSE, MINRANGE, MAXRANGE;
+        public double DMG_VS_INFANTRY, DMG_VS_ARMORED, DMG_VS_HEAVY;
         public UnitAttackType ATTACKTYPE;
         public UnitArmorClass ARMORCLASS;
         public UnitSuperType SUPERTYPE;
         UnitProfile(
             int ID, int SPEED, int VISION, int HEALTH, int DAMAGE, int DEFENSE, int MINRANGE, int MAXRANGE,
+            double DMG_VS_INFANTRY, double DMG_VS_ARMORED, double DMG_VS_HEAVY,
             UnitAttackType ATTACKTYPE,
             UnitArmorClass ARMORCLASS,
             UnitSuperType SUPERTYPE
         ){
             this.ID = ID;
+
             this.SPEED = SPEED;
             this.VISION = VISION;
             this.HEALTH = HEALTH;
@@ -86,9 +97,14 @@ public class UnitCodex {
             this.DEFENSE = DEFENSE;
             this.MINRANGE = MINRANGE;
             this.MAXRANGE = MAXRANGE;
+
             this.ATTACKTYPE = ATTACKTYPE;
             this.ARMORCLASS = ARMORCLASS;
             this.SUPERTYPE = SUPERTYPE;
+
+            this.DMG_VS_INFANTRY = DMG_VS_INFANTRY;
+            this.DMG_VS_ARMORED = DMG_VS_ARMORED;
+            this.DMG_VS_HEAVY = DMG_VS_HEAVY;
         }
     }
     public static UnitProfile getUnitProfile(UnitType unitType){
@@ -104,7 +120,7 @@ public class UnitCodex {
         ARTILLERY,
         TANK_BATTLE,
         ARTILLERY_ROCKET,
-
+/*
         SHIP_LANDER,
         SHIP_GUNBOAT,
         SHIP_DESTROYER,
@@ -115,7 +131,9 @@ public class UnitCodex {
         PLANE_JET,
         HELICOPTER_CHINOOK,
 
-        INFANTRY_GUERILLA,
+        INFANTRY_GUERRILLA,
+
+ */
     }
     public enum UnitSuperType{
         LAND_INFANTRY,
@@ -143,17 +161,26 @@ public class UnitCodex {
         double defenderDefense = getUnitProfile(defender.getUnitType()).DEFENSE;
 
         int rawDamage = getUnitProfile(offender.getUnitType()).DAMAGE;
+
         if(offender.getUnitState() == UnitState.COUNTERATTACKING){
             rawDamage /= 2;
         }
         double scaledDamage = (double)rawDamage * 10.0 * ((offenderRemainingHp + offenderMaxHp) / (2.0 * offenderMaxHp));
 
-        //TODO
         // Add damage bonuses for armor class
+        double damageMultiplier = 1.0;
+        switch (getUnitProfile(defender.getUnitType()).ARMORCLASS){
+            case ARMORCLASS_INFANTRY: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_INFANTRY; break;
+            case ARMORCLASS_HEAVY_ARMOR: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_HEAVY;
+            case ARMORCLASS_ARMORED: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_ARMORED; break;
+        }
+        double increasedDamage = scaledDamage * damageMultiplier;
 
         double defenseMultiplier = (10.0 - defenderDefense) / (10.0);
 
-        int finalDamage = (int)(scaledDamage * defenseMultiplier);
+        int finalDamage = (int)(increasedDamage * defenseMultiplier);
+
+        System.out.println("[UNIT-CODEX] [UNIT "+defender.getUnitType()+"] is hit for "+finalDamage+" damage");
 
         return finalDamage;
     }

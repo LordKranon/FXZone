@@ -10,6 +10,8 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.UnitCodex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Set;
 import javafx.scene.paint.Color;
 
 public class LobbyLocalUiController extends LobbyUiController{
@@ -35,38 +37,22 @@ public class LobbyLocalUiController extends LobbyUiController{
         */
         Map map = new Map(15, 25, null);
 
-        Unit u0 = new Unit(UnitType.INFANTRY, 1, 1, 0, null);
-        map.addUnit(u0);
-        Unit u1 = new Unit(UnitType.INFANTRY_RPG, 1, 2, 0, null);
-        map.addUnit(u1);
-        Unit u2 = new Unit(UnitType.CAR_HUMVEE, 1, 3, 0, null);
-        map.addUnit(u2);
-        Unit u3 = new Unit(UnitType.TRUCK_TRANSPORT, 1, 4, 0, null);
-        map.addUnit(u3);
-        Unit u4 = new Unit(UnitType.TANK_HUNTER, 1, 5, 0, null);
-        map.addUnit(u4);
-        Unit u5 = new Unit(UnitType.ARTILLERY, 1, 6, 0, null);
-        map.addUnit(u5);
-        Unit u6 = new Unit(UnitType.TANK_BATTLE, 1, 7, 0, null);
-        map.addUnit(u6);
-        Unit u7 = new Unit(UnitType.ARTILLERY_ROCKET, 1, 8, 0, null);
-        map.addUnit(u7);
+        int i = 1;
+        Set<UnitType> unitTypes = EnumSet.allOf(UnitType.class);
+        for(UnitType unitType : unitTypes){
 
-        Unit infantry1 = new Unit(UnitType.INFANTRY, 3, 3, 0, null);
-        map.addUnit(infantry1);
+            Unit u = new Unit(unitType, 1, i, 0, null);
+            map.addUnit(u);
+            u.setOwnerId(1);
+
+            Unit v = new Unit(unitType, 4, i++, 0, null);
+            map.addUnit(v);
+            v.setOwnerId(2);
+        }
+
         /*
         END Creating map.
         */
-
-        u0.setOwnerId(1);
-        u1.setOwnerId(1);
-        u2.setOwnerId(1);
-        u3.setOwnerId(1);
-        u4.setOwnerId(1);
-        u5.setOwnerId(1);
-        u6.setOwnerId(1);
-        u7.setOwnerId(1);
-        infantry1.setOwnerId(2);
 
         /*
          * START Creating game.

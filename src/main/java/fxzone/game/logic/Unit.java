@@ -388,6 +388,7 @@ public class Unit extends TileSpaceObject{
         setStance(UnitStance.ATTACK);
         setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), new Point(attackingUnit.getX(), attackingUnit.getY())));
         this.currentlyAttackedUnit = attackingUnit;
+        statRemainingHealthOnAttack = statRemainingHealth;
         this.unitState = UnitState.COUNTERATTACKING;
         return true;
     }
