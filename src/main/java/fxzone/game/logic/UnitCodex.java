@@ -1,54 +1,55 @@
 package fxzone.game.logic;
 
+import fxzone.game.logic.Unit.UnitState;
 import java.util.HashMap;
 public class UnitCodex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
-            0, 8, 10, 100, 10, 10, 1, 1,
+            0, 8, 10, 100, 3, 0, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
-            1, 8, 10, 100, 10, 10, 1, 1,
+            1, 8, 10, 100, 4, 0, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
-            2, 8, 10, 100, 10, 10, 1, 1,
+            2, 8, 10, 100, 4, 2, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
-            3, 5, 10, 100, 10, 10, 1, 1,
+            3, 5, 10, 100, 0, 1, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_HUNTER, new UnitProfile(
-            4, 4, 10, 100, 10, 10, 1, 1,
+            4, 4, 10, 100, 6, 5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY, new UnitProfile(
-            5, 5, 10, 100, 10, 10, 1, 1,
-            UnitAttackType.MELEE,
+            5, 5, 10, 100, 6, 4, 1, 1,
+            UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_BATTLE, new UnitProfile(
-            6, 3, 10, 100, 10, 10, 1, 1,
+            6, 3, 10, 100, 9, 7, 1, 1,
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
-            7, 5, 10, 100, 10, 10, 1, 1,
-            UnitAttackType.MELEE,
+            7, 5, 10, 100, 6, 2, 1, 1,
+            UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
@@ -132,5 +133,28 @@ public class UnitCodex {
         ARMORCLASS_INFANTRY,
         ARMORCLASS_ARMORED,
         ARMORCLASS_HEAVY_ARMOR
+    }
+
+    public static int calculateDamageOnAttack(Unit offender, Unit defender){
+        /* From old Zone */
+
+        double offenderRemainingHp = offender.getRemainingHealthOnAttack();
+        double offenderMaxHp = getUnitProfile(offender.getUnitType()).HEALTH;
+        double defenderDefense = getUnitProfile(defender.getUnitType()).DEFENSE;
+
+        int rawDamage = getUnitProfile(offender.getUnitType()).DAMAGE;
+        if(offender.getUnitState() == UnitState.COUNTERATTACKING){
+            rawDamage /= 2;
+        }
+        double scaledDamage = (double)rawDamage * 10.0 * ((offenderRemainingHp + offenderMaxHp) / (2.0 * offenderMaxHp));
+
+        //TODO
+        // Add damage bonuses for armor class
+
+        double defenseMultiplier = (10.0 - defenderDefense) / (10.0);
+
+        int finalDamage = (int)(scaledDamage * defenseMultiplier);
+
+        return finalDamage;
     }
 }

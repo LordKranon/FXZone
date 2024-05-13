@@ -68,6 +68,7 @@ public class Unit extends TileSpaceObject{
      */
     private int statMaxHealth;
     private int statRemainingHealth;
+    private int statRemainingHealthOnAttack;
     private int statDamage;
 
     /*
@@ -251,6 +252,12 @@ public class Unit extends TileSpaceObject{
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
         return statRemainingHealth > 0;
     }
+    private boolean onAttackHitBy(Unit attackingUnit){
+        this.statRemainingHealth -= UnitCodex.calculateDamageOnAttack(attackingUnit, this);
+        if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
+        gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
+        return statRemainingHealth > 0;
+    }
 
     /**
      * While moving, increase in-between-tile-offset to graphically represent the unit moving from one tile to a neighboring tile.
@@ -340,6 +347,7 @@ public class Unit extends TileSpaceObject{
             setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
             currentlyAttackedUnit = attackedUnit;
+            statRemainingHealthOnAttack = statRemainingHealth;
             mediaPlayerGunshot.play();
             unitStateToAttacking();
         } else {
@@ -356,7 +364,7 @@ public class Unit extends TileSpaceObject{
         // This is a temporary and rudimentary attack script
         boolean attackedUnitSurvived = true;
         if(currentlyAttackedUnit != null){
-            attackedUnitSurvived = currentlyAttackedUnit.changeStatHealth(- this.statDamage);
+            attackedUnitSurvived = currentlyAttackedUnit.onAttackHitBy(this);
             this.lastAttackedUnit = currentlyAttackedUnit;
         } else {
             System.err.println("[UNIT "+unitType+"] could not find enemy to attack");
@@ -426,5 +434,9 @@ public class Unit extends TileSpaceObject{
     public void onRemoval(Group group){
         gameObjectUnit.removeSelfFromRoot(group);
         gameObjectUiUnitHealth.removeSelfFromRoot(group);
+    }
+
+    public int getRemainingHealthOnAttack(){
+        return statRemainingHealthOnAttack;
     }
 }
