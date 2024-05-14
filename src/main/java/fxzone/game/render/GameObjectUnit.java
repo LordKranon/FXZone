@@ -5,8 +5,8 @@ import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Unit.UnitStance;
-import fxzone.game.logic.UnitCodex.UnitType;
-import fxzone.game.logic.UnitCodex;
+import fxzone.game.logic.Codex.UnitType;
+import fxzone.game.logic.Codex;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -34,7 +34,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
 
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
-        switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
+        switch (Codex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_VEHICLE:
                 this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
                 this.imageStanceMove1 = imageStanceNormal;

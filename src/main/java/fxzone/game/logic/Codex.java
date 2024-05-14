@@ -2,7 +2,7 @@ package fxzone.game.logic;
 
 import fxzone.game.logic.Unit.UnitState;
 import java.util.HashMap;
-public class UnitCodex {
+public class Codex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
@@ -74,6 +74,9 @@ public class UnitCodex {
         put(UnitType.TANK_BATTLE, "tank");
         put(UnitType.ARTILLERY_ROCKET, "rocketartillery");
     }};
+    public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
+        put(BuildingType.CITY, "city");
+    }};
 
     public static class UnitProfile{
         public int ID, SPEED, VISION, HEALTH, DAMAGE, DEFENSE, MINRANGE, MAXRANGE;
@@ -114,6 +117,20 @@ public class UnitCodex {
         return getUnitProfile(unit.getUnitType());
     }
 
+    public enum BuildingType {
+        CITY,
+        FACTORY,
+        PORT,
+        AIRPORT,
+
+        /*
+        HQ,
+        CITY_COMPLEX,
+        NUCLEAR_REACTOR,
+        STORAGE,
+        TENT
+         */
+    }
     public enum UnitType {
         INFANTRY,
         INFANTRY_RPG,
@@ -183,7 +200,7 @@ public class UnitCodex {
 
         int finalDamage = (int)(increasedDamage * defenseMultiplier);
 
-        System.out.println("[UNIT-CODEX] "+defender+" is hit for "+finalDamage+" damage");
+        System.out.println("[CODEX] "+defender+" is hit for "+finalDamage+" damage");
 
         return finalDamage;
     }

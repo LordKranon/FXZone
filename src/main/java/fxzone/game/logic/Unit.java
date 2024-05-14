@@ -5,7 +5,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
-import fxzone.game.logic.UnitCodex.UnitType;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
@@ -123,7 +123,7 @@ public class Unit extends TileSpaceObject{
         initializeMediaPlayer();
     }
     private void initializeStats(){
-        this.statMaxHealth = UnitCodex.getUnitProfile(unitType).HEALTH;
+        this.statMaxHealth = Codex.getUnitProfile(unitType).HEALTH;
         this.statRemainingHealth = this.statMaxHealth;
     }
     private void initializeMediaPlayer(){
@@ -172,7 +172,7 @@ public class Unit extends TileSpaceObject{
      */
     public UnitState moveCommand(ArrayDeque<Point> path, Map map, Point pointToAttack){
         /* TODO Remove second condition, it is temporary for testing */
-        if(unitState == UnitState.NEUTRAL && path.size() <= UnitCodex.getUnitProfile(this.unitType).SPEED){
+        if(unitState == UnitState.NEUTRAL && path.size() <= Codex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
             Point oldPosition = new Point(x, y);
             Point finalPosition = new Point(x, y);
@@ -245,7 +245,7 @@ public class Unit extends TileSpaceObject{
         }
     }
     private boolean onAttackHitBy(Unit attackingUnit){
-        this.statRemainingHealth -= UnitCodex.calculateDamageOnAttack(attackingUnit, this);
+        this.statRemainingHealth -= Codex.calculateDamageOnAttack(attackingUnit, this);
         if(verbose) System.out.println(this+" now has "+statRemainingHealth+" HP remaining");
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
         return statRemainingHealth > 0;

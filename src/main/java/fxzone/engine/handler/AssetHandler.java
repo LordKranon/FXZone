@@ -1,7 +1,7 @@
 package fxzone.engine.handler;
 
-import fxzone.game.logic.UnitCodex.UnitType;
-import fxzone.game.logic.UnitCodex;
+import fxzone.game.logic.Codex.UnitType;
+import fxzone.game.logic.Codex;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -19,6 +19,7 @@ public class AssetHandler {
     private static final HashMap<String, Image> images = new HashMap<>();
 
     private static final HashMap<KeyUnit, Image> imagesUnits = new HashMap<>();
+    private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
@@ -90,37 +91,56 @@ public class AssetHandler {
 
     public static Image getImageUnit(KeyUnit keyUnit){
         if(!imagesUnits.containsKey(keyUnit)){
-
-            BufferedImage bImgColoredPartRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnit.keyType))+"_cp.png");
-            BufferedImage bImgColoredPartCropped = bImgColoredPartRaw.getSubimage(
+            Image img = loadImageOwnableTileSpaceObject(
+                "units/"+Codex.UNIT_RESOURCE_NAMES.get(keyUnit.keyUnitType),
                 ((keyUnit.keyStance % 2) == 0) ? 0 : 24,
                 (keyUnit.keyStance < 2) ? 0 : 24,
-                24, 24
+                keyUnit.keyColor
             );
-
-            BufferedImage bImgUncoloredPartRaw = loadBufferedImage("/images/units/"+(UnitCodex.UNIT_RESOURCE_NAMES.get(keyUnit.keyType))+"_up.png");
-            BufferedImage bImgUncoloredPartCropped = bImgUncoloredPartRaw.getSubimage(
-                ((keyUnit.keyStance % 2) == 0) ? 0 : 24,
-                (keyUnit.keyStance < 2) ? 0 : 24,
-                24, 24
-            );
-
-            BufferedImage bImgColoredPartRecolored = applyColor(bImgColoredPartCropped, keyUnit.keyColor);
-
-            java.awt.Image awtImgColoredPartResized = bImgColoredPartRecolored.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-            java.awt.Image awtImgUncoloredPartResized = bImgUncoloredPartCropped.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-            BufferedImage bImgCombined = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-
-            Graphics2D graphics2D = bImgCombined.createGraphics();
-            graphics2D.drawImage(awtImgColoredPartResized, 0, 0, null);
-            graphics2D.drawImage(awtImgUncoloredPartResized, 0, 0, null);
-            graphics2D.dispose();
-
-            Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
-
-            imagesUnits.put(keyUnit, imgFinished);
+            imagesUnits.put(keyUnit, img);
         }
         return imagesUnits.get(keyUnit);
+    }
+    public static Image getImageBuilding(KeyBuilding keyBuilding){
+        if(!imagesBuildings.containsKey(keyBuilding)){
+            Image img = loadImageOwnableTileSpaceObject(
+                "buildings/"+(Codex.BUILDING_RESOURCE_NAMES.get(keyBuilding.keyBuildingType)),
+                0,
+                0,
+                keyBuilding.keyColor
+            );
+            imagesBuildings.put(keyBuilding, img);
+        }
+        return imagesBuildings.get(keyBuilding);
+    }
+    private static Image loadImageOwnableTileSpaceObject(String resourceName, int subImageX, int subImageY, java.awt.Color color){
+        BufferedImage bImgColoredPartRaw = loadBufferedImage("/images/"+resourceName+"_cp.png");
+        BufferedImage bImgColoredPartCropped = bImgColoredPartRaw.getSubimage(
+            subImageX,
+            subImageY,
+            24, 24
+        );
+
+        BufferedImage bImgUncoloredPartRaw = loadBufferedImage("/images/"+resourceName+"_up.png");
+        BufferedImage bImgUncoloredPartCropped = bImgUncoloredPartRaw.getSubimage(
+            subImageX,
+            subImageY,
+            24, 24
+        );
+
+        BufferedImage bImgColoredPartRecolored = applyColor(bImgColoredPartCropped, color);
+
+        java.awt.Image awtImgColoredPartResized = bImgColoredPartRecolored.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+        java.awt.Image awtImgUncoloredPartResized = bImgUncoloredPartCropped.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+        BufferedImage bImgCombined = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D graphics2D = bImgCombined.createGraphics();
+        graphics2D.drawImage(awtImgColoredPartResized, 0, 0, null);
+        graphics2D.drawImage(awtImgUncoloredPartResized, 0, 0, null);
+        graphics2D.dispose();
+
+        Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
+        return imgFinished;
     }
 
     /**
@@ -215,7 +235,7 @@ public class AssetHandler {
     }
 
     public static Media getSound(UnitType unitType){
-        switch (UnitCodex.getUnitProfile(unitType).SUPERTYPE){
+        switch (Codex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
             default: return getSound("/sounds/mixkit-truck-driving-steady-1621.mp3");
         }

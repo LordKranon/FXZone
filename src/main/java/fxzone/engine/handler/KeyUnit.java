@@ -1,14 +1,14 @@
 package fxzone.engine.handler;
 
-import fxzone.game.logic.UnitCodex.UnitType;
+import fxzone.game.logic.Codex.UnitType;
 
 public class KeyUnit {
-    public UnitType keyType;
+    public UnitType keyUnitType;
     public Integer keyStance;
     public java.awt.Color keyColor;
 
-    public KeyUnit(UnitType keyType, int keyStance, java.awt.Color keyColor) {
-        this.keyType = keyType;
+    public KeyUnit(UnitType keyUnitType, int keyStance, java.awt.Color keyColor) {
+        this.keyUnitType = keyUnitType;
         this.keyStance = keyStance;
         this.keyColor = keyColor;
     }
@@ -18,7 +18,7 @@ public class KeyUnit {
         if (!(obj instanceof KeyUnit))
             return false;
         KeyUnit ref = (KeyUnit) obj;
-        return this.keyType.equals(ref.keyType) &&
+        return this.keyUnitType.equals(ref.keyUnitType) &&
             this.keyStance.equals(ref.keyStance) &&
             (
                 (this.keyColor == null && ref.keyColor == null) ||
@@ -29,6 +29,6 @@ public class KeyUnit {
 
     @Override
     public int hashCode() {
-        return keyType.hashCode() ^ keyStance.hashCode();
+        return keyUnitType.hashCode() ^ keyStance.hashCode();
     }
 }

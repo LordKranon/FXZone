@@ -3,11 +3,13 @@ package fxzone.controller.lobby;
 import fxzone.controller.ingame.InGameLocalUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.UnitCodex.UnitType;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -49,6 +51,10 @@ public class LobbyLocalUiController extends LobbyUiController{
             map.addUnit(v);
             v.setOwnerId(2);
         }
+
+        Building b = new Building(BuildingType.CITY, 0, 0, 0, null);
+        map.addBuilding(b);
+        b.setOwnerId(1);
         /*
         END Creating map.
         */

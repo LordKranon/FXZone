@@ -16,7 +16,7 @@ import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
-import fxzone.game.logic.UnitCodex;
+import fxzone.game.logic.Codex;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
@@ -317,7 +317,7 @@ public class InGameUiController extends AbstractUiController {
 
                 if(
                     GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
-                        selectedUnitQueuedPath.size() < UnitCodex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
+                        selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
                         moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
                 ){
                     addPointToSelectedUnitPathQueue(hoveredPoint);
@@ -627,7 +627,7 @@ public class InGameUiController extends AbstractUiController {
         moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
-        onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), UnitCodex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
+        onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
     }
 
     private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){

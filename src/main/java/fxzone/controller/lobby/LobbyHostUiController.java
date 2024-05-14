@@ -8,7 +8,7 @@ import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.UnitCodex.UnitType;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;

@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Map {
 
     private Group subGroupMapTiles;
     private Group subGroupMapUnits;
+    private Group subGroupMapBuildings;
 
     /**
      * Game logic tiles
@@ -21,6 +23,8 @@ public class Map {
      * Game logic units
      */
     private List<Unit> units;
+
+    private List<Building> buildings;
 
     /**
      * Graphical size of one tile
@@ -47,14 +51,18 @@ public class Map {
             }
         }
         this.units = new ArrayList<Unit>();
+        this.buildings = new ArrayList<Building>();
     }
     public Map(MapSerializable mapSerializable, Group group, Game game){
         this.subGroupMapTiles = new Group();
         this.subGroupMapTiles.setViewOrder(ViewOrder.MAP_TILE);
         this.subGroupMapUnits = new Group();
         this.subGroupMapUnits.setViewOrder(ViewOrder.GAME_UNIT);
+        this.subGroupMapBuildings = new Group();
+        this.subGroupMapBuildings.setViewOrder(ViewOrder.GAME_BUILDING);
         group.getChildren().add(this.subGroupMapTiles);
         group.getChildren().add(this.subGroupMapUnits);
+        group.getChildren().add(this.subGroupMapBuildings);
         int width = mapSerializable.tiles.length;
         int height = mapSerializable.tiles[0].length;
         this.tiles = new Tile[width][height];
@@ -66,6 +74,10 @@ public class Map {
         this.units = new ArrayList<Unit>();
         for(UnitSerializable unitSerializable : mapSerializable.units){
             addUnit(new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game));
+        }
+        this.buildings = new ArrayList<Building>();
+        for(BuildingSerializable buildingSerializable : mapSerializable.buildings){
+            addBuilding(new Building(buildingSerializable, tileRenderSize, subGroupMapBuildings, game));
         }
     }
 
@@ -92,11 +104,14 @@ public class Map {
             }
         }
         for(Unit unit : units){
-            propagateGraphicalOffsetToUnit(unit);
+            propagateGraphicalOffsetToTileSpaceObject(unit);
+        }
+        for(Building building : buildings){
+            propagateGraphicalOffsetToTileSpaceObject(building);
         }
     }
-    private void propagateGraphicalOffsetToUnit(Unit unit){
-        unit.setGraphicalOffset(offsetX, offsetY);
+    private void propagateGraphicalOffsetToTileSpaceObject(TileSpaceObject tileSpaceObject){
+        tileSpaceObject.setGraphicalOffset(offsetX, offsetY);
     }
 
     public int getWidth(){
@@ -143,11 +158,14 @@ public class Map {
             }
         }
         for (Unit unit : units){
-            propagateTileRenderSizeToUnit(unit);
+            propagateTileRenderSizeToTileSpaceObject(unit);
+        }
+        for (Building building : buildings){
+            propagateTileRenderSizeToTileSpaceObject(building);
         }
     }
-    private void propagateTileRenderSizeToUnit(Unit unit){
-        unit.changeTileRenderSize(this);
+    private void propagateTileRenderSizeToTileSpaceObject(TileSpaceObject tileSpaceObject){
+        tileSpaceObject.changeTileRenderSize(this);
     }
 
     public void addUnit(Unit unit){
@@ -157,8 +175,8 @@ public class Map {
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("[MAP] Unit is not in bounds of map");
         }
-        propagateGraphicalOffsetToUnit(unit);
-        propagateTileRenderSizeToUnit(unit);
+        propagateGraphicalOffsetToTileSpaceObject(unit);
+        propagateTileRenderSizeToTileSpaceObject(unit);
     }
     public void removeUnit(Unit unit, Group group){
         boolean successfullyRemoved = units.remove(unit);
@@ -172,12 +190,20 @@ public class Map {
         }
         unit.onRemoval(subGroupMapUnits);
     }
+    public void addBuilding(Building building){
+        buildings.add(building);
+        propagateGraphicalOffsetToTileSpaceObject(building);
+        propagateTileRenderSizeToTileSpaceObject(building);
+    }
 
     public Tile[][] getTiles(){
         return tiles;
     }
     public List<Unit> getUnits(){
         return units;
+    }
+    public List<Building> getBuildings(){
+        return buildings;
     }
 
     /**
@@ -217,6 +243,7 @@ public class Map {
     public void setVisible(boolean visible){
         this.subGroupMapTiles.setVisible(visible);
         this.subGroupMapUnits.setVisible(visible);
+        this.subGroupMapBuildings.setVisible(visible);
     }
 
 }

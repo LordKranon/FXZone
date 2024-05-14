@@ -1,5 +1,6 @@
 package fxzone.game.logic.serializable;
 
+import fxzone.game.logic.Building;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Unit;
 import java.io.Serializable;
@@ -11,6 +12,8 @@ public class MapSerializable implements Serializable {
     public TileSerializable[][] tiles;
 
     public List<UnitSerializable> units;
+
+    public List<BuildingSerializable> buildings;
 
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +29,10 @@ public class MapSerializable implements Serializable {
         this.units = new ArrayList<>();
         for(Unit unit : map.getUnits()){
             this.units.add(new UnitSerializable(unit));
+        }
+        this.buildings = new ArrayList<>();
+        for(Building building : map.getBuildings()){
+            this.buildings.add(new BuildingSerializable(building));
         }
     }
 }
