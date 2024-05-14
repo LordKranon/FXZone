@@ -110,6 +110,9 @@ public class UnitCodex {
     public static UnitProfile getUnitProfile(UnitType unitType){
         return UNIT_PROFILE_VALUES.get(unitType);
     }
+    public static UnitProfile getUnitProfile(Unit unit){
+        return getUnitProfile(unit.getUnitType());
+    }
 
     public enum UnitType {
         INFANTRY,
@@ -157,8 +160,8 @@ public class UnitCodex {
         /* From old Zone */
 
         double offenderRemainingHp = offender.getRemainingHealthOnAttack();
-        double offenderMaxHp = getUnitProfile(offender.getUnitType()).HEALTH;
-        double defenderDefense = getUnitProfile(defender.getUnitType()).DEFENSE;
+        double offenderMaxHp = getUnitProfile(offender).HEALTH;
+        double defenderDefense = getUnitProfile(defender).DEFENSE;
 
         int rawDamage = getUnitProfile(offender.getUnitType()).DAMAGE;
 
@@ -170,9 +173,9 @@ public class UnitCodex {
         // Add damage bonuses for armor class
         double damageMultiplier = 1.0;
         switch (getUnitProfile(defender.getUnitType()).ARMORCLASS){
-            case ARMORCLASS_INFANTRY: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_INFANTRY; break;
-            case ARMORCLASS_HEAVY_ARMOR: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_HEAVY;
-            case ARMORCLASS_ARMORED: damageMultiplier *= getUnitProfile(offender.getUnitType()).DMG_VS_ARMORED; break;
+            case ARMORCLASS_INFANTRY: damageMultiplier *= getUnitProfile(offender).DMG_VS_INFANTRY; break;
+            case ARMORCLASS_HEAVY_ARMOR: damageMultiplier *= getUnitProfile(offender).DMG_VS_HEAVY;
+            case ARMORCLASS_ARMORED: damageMultiplier *= getUnitProfile(offender).DMG_VS_ARMORED; break;
         }
         double increasedDamage = scaledDamage * damageMultiplier;
 
@@ -180,7 +183,7 @@ public class UnitCodex {
 
         int finalDamage = (int)(increasedDamage * defenseMultiplier);
 
-        System.out.println("[UNIT-CODEX] [UNIT "+defender.getUnitType()+"] is hit for "+finalDamage+" damage");
+        System.out.println("[UNIT-CODEX] "+defender+" is hit for "+finalDamage+" damage");
 
         return finalDamage;
     }

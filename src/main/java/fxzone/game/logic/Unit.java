@@ -110,7 +110,7 @@ public class Unit extends TileSpaceObject{
         try {
             playerColor = FxUtils.toAwtColor(game.getPlayer(ownerId).getColor());
         }catch (NullPointerException e){
-            System.err.println("[UNIT "+unitType+"] Initialized without owner color");
+            System.err.println(this+" Initialized without owner color");
         }
 
         this.gameObjectUnit = new GameObjectUnit(
@@ -193,7 +193,7 @@ public class Unit extends TileSpaceObject{
             actionableThisTurn = false;
 
 
-            if(verbose) System.out.println("[UNIT "+unitType+"] received a move command");
+            if(verbose) System.out.println(this+" received a move command");
 
             //If path is empty, movement is ended immediately and the unit goes into attack immediately
             if(path.isEmpty()){
@@ -246,7 +246,7 @@ public class Unit extends TileSpaceObject{
     }
     private boolean onAttackHitBy(Unit attackingUnit){
         this.statRemainingHealth -= UnitCodex.calculateDamageOnAttack(attackingUnit, this);
-        if(verbose) System.out.println("[UNIT "+unitType+"] now has "+statRemainingHealth+" HP remaining");
+        if(verbose) System.out.println(this+" now has "+statRemainingHealth+" HP remaining");
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
         return statRemainingHealth > 0;
     }
@@ -333,7 +333,7 @@ public class Unit extends TileSpaceObject{
     private void onMovementEnd(Map map){
         cleanUpMovingState(map);
         if(hasAttackCommandAfterMoving){
-            if(verbose) System.out.println("[UNIT "+unitType+"] on movement end, going into attack");
+            if(verbose) System.out.println(this+" on movement end, going into attack");
             setStance(UnitStance.ATTACK);
             setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
@@ -358,7 +358,7 @@ public class Unit extends TileSpaceObject{
             attackedUnitSurvived = currentlyAttackedUnit.onAttackHitBy(this);
             this.lastAttackedUnit = currentlyAttackedUnit;
         } else {
-            System.err.println("[UNIT "+unitType+"] could not find enemy to attack");
+            System.err.println(this + " could not find enemy to attack");
         }
         mediaPlayerGunshot.stop();
         setStance(UnitStance.NORMAL);
@@ -430,5 +430,10 @@ public class Unit extends TileSpaceObject{
 
     public int getRemainingHealthOnAttack(){
         return statRemainingHealthOnAttack;
+    }
+
+    @Override
+    public String toString(){
+        return "[UNIT "+unitType+"]";
     }
 }
