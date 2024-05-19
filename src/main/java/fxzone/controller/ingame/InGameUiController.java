@@ -222,7 +222,7 @@ public class InGameUiController extends AbstractUiController {
 
         root2D.getChildren().add(hBox);
         VBox vBox = (VBox) hBox.getChildren().get(0);
-        HBox hBoxInner = (HBox) vBox.getChildren().get(1);
+        HBox hBoxInner = (HBox) vBox.getChildren().get(2);
         VBox vBoxInner1 = (VBox) hBoxInner.getChildren().get(0);
         labelPlayerName = (Label) vBoxInner1.getChildren().get(0);
 

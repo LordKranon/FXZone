@@ -192,6 +192,7 @@ public class Map {
     }
     public void addBuilding(Building building){
         buildings.add(building);
+        //TODO Add to tiles
         propagateGraphicalOffsetToTileSpaceObject(building);
         propagateTileRenderSizeToTileSpaceObject(building);
     }

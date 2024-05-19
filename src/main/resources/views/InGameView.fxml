@@ -17,7 +17,14 @@
 >
 
   <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+
+
     <Pane VBox.vgrow="ALWAYS"/>
+
+    <HBox  HBox.hgrow="ALWAYS" style="-fx-background-color: #282828;" prefHeight="100" visible="false">
+
+    </HBox>
+
     <HBox spacing="40" style="-fx-background-color: #303030;">
       <VBox>
         <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE">
@@ -62,5 +69,7 @@
       </VBox>
     </HBox>
   </VBox>
+
+
 
 </HBox>
