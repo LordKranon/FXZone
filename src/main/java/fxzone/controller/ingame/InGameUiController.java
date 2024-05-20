@@ -8,6 +8,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Building;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
@@ -127,6 +128,7 @@ public class InGameUiController extends AbstractUiController {
     protected int thisPlayerId;
 
     protected Unit selectedUnit;
+    protected Building selectedBuilding;
 
     protected TurnState turnState = TurnState.NEUTRAL;
 
@@ -285,8 +287,6 @@ public class InGameUiController extends AbstractUiController {
             quitGame();
         });
         escapeMenu.getChildren().add(quitConfirmButton);
-
-
     }
 
     private void initializeGame(GameSerializable initialGame){
@@ -385,9 +385,13 @@ public class InGameUiController extends AbstractUiController {
     private void tileClicked(int x, int y){
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [tileClicked] during your turn with turn-state neutral");
-            Unit unitOnTileClicked = map.getTiles()[x][y].getUnitOnTile();
+            Tile tileClicked = map.getTiles()[x][y];
+            Unit unitOnTileClicked = tileClicked.getUnitOnTile();
+            Building buildingOnTileClicked = tileClicked.getBuildingOnTile();
             if(unitOnTileClicked != null){
                 selectUnit(unitOnTileClicked);
+            } else if(buildingOnTileClicked != null){
+                selectBuilding(buildingOnTileClicked);
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
@@ -653,6 +657,25 @@ public class InGameUiController extends AbstractUiController {
 
             turnState = TurnState.UNIT_SELECTED;
             if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
+        }
+    }
+    protected void selectBuilding(Building building){
+        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectBuilding] trying");
+        if(
+            turnState == TurnState.NEUTRAL &&
+            thisPlayer != null &&
+            (thisPlayer.getId() == building.getOwnerId())
+        ){
+            selectedBuilding = building;
+
+            // Show the building UI
+            VBox buildingUI = selectedBuilding.getConstructionMenu();
+            buildingUI.setTranslateX((double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX());
+            buildingUI.setTranslateY((double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY());
+            root2D.getChildren().add(buildingUI);
+
+            turnState = TurnState.BUILDING_SELECTED;
+            if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectBuilding] building selected");
         }
     }
 

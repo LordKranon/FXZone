@@ -76,6 +76,9 @@ public class Codex {
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
+        put(BuildingType.FACTORY, "factory");
+        put(BuildingType.PORT, "port");
+        put(BuildingType.AIRPORT, "airport");
     }};
 
     public static class UnitProfile{

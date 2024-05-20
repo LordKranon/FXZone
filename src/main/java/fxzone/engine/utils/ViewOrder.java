@@ -13,5 +13,7 @@ public class ViewOrder {
 
     public static final int UI_IN_GAME_VIEW = -10;
 
+    public static final int GAME_BUILDING_UI_BACKGROUND = -18;
+    public static final int GAME_BUILDING_UI_BUTTON = -19;
     public static final int UI_BUTTON = -20;
 }

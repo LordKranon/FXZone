@@ -192,7 +192,11 @@ public class Map {
     }
     public void addBuilding(Building building){
         buildings.add(building);
-        //TODO Add to tiles
+        try{
+            tiles[building.x][building.y].setBuildingOnTile(building);
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.err.println("[MAP] Building is not in bounds of map");
+        }
         propagateGraphicalOffsetToTileSpaceObject(building);
         propagateTileRenderSizeToTileSpaceObject(building);
     }

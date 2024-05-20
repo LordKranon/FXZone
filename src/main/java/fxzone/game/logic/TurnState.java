@@ -7,6 +7,7 @@ public enum TurnState {
     NO_TURN,
     NEUTRAL,
     UNIT_SELECTED,
+    BUILDING_SELECTED,
 
     /**
      * Only for network syncing purposes
