@@ -53,11 +53,10 @@ public class InGameUiController extends AbstractUiController {
     /*
     UI ELEMENTS
      */
-    private Button quitButton;
-
+    private Button escapeMenuButton;
     private Button endTurnButton;
-
     private Label labelPlayerName;
+    private VBox escapeMenu;
 
 
     /**
@@ -245,15 +244,15 @@ public class InGameUiController extends AbstractUiController {
 
     private void createFXSceneUI(){
         Font font = new Font(36);
-        quitButton = new Button("Quit");
-        quitButton.setPrefWidth(400);
-        quitButton.setViewOrder(ViewOrder.UI_BUTTON);
-        quitButton.setVisible(true);
-        quitButton.setFont(font);
-        quitButton.setOnMouseClicked(mouseEvent -> {
-            quitGame();
+        escapeMenuButton = new Button("Menu");
+        escapeMenuButton.setPrefWidth(400);
+        escapeMenuButton.setViewOrder(ViewOrder.UI_BUTTON);
+        escapeMenuButton.setVisible(true);
+        escapeMenuButton.setFont(font);
+        escapeMenuButton.setOnMouseClicked(mouseEvent -> {
+            toggleEscapeMenu();
         });
-        root2D.getChildren().add(quitButton);
+        root2D.getChildren().add(escapeMenuButton);
 
         endTurnButton = new Button("End Turn");
         endTurnButton.setPrefWidth(400);
@@ -264,11 +263,43 @@ public class InGameUiController extends AbstractUiController {
             endTurnButtonClicked();
         });
         root2D.getChildren().add(endTurnButton);
+
+
+
+        escapeMenu = new VBox();
+        escapeMenu.setPrefWidth(600);
+        escapeMenu.setPrefHeight(1000);
+        escapeMenu.setVisible(false);
+        escapeMenu.setStyle("-fx-background-color: #282828;");
+        escapeMenu.setViewOrder(ViewOrder.UI_BUTTON);
+        root2D.getChildren().add(escapeMenu);
+
+        Button quitConfirmButton = new Button("Quit");
+        quitConfirmButton.setPrefWidth(400);
+        quitConfirmButton.setTranslateX(100);
+        quitConfirmButton.setTranslateY(800);
+        quitConfirmButton.setViewOrder(ViewOrder.UI_BUTTON);
+        quitConfirmButton.setVisible(true);
+        quitConfirmButton.setFont(font);
+        quitConfirmButton.setOnMouseClicked(mouseEvent -> {
+            quitGame();
+        });
+        escapeMenu.getChildren().add(quitConfirmButton);
+
+
     }
 
     private void initializeGame(GameSerializable initialGame){
         game = new Game(initialGame, root2D);
         map = game.getMap();
+    }
+
+    protected void toggleEscapeMenu(){
+        if(escapeMenu.isVisible()){
+            escapeMenu.setVisible(false);
+        } else{
+            escapeMenu.setVisible(true);
+        }
     }
 
     protected void quitGame(){
@@ -291,10 +322,13 @@ public class InGameUiController extends AbstractUiController {
      * Redraw UI elements to adjust for window size changes
      */
     private void refreshUi(){
-        quitButton.setTranslateX(subScene2D.getWidth() - quitButton.getWidth() - 24);
-        quitButton.setTranslateY(subScene2D.getHeight() - quitButton.getHeight() - 46);
+        escapeMenuButton.setTranslateX(subScene2D.getWidth() - escapeMenuButton.getWidth() - 24);
+        escapeMenuButton.setTranslateY(subScene2D.getHeight() - escapeMenuButton.getHeight() - 46);
         endTurnButton.setTranslateX(subScene2D.getWidth() - endTurnButton.getWidth() - 24);
-        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 46 - quitButton.getHeight());
+        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 46 - escapeMenuButton.getHeight());
+
+        escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
+        escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
     }
 
     private void handleClicks(){
