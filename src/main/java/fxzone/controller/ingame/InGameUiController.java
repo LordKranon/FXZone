@@ -129,6 +129,7 @@ public class InGameUiController extends AbstractUiController {
 
     protected Unit selectedUnit;
     protected Building selectedBuilding;
+    private VBox selectedBuildingUI;
 
     protected TurnState turnState = TurnState.NEUTRAL;
 
@@ -411,6 +412,11 @@ public class InGameUiController extends AbstractUiController {
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
             }
 
+        } else if(turnState == TurnState.BUILDING_SELECTED){
+            if(selectedBuilding.getX() == x && selectedBuilding.getY() == y){
+                // Deselect building
+                turnStateToNeutral();
+            }
         }
     }
 
@@ -669,10 +675,11 @@ public class InGameUiController extends AbstractUiController {
             selectedBuilding = building;
 
             // Show the building UI
-            VBox buildingUI = selectedBuilding.getConstructionMenu();
-            buildingUI.setTranslateX((double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX());
-            buildingUI.setTranslateY((double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY());
-            root2D.getChildren().add(buildingUI);
+            selectedBuildingUI = selectedBuilding.getConstructionMenu();
+            selectedBuildingUI.setTranslateX((double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX());
+            selectedBuildingUI.setTranslateY((double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY());
+            root2D.getChildren().add(selectedBuildingUI);
+
 
             turnState = TurnState.BUILDING_SELECTED;
             if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectBuilding] building selected");
@@ -805,6 +812,10 @@ public class InGameUiController extends AbstractUiController {
             for(GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
                 gridTile.removeSelfFromRoot(root2D);
             }
+        }
+        if(selectedBuildingUI != null){
+            root2D.getChildren().remove(selectedBuildingUI);
+            selectedBuildingUI = null;
         }
         turnState = TurnState.NEUTRAL;
     }
