@@ -1,12 +1,16 @@
 package fxzone.game.logic;
 
+import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.render.GameObjectBuilding;
 import java.awt.Color;
 import javafx.scene.Group;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class Building extends TileSpaceObject{
@@ -52,6 +56,16 @@ public class Building extends TileSpaceObject{
         constructionMenu.setVisible(true);
         constructionMenu.setStyle("-fx-background-color: #282828;");
         constructionMenu.setViewOrder(ViewOrder.GAME_BUILDING_UI_BACKGROUND);
+
+        ImageView unitIcon = new ImageView();
+        unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 0, Color.CYAN)));
+        unitIcon.setFitWidth(128);
+        unitIcon.setFitHeight(128);
+        unitIcon.setTranslateX(100);
+        unitIcon.setTranslateY(100);
+        unitIcon.setVisible(true);
+        unitIcon.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
+        constructionMenu.getChildren().add(unitIcon);
     }
     public VBox getConstructionMenu(){
         return constructionMenu;
