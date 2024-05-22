@@ -143,6 +143,7 @@ public class InGameUiController extends AbstractUiController {
      */
     public static final double TOTAL_UNIT_MOVEMENT_INTERVAL = Config.getDouble("GAME_SPEED_UNIT_MOVEMENT_INTERVAL");
     public static final double TOTAL_UNIT_ATTACK_INTERVAL = Config.getDouble("GAME_SPEED_UNIT_ATTACK_INTERVAL");
+    private static final double MAP_SCROLL_SPEED = Config.getDouble("MAP_SCROLL_SPEED");
 
     /*
     DEBUG
@@ -398,8 +399,7 @@ public class InGameUiController extends AbstractUiController {
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
 
                 // Deselect unit
-                selectedUnit.setStance(UnitStance.NORMAL);
-                turnStateToNeutral();
+                deselectUnit();
 
             }
             else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y){
@@ -415,7 +415,7 @@ public class InGameUiController extends AbstractUiController {
         } else if(turnState == TurnState.BUILDING_SELECTED){
             if(selectedBuilding.getX() == x && selectedBuilding.getY() == y){
                 // Deselect building
-                turnStateToNeutral();
+                deselectBuilding();
             }
         }
     }
@@ -442,7 +442,7 @@ public class InGameUiController extends AbstractUiController {
     private void moveMap(double delta){
 
         double totalExtraOffsetX = 0, totalExtraOffsetY = 0;
-        double mapMovementUnit = delta * Math.log(map.getTileRenderSize()) * Config.getDouble("MAP_SCROLL_SPEED");
+        double mapMovementUnit = delta * Math.log(map.getTileRenderSize()) * MAP_SCROLL_SPEED;
 
         if(gameController.getInputHandler().isKeyPressed(KeyCode.RIGHT) || gameController.getInputHandler().isKeyPressed(KeyCode.D)){
             totalExtraOffsetX -= mapMovementUnit;
@@ -685,6 +685,13 @@ public class InGameUiController extends AbstractUiController {
             if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectBuilding] building selected");
         }
     }
+    protected void deselectBuilding(){
+        turnStateToNeutral();
+    }
+    protected void deselectUnit(){
+        selectedUnit.setStance(UnitStance.NORMAL);
+        turnStateToNeutral();
+    }
 
     private void onSelectUnitCalculateMoveCommandGrid(){
         // Initialize move command grid logic
@@ -825,4 +832,20 @@ public class InGameUiController extends AbstractUiController {
         turnState = TurnState.NO_TURN;
     }
 
+    @Override
+    public void keyPressed(KeyCode keyCode){
+        switch (keyCode){
+            case ESCAPE: escapeKeyPressed(); break;
+            default: break;
+        }
+    }
+    private void escapeKeyPressed(){
+        if(turnState == TurnState.BUILDING_SELECTED){
+            deselectBuilding();
+        } else if(turnState == TurnState.UNIT_SELECTED){
+            deselectUnit();
+        } else if(turnState == TurnState.NEUTRAL){
+            toggleEscapeMenu();
+        }
+    }
 }

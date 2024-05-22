@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import fxzone.engine.Initializable;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -64,5 +65,8 @@ public abstract class AbstractUiController implements Initializable, Updatable {
             int heightCorrection = stage.isFullScreen() ? 0 : 28;
             anchorPane.setPrefHeight(stage.getHeight() - heightCorrection);
         });
+    }
+
+    public void keyPressed(KeyCode keyCode){
     }
 }

@@ -1,5 +1,6 @@
 package fxzone.engine.handler;
 
+import fxzone.engine.controller.AbstractGameController;
 import java.util.HashSet;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -8,9 +9,11 @@ import javafx.scene.input.MouseButton;
 
 public class InputHandler {
 
-    private HashSet<KeyCode> keysPressed;
+    private AbstractGameController gameController;
 
-    private HashSet<MouseButton> mouseButtonsPressed;
+    private final HashSet<KeyCode> keysPressed;
+
+    private final HashSet<MouseButton> mouseButtonsPressed;
 
     private Point2D lastMousePosition;
 
@@ -23,12 +26,14 @@ public class InputHandler {
     private double cumulativeScrollDelta;
 
 
-    public InputHandler(Scene scene){
+    public InputHandler(AbstractGameController gameController, Scene scene){
 
+        this.gameController = gameController;
         keysPressed = new HashSet<>();
 
         scene.setOnKeyPressed(keyEvent -> {
             keysPressed.add(keyEvent.getCode());
+            gameController.keyPressed(keyEvent.getCode());
         });
         scene.setOnKeyReleased(keyEvent -> {
             keysPressed.remove(keyEvent.getCode());

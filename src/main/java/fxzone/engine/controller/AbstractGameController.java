@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public abstract class AbstractGameController extends AnimationTimer {
@@ -49,7 +50,7 @@ public abstract class AbstractGameController extends AnimationTimer {
         this.lastNanoTime = System.nanoTime();
         this.fpsTimer = System.currentTimeMillis();
         this.framesCounter = 0;
-        this.inputHandler = new InputHandler(scene);
+        this.inputHandler = new InputHandler(this, scene);
     }
 
     @Override
@@ -111,5 +112,9 @@ public abstract class AbstractGameController extends AnimationTimer {
 
     public InputHandler getInputHandler(){
         return inputHandler;
+    }
+
+    public void keyPressed(KeyCode keyCode){
+        activeUiController.keyPressed(keyCode);
     }
 }
