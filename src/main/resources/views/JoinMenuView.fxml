@@ -13,6 +13,7 @@
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+  stylesheets="@style.css"
 >
 
   <children>
@@ -106,16 +107,10 @@
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="JOIN"
                   onAction="#join" >
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
               </children>
             </VBox>

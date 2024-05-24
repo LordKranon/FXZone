@@ -10,6 +10,7 @@
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+  stylesheets="@style.css"
 >
   <children>
     <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
@@ -72,22 +73,13 @@
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="SETTING 1">
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="SETTING 2">
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
               </children>
             </VBox>
