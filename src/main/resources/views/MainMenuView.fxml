@@ -101,6 +101,7 @@
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="PLAY"
+                  style="-fx-background-image: url('/images/icon_tank_blue.png')"
                   onAction="#play" >
                   <font>
                     <Font size="36.0"/>
