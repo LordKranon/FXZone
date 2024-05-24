@@ -10,6 +10,7 @@
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+  stylesheets="@style.css"
 >
   <children>
     <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
@@ -82,18 +83,13 @@
               <children>
                 <Button fx:id="creditsButton" mnemonicParsing="false"
                   prefWidth="110.0" text="CREDITS" GridPane.columnIndex="0"
-                  GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                  <font>
-                    <Font size="20.0"/>
-                  </font>
+                  GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                  style="-fx-font-size: 20">
                 </Button>
                 <Button fx:id="quitButton" mnemonicParsing="false"
                   prefWidth="110.0" text="QUIT" GridPane.columnIndex="2"
                   GridPane.halignment="CENTER" GridPane.valignment="CENTER"
-                  onAction="#quit" >
-                  <font>
-                    <Font size="20.0"/>
-                  </font>
+                  onAction="#quit" style="-fx-font-size: 20">
                 </Button>
               </children>
             </GridPane>
@@ -101,24 +97,14 @@
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="PLAY"
-                  style="-fx-background-image: url('/images/icon_tank_blue.png')"
                   onAction="#play" >
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="TUTORIAL">
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="SETTINGS"
                   onAction="#settings" >
-                  <font>
-                    <Font size="36.0"/>
-                  </font>
                 </Button>
               </children>
             </VBox>
