@@ -129,7 +129,7 @@ public class InGameUiController extends AbstractUiController {
 
     protected Unit selectedUnit;
     protected Building selectedBuilding;
-    private VBox selectedBuildingUI;
+    private Pane selectedBuildingUI;
 
     protected TurnState turnState = TurnState.NEUTRAL;
 

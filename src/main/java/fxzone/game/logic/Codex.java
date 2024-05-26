@@ -1,61 +1,73 @@
 package fxzone.game.logic;
 
 import fxzone.game.logic.Unit.UnitState;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+
 public class Codex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
-            0, 8, 10, 100, 3, 0, 1, 1,
+            0, "Infantry",
+            8, 10, 100, 3, 0, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
-            1, 8, 10, 100, 4, 0, 1, 1,
+            1, "RPG",
+            8, 10, 100, 4, 0, 1, 1,
             .5, 1.5, 1.5,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
             UnitSuperType.LAND_INFANTRY
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
-            2, 8, 10, 100, 4, 2, 1, 1,
+            2, "Car",
+            8, 10, 100, 4, 2, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
-            3, 5, 10, 100, 0, 1, 1, 1,
+            3, "Truck",
+            5, 10, 100, 0, 1, 1, 1,
             1, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_HUNTER, new UnitProfile(
-            4, 4, 10, 100, 6, 5, 1, 1,
+            4, "Hunter Tank",
+            4, 10, 100, 6, 5, 1, 1,
             1, 1.25, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY, new UnitProfile(
-            5, 5, 10, 100, 6, 4, 1, 1,
+            5, "Artillery",
+            5, 10, 100, 6, 4, 1, 1,
             1.5, 1, 1,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.TANK_BATTLE, new UnitProfile(
-            6, 3, 10, 100, 9, 7, 1, 1,
+            6, "Battle Tank",
+            3, 10, 100, 9, 7, 1, 1,
             1, 1, 1.5,
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
-            7, 5, 10, 100, 6, 2, 1, 1,
+            7, "Rocket Artillery",
+            5, 10, 100, 6, 2, 1, 1,
             1, 1.5, 1.5,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
@@ -81,20 +93,34 @@ public class Codex {
         put(BuildingType.AIRPORT, "airport");
     }};
 
+    public static final List<UnitType> BUILDABLE_UNIT_TYPES = Arrays.asList(
+        UnitType.INFANTRY,
+        UnitType.INFANTRY_RPG,
+        UnitType.CAR_HUMVEE,
+        UnitType.TRUCK_TRANSPORT,
+        UnitType.TANK_HUNTER,
+        UnitType.ARTILLERY,
+        UnitType.TANK_BATTLE,
+        UnitType.ARTILLERY_ROCKET
+    );
+
     public static class UnitProfile{
+        public String NAME;
         public int ID, SPEED, VISION, HEALTH, DAMAGE, DEFENSE, MINRANGE, MAXRANGE;
         public double DMG_VS_INFANTRY, DMG_VS_ARMORED, DMG_VS_HEAVY;
         public UnitAttackType ATTACKTYPE;
         public UnitArmorClass ARMORCLASS;
         public UnitSuperType SUPERTYPE;
         UnitProfile(
-            int ID, int SPEED, int VISION, int HEALTH, int DAMAGE, int DEFENSE, int MINRANGE, int MAXRANGE,
+            int ID, String NAME,
+            int SPEED, int VISION, int HEALTH, int DAMAGE, int DEFENSE, int MINRANGE, int MAXRANGE,
             double DMG_VS_INFANTRY, double DMG_VS_ARMORED, double DMG_VS_HEAVY,
             UnitAttackType ATTACKTYPE,
             UnitArmorClass ARMORCLASS,
             UnitSuperType SUPERTYPE
         ){
             this.ID = ID;
+            this.NAME = NAME;
 
             this.SPEED = SPEED;
             this.VISION = VISION;
