@@ -247,12 +247,13 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void createFXSceneUI(){
-        Font font = new Font(36);
+        String css = this.getClass().getResource("../../../views/style.css").toExternalForm();
+        root2D.getStylesheets().add(css);
+
         escapeMenuButton = new Button("Menu");
         escapeMenuButton.setPrefWidth(400);
         escapeMenuButton.setViewOrder(ViewOrder.UI_BUTTON);
         escapeMenuButton.setVisible(true);
-        escapeMenuButton.setFont(font);
         escapeMenuButton.setOnMouseClicked(mouseEvent -> {
             toggleEscapeMenu();
         });
@@ -262,7 +263,6 @@ public class InGameUiController extends AbstractUiController {
         endTurnButton.setPrefWidth(400);
         endTurnButton.setViewOrder(ViewOrder.UI_BUTTON);
         endTurnButton.setVisible(true);
-        endTurnButton.setFont(font);
         endTurnButton.setOnMouseClicked(mouseEvent -> {
             endTurnButtonClicked();
         });
@@ -284,7 +284,6 @@ public class InGameUiController extends AbstractUiController {
         quitConfirmButton.setTranslateY(800);
         quitConfirmButton.setViewOrder(ViewOrder.UI_BUTTON);
         quitConfirmButton.setVisible(true);
-        quitConfirmButton.setFont(font);
         quitConfirmButton.setOnMouseClicked(mouseEvent -> {
             quitGame();
         });
