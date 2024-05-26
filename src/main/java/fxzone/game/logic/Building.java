@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
@@ -53,8 +54,10 @@ public class Building extends TileSpaceObject{
 
     private void initializeConstructionMenuUI(){
         constructionMenu = new Pane();
-        constructionMenu.setPrefWidth(384);
-        constructionMenu.setPrefHeight(1024);
+        int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
+        int FONT_SIZE = 36 * UI_SIZE / 128;
+        constructionMenu.setPrefWidth(3* UI_SIZE);
+        constructionMenu.setPrefHeight(8* UI_SIZE);
         constructionMenu.setVisible(true);
         constructionMenu.setStyle("-fx-background-color: #282828;");
         constructionMenu.setViewOrder(ViewOrder.GAME_BUILDING_UI_BACKGROUND);
@@ -63,22 +66,23 @@ public class Building extends TileSpaceObject{
         for(UnitType unitType : Codex.BUILDABLE_UNIT_TYPES){
             ImageView unitIcon = new ImageView();
             unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, Color.CYAN)));
-            unitIcon.setFitWidth(128);
-            unitIcon.setFitHeight(128);
+            unitIcon.setFitWidth(UI_SIZE);
+            unitIcon.setFitHeight(UI_SIZE);
             unitIcon.setTranslateX(0);
-            unitIcon.setTranslateY(128*i);
+            unitIcon.setTranslateY(UI_SIZE*i);
             unitIcon.setVisible(true);
             unitIcon.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
             constructionMenu.getChildren().add(unitIcon);
 
             Button unitPurchaseButton = new Button();
-            unitPurchaseButton.setPrefWidth(256);
-            unitPurchaseButton.setPrefHeight(128);
-            unitPurchaseButton.setTranslateX(128);
-            unitPurchaseButton.setTranslateY(128*i);
+            unitPurchaseButton.setPrefWidth(2* UI_SIZE);
+            unitPurchaseButton.setPrefHeight(UI_SIZE);
+            unitPurchaseButton.setTranslateX(UI_SIZE);
+            unitPurchaseButton.setTranslateY(UI_SIZE*i);
             unitPurchaseButton.setVisible(true);
             unitPurchaseButton.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
             unitPurchaseButton.setText(Codex.getUnitProfile(unitType).NAME);
+            unitPurchaseButton.setStyle(unitPurchaseButton.getStyle()+ " ;-fx-font-size:"+FONT_SIZE+";");
             constructionMenu.getChildren().add(unitPurchaseButton);
 
             i++;
