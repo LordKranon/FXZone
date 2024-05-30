@@ -31,7 +31,7 @@ public class Building extends TileSpaceObject{
         this.buildingType = buildingType;
         this.gameObjectBuilding = new GameObjectBuilding(buildingType, x, y, tileRenderSize, group, Color.WHITE);
         this.gameObjectInTileSpace = this.gameObjectBuilding;
-        initializeConstructionMenuUI();
+        initializeConstructionMenuUI(null);
     }
     public Building(BuildingSerializable buildingSerializable, double tileRenderSize, Group group, Game game){
         super(buildingSerializable);
@@ -49,10 +49,10 @@ public class Building extends TileSpaceObject{
             buildingType, x, y, tileRenderSize, group, playerColor
         );
         this.gameObjectInTileSpace = this.gameObjectBuilding;
-        initializeConstructionMenuUI();
+        initializeConstructionMenuUI(playerColor);
     }
 
-    private void initializeConstructionMenuUI(){
+    private void initializeConstructionMenuUI(Color color){
         constructionMenu = new Pane();
         int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
         int FONT_SIZE = 36 * UI_SIZE / 128;
@@ -65,7 +65,7 @@ public class Building extends TileSpaceObject{
         int i = 0;
         for(UnitType unitType : Codex.BUILDABLE_UNIT_TYPES){
             ImageView unitIcon = new ImageView();
-            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, Color.CYAN)));
+            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, color)));
             unitIcon.setFitWidth(UI_SIZE);
             unitIcon.setFitHeight(UI_SIZE);
             unitIcon.setTranslateX(0);
