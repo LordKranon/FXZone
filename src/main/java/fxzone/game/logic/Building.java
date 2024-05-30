@@ -26,12 +26,9 @@ public class Building extends TileSpaceObject{
 
     private Pane constructionMenu;
 
-    public Building(BuildingType buildingType, int x, int y, double tileRenderSize, Group group) {
-        super(x, y, tileRenderSize, group);
+    public Building(BuildingType buildingType, int x, int y) {
+        super(x, y);
         this.buildingType = buildingType;
-        this.gameObjectBuilding = new GameObjectBuilding(buildingType, x, y, tileRenderSize, group, Color.WHITE);
-        this.gameObjectInTileSpace = this.gameObjectBuilding;
-        initializeConstructionMenuUI(null);
     }
     public Building(BuildingSerializable buildingSerializable, double tileRenderSize, Group group, Game game){
         super(buildingSerializable);
@@ -85,6 +82,10 @@ public class Building extends TileSpaceObject{
             unitPurchaseButton.setStyle(unitPurchaseButton.getStyle()+ " ;-fx-font-size:"+FONT_SIZE+";");
             constructionMenu.getChildren().add(unitPurchaseButton);
 
+            unitPurchaseButton.setOnMouseClicked(mouseEvent -> {
+                unitPurchaseButtonClicked(unitType);
+            });
+
             i++;
         }
 
@@ -92,6 +93,13 @@ public class Building extends TileSpaceObject{
     }
     public Pane getConstructionMenu(){
         return constructionMenu;
+    }
+    private void unitPurchaseButtonClicked(UnitType unitType){
+        //TODO Check if valid purchasing
+        createUnitOnBuilding(unitType);
+    }
+    private void createUnitOnBuilding(UnitType unitType){
+
     }
 
     public BuildingType getBuildingType(){

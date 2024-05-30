@@ -43,17 +43,17 @@ public class LobbyLocalUiController extends LobbyUiController{
         Set<UnitType> unitTypes = EnumSet.allOf(UnitType.class);
         for(UnitType unitType : unitTypes){
 
-            Unit u = new Unit(unitType, 1, i, 0, null);
-            map.addUnit(u);
+            Unit u = new Unit(unitType, 1, i);
+            map.getUnits().add(u);
             u.setOwnerId(1);
 
-            Unit v = new Unit(unitType, 4, i++, 0, null);
-            map.addUnit(v);
+            Unit v = new Unit(unitType, 4, i++);
+            map.getUnits().add(v);
             v.setOwnerId(2);
         }
 
-        Building b = new Building(BuildingType.CITY, 0, 0, 0, null);
-        map.addBuilding(b);
+        Building b = new Building(BuildingType.CITY, 0, 0);
+        map.getBuildings().add(b);
         b.setOwnerId(1);
         /*
         END Creating map.

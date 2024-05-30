@@ -23,10 +23,8 @@ public class TileSpaceObject {
      *
      * @param x game logical tile position in the map
      * @param y game logical tile position in the map
-     * @param tileRenderSize graphical size
-     * @param group graphical object group
      */
-    public TileSpaceObject(int x, int y, double tileRenderSize, Group group){
+    public TileSpaceObject(int x, int y){
         this.x = x;
         this.y = y;
     }

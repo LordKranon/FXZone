@@ -47,7 +47,7 @@ public class Map {
         this.tiles = new Tile[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                this.tiles[i][j] = new Tile(i, j, tileRenderSize, group);
+                this.tiles[i][j] = new Tile(i, j);
             }
         }
         this.units = new ArrayList<Unit>();
@@ -168,7 +168,10 @@ public class Map {
         tileSpaceObject.changeTileRenderSize(this);
     }
 
-    public void addUnit(Unit unit){
+    /**
+     * Add a unit fully and graphically to a finished map in a started or running game.
+     */
+    private void addUnit(Unit unit){
         units.add(unit);
         try{
             tiles[unit.x][unit.y].setUnitOnTile(unit);
@@ -190,7 +193,7 @@ public class Map {
         }
         unit.onRemoval(subGroupMapUnits);
     }
-    public void addBuilding(Building building){
+    private void addBuilding(Building building){
         buildings.add(building);
         try{
             tiles[building.x][building.y].setBuildingOnTile(building);

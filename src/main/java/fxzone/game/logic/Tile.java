@@ -23,16 +23,11 @@ public class Tile extends TileSpaceObject{
      *
      * @param x              game logical tile position in the map
      * @param y              game logical tile position in the map
-     * @param tileRenderSize graphical size
-     * @param group          graphical object group
      */
-    public Tile(int x, int y, double tileRenderSize, Group group) {
-        super(x, y, tileRenderSize, group);
+    public Tile(int x, int y) {
+        super(x, y);
         this.tileType = TileType.PLAINS;
-        this.gameObjectInTileSpace = new GameObjectInTileSpace(AssetHandler.getImage(
-            "/images/terrain/tiles/tile_plains.png"), x, y, tileRenderSize, group);
     }
-
     public Tile(TileSerializable tileSerializable, double tileRenderSize, Group group){
         super(tileSerializable);
         this.tileType = tileSerializable.tileType;

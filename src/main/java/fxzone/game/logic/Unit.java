@@ -86,19 +86,10 @@ public class Unit extends TileSpaceObject{
      *
      * @param x              game logical tile position in the map
      * @param y              game logical tile position in the map
-     * @param tileRenderSize graphical size
-     * @param group          graphical object group
      */
-    public Unit(UnitType unitType, int x, int y, double tileRenderSize, Group group) {
-        super(x, y, tileRenderSize, group);
+    public Unit(UnitType unitType, int x, int y) {
+        super(x, y);
         this.unitType = unitType;
-
-        this.gameObjectUnit = new GameObjectUnit(unitType, x, y, tileRenderSize, group, Color.WHITE);
-        this.gameObjectInTileSpace = this.gameObjectUnit;
-
-        this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
-        initializeStats();
-        initializeMediaPlayer();
     }
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);

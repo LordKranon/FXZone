@@ -65,18 +65,18 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         START Creating map.
         */
         Map map = new Map(25, 15, null);
-        Unit tank1 = new Unit(UnitType.TANK_BATTLE, 1, 1, map.getTileRenderSize(), null);
-        map.addUnit(tank1);
-        Unit tank2 = new Unit(UnitType.TANK_HUNTER, 2, 1, 0, null);
-        map.addUnit(tank2);
-        Unit tank3 = new Unit(UnitType.ARTILLERY, 3, 1, 0, null);
-        map.addUnit(tank3);
-        Unit tank4 = new Unit(UnitType.ARTILLERY, 4, 1, 0, null);
-        map.addUnit(tank4);
-        map.addUnit(new Unit(UnitType.TANK_BATTLE, 25, 15, 0, null));
+        Unit tank1 = new Unit(UnitType.TANK_BATTLE, 1, 1);
+        map.getUnits().add(tank1);
+        Unit tank2 = new Unit(UnitType.TANK_HUNTER, 2, 1);
+        map.getUnits().add(tank2);
+        Unit tank3 = new Unit(UnitType.ARTILLERY, 3, 1);
+        map.getUnits().add(tank3);
+        Unit tank4 = new Unit(UnitType.ARTILLERY, 4, 1);
+        map.getUnits().add(tank4);
+        map.getUnits().add(new Unit(UnitType.TANK_BATTLE, 25, 15));
 
-        Unit infantry1 = new Unit(UnitType.INFANTRY, 0, 0, 0, null);
-        map.addUnit(infantry1);
+        Unit infantry1 = new Unit(UnitType.INFANTRY, 0, 0);
+        map.getUnits().add(infantry1);
         /*
         END Creating map.
         */
