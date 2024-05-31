@@ -7,6 +7,7 @@ import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.GameActionPacket;
+import fxzone.net.packet.UnitCreatedPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -48,9 +49,20 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         endTurn();
     }
 
+    private void onNetworkPlayerCreatesUnit(UnitCreatedPacket unitCreatedPacket){
+        /*
+        Same desync problem?
+         */
+        // Since unit graphics can't be created outside of FX application thread, listen in FX app thread for new units created
+        //createUnit(unitCreatedPacket.getUnitSerializable());
+        unitsToBeCreated.add(unitCreatedPacket.getUnitSerializable());
+        offThreadGraphicsNeedHandling = true;
+    }
+
     protected void onNetworkPlayerGameAction(GameActionPacket gameActionPacket){
         switch (gameActionPacket.getGameActionSpecification()){
             case UNIT_MOVE_COMMAND: onNetworkPlayerUnitMoveCommandReceived((UnitMoveCommandPacket) gameActionPacket); break;
+            case UNIT_CREATED: onNetworkPlayerCreatesUnit((UnitCreatedPacket) gameActionPacket); break;
             case END_TURN: onNetworkPlayerEndTurn(); break;
             default: break;
         }

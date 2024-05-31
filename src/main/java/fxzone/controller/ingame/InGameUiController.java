@@ -53,6 +53,8 @@ public class InGameUiController extends AbstractUiController {
 
     private final AbstractGameController gameController;
 
+    protected boolean offThreadGraphicsNeedHandling;
+
     /*
     UI ELEMENTS
      */
@@ -140,6 +142,12 @@ public class InGameUiController extends AbstractUiController {
 
     private ArrayDeque<Point> selectedUnitQueuedPath;
 
+    /**
+     * Used in case of unit creation info coming in over network,
+     * which needs to be transferred to the FX app thread for graphics.
+     */
+    protected final ArrayList<UnitSerializable> unitsToBeCreated = new ArrayList<>();
+
     /*
     GAME DECOR SETTINGS
      */
@@ -193,6 +201,7 @@ public class InGameUiController extends AbstractUiController {
     @Override
     public void update(AbstractGameController gameController, double delta) {
         refreshUi();
+        handleOffThreadGraphics();
         handleClicks();
         moveMap(delta);
         handlePulsatingElements(delta);
@@ -332,6 +341,20 @@ public class InGameUiController extends AbstractUiController {
 
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
+    }
+
+    private void handleOffThreadGraphics(){
+        if(offThreadGraphicsNeedHandling){
+            offThreadGraphicsNeedHandling = false;
+            if(unitsToBeCreated.isEmpty()){
+                System.err.println("[IN-GAME-UI-CONTROLLER] Tried to handle off-thread graphics, but no newly created units were found");
+            } else {
+                for(UnitSerializable unitSerializable : unitsToBeCreated){
+                    createUnit(unitSerializable);
+                }
+                unitsToBeCreated.clear();
+            }
+        }
     }
 
     private void handleClicks(){

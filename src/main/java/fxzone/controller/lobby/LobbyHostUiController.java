@@ -4,6 +4,8 @@ import fxzone.controller.ServerHostController;
 import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
@@ -77,6 +79,11 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
 
         Unit infantry1 = new Unit(UnitType.INFANTRY, 0, 0);
         map.getUnits().add(infantry1);
+
+        Building building1 = new Building(BuildingType.FACTORY, 0, 0);
+        map.getBuildings().add(building1);
+        Building building2 = new Building(BuildingType.CITY, 5, 5);
+        map.getBuildings().add(building2);
         /*
         END Creating map.
         */
@@ -91,6 +98,8 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         tank2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): 0);
         tank3.setOwnerId(playerList.size() > 2 ? playerList.get(2).getId(): 0);
         infantry1.setOwnerId(hostingPlayer.getId());
+        building1.setOwnerId(hostingPlayer.getId());
+        building2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): hostingPlayer.getId());
 
         /*
         * START Creating game.

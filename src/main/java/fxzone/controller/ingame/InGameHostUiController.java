@@ -4,8 +4,10 @@ import fxzone.controller.ServerHostController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.net.packet.EndTurnPacket;
 import fxzone.net.packet.GameActionPacket;
+import fxzone.net.packet.UnitCreatedPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import fxzone.net.server.Server;
 import java.awt.Point;
@@ -49,6 +51,12 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
         super.onPlayerUnitMoveCommand(path, pointToAttack);
         server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path, pointToAttack));
+    }
+
+    @Override
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
+        super.onPlayerCreatesUnit(unitSerializable);
+        server.sendPacketToAllVerifiedPlayers(new UnitCreatedPacket(unitSerializable));
     }
 
     @Override

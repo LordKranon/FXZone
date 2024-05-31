@@ -4,9 +4,11 @@ import fxzone.controller.ClientJoinedController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.net.client.Client;
 import fxzone.net.packet.EndTurnPacket;
 import fxzone.net.packet.GameActionPacket;
+import fxzone.net.packet.UnitCreatedPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
@@ -69,6 +71,11 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
         client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path, pointToAttack));
         turnStateToNeutral();
+    }
+
+    @Override
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
+        client.sendPacket(new UnitCreatedPacket(unitSerializable));
     }
 
     @Override

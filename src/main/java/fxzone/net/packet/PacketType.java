@@ -13,5 +13,6 @@ public enum PacketType {
 
     GAME_ACTION,
     UNIT_MOVE_COMMAND,
+    UNIT_CREATED,
     END_TURN,
 }
