@@ -4,6 +4,7 @@ import fxzone.config.Config;
 import fxzone.controller.menu.MainMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.GeometryUtils;
@@ -27,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -34,6 +37,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -678,6 +682,14 @@ public class InGameUiController extends AbstractUiController {
             selectedBuildingUI.setTranslateX((double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX());
             selectedBuildingUI.setTranslateY((double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY());
             root2D.getChildren().add(selectedBuildingUI);
+
+            // Configure construction menu buttons
+            for (ButtonBuildingBuyUnit button : building.getConstructionMenuButtons()){
+                button.setOnMouseClicked(mouseEvent -> {
+                    if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Building button clicked, buy unit "+button.getUnitType());
+                });
+            }
+
 
 
             turnState = TurnState.BUILDING_SELECTED;

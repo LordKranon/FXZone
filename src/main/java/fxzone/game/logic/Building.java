@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.config.Config;
+import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
@@ -8,13 +9,13 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.BuildingSerializable;
+import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectBuilding;
 import java.awt.Color;
+import java.util.ArrayList;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 public class Building extends TileSpaceObject{
 
@@ -25,6 +26,10 @@ public class Building extends TileSpaceObject{
     private int ownerId;
 
     private Pane constructionMenu;
+
+    private ArrayList<ButtonBuildingBuyUnit> constructionMenuButtons;
+
+    private static final boolean verbose = true;
 
     public Building(BuildingType buildingType, int x, int y) {
         super(x, y);
@@ -50,6 +55,7 @@ public class Building extends TileSpaceObject{
     }
 
     private void initializeConstructionMenuUI(Color color){
+        constructionMenuButtons = new ArrayList<>();
         constructionMenu = new Pane();
         int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
         int FONT_SIZE = 36 * UI_SIZE / 128;
@@ -71,7 +77,7 @@ public class Building extends TileSpaceObject{
             unitIcon.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
             constructionMenu.getChildren().add(unitIcon);
 
-            Button unitPurchaseButton = new Button();
+            ButtonBuildingBuyUnit unitPurchaseButton = new ButtonBuildingBuyUnit(unitType);
             unitPurchaseButton.setPrefWidth(2* UI_SIZE);
             unitPurchaseButton.setPrefHeight(UI_SIZE);
             unitPurchaseButton.setTranslateX(UI_SIZE);
@@ -82,9 +88,7 @@ public class Building extends TileSpaceObject{
             unitPurchaseButton.setStyle(unitPurchaseButton.getStyle()+ " ;-fx-font-size:"+FONT_SIZE+";");
             constructionMenu.getChildren().add(unitPurchaseButton);
 
-            unitPurchaseButton.setOnMouseClicked(mouseEvent -> {
-                unitPurchaseButtonClicked(unitType);
-            });
+            constructionMenuButtons.add(unitPurchaseButton);
 
             i++;
         }
@@ -94,12 +98,17 @@ public class Building extends TileSpaceObject{
     public Pane getConstructionMenu(){
         return constructionMenu;
     }
+    public ArrayList<ButtonBuildingBuyUnit> getConstructionMenuButtons(){
+        return constructionMenuButtons;
+    }
     private void unitPurchaseButtonClicked(UnitType unitType){
-        //TODO Check if valid purchasing
+        //TODO Check if valid purchasing and valid unit creation
+        if(verbose) System.out.println(this+" Unit purchase button clicked");
         createUnitOnBuilding(unitType);
     }
     private void createUnitOnBuilding(UnitType unitType){
-
+        Unit unit = new Unit(unitType, x, y);
+        UnitSerializable unitSerializable = new UnitSerializable(unit);
     }
 
     public BuildingType getBuildingType(){
