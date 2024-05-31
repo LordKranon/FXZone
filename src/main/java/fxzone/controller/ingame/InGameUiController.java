@@ -10,6 +10,7 @@ import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
@@ -20,6 +21,7 @@ import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
@@ -28,8 +30,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -37,13 +37,11 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public class InGameUiController extends AbstractUiController {
@@ -129,7 +127,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Only used at initialization to determine players.
      */
-    protected int thisPlayerId;
+    protected int thisPlayerIdTemp;
 
     protected Unit selectedUnit;
     protected Building selectedBuilding;
@@ -155,10 +153,10 @@ public class InGameUiController extends AbstractUiController {
     static final boolean verbose = true;
 
 
-    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame, int thisPlayerId) {
+    public InGameUiController(AbstractGameController gameController, GameSerializable initialGame, int thisPlayerIdTemp) {
         super(gameController);
         this.gameController = gameController;
-        this.thisPlayerId = thisPlayerId;
+        this.thisPlayerIdTemp = thisPlayerIdTemp;
         initializeGame(initialGame);
         initializeGameSpecifics();
 
@@ -687,9 +685,9 @@ public class InGameUiController extends AbstractUiController {
             for (ButtonBuildingBuyUnit button : building.getConstructionMenuButtons()){
                 button.setOnMouseClicked(mouseEvent -> {
                     if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Building button clicked, buy unit "+button.getUnitType());
+                    buyUnitButtonClicked(button.getUnitType());
                 });
             }
-
 
 
             turnState = TurnState.BUILDING_SELECTED;
@@ -702,6 +700,16 @@ public class InGameUiController extends AbstractUiController {
     protected void deselectUnit(){
         selectedUnit.setStance(UnitStance.NORMAL);
         turnStateToNeutral();
+    }
+
+    private void buyUnitButtonClicked(UnitType unitType){
+        //TODO Check if valid buy and if unit creation possible
+
+        Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY());
+        createdUnit.setOwnerId(thisPlayer.getId());
+        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
+        onPlayerCreatesUnit(createdUnitSerializable);
+        deselectBuilding();
     }
 
     private void onSelectUnitCalculateMoveCommandGrid(){
@@ -772,6 +780,12 @@ public class InGameUiController extends AbstractUiController {
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
         commandUnitToMove(selectedUnit, path, pointToAttack);
         turnStateToNeutral();
+    }
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
+        createUnit(unitSerializable);
+    }
+    protected void createUnit(UnitSerializable unitSerializable){
+        map.createNewUnit(unitSerializable, game);
     }
 
     /**

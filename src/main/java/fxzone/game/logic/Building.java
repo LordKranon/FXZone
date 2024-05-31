@@ -101,15 +101,6 @@ public class Building extends TileSpaceObject{
     public ArrayList<ButtonBuildingBuyUnit> getConstructionMenuButtons(){
         return constructionMenuButtons;
     }
-    private void unitPurchaseButtonClicked(UnitType unitType){
-        //TODO Check if valid purchasing and valid unit creation
-        if(verbose) System.out.println(this+" Unit purchase button clicked");
-        createUnitOnBuilding(unitType);
-    }
-    private void createUnitOnBuilding(UnitType unitType){
-        Unit unit = new Unit(unitType, x, y);
-        UnitSerializable unitSerializable = new UnitSerializable(unit);
-    }
 
     public BuildingType getBuildingType(){
         return buildingType;

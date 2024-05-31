@@ -168,6 +168,10 @@ public class Map {
         tileSpaceObject.changeTileRenderSize(this);
     }
 
+    public void createNewUnit(UnitSerializable unitSerializable, Game game){
+        Unit unit = new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game);
+        addUnit(unit);
+    }
     /**
      * Add a unit fully and graphically to a finished map in a started or running game.
      */

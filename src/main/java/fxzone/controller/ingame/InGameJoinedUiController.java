@@ -84,7 +84,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     protected void initializeGameSpecifics(){
         Player thisPlayerToBe = null;
         for(Player player : this.game.getPlayers()){
-            if(player.getId() == thisPlayerId){
+            if(player.getId() == thisPlayerIdTemp){
                 thisPlayerToBe = player;
                 break;
             }
