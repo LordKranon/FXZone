@@ -60,7 +60,12 @@ public class InGameUiController extends AbstractUiController {
      */
     private Button escapeMenuButton;
     private Button endTurnButton;
+
     private Label labelPlayerName;
+    private Button buttonPlayerCash;
+    private Label labelHoverName;
+    private Button buttonHoverInfo;
+
     private VBox escapeMenu;
 
 
@@ -73,6 +78,7 @@ public class InGameUiController extends AbstractUiController {
      * Game logical tile of the map that the mouse pointer is hovering over.
      */
     private int tileHoveredX = 0, tileHoveredY = 0;
+    private Point tileHovered;
 
     /**
      * Indicates that the mouse pointer is in bounds of the map.
@@ -237,8 +243,12 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(hBox);
         VBox vBox = (VBox) hBox.getChildren().get(0);
         HBox hBoxInner = (HBox) vBox.getChildren().get(2);
-        VBox vBoxInner1 = (VBox) hBoxInner.getChildren().get(0);
-        labelPlayerName = (Label) vBoxInner1.getChildren().get(0);
+        VBox vBoxPlayerInfo = (VBox) hBoxInner.lookup("#vBoxPlayerInfo");
+        labelPlayerName = (Label) vBoxPlayerInfo.lookup("#labelPlayerName");
+        buttonPlayerCash = (Button) vBoxPlayerInfo.lookup("#buttonPlayerCash");
+        VBox vBoxHoverInfo = (VBox) hBoxInner.lookup("#vBoxHoverInfo");
+        labelHoverName = (Label) vBoxHoverInfo.lookup("#labelHoverName");
+        buttonHoverInfo = (Button) vBoxHoverInfo.lookup("#buttonHoverInfo");
 
     }
 
@@ -251,6 +261,8 @@ public class InGameUiController extends AbstractUiController {
     protected void setLabelToPlayer(Player player){
         labelPlayerName.setText(player.getName());
         labelPlayerName.setTextFill(Color.web(player.getColor().toString()));
+
+        buttonPlayerCash.setText(player.getName());
     }
 
     private void createTileSelector(){
@@ -569,14 +581,25 @@ public class InGameUiController extends AbstractUiController {
      * Determine the game logical tile of the map that the mouse is hovering over.
      */
     private void findHoveredTile(){
-        try {
-            Point2D pointHovered = gameController.getInputHandler().getLastMousePosition();
-            Tile hoveredTile = map.getTileAt(pointHovered.getX(), pointHovered.getY());
-            tileHoveredX = hoveredTile.getX();
-            tileHoveredY = hoveredTile.getY();
+        Point2D pointHovered = gameController.getInputHandler().getLastMousePosition();
+        Point pointHoveredInTileSpace = map.getPointAt(pointHovered.getX(), pointHovered.getY());
+
+        /*
+        SUBJECT TO CHANGE
+        This check happens every frame and needs to be really fast.
+         */
+        boolean hoveredTileChanged = !pointHoveredInTileSpace.equals(tileHovered);
+        if(map.isInBounds(pointHoveredInTileSpace.x, pointHoveredInTileSpace.y)){
+            tileHoveredX = pointHoveredInTileSpace.x;
+            tileHoveredY = pointHoveredInTileSpace.y;
+            tileHovered = pointHoveredInTileSpace;
             setMousePointerInBounds(true);
-        }
-        catch (ArrayIndexOutOfBoundsException e){
+
+            if(hoveredTileChanged){
+                setHoveredTileInfoLabel(tileHovered);
+            }
+
+        } else {
             setMousePointerInBounds(false);
         }
     }
@@ -584,6 +607,23 @@ public class InGameUiController extends AbstractUiController {
     private void setMousePointerInBounds(boolean mousePointerInBounds){
         this.mousePointerInBounds = mousePointerInBounds;
         tileSelector.setVisible(mousePointerInBounds);
+    }
+    private void setHoveredTileInfoLabel(Point hoveredPoint){
+        Tile tile = map.getTiles()[hoveredPoint.x][hoveredPoint.y];
+        Unit unit = tile.getUnitOnTile();
+        if(unit != null){
+            labelHoverName.setText(Codex.getUnitProfile(unit.getUnitType()).NAME);
+            buttonHoverInfo.setText(unit.getStatRemainingHealth() + "%");
+            return;
+        }
+        Building building = tile.getBuildingOnTile();
+        if(building != null){
+            labelHoverName.setText(""+building.getBuildingType());
+            buttonHoverInfo.setText("");
+            return;
+        }
+        labelHoverName.setText(""+tile.getTileType());
+        buttonHoverInfo.setText("");
     }
 
     /**

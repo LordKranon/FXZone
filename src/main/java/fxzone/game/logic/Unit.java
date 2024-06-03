@@ -422,6 +422,9 @@ public class Unit extends TileSpaceObject{
     public int getRemainingHealthOnAttack(){
         return statRemainingHealthOnAttack;
     }
+    public int getStatRemainingHealth(){
+        return statRemainingHealth;
+    }
 
     @Override
     public String toString(){

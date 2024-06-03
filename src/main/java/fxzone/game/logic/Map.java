@@ -4,6 +4,7 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
@@ -138,9 +139,16 @@ public class Map {
      * @return tile at given screen coordinates
      */
     public Tile getTileAt(double graphicalX, double graphicalY) throws ArrayIndexOutOfBoundsException{
+        Point point = getPointAt(graphicalX, graphicalY);
+        return tiles[point.x][point.y];
+    }
+    /**
+     * Convert graphical true position to tilespace position.
+     */
+    public Point getPointAt(double graphicalX, double graphicalY) {
         int tileX = (int)Math.floor((graphicalX - offsetX) / tileRenderSize);
         int tileY = (int)Math.floor((graphicalY - offsetY) / tileRenderSize);
-        return tiles[tileX][tileY];
+        return new Point(tileX, tileY);
     }
 
     /**

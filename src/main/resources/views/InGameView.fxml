@@ -27,15 +27,15 @@
     </HBox>
 
     <HBox spacing="40" style="-fx-background-color: #303030;">
-      <VBox>
-        <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE">
+      <VBox fx:id="vBoxPlayerInfo">
+        <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE" fx:id="labelPlayerName">
           <font>
             <Font size="50.0"/>
           </font>
         </Label>
 
         <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="400.0" text="TESTTEST">
+          prefWidth="400.0" text="TESTTEST" fx:id="buttonPlayerCash">
         </Button>
 
         <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
@@ -45,15 +45,15 @@
         </Label>
       </VBox>
 
-      <VBox>
-        <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE">
+      <VBox fx:id="vBoxHoverInfo">
+        <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE" fx:id="labelHoverName">
           <font>
             <Font size="50.0"/>
           </font>
         </Label>
 
         <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="400.0" text="TESTTEST2">
+          prefWidth="400.0" text="TESTTEST2" fx:id="buttonHoverInfo">
         </Button>
 
         <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
