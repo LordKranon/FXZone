@@ -54,9 +54,9 @@ public class InGameHostUiController extends InGameNetworkUiController implements
     }
 
     @Override
-    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
-        super.onPlayerCreatesUnit(unitSerializable);
-        server.sendPacketToAllVerifiedPlayers(new UnitCreatedPacket(unitSerializable));
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
+        super.onPlayerCreatesUnit(unitSerializable, statPurchasingPrice);
+        server.sendPacketToAllVerifiedPlayers(new UnitCreatedPacket(unitSerializable, statPurchasingPrice));
     }
 
     @Override

@@ -12,16 +12,24 @@ public class Player {
 
     private final int id;
 
+    /*
+    GAMEPLAY
+     */
+    private int statResourceCash;
+
     public Player(String name, Color color, int id){
         this.name = name;
         this.color = color;
         this.id = id;
     }
-
     public Player(PlayerSerializable playerSerializable){
         this.name = playerSerializable.name;
         this.color = Color.web(playerSerializable.color);
         this.id = playerSerializable.id;
+        initializeStats();
+    }
+    private void initializeStats(){
+        this.statResourceCash = 100;
     }
 
     public Color getColor(){
@@ -47,5 +55,12 @@ public class Player {
     @Override
     public String toString(){
         return "PLAYER"+id+":"+name+":"+super.toString();
+    }
+
+    public int getStatResourceCash(){
+        return statResourceCash;
+    }
+    public void setStatResourceCash(int cash){
+        this.statResourceCash = cash;
     }
 }

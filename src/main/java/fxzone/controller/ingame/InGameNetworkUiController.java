@@ -54,8 +54,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         Same desync problem?
          */
         // Since unit graphics can't be created outside of FX application thread, listen in FX app thread for new units created
-        //createUnit(unitCreatedPacket.getUnitSerializable());
-        unitsToBeCreated.add(unitCreatedPacket.getUnitSerializable());
+        unitsToBeCreated.put(unitCreatedPacket.getUnitSerializable(), unitCreatedPacket.getStatPurchasingPrice());
         offThreadGraphicsNeedHandling = true;
     }
 

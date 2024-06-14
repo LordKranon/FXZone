@@ -74,8 +74,8 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     }
 
     @Override
-    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
-        client.sendPacket(new UnitCreatedPacket(unitSerializable));
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
+        client.sendPacket(new UnitCreatedPacket(unitSerializable, statPurchasingPrice));
     }
 
     @Override

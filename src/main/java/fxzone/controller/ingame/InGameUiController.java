@@ -152,7 +152,7 @@ public class InGameUiController extends AbstractUiController {
      * Used in case of unit creation info coming in over network,
      * which needs to be transferred to the FX app thread for graphics.
      */
-    protected final ArrayList<UnitSerializable> unitsToBeCreated = new ArrayList<>();
+    protected final HashMap<UnitSerializable, Integer> unitsToBeCreated = new HashMap<>();
 
     /*
     GAME DECOR SETTINGS
@@ -212,7 +212,7 @@ public class InGameUiController extends AbstractUiController {
         moveMap(delta);
         handlePulsatingElements(delta);
         zoomMap();
-        findHoveredTile();
+        handleHoveredTile();
         moveSelector();
         moveMoveCommandArrowAndGridTiles();
         handleSelectedUnitPathQueue();
@@ -262,7 +262,7 @@ public class InGameUiController extends AbstractUiController {
         labelPlayerName.setText(player.getName());
         labelPlayerName.setTextFill(Color.web(player.getColor().toString()));
 
-        buttonPlayerCash.setText(player.getName());
+        buttonPlayerCash.setText("$"+player.getStatResourceCash());
     }
 
     private void createTileSelector(){
@@ -361,8 +361,8 @@ public class InGameUiController extends AbstractUiController {
             if(unitsToBeCreated.isEmpty()){
                 System.err.println("[IN-GAME-UI-CONTROLLER] Tried to handle off-thread graphics, but no newly created units were found");
             } else {
-                for(UnitSerializable unitSerializable : unitsToBeCreated){
-                    createUnit(unitSerializable);
+                for(UnitSerializable unitSerializable : unitsToBeCreated.keySet()){
+                    createUnit(unitSerializable, unitsToBeCreated.get(unitSerializable));
                 }
                 unitsToBeCreated.clear();
             }
@@ -580,7 +580,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Determine the game logical tile of the map that the mouse is hovering over.
      */
-    private void findHoveredTile(){
+    private void handleHoveredTile(){
         Point2D pointHovered = gameController.getInputHandler().getLastMousePosition();
         Point pointHoveredInTileSpace = map.getPointAt(pointHovered.getX(), pointHovered.getY());
 
@@ -771,7 +771,7 @@ public class InGameUiController extends AbstractUiController {
         Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY());
         createdUnit.setOwnerId(thisPlayer.getId());
         UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
-        onPlayerCreatesUnit(createdUnitSerializable);
+        onPlayerCreatesUnit(createdUnitSerializable, 40);
         deselectBuilding();
     }
 
@@ -844,12 +844,25 @@ public class InGameUiController extends AbstractUiController {
         commandUnitToMove(selectedUnit, path, pointToAttack);
         turnStateToNeutral();
     }
-    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable){
-        createUnit(unitSerializable);
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
+        createUnit(unitSerializable, statPurchasingPrice);
     }
-    protected void createUnit(UnitSerializable unitSerializable){
+    protected void createUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
         map.createNewUnit(unitSerializable, game);
+        payUnitPurchasingPrice(unitSerializable, statPurchasingPrice);
     }
+    protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
+        if((statPurchasingPrice != 0) && (unitSerializable.ownerId != 0)){
+            Player owner = game.getPlayer(unitSerializable.ownerId);
+            if(owner == null){
+                System.err.println("[IN-GAME-UI-CONTROLLER] [createUnit] could not find unit owner");
+                return;
+            }
+            owner.setStatResourceCash(owner.getStatResourceCash() - statPurchasingPrice);
+            setLabelToPlayer(thisPlayer);
+        }
+    }
+
 
     /**
      * The player has clicked the "end turn" button.
