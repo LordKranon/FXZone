@@ -2,6 +2,7 @@ package fxzone.engine.handler;
 
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
+import fxzone.game.logic.TileType;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class AssetHandler {
 
     private static final HashMap<KeyUnit, Image> imagesUnits = new HashMap<>();
     private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
+    private static final HashMap<KeyTile, Image> imagesTiles = new HashMap<>();
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
@@ -89,6 +91,14 @@ public class AssetHandler {
         return bufferedImage;
     }
 
+    public static Image getImageTile(KeyTile keyTile){
+        if(!imagesTiles.containsKey(keyTile)){
+            String path = "/images/terrain/tiles/tile_"+((keyTile.keyTileType == TileType.PLAINS)?"plains":"water_0")+".png";
+            Image img = new Image(AssetHandler.class.getResourceAsStream(path));
+            imagesTiles.put(keyTile, img);
+        }
+        return imagesTiles.get(keyTile);
+    }
     public static Image getImageUnit(KeyUnit keyUnit){
         if(!imagesUnits.containsKey(keyUnit)){
             Image img = loadImageOwnableTileSpaceObject(

@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyTile;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
 import javafx.scene.Group;
@@ -24,15 +25,16 @@ public class Tile extends TileSpaceObject{
      * @param x              game logical tile position in the map
      * @param y              game logical tile position in the map
      */
-    public Tile(int x, int y) {
+    public Tile(int x, int y, TileType tileType) {
         super(x, y);
-        this.tileType = TileType.PLAINS;
+        this.tileType = tileType;
     }
     public Tile(TileSerializable tileSerializable, double tileRenderSize, Group group){
         super(tileSerializable);
         this.tileType = tileSerializable.tileType;
-        this.gameObjectInTileSpace = new GameObjectInTileSpace(AssetHandler.getImage(
-            "/images/terrain/tiles/tile_plains.png"), x, y, tileRenderSize, group);
+        this.gameObjectInTileSpace = new GameObjectInTileSpace(
+            AssetHandler.getImageTile(new KeyTile(this.tileType)),
+            x, y, tileRenderSize, group);
     }
 
     public TileType getTileType(){

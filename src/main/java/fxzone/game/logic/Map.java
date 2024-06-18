@@ -46,11 +46,15 @@ public class Map {
      */
     public Map(int width, int height, Group group){
         this.tiles = new Tile[width][height];
+
+        // Temporary tile filler
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                this.tiles[i][j] = new Tile(i, j);
+                this.tiles[i][j] = new Tile(i, j, i > 5 ? TileType.WATER:TileType.PLAINS);
             }
         }
+
+
         this.units = new ArrayList<Unit>();
         this.buildings = new ArrayList<Building>();
     }
