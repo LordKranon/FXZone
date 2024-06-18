@@ -11,6 +11,8 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.save.Save;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
@@ -37,6 +39,8 @@ public class LobbyLocalUiController extends LobbyUiController{
         /*
         START Creating map.
         */
+
+        /*
         Map map = new Map(15, 25, null);
 
         int i = 1;
@@ -55,6 +59,12 @@ public class LobbyLocalUiController extends LobbyUiController{
         Building b = new Building(BuildingType.CITY, 0, 0);
         map.getBuildings().add(b);
         b.setOwnerId(1);
+
+        MapSerializable mapSerializable = new MapSerializable(map);
+        Save.saveMap(mapSerializable);
+        */
+
+
         /*
         END Creating map.
         */
@@ -62,8 +72,9 @@ public class LobbyLocalUiController extends LobbyUiController{
         /*
          * START Creating game.
          * */
-        Game game = new Game(localPlayerList, map);
-        GameSerializable gameSerializable = new GameSerializable(game);
+        //Game game = new Game(localPlayerList, map);
+        //GameSerializable gameSerializable = new GameSerializable(game);
+        GameSerializable gameSerializable = new GameSerializable(Save.loadMap(), localPlayerList);
         /*
          * END Creating game.
          * */
