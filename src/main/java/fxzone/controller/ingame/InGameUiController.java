@@ -66,7 +66,7 @@ public class InGameUiController extends AbstractUiController {
     private Label labelHoverName;
     private Button buttonHoverInfo;
 
-    private VBox escapeMenu;
+    Pane escapeMenu;
 
 
     /**
@@ -269,7 +269,7 @@ public class InGameUiController extends AbstractUiController {
         tileSelector = new GameObjectTileSelector(0, 0, 128, root2D);
     }
 
-    private void createFXSceneUI(){
+    void createFXSceneUI(){
         String css = this.getClass().getResource("../../../views/style.css").toExternalForm();
         root2D.getStylesheets().add(css);
 
@@ -293,7 +293,7 @@ public class InGameUiController extends AbstractUiController {
 
 
 
-        escapeMenu = new VBox();
+        escapeMenu = new Pane();
         escapeMenu.setPrefWidth(600);
         escapeMenu.setPrefHeight(1000);
         escapeMenu.setVisible(false);

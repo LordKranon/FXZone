@@ -39,7 +39,8 @@ public class Map {
     private double offsetX, offsetY;
 
     /**
-     * Constructor
+     * Constructor.
+     * Not ready for gameplay.
      *
      * @param width game logical amount of tiles horizontally
      * @param height game logical amount of tiles vertically
@@ -59,6 +60,29 @@ public class Map {
         this.units = new ArrayList<Unit>();
         this.buildings = new ArrayList<Building>();
     }
+    /**
+     * Temporary Constructor.
+     * Construct from loaded map and discard units and buildings, keep only tiles.
+     * Not ready for gameplay.
+     * TODO Remove
+     */
+    public Map(MapSerializable mapSerializable){
+        int width = mapSerializable.tiles.length;
+        int height = mapSerializable.tiles[0].length;
+        this.tiles = new Tile[width][height];
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                this.tiles[i][j] = new Tile(
+                    mapSerializable.tiles[i][j].x, mapSerializable.tiles[i][j].y, mapSerializable.tiles[i][j].tileType
+                );
+            }
+        }
+        this.units = new ArrayList<Unit>();
+        this.buildings = new ArrayList<Building>();
+    }
+    /**
+     * Construct a map and initialize all graphics for gameplay readiness.
+     */
     public Map(MapSerializable mapSerializable, Group group, Game game){
         this.subGroupMapTiles = new Group();
         this.subGroupMapTiles.setViewOrder(ViewOrder.MAP_TILE);
