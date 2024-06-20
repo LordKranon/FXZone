@@ -3,6 +3,7 @@ package fxzone.game.logic;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -270,4 +271,18 @@ public class Map {
         this.subGroupMapBuildings.setVisible(visible);
     }
 
+    /**
+     * Used for map editor.
+     * Remove a tile from the map and substitute a new tile for it.
+     *
+     * @param newTileSerializable the fresh tile that will replace the old tile at that position
+     */
+    public void switchTile(TileSerializable newTileSerializable){
+        Tile oldTile = tiles[newTileSerializable.x][newTileSerializable.y];
+        oldTile.onRemoval(subGroupMapTiles);
+        Tile newTile = new Tile(newTileSerializable, tileRenderSize, subGroupMapTiles);
+        tiles[newTileSerializable.x][newTileSerializable.y] = newTile;
+        newTile.setBuildingOnTile(oldTile.getBuildingOnTile());
+        newTile.setUnitOnTile(oldTile.getUnitOnTile());
+    }
 }

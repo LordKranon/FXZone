@@ -420,7 +420,7 @@ public class InGameUiController extends AbstractUiController {
         moveCommandArrowTiles.add(arrowTile);
     }
 
-    private void tileClicked(int x, int y){
+    void tileClicked(int x, int y){
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [tileClicked] during your turn with turn-state neutral");
             Tile tileClicked = map.getTiles()[x][y];

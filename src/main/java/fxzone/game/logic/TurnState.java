@@ -4,6 +4,7 @@ package fxzone.game.logic;
  * Affects how inputs are processed and how UI elements behave / what is shown on screen during IN-GAME
  */
 public enum TurnState {
+
     NO_TURN,
     NEUTRAL,
     UNIT_SELECTED,
@@ -14,4 +15,9 @@ public enum TurnState {
      */
     ENDING_TURN,
     BEGINNING_TURN,
+
+    /**
+     * Only in editor mode
+     */
+    EDITOR,
 }

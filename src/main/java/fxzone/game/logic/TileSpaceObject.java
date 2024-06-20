@@ -52,4 +52,8 @@ public class TileSpaceObject {
         this.y = y;
         gameObjectInTileSpace.setPositionInMap(x, y, map);
     }
+
+    public void onRemoval(Group group){
+        gameObjectInTileSpace.removeSelfFromRoot(group);
+    }
 }

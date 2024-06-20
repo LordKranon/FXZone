@@ -414,8 +414,9 @@ public class Unit extends TileSpaceObject{
      * Called when this unit is killed.
      * Remove all graphical game objects.
      */
+    @Override
     public void onRemoval(Group group){
-        gameObjectUnit.removeSelfFromRoot(group);
+        super.onRemoval(group);
         gameObjectUiUnitHealth.removeSelfFromRoot(group);
     }
 

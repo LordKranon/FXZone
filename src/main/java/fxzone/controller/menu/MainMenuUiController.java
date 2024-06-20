@@ -1,9 +1,15 @@
 package fxzone.controller.menu;
 
+import fxzone.controller.ingame.InGameEditorUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.game.logic.Map;
+import fxzone.game.logic.Player;
+import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.MapSerializable;
 import java.io.IOException;
+import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -12,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 public class MainMenuUiController extends AbstractUiController {
 
@@ -84,6 +91,15 @@ public class MainMenuUiController extends AbstractUiController {
         @FXML
         public void settings(){
             gameController.setActiveUiController(new SettingsUiController(gameController));
+        }
+
+        @FXML
+        public void editor(){
+            Map map = new Map(15, 25, null);
+            MapSerializable mapSerializable = new MapSerializable(map);
+            ArrayList<Player> editorPlayerList = new ArrayList<>();
+            editorPlayerList.add(new Player("Editor", Color.CYAN, 1));
+            gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList)));
         }
 
         @FXML

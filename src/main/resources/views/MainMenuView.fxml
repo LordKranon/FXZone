@@ -103,6 +103,10 @@
                   prefWidth="400.0" text="TUTORIAL">
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="EDITOR"
+                  onAction="#editor">
+                </Button>
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="SETTINGS"
                   onAction="#settings" >
                 </Button>

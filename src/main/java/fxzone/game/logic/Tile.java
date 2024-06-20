@@ -74,4 +74,9 @@ public class Tile extends TileSpaceObject{
     public String toString(){
         return "[TILE ("+x+"; "+y+")]";
     }
+
+    @Override
+    public void onRemoval(Group group){
+        super.onRemoval(group);
+    }
 }
