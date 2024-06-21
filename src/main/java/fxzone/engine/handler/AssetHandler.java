@@ -1,8 +1,10 @@
 package fxzone.engine.handler;
 
+import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.TileType;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,6 +15,11 @@ import javafx.scene.media.Media;
 import javax.imageio.ImageIO;
 
 public class AssetHandler {
+
+    /*
+    LEGACY
+     */
+    private static final int BUFFERED_IMAGE_TYPE = 2;
 
     /**
      * Links image paths to loaded raw images.
@@ -93,9 +100,54 @@ public class AssetHandler {
 
     public static Image getImageTile(KeyTile keyTile){
         if(!imagesTiles.containsKey(keyTile)){
-            String path = "/images/terrain/tiles/tile_"+((keyTile.keyTileType == TileType.PLAINS)?"plains":"water_0")+".png";
-            Image img = new Image(AssetHandler.class.getResourceAsStream(path));
-            imagesTiles.put(keyTile, img);
+
+            if(keyTile.keyTileType == TileType.WATER){
+                // No further handling needed for water
+                String path = "/images/terrain/tiles/tile_water_0.png";
+                Image img = new Image(AssetHandler.class.getResourceAsStream(path), 256, 256, true, false);
+                imagesTiles.put(keyTile, img);
+            } else {
+                if(keyTile.keyTileType == TileType.PLAINS){
+                    String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
+                    String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
+                    String pathToWaterImg = "/images/terrain/tile_water_0";
+
+                    BufferedImage base = loadBufferedImage(pathToBaseImg);
+
+                    BufferedImage baseAllCornersCut = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
+                    Graphics gBaseAllCornersCut = baseAllCornersCut.createGraphics();
+                    gBaseAllCornersCut.drawImage(base.getSubimage(0, 4, 24, 16), 0, 4, 24, 20, 0, 0, 24, 16, null);
+                    gBaseAllCornersCut.drawImage(base.getSubimage(4, 0, 16, 24), 4, 0, 20, 24, 0, 0, 16, 24, null);
+                    gBaseAllCornersCut.dispose();
+
+                    BufferedImage baseWithCorrectCorners = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
+                    Graphics gCorrectCorners = baseWithCorrectCorners.createGraphics();
+                    gCorrectCorners.drawImage(baseAllCornersCut, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                        gCorrectCorners.drawImage(base.getSubimage(0, 0, 24, 4), 0, 0, 24, 4, 0, 0, 24, 4, null);
+                    }
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                        gCorrectCorners.drawImage(base.getSubimage(0, 0, 4, 24), 0, 0, 4, 24, 0, 0, 4, 24, null);
+                    }
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                        gCorrectCorners.drawImage(base.getSubimage(0, 20, 24, 4), 0, 20, 24, 24, 0, 0, 24, 4, null);
+                    }
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                        gCorrectCorners.drawImage(base.getSubimage(20, 0, 4, 24), 20, 0, 24, 24, 0, 0, 4, 24, null);
+                    }
+                    //TODO Draw Edges
+                    gCorrectCorners.dispose();
+
+                    BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+                    Graphics gUpscaled = upscaled.createGraphics();
+                    java.awt.Image awtImgCorrectCorners = baseWithCorrectCorners.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+                    gUpscaled.drawImage(awtImgCorrectCorners, 0, 0, null);
+                    gUpscaled.dispose();
+
+                    Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+                    imagesTiles.put(keyTile, imageFinished);
+                }
+            }
         }
         return imagesTiles.get(keyTile);
     }

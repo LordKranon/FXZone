@@ -11,11 +11,14 @@ public class KeyTile {
     public KeyTile(TileType keyTileType){
         this.keyTileType = keyTileType;
 
-        this.keyTileTypesOfNeighbors = new TileType[4];
-        this.keyTileTypesOfNeighbors[0] = TileType.PLAINS;
-        this.keyTileTypesOfNeighbors[1] = TileType.PLAINS;
-        this.keyTileTypesOfNeighbors[2] = TileType.PLAINS;
-        this.keyTileTypesOfNeighbors[3] = TileType.PLAINS;
+        this.keyTileTypesOfNeighbors = new TileType[9];
+        for(int i = 0; i < keyTileTypesOfNeighbors.length; i++){
+            this.keyTileTypesOfNeighbors[i] = TileType.PLAINS;
+        }
+    }
+    public KeyTile(TileType keyTileType, TileType[] keyTileTypesOfNeighbors){
+        this.keyTileType = keyTileType;
+        this.keyTileTypesOfNeighbors = keyTileTypesOfNeighbors;
     }
 
     @Override

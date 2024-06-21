@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -99,6 +100,23 @@ public class Map {
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, subGroupMapTiles);
+
+                // Set neighbor tileType info
+                /*
+                 */
+                TileType[] tileTypesOfNeighbors = new TileType[8];
+                for(int k = 0; k < tileTypesOfNeighbors.length; k++) {
+
+                    try {
+                        Point neighborsPosition = GeometryUtils.getNeighborsPosition(i, j, k);
+                        tileTypesOfNeighbors[k] = mapSerializable.tiles[neighborsPosition.x][neighborsPosition.y].tileType;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        tileTypesOfNeighbors[k] = TileType.PLAINS;
+                    }
+
+                }
+                this.tiles[i][j].updateTileTypesOfNeighbors(tileTypesOfNeighbors);
+
             }
         }
         this.units = new ArrayList<Unit>();

@@ -4,6 +4,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyTile;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectInTileSpace;
+import fxzone.game.render.GameObjectTile;
 import javafx.scene.Group;
 
 public class Tile extends TileSpaceObject{
@@ -13,6 +14,8 @@ public class Tile extends TileSpaceObject{
     private Unit unitOnTile;
 
     private Building buildingOnTile;
+
+    private GameObjectTile gameObjectTile;
 
     /*
     * DEBUG
@@ -32,9 +35,10 @@ public class Tile extends TileSpaceObject{
     public Tile(TileSerializable tileSerializable, double tileRenderSize, Group group){
         super(tileSerializable);
         this.tileType = tileSerializable.tileType;
-        this.gameObjectInTileSpace = new GameObjectInTileSpace(
-            AssetHandler.getImageTile(new KeyTile(this.tileType)),
+        this.gameObjectTile = new GameObjectTile(
+            this.tileType, new TileType[4],
             x, y, tileRenderSize, group);
+        this.gameObjectInTileSpace = this.gameObjectTile;
     }
 
     public TileType getTileType(){
@@ -78,5 +82,10 @@ public class Tile extends TileSpaceObject{
     @Override
     public void onRemoval(Group group){
         super.onRemoval(group);
+    }
+
+    public void updateTileTypesOfNeighbors(TileType[] tileTypesOfNeighbors){
+        //TODO
+        gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors);
     }
 }
