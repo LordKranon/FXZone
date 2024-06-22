@@ -46,6 +46,9 @@ public class KeyTile {
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder("");
+
+
+        /*
         s.append("\n");
         for(int i = 0; i < 3; i++){
             s.append((keyTileTypesOfNeighbors[i] == TileType.PLAINS) ? "P" : "-");
@@ -58,6 +61,15 @@ public class KeyTile {
         for(int i = 0; i < 3; i++){
             s.append((keyTileTypesOfNeighbors[i+5] == TileType.PLAINS) ? "P" : "-");
         }
+        */
+
+        s.append("\n "+ ((keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS) ? "P" : "-") +" ");
+        s.append("\n");
+        s.append((keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS) ? "P" : "-");
+        s.append((keyTileType == TileType.PLAINS) ? "P" : "-");
+        s.append((keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS) ? "P" : "-");
+        s.append("\n "+ ((keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS) ? "P" : "-") +" ");
+
         return s.toString();
     }
 }
