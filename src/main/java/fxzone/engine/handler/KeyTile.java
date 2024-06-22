@@ -1,5 +1,6 @@
 package fxzone.engine.handler;
 
+import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.TileType;
 
 public class KeyTile {
@@ -11,7 +12,7 @@ public class KeyTile {
     public KeyTile(TileType keyTileType){
         this.keyTileType = keyTileType;
 
-        this.keyTileTypesOfNeighbors = new TileType[9];
+        this.keyTileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int i = 0; i < keyTileTypesOfNeighbors.length; i++){
             this.keyTileTypesOfNeighbors[i] = TileType.PLAINS;
         }

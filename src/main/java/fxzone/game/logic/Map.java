@@ -53,7 +53,7 @@ public class Map {
         // Temporary tile filler
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                this.tiles[i][j] = new Tile(i, j, i > 5 ? TileType.WATER:TileType.PLAINS);
+                this.tiles[i][j] = new Tile(i, j, i > 5 ? TileType.WATER:TileType.WATER);
             }
         }
 
@@ -104,18 +104,7 @@ public class Map {
                 // Set neighbor tileType info
                 /*
                  */
-                TileType[] tileTypesOfNeighbors = new TileType[8];
-                for(int k = 0; k < tileTypesOfNeighbors.length; k++) {
-
-                    try {
-                        Point neighborsPosition = GeometryUtils.getNeighborsPosition(i, j, k);
-                        tileTypesOfNeighbors[k] = mapSerializable.tiles[neighborsPosition.x][neighborsPosition.y].tileType;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        tileTypesOfNeighbors[k] = TileType.PLAINS;
-                    }
-
-                }
-                this.tiles[i][j].updateTileTypesOfNeighbors(tileTypesOfNeighbors);
+                setNeighborTileTypeInfoForTile(i, j, mapSerializable.tiles);
 
             }
         }
@@ -127,6 +116,23 @@ public class Map {
         for(BuildingSerializable buildingSerializable : mapSerializable.buildings){
             addBuilding(new Building(buildingSerializable, tileRenderSize, subGroupMapBuildings, game));
         }
+    }
+
+    private void setNeighborTileTypeInfoForTile(int x, int y, TileSerializable[][] tilesSerializable) throws ArrayIndexOutOfBoundsException{
+        TileType[] tileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
+        for(int k = 0; k < tileTypesOfNeighbors.length; k++) {
+            try {
+                Point neighborsPosition = GeometryUtils.getNeighborsPosition(x, y, k);
+                if(tilesSerializable != null){
+                    tileTypesOfNeighbors[k] = tilesSerializable[neighborsPosition.x][neighborsPosition.y].tileType;
+                } else {
+                    tileTypesOfNeighbors[k] = this.tiles[neighborsPosition.x][neighborsPosition.y].getTileType();
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                tileTypesOfNeighbors[k] = TileType.PLAINS;
+            }
+        }
+        this.tiles[x][y].updateTileTypesOfNeighbors(tileTypesOfNeighbors);
     }
 
     /**
@@ -326,5 +332,15 @@ public class Map {
         tiles[newTileSerializable.x][newTileSerializable.y] = newTile;
         newTile.setBuildingOnTile(oldTile.getBuildingOnTile());
         newTile.setUnitOnTile(oldTile.getUnitOnTile());
+
+        for(int i = 0; i < GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS; i++){
+            Point neighbor = GeometryUtils.getNeighborsPosition(newTileSerializable.x, newTileSerializable.y, i);
+            try {
+                setNeighborTileTypeInfoForTile(neighbor.x, neighbor.y, null);
+            } catch (ArrayIndexOutOfBoundsException ignored){
+
+            }
+        }
+        setNeighborTileTypeInfoForTile(newTileSerializable.x, newTileSerializable.y, null);
     }
 }

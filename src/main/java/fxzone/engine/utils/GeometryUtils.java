@@ -4,6 +4,7 @@ import java.awt.Point;
 
 public class GeometryUtils {
 
+    public static final int TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS = 8;
     public static final int NORTH_WEST = 0, NORTH = 1, NORTH_EAST = 2, WEST = 3, EAST = 4, SOUTH_WEST = 5, SOUTH = 6, SOUTH_EAST = 7;
 
     public static Direction getPointToPointDirection(Point a, Point b){
