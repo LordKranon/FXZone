@@ -17,6 +17,11 @@ import javax.imageio.ImageIO;
 public class AssetHandler {
 
     /*
+    DEBUG
+     */
+    private static final boolean verbose = true;
+
+    /*
     LEGACY
      */
     private static final int BUFFERED_IMAGE_TYPE = 2;
@@ -29,6 +34,7 @@ public class AssetHandler {
     private static final HashMap<KeyUnit, Image> imagesUnits = new HashMap<>();
     private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
     private static final HashMap<KeyTile, Image> imagesTiles = new HashMap<>();
+
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
@@ -110,41 +116,129 @@ public class AssetHandler {
                 if(keyTile.keyTileType == TileType.PLAINS){
                     String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
                     String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
-                    String pathToWaterImg = "/images/terrain/tile_water_0";
+                    String pathToWaterImg = "/images/terrain/tiles/tile_water_0.png";
 
                     BufferedImage base = loadBufferedImage(pathToBaseImg);
+                    BufferedImage edgesSet = loadBufferedImage(pathToEdgesImg);
+                    BufferedImage baseWater = loadBufferedImage(pathToWaterImg);
 
                     BufferedImage baseAllCornersCut = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
                     Graphics gBaseAllCornersCut = baseAllCornersCut.createGraphics();
+                    gBaseAllCornersCut.drawImage(baseWater, 0, 0, null);
                     gBaseAllCornersCut.drawImage(base.getSubimage(0, 4, 24, 16), 0, 4, 24, 20, 0, 0, 24, 16, null);
                     gBaseAllCornersCut.drawImage(base.getSubimage(4, 0, 16, 24), 4, 0, 20, 24, 0, 0, 16, 24, null);
                     gBaseAllCornersCut.dispose();
 
-                    BufferedImage baseWithCorrectCorners = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
-                    Graphics gCorrectCorners = baseWithCorrectCorners.createGraphics();
-                    gCorrectCorners.drawImage(baseAllCornersCut, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                    BufferedImage terrained = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
+                    Graphics gTerrain = terrained.createGraphics();
+
+                    // Put the base image with 4 empty corners
+                    gTerrain.drawImage(baseAllCornersCut, 0, 0, 24, 24, 0, 0, 24, 24, null);
+
+                    int directPlainsNeighbors = 0;
+
+                    // Fill corners where necessary
                     if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
-                        gCorrectCorners.drawImage(base.getSubimage(0, 0, 24, 4), 0, 0, 24, 4, 0, 0, 24, 4, null);
+                        gTerrain.drawImage(base.getSubimage(0, 0, 24, 4), 0, 0, 24, 4, 0, 0, 24, 4, null);
+                        directPlainsNeighbors++;
                     }
                     if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
-                        gCorrectCorners.drawImage(base.getSubimage(0, 0, 4, 24), 0, 0, 4, 24, 0, 0, 4, 24, null);
+                        gTerrain.drawImage(base.getSubimage(0, 0, 4, 24), 0, 0, 4, 24, 0, 0, 4, 24, null);
+                        directPlainsNeighbors++;
                     }
                     if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
-                        gCorrectCorners.drawImage(base.getSubimage(0, 20, 24, 4), 0, 20, 24, 24, 0, 0, 24, 4, null);
+                        gTerrain.drawImage(base.getSubimage(0, 20, 24, 4), 0, 20, 24, 24, 0, 0, 24, 4, null);
+                        directPlainsNeighbors++;
                     }
                     if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
-                        gCorrectCorners.drawImage(base.getSubimage(20, 0, 4, 24), 20, 0, 24, 24, 0, 0, 4, 24, null);
+                        gTerrain.drawImage(base.getSubimage(20, 0, 4, 24), 20, 0, 24, 24, 0, 0, 4, 24, null);
+                        directPlainsNeighbors++;
                     }
-                    //TODO Draw Edges
-                    gCorrectCorners.dispose();
+
+                    // Draw Edges
+                    switch (directPlainsNeighbors){
+
+                        // No direct plains neighbors: This is a 1 tile island
+                        case 0:
+                            gTerrain.drawImage(edgesSet.getSubimage(48, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            break;
+
+                        // 1 direct plains neighbor: This is a peninsula, determine direction of peninsula
+                        case 1:
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
+                            } else {
+                                System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
+                            }
+                            break;
+
+                        // 2 neighbors: Either a corner or a double side
+                        case 2:
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                                gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 24, 24, 0, 0, null);
+                            } else {
+                                System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
+                            }
+                            break;
+
+                        // 3 neighbors: One side to the sea
+                        case 3:
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.WATER){
+                                gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.WATER){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.WATER){
+                                gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.WATER){
+                                gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
+                            } else {
+                                System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
+                            }
+                            break;
+
+                        // 4 neighbors: landlocked
+                        case 4: break;
+
+                        default:
+                            System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
+                            break;
+                    }
+
+                    gTerrain.dispose();
 
                     BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
                     Graphics gUpscaled = upscaled.createGraphics();
-                    java.awt.Image awtImgCorrectCorners = baseWithCorrectCorners.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+                    java.awt.Image awtImgCorrectCorners = terrained.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
                     gUpscaled.drawImage(awtImgCorrectCorners, 0, 0, null);
                     gUpscaled.dispose();
 
                     Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+
+                    if(verbose) System.out.println("[ASSET-HANDLER] [getImageTile] Loaded terrain variation "+keyTile.keyTileType+" "+keyTile);
                     imagesTiles.put(keyTile, imageFinished);
                 }
             }
