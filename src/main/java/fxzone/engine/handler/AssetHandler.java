@@ -35,6 +35,7 @@ public class AssetHandler {
     private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
     private static final HashMap<KeyTile, Image> imagesTiles = new HashMap<>();
 
+    private static final HashMap<String, BufferedImage> bufferedImages = new HashMap<>();
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
 
@@ -94,6 +95,13 @@ public class AssetHandler {
         images.put(path, new Image(AssetHandler.class.getResourceAsStream(path), width, height, true, false));
     }
 
+    private static BufferedImage getBufferedImage(String path){
+        if(!bufferedImages.containsKey(path)){
+            BufferedImage bufferedImage = loadBufferedImage(path);
+            bufferedImages.put(path, bufferedImage);
+        }
+        return bufferedImages.get(path);
+    }
     private static BufferedImage loadBufferedImage(String path){
         BufferedImage bufferedImage = null;
         try {
@@ -118,9 +126,9 @@ public class AssetHandler {
                     String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
                     String pathToWaterImg = "/images/terrain/tiles/tile_water_0.png";
 
-                    BufferedImage base = loadBufferedImage(pathToBaseImg);
-                    BufferedImage edgesSet = loadBufferedImage(pathToEdgesImg);
-                    BufferedImage baseWater = loadBufferedImage(pathToWaterImg);
+                    BufferedImage base = getBufferedImage(pathToBaseImg);
+                    BufferedImage edgesSet = getBufferedImage(pathToEdgesImg);
+                    BufferedImage baseWater = getBufferedImage(pathToWaterImg);
 
                     BufferedImage baseAllCornersCut = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
                     Graphics gBaseAllCornersCut = baseAllCornersCut.createGraphics();
@@ -277,7 +285,7 @@ public class AssetHandler {
             24, 24
         );
 
-        BufferedImage bImgUncoloredPartRaw = loadBufferedImage("/images/"+resourceName+"_up.png");
+        BufferedImage bImgUncoloredPartRaw = getBufferedImage("/images/"+resourceName+"_up.png");
         BufferedImage bImgUncoloredPartCropped = bImgUncoloredPartRaw.getSubimage(
             subImageX,
             subImageY,
