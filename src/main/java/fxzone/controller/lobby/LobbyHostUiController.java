@@ -15,6 +15,7 @@ import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
+import fxzone.save.Save;
 import java.util.ArrayList;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -66,7 +67,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         /*
         START Creating map.
         */
-        Map map = new Map(25, 15, null);
+        Map map = new Map(Save.loadMap());
         Unit tank1 = new Unit(UnitType.TANK_BATTLE, 1, 1);
         map.getUnits().add(tank1);
         Unit tank2 = new Unit(UnitType.TANK_HUNTER, 2, 1);
