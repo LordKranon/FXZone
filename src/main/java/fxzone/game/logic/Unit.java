@@ -5,6 +5,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
@@ -161,7 +162,7 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public UnitState moveCommand(ArrayDeque<Point> path, Map map, Point pointToAttack){
+    public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack){
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= Codex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
@@ -173,8 +174,15 @@ public class Unit extends TileSpaceObject{
                 directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
                 setFacingDirection(directionNextPointOnMovePath);
             }
-            setPositionInMap(finalPosition.x, finalPosition.y, map);
-            setPositionInMapVisual(oldPosition.x, oldPosition.y, map);
+            setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+
+            /*
+            Capture any building on destination tile (Temporary test).
+            TODO Will need changes
+            */
+            doCapture(game);
+
+            setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
 
             //If an attack is included in the command, the unit will perform it after moving to the destination.
             if(pointToAttack != null){
@@ -188,7 +196,7 @@ public class Unit extends TileSpaceObject{
 
             //If path is empty, movement is ended immediately and the unit goes into attack immediately
             if(path.isEmpty()){
-                onMovementEnd(map);
+                onMovementEnd(game.getMap());
             } else {
                 mediaPlayerMovement.play();
                 unitState = UnitState.MOVING;
@@ -430,5 +438,17 @@ public class Unit extends TileSpaceObject{
     @Override
     public String toString(){
         return "[UNIT "+unitType+"]";
+    }
+
+    /**
+     * If any building is on the same tile as this unit, that building is captured.
+     */
+    private void doCapture(Game game){
+        Building buildingToCapture = game.getMap().getTiles()[x][y].getBuildingOnTile();
+        if(buildingToCapture != null){
+            if(buildingToCapture.getOwnerId() != this.ownerId){
+                buildingToCapture.ownerChanged(this.ownerId, game);
+            }
+        }
     }
 }

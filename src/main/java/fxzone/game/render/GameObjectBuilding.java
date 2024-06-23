@@ -11,8 +11,12 @@ public class GameObjectBuilding extends GameObjectInTileSpace{
 
     public GameObjectBuilding(BuildingType buildingType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
-        Image image = AssetHandler.getImageBuilding(new KeyBuilding(buildingType, playerColor));
-        this.setImage(image);
+        setImageToNewOwner(buildingType, playerColor);
         this.setViewOrder(ViewOrder.GAME_BUILDING);
+    }
+
+    public void setImageToNewOwner(BuildingType buildingType, java.awt.Color color){
+        Image image = AssetHandler.getImageBuilding(new KeyBuilding(buildingType, color));
+        this.setImage(image);
     }
 }

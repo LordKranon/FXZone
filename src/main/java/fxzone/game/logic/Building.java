@@ -112,6 +112,26 @@ public class Building extends TileSpaceObject{
         this.ownerId = ownerId;
     }
 
+    /**
+     * This building is captured meaning it gets a new owner,
+     * or this buildings owner is gone and it becomes unowned.
+     */
+    public void ownerChanged(int newOwnerId, Game game){
+        if(this.ownerId == newOwnerId){
+            System.err.println(this+" [ownerChanged] New owner is old owner");
+            return;
+        }
+        this.ownerId = newOwnerId;
+        java.awt.Color playerColorNew = null;
+        try {
+            playerColorNew = FxUtils.toAwtColor(game.getPlayer(ownerId).getColor());
+        }catch (NullPointerException e){
+            System.err.println(this+" [ownerChanged] No color on owner change");
+        }
+        this.gameObjectBuilding.setImageToNewOwner(this.buildingType, playerColorNew);
+        initializeConstructionMenuUI(playerColorNew);
+    }
+
     @Override
     public String toString(){
         return "[BUILDING "+buildingType+"]";
