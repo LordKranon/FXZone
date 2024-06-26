@@ -18,6 +18,8 @@ public class InGameEditorUiController extends InGameUiController{
      */
     private static final boolean verbose = true;
 
+    private TileType editorTileTypePlaced;
+
     public InGameEditorUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
     }
@@ -38,10 +40,28 @@ public class InGameEditorUiController extends InGameUiController{
     void createFXSceneUI(){
         super.createFXSceneUI();
 
+        this.editorTileTypePlaced = TileType.PLAINS;
+        Button tileTypeButton = new Button(""+editorTileTypePlaced);
+        tileTypeButton.setPrefWidth(400);
+        tileTypeButton.setTranslateX(100);
+        tileTypeButton.setTranslateY(600);
+        tileTypeButton.setViewOrder(ViewOrder.UI_BUTTON);
+        tileTypeButton.setVisible(true);
+        tileTypeButton.setOnMouseClicked(mouseEvent -> {
+            if(editorTileTypePlaced == TileType.PLAINS){
+                editorTileTypePlaced = TileType.WATER;
+            } else {
+                editorTileTypePlaced = TileType.PLAINS;
+            }
+            tileTypeButton.setText(""+editorTileTypePlaced);
+        });
+        escapeMenu.getChildren().add(tileTypeButton);
+
+
         Button saveMapButton = new Button("Save Map");
         saveMapButton.setPrefWidth(400);
         saveMapButton.setTranslateX(100);
-        saveMapButton.setTranslateY(600);
+        saveMapButton.setTranslateY(700);
         saveMapButton.setViewOrder(ViewOrder.UI_BUTTON);
         saveMapButton.setVisible(true);
         saveMapButton.setOnMouseClicked(mouseEvent -> {
@@ -59,7 +79,7 @@ public class InGameEditorUiController extends InGameUiController{
     void tileClicked(int x, int y){
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.EDITOR){
             if (verbose) System.out.println("[EDITOR] [tileClicked] during editor");
-            Tile tile = new Tile(x, y, TileType.PLAINS);
+            Tile tile = new Tile(x, y, editorTileTypePlaced);
             TileSerializable tileSerializable = new TileSerializable(tile);
             map.switchTile(tileSerializable);
         }

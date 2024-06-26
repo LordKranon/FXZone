@@ -19,7 +19,7 @@ public class Game {
     /*
      * DEBUG
      */
-    static final boolean verbose = true;
+    static final boolean verbose = false;
 
     public Game(List<Player> players, Map map){
         this.players = new ArrayList<>();

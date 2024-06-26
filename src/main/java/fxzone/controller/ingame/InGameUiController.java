@@ -945,7 +945,7 @@ public class InGameUiController extends AbstractUiController {
             deselectBuilding();
         } else if(turnState == TurnState.UNIT_SELECTED){
             deselectUnit();
-        } else if(turnState == TurnState.NEUTRAL){
+        } else if(turnState == TurnState.NEUTRAL || turnState == TurnState.EDITOR){
             toggleEscapeMenu();
         }
     }
