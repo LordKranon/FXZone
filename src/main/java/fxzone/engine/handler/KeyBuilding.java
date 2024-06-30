@@ -27,6 +27,6 @@ public class KeyBuilding {
 
     @Override
     public int hashCode() {
-        return keyBuildingType.hashCode() ^ keyColor.hashCode();
+        return keyBuildingType.hashCode();
     }
 }

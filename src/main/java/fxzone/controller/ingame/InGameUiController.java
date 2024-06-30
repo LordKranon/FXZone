@@ -304,7 +304,7 @@ public class InGameUiController extends AbstractUiController {
         Button quitConfirmButton = new Button("Quit");
         quitConfirmButton.setPrefWidth(400);
         quitConfirmButton.setTranslateX(100);
-        quitConfirmButton.setTranslateY(800);
+        quitConfirmButton.setTranslateY(900);
         quitConfirmButton.setViewOrder(ViewOrder.UI_BUTTON);
         quitConfirmButton.setVisible(true);
         quitConfirmButton.setOnMouseClicked(mouseEvent -> {
@@ -313,7 +313,7 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.getChildren().add(quitConfirmButton);
     }
 
-    private void initializeGame(GameSerializable initialGame){
+    void initializeGame(GameSerializable initialGame){
         game = new Game(initialGame, root2D);
         map = game.getMap();
     }

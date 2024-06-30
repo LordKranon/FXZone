@@ -98,7 +98,7 @@ public class MainMenuUiController extends AbstractUiController {
             Map map = new Map(15, 25, null);
             MapSerializable mapSerializable = new MapSerializable(map);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
-            editorPlayerList.add(new Player("Editor", Color.CYAN, 1));
+            //editorPlayerList.add(new Player("Editor", Color.CYAN, 1));
             gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList)));
         }
 
