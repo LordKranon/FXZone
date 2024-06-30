@@ -81,6 +81,8 @@ public class InGameEditorUiController extends InGameUiController{
 
 
 
+        ImageView ownerIdIcon = initializeEditorMenuIcon(50, 400);
+        ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, null)));
 
         Button ownerIdButton = initializeEditorMenuButton(150, 400);
         ownerIdButton.setText("NONE");
@@ -99,10 +101,11 @@ public class InGameEditorUiController extends InGameUiController{
             }
             if(editorOwnerIdPlaced != 0){
                 ownerIdButton.setText(game.getPlayer(editorOwnerIdPlaced).getName());
+                ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, FxUtils.toAwtColor(game.getPlayer(editorOwnerIdPlaced).getColor()))));
             }else {
                 ownerIdButton.setText("NONE");
+                ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, null)));
             }
-
 
         });
 
