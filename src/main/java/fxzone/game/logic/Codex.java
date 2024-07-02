@@ -11,7 +11,7 @@ public class Codex {
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
             0, "Infantry",
-            8, 10, 100, 3, 0, 1, 1,
+            3, 10, 100, 3, 0, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
@@ -19,7 +19,7 @@ public class Codex {
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
             1, "RPG",
-            8, 10, 100, 4, 0, 1, 1,
+            3, 10, 100, 4, 0, 1, 1,
             .5, 1.5, 1.5,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
@@ -27,7 +27,7 @@ public class Codex {
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
             2, "Car",
-            8, 10, 100, 4, 2, 1, 1,
+            7, 10, 100, 4, 2, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
@@ -35,7 +35,7 @@ public class Codex {
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
             3, "Truck",
-            5, 10, 100, 0, 1, 1, 1,
+            4, 10, 100, 0, 1, 1, 1,
             1, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
@@ -43,7 +43,7 @@ public class Codex {
         ));
         put(UnitType.TANK_HUNTER, new UnitProfile(
             4, "Hunter Tank",
-            4, 10, 100, 6, 5, 1, 1,
+            5, 10, 100, 6, 5, 1, 1,
             1, 1.25, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
@@ -51,7 +51,7 @@ public class Codex {
         ));
         put(UnitType.ARTILLERY, new UnitProfile(
             5, "Artillery",
-            5, 10, 100, 6, 4, 1, 1,
+            3, 10, 100, 6, 4, 3, 5,
             1.5, 1, 1,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
@@ -59,7 +59,7 @@ public class Codex {
         ));
         put(UnitType.TANK_BATTLE, new UnitProfile(
             6, "Battle Tank",
-            3, 10, 100, 9, 7, 1, 1,
+            4, 10, 100, 9, 7, 1, 2,
             1, 1, 1.5,
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
@@ -67,7 +67,7 @@ public class Codex {
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
             7, "Rocket Artillery",
-            5, 10, 100, 6, 2, 1, 1,
+            3, 10, 100, 6, 2, 4, 6,
             1, 1.5, 1.5,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
