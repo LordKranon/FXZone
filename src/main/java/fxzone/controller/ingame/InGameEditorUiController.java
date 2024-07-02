@@ -37,6 +37,8 @@ public class InGameEditorUiController extends InGameUiController{
 
     private int editorOwnerIdPlaced;
 
+    private Button selectedPlacingButton;
+
     public InGameEditorUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
     }
@@ -70,16 +72,22 @@ public class InGameEditorUiController extends InGameUiController{
 
         Button tileTypeButton = initializeEditorMenuButton(150, 200);
         tileTypeButton.setText(""+editorTileTypePlaced);
-        tileTypeButton.setStyle("-fx-border-width: 5; -fx-border-color: eeeeee;");
-        //tileTypeButton.setStyle(null);
+
+        selectPlacingButton(tileTypeButton);
+
         tileTypeButton.setOnMouseClicked(mouseEvent -> {
-            if(editorTileTypePlaced == TileType.PLAINS){
-                editorTileTypePlaced = TileType.WATER;
+            if(tileTypeButton == selectedPlacingButton) {
+
+                if (editorTileTypePlaced == TileType.PLAINS) {
+                    editorTileTypePlaced = TileType.WATER;
+                } else {
+                    editorTileTypePlaced = TileType.PLAINS;
+                }
+                tileTypeButton.setText("" + editorTileTypePlaced);
+                tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
             } else {
-                editorTileTypePlaced = TileType.PLAINS;
+                selectPlacingButton(tileTypeButton);
             }
-            tileTypeButton.setText(""+editorTileTypePlaced);
-            tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
         });
 
 
@@ -90,22 +98,26 @@ public class InGameEditorUiController extends InGameUiController{
         Button ownerIdButton = initializeEditorMenuButton(150, 400);
         ownerIdButton.setText("NONE");
         ownerIdButton.setOnMouseClicked(mouseEvent -> {
-            switch (editorOwnerIdPlaced){
+            switch (editorOwnerIdPlaced) {
                 case 0:
                 case 1:
                 case 2:
                 case 3:
-                    editorOwnerIdPlaced++; break;
+                    editorOwnerIdPlaced++;
+                    break;
                 case 4:
-                    editorOwnerIdPlaced = 0; break;
+                    editorOwnerIdPlaced = 0;
+                    break;
                 default:
                     System.err.println("[EDITOR] Editor menu error");
-                    editorOwnerIdPlaced = 0; break;
+                    editorOwnerIdPlaced = 0;
+                    break;
             }
-            if(editorOwnerIdPlaced != 0){
+            if (editorOwnerIdPlaced != 0) {
                 ownerIdButton.setText(game.getPlayer(editorOwnerIdPlaced).getName());
-                ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, FxUtils.toAwtColor(game.getPlayer(editorOwnerIdPlaced).getColor()))));
-            }else {
+                ownerIdIcon.setImage(AssetHandler.getImageUnit(
+                    new KeyUnit(UnitType.INFANTRY, 1, FxUtils.toAwtColor(game.getPlayer(editorOwnerIdPlaced).getColor()))));
+            } else {
                 ownerIdButton.setText("NONE");
                 ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, null)));
             }
@@ -120,17 +132,32 @@ public class InGameEditorUiController extends InGameUiController{
         Button buildingTypeButton = initializeEditorMenuButton(150, 500);
         buildingTypeButton.setText(""+editorBuildingTypePlaced);
         buildingTypeButton.setOnMouseClicked(mouseEvent -> {
-            switch (editorBuildingTypePlaced){
-                case CITY: editorBuildingTypePlaced = BuildingType.FACTORY; break;
-                case FACTORY: editorBuildingTypePlaced = BuildingType.AIRPORT; break;
-                case AIRPORT: editorBuildingTypePlaced = BuildingType.PORT; break;
-                case PORT: editorBuildingTypePlaced = BuildingType.CITY; break;
-                default:
-                    System.err.println("[EDITOR] Editor menu error");
-                    editorBuildingTypePlaced = BuildingType.CITY; break;
+            if(buildingTypeButton == selectedPlacingButton) {
+
+                switch (editorBuildingTypePlaced) {
+                    case CITY:
+                        editorBuildingTypePlaced = BuildingType.FACTORY;
+                        break;
+                    case FACTORY:
+                        editorBuildingTypePlaced = BuildingType.AIRPORT;
+                        break;
+                    case AIRPORT:
+                        editorBuildingTypePlaced = BuildingType.PORT;
+                        break;
+                    case PORT:
+                        editorBuildingTypePlaced = BuildingType.CITY;
+                        break;
+                    default:
+                        System.err.println("[EDITOR] Editor menu error");
+                        editorBuildingTypePlaced = BuildingType.CITY;
+                        break;
+                }
+                buildingTypeButton.setText("" + editorBuildingTypePlaced);
+                buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
             }
-            buildingTypeButton.setText(""+editorBuildingTypePlaced);
-            buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
+            else {
+                selectPlacingButton(buildingTypeButton);
+            }
         });
 
 
@@ -142,21 +169,42 @@ public class InGameEditorUiController extends InGameUiController{
         Button unitTypeButton = initializeEditorMenuButton(150, 600);
         unitTypeButton.setText(""+editorUnitTypePlaced);
         unitTypeButton.setOnMouseClicked(mouseEvent -> {
-            switch (editorUnitTypePlaced){
-                case INFANTRY: editorUnitTypePlaced = UnitType.INFANTRY_RPG; break;
-                case INFANTRY_RPG: editorUnitTypePlaced = UnitType.CAR_HUMVEE; break;
-                case CAR_HUMVEE: editorUnitTypePlaced = UnitType.TRUCK_TRANSPORT; break;
-                case TRUCK_TRANSPORT: editorUnitTypePlaced = UnitType.TANK_HUNTER; break;
-                case TANK_HUNTER: editorUnitTypePlaced = UnitType.ARTILLERY; break;
-                case ARTILLERY: editorUnitTypePlaced = UnitType.TANK_BATTLE; break;
-                case TANK_BATTLE: editorUnitTypePlaced = UnitType.ARTILLERY_ROCKET; break;
-                case ARTILLERY_ROCKET: editorUnitTypePlaced = UnitType.INFANTRY; break;
-                default:
-                    System.err.println("[EDITOR] Editor menu error");
-                    editorUnitTypePlaced = UnitType.INFANTRY; break;
+            if(unitTypeButton == selectedPlacingButton) {
+                switch (editorUnitTypePlaced) {
+                    case INFANTRY:
+                        editorUnitTypePlaced = UnitType.INFANTRY_RPG;
+                        break;
+                    case INFANTRY_RPG:
+                        editorUnitTypePlaced = UnitType.CAR_HUMVEE;
+                        break;
+                    case CAR_HUMVEE:
+                        editorUnitTypePlaced = UnitType.TRUCK_TRANSPORT;
+                        break;
+                    case TRUCK_TRANSPORT:
+                        editorUnitTypePlaced = UnitType.TANK_HUNTER;
+                        break;
+                    case TANK_HUNTER:
+                        editorUnitTypePlaced = UnitType.ARTILLERY;
+                        break;
+                    case ARTILLERY:
+                        editorUnitTypePlaced = UnitType.TANK_BATTLE;
+                        break;
+                    case TANK_BATTLE:
+                        editorUnitTypePlaced = UnitType.ARTILLERY_ROCKET;
+                        break;
+                    case ARTILLERY_ROCKET:
+                        editorUnitTypePlaced = UnitType.INFANTRY;
+                        break;
+                    default:
+                        System.err.println("[EDITOR] Editor menu error");
+                        editorUnitTypePlaced = UnitType.INFANTRY;
+                        break;
+                }
+                unitTypeButton.setText("" + editorUnitTypePlaced);
+                unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
+            } else {
+                selectPlacingButton(unitTypeButton);
             }
-            unitTypeButton.setText(""+editorUnitTypePlaced);
-            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
         });
 
 
@@ -165,6 +213,18 @@ public class InGameEditorUiController extends InGameUiController{
         saveMapButton.setOnMouseClicked(mouseEvent -> {
             saveMap();
         });
+    }
+
+    private void selectPlacingButton(Button button){
+        if(selectedPlacingButton != button){
+            if(selectedPlacingButton != null){
+                selectedPlacingButton.setStyle(null);
+            }
+            button.setStyle("-fx-border-width: 5; -fx-border-color: eeeeee;");
+            selectedPlacingButton = button;
+        } else {
+            System.err.println("[EDITOR] Editor menu error");
+        }
     }
 
     @Override
