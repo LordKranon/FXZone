@@ -16,6 +16,7 @@ public class Map {
     private Group subGroupMapTiles;
     private Group subGroupMapUnits;
     private Group subGroupMapBuildings;
+    private Group subGroupFogOfWar;
 
     /**
      * Game logic tiles
@@ -28,6 +29,11 @@ public class Map {
     private List<Unit> units;
 
     private List<Building> buildings;
+
+    /**
+     * Fog of war
+     */
+    private FogOfWarTile[][] fogOfWar;
 
     /**
      * Graphical size of one tile
@@ -91,21 +97,25 @@ public class Map {
         this.subGroupMapUnits.setViewOrder(ViewOrder.GAME_UNIT);
         this.subGroupMapBuildings = new Group();
         this.subGroupMapBuildings.setViewOrder(ViewOrder.GAME_BUILDING);
+        this.subGroupFogOfWar = new Group();
+        this.subGroupFogOfWar.setViewOrder(ViewOrder.FOG_OF_WAR);
         group.getChildren().add(this.subGroupMapTiles);
         group.getChildren().add(this.subGroupMapUnits);
         group.getChildren().add(this.subGroupMapBuildings);
+        group.getChildren().add(this.subGroupFogOfWar);
         int width = mapSerializable.tiles.length;
         int height = mapSerializable.tiles[0].length;
         this.tiles = new Tile[width][height];
+        this.fogOfWar = new FogOfWarTile[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
+                // Initialize tile
                 this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, subGroupMapTiles);
-
                 // Set neighbor tileType info
-                /*
-                 */
                 setNeighborTileTypeInfoForTile(i, j, mapSerializable.tiles);
 
+                // Initialize fog of war on this tile
+                this.fogOfWar[i][j] = new FogOfWarTile(i, j, tileRenderSize, subGroupFogOfWar);
             }
         }
         this.units = new ArrayList<Unit>();
@@ -155,6 +165,7 @@ public class Map {
         for(int i = 0; i < getWidth(); i++){
             for(int j = 0; j < getHeight(); j++){
                 tiles[i][j].setGraphicalOffset(offsetX, offsetY);
+                fogOfWar[i][j].setGraphicalOffset(offsetX, offsetY);
             }
         }
         for(Unit unit : units){
@@ -216,6 +227,7 @@ public class Map {
         for(int i = 0; i < getWidth(); i++){
             for(int j = 0; j < getHeight(); j++){
                 tiles[i][j].changeTileRenderSize(this);
+                fogOfWar[i][j].changeTileRenderSize(this);
             }
         }
         for (Unit unit : units){
