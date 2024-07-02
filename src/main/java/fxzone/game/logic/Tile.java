@@ -46,10 +46,13 @@ public class Tile extends TileSpaceObject{
     }
 
     public void setUnitOnTile(Unit unit){
+        if(this.unitOnTile != null && unit != null){
+            System.err.println(this+" Already has a unit! Overwriting...");
+        }
         this.unitOnTile = unit;
     }
     public void setBuildingOnTile(Building building){
-        if(this.buildingOnTile != null){
+        if(this.buildingOnTile != null && building != null){
             System.err.println(this+" Already has a building! Overwriting...");
         }
         this.buildingOnTile = building;

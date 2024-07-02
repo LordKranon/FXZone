@@ -536,7 +536,7 @@ public class InGameUiController extends AbstractUiController {
                 boolean attackedUnitSurvived = unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
                 if(!attackedUnitSurvived){
-                    map.removeUnit(unit.getLastAttackedUnit(), root2D);
+                    map.removeUnit(unit.getLastAttackedUnit());
                 }
                 return;
             } else {

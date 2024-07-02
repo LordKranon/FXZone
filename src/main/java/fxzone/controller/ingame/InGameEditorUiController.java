@@ -7,15 +7,19 @@ import fxzone.engine.handler.KeyTile;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.TileType;
 import fxzone.game.logic.TurnState;
+import fxzone.game.logic.Unit;
+import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.TileSerializable;
+import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.save.Save;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -288,9 +292,28 @@ public class InGameEditorUiController extends InGameUiController{
     void tileClicked(int x, int y){
         if(turnState == TurnState.EDITOR && !escapeMenu.isVisible()){
             if (verbose) System.out.println("[EDITOR] [tileClicked] during editor");
-            Tile tile = new Tile(x, y, editorTileTypePlaced);
-            TileSerializable tileSerializable = new TileSerializable(tile);
-            map.switchTile(tileSerializable);
+            switch (placingMode){
+                case TILE:
+                    Tile tile = new Tile(x, y, editorTileTypePlaced);
+                    TileSerializable tileSerializable = new TileSerializable(tile);
+                    map.switchTile(tileSerializable);
+                    break;
+                case BUILDING:
+                    Building building = new Building(editorBuildingTypePlaced, x, y);
+                    building.setOwnerId(editorOwnerIdPlaced);
+                    BuildingSerializable buildingSerializable = new BuildingSerializable(building);
+                    map.switchBuilding(buildingSerializable, game);
+                    break;
+                case UNIT:
+                    Unit unit = new Unit(editorUnitTypePlaced, x, y);
+                    unit.setOwnerId(editorOwnerIdPlaced);
+                    UnitSerializable unitSerializable = new UnitSerializable(unit);
+                    map.switchUnit(unitSerializable, game);
+                    break;
+                default:
+                    printErr();
+                    break;
+            }
         }
     }
 

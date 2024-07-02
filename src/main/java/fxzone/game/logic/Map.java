@@ -246,7 +246,7 @@ public class Map {
         propagateGraphicalOffsetToTileSpaceObject(unit);
         propagateTileRenderSizeToTileSpaceObject(unit);
     }
-    public void removeUnit(Unit unit, Group group){
+    public void removeUnit(Unit unit){
         boolean successfullyRemoved = units.remove(unit);
         if(!successfullyRemoved){
             System.err.println("[MAP] [removeUnit] Unit not in this maps list of units");
@@ -267,6 +267,18 @@ public class Map {
         }
         propagateGraphicalOffsetToTileSpaceObject(building);
         propagateTileRenderSizeToTileSpaceObject(building);
+    }
+    private void removeBuilding(Building building){
+        boolean successfullyRemoved = buildings.remove(building);
+        if(!successfullyRemoved){
+            System.err.println("[MAP] [removeBuilding] Building not in this maps list of buildings");
+        }
+        try{
+            tiles[building.x][building.y].setBuildingOnTile(null);
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.err.println("[MAP] Building is not in bounds of map");
+        }
+        building.onRemoval(subGroupMapBuildings);
     }
 
     public Tile[][] getTiles(){
@@ -342,5 +354,21 @@ public class Map {
             }
         }
         setNeighborTileTypeInfoForTile(newTileSerializable.x, newTileSerializable.y, null);
+    }
+    public void switchBuilding(BuildingSerializable newBuildingSerializable, Game game){
+        Building oldBuilding = tiles[newBuildingSerializable.x][newBuildingSerializable.y].getBuildingOnTile();
+        if(oldBuilding != null){
+            removeBuilding(oldBuilding);
+        }
+        Building newBuilding = new Building(newBuildingSerializable, tileRenderSize, subGroupMapBuildings, game);
+        addBuilding(newBuilding);
+    }
+    public void switchUnit(UnitSerializable newUnitSerializable, Game game){
+        Unit oldUnit = tiles[newUnitSerializable.x][newUnitSerializable.y].getUnitOnTile();
+        if(oldUnit != null){
+            removeUnit(oldUnit);
+        }
+        Unit newUnit = new Unit(newUnitSerializable, tileRenderSize, subGroupMapUnits, game);
+        addUnit(newUnit);
     }
 }
