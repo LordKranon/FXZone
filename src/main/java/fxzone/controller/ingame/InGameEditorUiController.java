@@ -19,7 +19,6 @@ import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.save.Save;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 
 public class InGameEditorUiController extends InGameUiController{
@@ -38,6 +37,13 @@ public class InGameEditorUiController extends InGameUiController{
     private int editorOwnerIdPlaced;
 
     private Button selectedPlacingButton;
+
+    private enum EditorPlacingMode {
+        TILE, BUILDING, UNIT
+    }
+    private EditorPlacingMode placingMode;
+
+    private Button tileTypeButton, buildingTypeButton, unitTypeButton;
 
     public InGameEditorUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
@@ -70,10 +76,10 @@ public class InGameEditorUiController extends InGameUiController{
         ImageView tileIcon = initializeEditorMenuIcon(50, 200);
         tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
 
-        Button tileTypeButton = initializeEditorMenuButton(150, 200);
+        this.tileTypeButton = initializeEditorMenuButton(150, 200);
         tileTypeButton.setText(""+editorTileTypePlaced);
 
-        selectPlacingButton(tileTypeButton);
+        selectPlacingMode(EditorPlacingMode.TILE);
 
         tileTypeButton.setOnMouseClicked(mouseEvent -> {
             if(tileTypeButton == selectedPlacingButton) {
@@ -86,7 +92,7 @@ public class InGameEditorUiController extends InGameUiController{
                 tileTypeButton.setText("" + editorTileTypePlaced);
                 tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
             } else {
-                selectPlacingButton(tileTypeButton);
+                selectPlacingMode(EditorPlacingMode.TILE);
             }
         });
 
@@ -129,7 +135,7 @@ public class InGameEditorUiController extends InGameUiController{
         ImageView buildingIcon = initializeEditorMenuIcon(50, 500);
         buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
 
-        Button buildingTypeButton = initializeEditorMenuButton(150, 500);
+        this.buildingTypeButton = initializeEditorMenuButton(150, 500);
         buildingTypeButton.setText(""+editorBuildingTypePlaced);
         buildingTypeButton.setOnMouseClicked(mouseEvent -> {
             if(buildingTypeButton == selectedPlacingButton) {
@@ -156,7 +162,7 @@ public class InGameEditorUiController extends InGameUiController{
                 buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
             }
             else {
-                selectPlacingButton(buildingTypeButton);
+                selectPlacingMode(EditorPlacingMode.BUILDING);
             }
         });
 
@@ -166,7 +172,7 @@ public class InGameEditorUiController extends InGameUiController{
         ImageView unitIcon = initializeEditorMenuIcon(40, 600);
         unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
 
-        Button unitTypeButton = initializeEditorMenuButton(150, 600);
+        this.unitTypeButton = initializeEditorMenuButton(150, 600);
         unitTypeButton.setText(""+editorUnitTypePlaced);
         unitTypeButton.setOnMouseClicked(mouseEvent -> {
             if(unitTypeButton == selectedPlacingButton) {
@@ -196,14 +202,14 @@ public class InGameEditorUiController extends InGameUiController{
                         editorUnitTypePlaced = UnitType.INFANTRY;
                         break;
                     default:
-                        System.err.println("[EDITOR] Editor menu error");
+                        printErr();
                         editorUnitTypePlaced = UnitType.INFANTRY;
                         break;
                 }
                 unitTypeButton.setText("" + editorUnitTypePlaced);
                 unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
             } else {
-                selectPlacingButton(unitTypeButton);
+                selectPlacingMode(EditorPlacingMode.UNIT);
             }
         });
 
@@ -215,7 +221,16 @@ public class InGameEditorUiController extends InGameUiController{
         });
     }
 
-    private void selectPlacingButton(Button button){
+    private void selectPlacingMode(EditorPlacingMode newPlacingMode){
+        Button button;
+        switch (newPlacingMode){
+            case TILE: button = tileTypeButton; break;
+            case BUILDING: button = buildingTypeButton; break;
+            case UNIT: button = unitTypeButton; break;
+            default:
+                printErr();
+                button = tileTypeButton; break;
+        }
         if(selectedPlacingButton != button){
             if(selectedPlacingButton != null){
                 selectedPlacingButton.setStyle(null);
@@ -223,7 +238,12 @@ public class InGameEditorUiController extends InGameUiController{
             button.setStyle("-fx-border-width: 5; -fx-border-color: eeeeee;");
             selectedPlacingButton = button;
         } else {
-            System.err.println("[EDITOR] Editor menu error");
+            printErr();
+        }
+        if(this.placingMode != newPlacingMode){
+            this.placingMode = newPlacingMode;
+        } else {
+            printErr();
         }
     }
 
@@ -272,5 +292,9 @@ public class InGameEditorUiController extends InGameUiController{
             TileSerializable tileSerializable = new TileSerializable(tile);
             map.switchTile(tileSerializable);
         }
+    }
+
+    private void printErr(){
+        System.err.println("[EDITOR] Editor menu error");
     }
 }
