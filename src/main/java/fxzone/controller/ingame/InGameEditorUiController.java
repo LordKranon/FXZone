@@ -19,6 +19,7 @@ import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.save.Save;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 
 public class InGameEditorUiController extends InGameUiController{
@@ -69,6 +70,8 @@ public class InGameEditorUiController extends InGameUiController{
 
         Button tileTypeButton = initializeEditorMenuButton(150, 200);
         tileTypeButton.setText(""+editorTileTypePlaced);
+        tileTypeButton.setStyle("-fx-border-width: 5; -fx-border-color: eeeeee;");
+        //tileTypeButton.setStyle(null);
         tileTypeButton.setOnMouseClicked(mouseEvent -> {
             if(editorTileTypePlaced == TileType.PLAINS){
                 editorTileTypePlaced = TileType.WATER;
@@ -203,7 +206,7 @@ public class InGameEditorUiController extends InGameUiController{
 
     @Override
     void tileClicked(int x, int y){
-        if(turnState == TurnState.EDITOR){
+        if(turnState == TurnState.EDITOR && !escapeMenu.isVisible()){
             if (verbose) System.out.println("[EDITOR] [tileClicked] during editor");
             Tile tile = new Tile(x, y, editorTileTypePlaced);
             TileSerializable tileSerializable = new TileSerializable(tile);
