@@ -64,52 +64,14 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     @Override
     protected void startOuter(AbstractGameController gameController) {
 
-        /*
-        START Creating map.
-        */
-        Map map = new Map(Save.loadMap());
-        Unit tank1 = new Unit(UnitType.TANK_BATTLE, 1, 1);
-        map.getUnits().add(tank1);
-        Unit tank2 = new Unit(UnitType.TANK_HUNTER, 2, 1);
-        map.getUnits().add(tank2);
-        Unit tank3 = new Unit(UnitType.ARTILLERY, 3, 1);
-        map.getUnits().add(tank3);
-        Unit tank4 = new Unit(UnitType.ARTILLERY, 4, 1);
-        map.getUnits().add(tank4);
-        map.getUnits().add(new Unit(UnitType.TANK_BATTLE, 25, 15));
-
-        Unit infantry1 = new Unit(UnitType.INFANTRY, 0, 0);
-        map.getUnits().add(infantry1);
-
-        Building building1 = new Building(BuildingType.FACTORY, 0, 0);
-        map.getBuildings().add(building1);
-        Building building2 = new Building(BuildingType.CITY, 5, 5);
-        map.getBuildings().add(building2);
-        /*
-        END Creating map.
-        */
 
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(hostingPlayer);
         playerList.addAll(server.getPlayers());
 
-        //Set unit ownership for debug
-        tank1.setOwnerId(hostingPlayer.getId());
-        tank4.setOwnerId(hostingPlayer.getId());
-        tank2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): 0);
-        tank3.setOwnerId(playerList.size() > 2 ? playerList.get(2).getId(): 0);
-        infantry1.setOwnerId(hostingPlayer.getId());
-        building1.setOwnerId(hostingPlayer.getId());
-        building2.setOwnerId(playerList.size() > 1 ? playerList.get(1).getId(): hostingPlayer.getId());
 
-        /*
-        * START Creating game.
-        * */
-        Game game = new Game(playerList, map);
-        GameSerializable gameSerializable = new GameSerializable(game);
-        /*
-         * END Creating game.
-         * */
+        GameSerializable gameSerializable = new GameSerializable(Save.loadMap(), playerList);
+
 
         InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, gameSerializable);
         if(server.startGameForAll(inGameHostUiController, gameSerializable)){

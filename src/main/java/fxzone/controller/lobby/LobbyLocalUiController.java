@@ -37,39 +37,7 @@ public class LobbyLocalUiController extends LobbyUiController{
     @Override
     protected void startOuter(AbstractGameController gameController) {
 
-        /*
-        START Creating map.
-        */
-        Map map = new Map(Save.loadMap());
-
-        int i = 1;
-        Set<UnitType> unitTypes = EnumSet.allOf(UnitType.class);
-        for(UnitType unitType : unitTypes){
-            Unit u = new Unit(unitType, 1, i);
-            map.getUnits().add(u);
-            u.setOwnerId(1);
-
-            Unit v = new Unit(unitType, 4, i++);
-            map.getUnits().add(v);
-            v.setOwnerId(2);
-        }
-
-        Building b = new Building(BuildingType.CITY, 0, 0);
-        map.getBuildings().add(b);
-        b.setOwnerId(1);
-
-        MapSerializable mapSerializable = new MapSerializable(map);
-        /*
-        END Creating map.
-        */
-
-        /*
-         * START Creating game.
-         * */
-        GameSerializable gameSerializable = new GameSerializable(mapSerializable, localPlayerList);
-        /*
-         * END Creating game.
-         * */
+        GameSerializable gameSerializable = new GameSerializable(Save.loadMap(), localPlayerList);
 
         gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
     }
