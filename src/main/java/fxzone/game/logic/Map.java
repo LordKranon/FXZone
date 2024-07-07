@@ -384,4 +384,32 @@ public class Map {
         Unit newUnit = new Unit(newUnitSerializable, tileRenderSize, subGroupMapUnits, game);
         addUnit(newUnit);
     }
+
+    /**
+     * Calculate and mark all visible tiles of given player.
+     *
+     * @param ownerId id of player
+     * @return boolean array of same size as map, with true = visible
+     */
+    public boolean[][] getVisionOfPlayer(int ownerId){
+        boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
+        for(Unit unit : units){
+            if(unit.getOwnerId() == ownerId){
+                tileVisible[unit.getX()][unit.getY()] = true;
+            }
+        }
+        return tileVisible;
+    }
+
+    public void setFogOfWarToVision(boolean[][] tileVisible){
+        if(tileVisible.length != getWidth() || tileVisible[0].length != getHeight()){
+            System.err.println("[MAP] [setFogOfWarToVision] Bad vision array");
+            return;
+        }
+        for (int i = 0; i < getWidth(); i++){
+            for (int j = 0; j < getHeight(); j++){
+                fogOfWar[i][j].setVisible(!tileVisible[i][j]);
+            }
+        }
+    }
 }

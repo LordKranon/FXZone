@@ -885,6 +885,12 @@ public class InGameUiController extends AbstractUiController {
     protected void onPlayerEndTurn(){
         endTurn();
     }
+
+    /**
+     * The player demands to begin their turn.
+     * Only in local games!
+     * In online games, the next turn begins automatically on end of previous turn.
+     */
     protected void onPlayerBeginTurn(){
         beginTurn();
     }
@@ -898,11 +904,13 @@ public class InGameUiController extends AbstractUiController {
         graphical elements as it is not on the FX thread. This should, in theory, never occur since you can't end your turn
         while still having a unit selected and with move command arrows being displayed.
         */
-        turnStateToNeutral();
+        turnStateToNoTurn();
         game.goNextTurn();
+        beginTurn();
     }
     protected void beginTurn(){
         map.setVisible(true);
+        map.setFogOfWarToVision(map.getVisionOfPlayer(thisPlayer.getId()));
         turnStateToNeutral();
     }
 

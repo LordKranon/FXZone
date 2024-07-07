@@ -56,4 +56,8 @@ public class TileSpaceObject {
     public void onRemoval(Group group){
         gameObjectInTileSpace.removeSelfFromRoot(group);
     }
+
+    public void setVisible(boolean visible){
+        this.gameObjectInTileSpace.setVisible(visible);
+    }
 }
