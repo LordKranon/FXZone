@@ -11,7 +11,7 @@ public class Codex {
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
             0, "Infantry",
-            3, 10, 100, 3, 0, 1, 1,
+            3, 5, 100, 3, 0, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,

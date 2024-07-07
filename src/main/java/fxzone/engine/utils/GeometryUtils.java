@@ -1,6 +1,8 @@
 package fxzone.engine.utils;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GeometryUtils {
 
@@ -53,5 +55,25 @@ public class GeometryUtils {
         }
         System.err.println("[GEOMETRY-UTILS] ERROR! Bad neighbor direction");
         return null;
+    }
+
+    public static ArrayList<Point> getPointsInRange(int range){
+        ArrayList<Point> pointsInRange = new ArrayList<>();
+        pointsInRange.add(new Point(0, 0));
+        for(int i = 1; i <= range; i++){
+            for(int j = 0; j < i; j++){
+                pointsInRange.add(new Point(i-j, j));
+            }
+            for(int j = 0; j < i; j++){
+                pointsInRange.add(new Point(j, -i+j));
+            }
+            for(int j = 0; j < i; j++){
+                pointsInRange.add(new Point(-i+j, -j));
+            }
+            for(int j = 0; j < i; j++){
+                pointsInRange.add(new Point(-j, i-j));
+            }
+        }
+        return pointsInRange;
     }
 }

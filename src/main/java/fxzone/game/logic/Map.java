@@ -395,7 +395,14 @@ public class Map {
         boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
         for(Unit unit : units){
             if(unit.getOwnerId() == ownerId){
-                tileVisible[unit.getX()][unit.getY()] = true;
+                ArrayList<Point> pointsInVision = GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit.getUnitType()).VISION);
+                for(Point p : pointsInVision){
+                    int tileX = unit.getX()+p.x;
+                    int tileY = unit.getY()+p.y;
+                    if(isInBounds(tileX, tileY)){
+                        tileVisible[tileX][tileY] = true;
+                    }
+                }
             }
         }
         return tileVisible;
