@@ -341,6 +341,7 @@ public class Map {
         this.subGroupMapTiles.setVisible(visible);
         this.subGroupMapUnits.setVisible(visible);
         this.subGroupMapBuildings.setVisible(visible);
+        this.subGroupFogOfWar.setVisible(visible);
     }
 
     /**
