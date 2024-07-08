@@ -141,7 +141,7 @@ public class InGameUiController extends AbstractUiController {
     protected Building selectedBuilding;
     private Pane selectedBuildingUI;
 
-    protected TurnState turnState = TurnState.NEUTRAL;
+    protected TurnState turnState = TurnState.GAME_STARTING;
 
     private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
     private final HashMap<Unit, Double> unitsAttacking = new HashMap<Unit, Double>();
@@ -173,6 +173,9 @@ public class InGameUiController extends AbstractUiController {
         this.thisPlayerIdTemp = thisPlayerIdTemp;
         initializeGame(initialGame);
         initializeGameSpecifics();
+
+        //Begin the first turn
+        beginTurn();
 
         //In-Game music
         mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/zone_jr_v1.2.mp3"));

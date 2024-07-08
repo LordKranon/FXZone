@@ -59,8 +59,13 @@ public class InGameEditorUiController extends InGameUiController{
 
         this.thisPlayer = editorPlayer;
 
-        turnState = TurnState.EDITOR;
         super.initializeGameSpecifics();
+    }
+
+    @Override
+    protected void beginTurn(){
+        if(verbose) System.out.println("[EDITOR] [beginTurn] Begin editor mode");
+        turnState = TurnState.EDITOR;
     }
 
     @Override
