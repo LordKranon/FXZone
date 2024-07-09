@@ -520,6 +520,12 @@ public class InGameUiController extends AbstractUiController {
                 UnitState nextState = unit.performFullTileMove(map);
                 if(nextState != UnitState.MOVING){
                     unitsMoving.remove(unit);
+
+                    // Add more vision
+                    if(unit.getOwnerId() == thisPlayer.getId()){
+                        map.setFogOfWarToAdditionalVisionOnUnitMove(unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION);
+                    }
+
                     if(nextState == UnitState.ATTACKING){
                         onAttackAddFightingUnits(unit);
                     }
@@ -853,6 +859,11 @@ public class InGameUiController extends AbstractUiController {
     protected void createUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
         map.createNewUnit(unitSerializable, game);
         payUnitPurchasingPrice(unitSerializable, statPurchasingPrice);
+
+        // Add more vision
+        if(unitSerializable.ownerId == thisPlayer.getId()){
+            map.setFogOfWarToAdditionalVisionOnUnitMove(unitSerializable.x, unitSerializable.y, Codex.getUnitProfile(unitSerializable.unitType).VISION);
+        }
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
         if((statPurchasingPrice != 0) && (unitSerializable.ownerId != 0)){

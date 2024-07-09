@@ -395,7 +395,7 @@ public class Map {
         boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
         for(Unit unit : units){
             if(unit.getOwnerId() == ownerId){
-                ArrayList<Point> pointsInVision = GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit.getUnitType()).VISION);
+                ArrayList<Point> pointsInVision = GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).VISION);
                 for(Point p : pointsInVision){
                     int tileX = unit.getX()+p.x;
                     int tileY = unit.getY()+p.y;
@@ -416,6 +416,18 @@ public class Map {
         for (int i = 0; i < getWidth(); i++){
             for (int j = 0; j < getHeight(); j++){
                 fogOfWar[i][j].setVisible(!tileVisible[i][j]);
+            }
+        }
+    }
+    public void setFogOfWarToAdditionalVisionOnUnitMove(int unitX, int unitY, int visionRange){
+        // Used to not completely recalculate vision every time and to save processing time
+        // TODO Change or remove this method as it uses redundant Fog of War calculations
+        ArrayList<Point> pointsInVision = GeometryUtils.getPointsInRange(visionRange);
+        for(Point p : pointsInVision){
+            int tileX = unitX+p.x;
+            int tileY = unitY+p.y;
+            if(isInBounds(tileX, tileY)){
+                fogOfWar[tileX][tileY].setVisible(false);
             }
         }
     }
