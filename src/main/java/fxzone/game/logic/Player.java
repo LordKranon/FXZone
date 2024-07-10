@@ -1,12 +1,15 @@
 package fxzone.game.logic;
 
 
+import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.serializable.PlayerSerializable;
 import javafx.scene.paint.Color;
 
 public class Player {
 
     private final Color color;
+
+    private final Color textColor;
 
     private final String name;
 
@@ -20,11 +23,13 @@ public class Player {
     public Player(String name, Color color, int id){
         this.name = name;
         this.color = color;
+        this.textColor = FxUtils.easeColor(color);
         this.id = id;
     }
     public Player(PlayerSerializable playerSerializable){
         this.name = playerSerializable.name;
         this.color = Color.web(playerSerializable.color);
+        this.textColor = FxUtils.easeColor(this.color);
         this.id = playerSerializable.id;
         initializeStats();
     }
@@ -34,6 +39,10 @@ public class Player {
 
     public Color getColor(){
         return color;
+    }
+
+    public Color getTextColor(){
+        return textColor;
     }
 
     public String getName(){

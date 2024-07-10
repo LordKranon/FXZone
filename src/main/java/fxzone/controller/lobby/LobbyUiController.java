@@ -123,7 +123,7 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         button.setAlignment(Pos.CENTER);
         button.setMnemonicParsing(false);
         button.setPrefWidth(400);
-        button.setStyle("-fx-text-fill: "+ FxUtils.toRGBCode(player.getColor()) +";");
+        button.setStyle("-fx-text-fill: "+ FxUtils.toRGBCode(player.getTextColor()) +";");
 
         vBoxPlayerList.getChildren().add(button);
 

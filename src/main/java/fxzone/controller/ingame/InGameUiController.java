@@ -264,7 +264,7 @@ public class InGameUiController extends AbstractUiController {
     }
     protected void setLabelToPlayer(Player player){
         labelPlayerName.setText(player.getName());
-        labelPlayerName.setTextFill(Color.web(player.getColor().toString()));
+        labelPlayerName.setTextFill(Color.web(player.getTextColor().toString()));
 
         buttonPlayerCash.setText("$"+player.getStatResourceCash());
     }
@@ -630,19 +630,30 @@ public class InGameUiController extends AbstractUiController {
     private void setHoveredTileInfoLabel(Point hoveredPoint){
         Tile tile = map.getTiles()[hoveredPoint.x][hoveredPoint.y];
         Unit unit = tile.getUnitOnTile();
-        if(unit != null){
+        if(unit != null && thisPlayerFowVision[hoveredPoint.x][hoveredPoint.y]){
             labelHoverName.setText(Codex.getUnitProfile(unit.getUnitType()).NAME);
             buttonHoverInfo.setText(unit.getStatRemainingHealth() + "%");
+            if(game.playerExists(unit.getOwnerId())){
+                labelHoverName.setTextFill(Color.web(game.getPlayer(unit.getOwnerId()).getTextColor().toString()));
+            } else {
+                labelHoverName.setTextFill(Color.web("#ffffff"));
+            }
             return;
         }
         Building building = tile.getBuildingOnTile();
         if(building != null){
             labelHoverName.setText(""+building.getBuildingType());
             buttonHoverInfo.setText("");
+            if(game.playerExists(building.getOwnerId())){
+                labelHoverName.setTextFill(Color.web(game.getPlayer(building.getOwnerId()).getTextColor().toString()));
+            } else {
+                labelHoverName.setTextFill(Color.web("#ffffff"));
+            }
             return;
         }
         labelHoverName.setText(""+tile.getTileType());
         buttonHoverInfo.setText("");
+        labelHoverName.setTextFill(Color.web("#ffffff"));
     }
 
     /**

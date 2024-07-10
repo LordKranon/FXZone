@@ -30,4 +30,14 @@ public class FxUtils
         );
         return awtColor;
     }
+
+    public static Color easeColor(Color color){
+        Color easedColor = new Color(
+            color.getRed()/2. + .5,
+            color.getGreen()/2. + .5,
+            color.getBlue()/2. + .5,
+            color.getOpacity()
+        );
+        return easedColor;
+    }
 }

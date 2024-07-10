@@ -55,6 +55,14 @@ public class Game {
         System.err.println("[GAME] [getPlayer] Player with ID: "+playerId+" not found");
         return null;
     }
+    public boolean playerExists(int playerId){
+        for(Player player : players){
+            if(player.getId() == playerId){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void setWhoseTurn(int whoseTurn){
         this.whoseTurn = whoseTurn;
