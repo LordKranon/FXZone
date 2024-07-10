@@ -67,24 +67,24 @@ public class Tile extends TileSpaceObject{
         return buildingOnTile;
     }
 
-    public boolean isMovableThroughBy(Unit unit){
+    public boolean isMovableThroughBy(Unit unit, boolean tileVisible){
         //TODO
         //Implement more intelligent checks for whether a unit can move through this tile or not
 
         boolean blockedByOtherUnit = false;
-        if(this.unitOnTile != null){
+        if(tileVisible && this.unitOnTile != null){
             if(this.unitOnTile.getOwnerId() != unit.getOwnerId()){
                 blockedByOtherUnit = true;
             }
         }
         return (!blockedByOtherUnit) && (this.tileType == TileType.PLAINS);
     }
-    public boolean isMovableToBy(Unit unit){
-        return (this.unitOnTile == null) && (this.tileType == TileType.PLAINS);
+    public boolean isMovableToBy(Unit unit, boolean tileVisible){
+        return (!tileVisible || this.unitOnTile == null) && (this.tileType == TileType.PLAINS);
     }
 
-    public boolean isAttackableBy(Unit unit){
-        return (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId();
+    public boolean isAttackableBy(Unit unit, boolean tileVisible){
+        return tileVisible && (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId();
     }
 
     @Override

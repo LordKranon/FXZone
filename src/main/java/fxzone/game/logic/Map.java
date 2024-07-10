@@ -313,32 +313,42 @@ public class Map {
     /**
      * Used for pathfinding.
      * Whether a given unit can move through a specific tile.
+     * This only takes into account the information that the units owner has,
+     * an inaccessible tile that has its obstruction hidden by fog of war will still be classified as accessible.
      */
-    public boolean checkTileForMoveThroughByUnit(int x, int y, Unit unit){
+    public boolean checkTileForMoveThroughByUnitPerceived(int x, int y, Unit unit, boolean[][] vision){
         //TODO
         //See Tile.isMovableThroughBy(Unit unit)
         if(!isInBounds(x, y)){
             return false;
         }
         else {
-            return this.tiles[x][y].isMovableThroughBy(unit);
+            return this.tiles[x][y].isMovableThroughBy(unit, vision[x][y]);
         }
     }
-    public boolean checkTileForMoveToByUnit(int x, int y, Unit unit){
+    public boolean checkTileForMoveToByUnitPerceived(int x, int y, Unit unit, boolean[][] vision){
         if(!isInBounds(x, y)){
             return false;
         }
         else {
-            return this.tiles[x][y].isMovableToBy(unit);
+            return this.tiles[x][y].isMovableToBy(unit, vision[x][y]);
+        }
+    }
+    public boolean checkTileForMoveThroughByUnitFinal(int x, int y, Unit unit){
+        if(!isInBounds(x, y)){
+            return false;
+        }
+        else {
+            return this.tiles[x][y].isMovableThroughBy(unit, true);
         }
     }
 
-    public boolean checkTileForAttackByUnit(int x, int y, Unit unit){
+    public boolean checkTileForAttackByUnit(int x, int y, Unit unit, boolean[][] vision){
         if(!isInBounds(x, y)){
             return false;
         }
         else {
-            return this.tiles[x][y].isAttackableBy(unit);
+            return this.tiles[x][y].isAttackableBy(unit, vision[x][y]);
         }
     }
 

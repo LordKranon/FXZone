@@ -442,7 +442,10 @@ public class InGameUiController extends AbstractUiController {
                 deselectUnit();
 
             }
-            else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y && map.checkTileForMoveToByUnit(x, y, selectedUnit)){
+            else if(
+                lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y &&
+                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
+            ){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);
             }
             // TODO
@@ -450,7 +453,10 @@ public class InGameUiController extends AbstractUiController {
             else if(
                 moveCommandGridAttackableSquares[x][y] &&
                 GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue) &&
-                    (map.checkTileForMoveToByUnit(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit) || selectedUnitQueuedPath.isEmpty())
+                    (
+                        map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision) ||
+                            selectedUnitQueuedPath.isEmpty()
+                    )
             ){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
             }
@@ -799,19 +805,19 @@ public class InGameUiController extends AbstractUiController {
     private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
         onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
         if(remainingSteps > 0){
-            if(map.checkTileForMoveThroughByUnit(x, y-1, selectedUnit)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, selectedUnit, thisPlayerFowVision)){
                 moveCommandGridMovableSquares[x][y-1] = true;
                 onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1);
             }
-            if(map.checkTileForMoveThroughByUnit(x-1, y, selectedUnit)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x-1, y, selectedUnit, thisPlayerFowVision)){
                 moveCommandGridMovableSquares[x-1][y] = true;
                 onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1);
             }
-            if(map.checkTileForMoveThroughByUnit(x, y+1, selectedUnit)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y+1, selectedUnit, thisPlayerFowVision)){
                 moveCommandGridMovableSquares[x][y+1] = true;
                 onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1);
             }
-            if(map.checkTileForMoveThroughByUnit(x+1, y, selectedUnit)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x+1, y, selectedUnit, thisPlayerFowVision)){
                 moveCommandGridMovableSquares[x+1][y] = true;
                 onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1);
             }
@@ -819,16 +825,16 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void onCalculateMoveCommandGridAddToAttackGridFromTile(int x, int y){
-        if(map.checkTileForAttackByUnit(x, y-1, selectedUnit)){
+        if(map.checkTileForAttackByUnit(x, y-1, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x][y-1] = true;
         }
-        if(map.checkTileForAttackByUnit(x-1, y, selectedUnit)){
+        if(map.checkTileForAttackByUnit(x-1, y, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x-1][y] = true;
         }
-        if(map.checkTileForAttackByUnit(x, y+1, selectedUnit)){
+        if(map.checkTileForAttackByUnit(x, y+1, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x][y+1] = true;
         }
-        if(map.checkTileForAttackByUnit(x+1, y, selectedUnit)){
+        if(map.checkTileForAttackByUnit(x+1, y, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x+1][y] = true;
         }
     }
@@ -854,7 +860,23 @@ public class InGameUiController extends AbstractUiController {
      * The player gives a unit a move command during their turn.
      */
     protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
-        commandUnitToMove(selectedUnit, path, pointToAttack);
+
+        /*
+        If the path leads into the fog of war, the unit might not complete the entire path and might be stopped by a
+        previously invisible enemy unit.
+         */
+        boolean wasStopped = false;
+        ArrayDeque<Point> trimmedPath = new ArrayDeque<>();
+        for(Point p : path){
+            if(map.checkTileForMoveThroughByUnitFinal(p.x, p.y, selectedUnit)){
+                trimmedPath.add(p);
+            } else {
+                wasStopped = true;
+                break;
+            }
+        }
+
+        commandUnitToMove(selectedUnit, trimmedPath, wasStopped?null:pointToAttack);
         turnStateToNeutral();
     }
     protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
