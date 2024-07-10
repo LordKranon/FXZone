@@ -436,6 +436,9 @@ public class Map {
                 fogOfWar[i][j].setVisible(!tileVisible[i][j]);
             }
         }
+        for(Unit unit : units){
+            unit.setVisible(tileVisible[unit.getX()][unit.getY()]);
+        }
     }
 
     public boolean[][] addVisionOnUnitMove(boolean[][] tileVisibleBefore, int unitX, int unitY, int visionRange){

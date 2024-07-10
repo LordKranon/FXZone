@@ -427,7 +427,17 @@ public class Unit extends TileSpaceObject{
         super.onRemoval(group);
         gameObjectUiUnitHealth.removeSelfFromRoot(group);
     }
+    @Override
+    public void setVisible(boolean visible){
+        super.setVisible(visible);
+        if(this.isDamaged()){
+            gameObjectUiUnitHealth.setVisible(visible);
+        }
+    }
 
+    public boolean isDamaged(){
+        return statRemainingHealth < statMaxHealth;
+    }
     public int getRemainingHealthOnAttack(){
         return statRemainingHealthOnAttack;
     }
