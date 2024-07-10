@@ -324,6 +324,14 @@ public class Map {
             return this.tiles[x][y].isMovableThroughBy(unit);
         }
     }
+    public boolean checkTileForMoveToByUnit(int x, int y, Unit unit){
+        if(!isInBounds(x, y)){
+            return false;
+        }
+        else {
+            return this.tiles[x][y].isMovableToBy(unit);
+        }
+    }
 
     public boolean checkTileForAttackByUnit(int x, int y, Unit unit){
         if(!isInBounds(x, y)){

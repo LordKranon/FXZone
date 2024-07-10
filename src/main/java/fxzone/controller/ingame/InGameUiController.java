@@ -442,13 +442,16 @@ public class InGameUiController extends AbstractUiController {
                 deselectUnit();
 
             }
-            else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y){
+            else if(lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y && map.checkTileForMoveToByUnit(x, y, selectedUnit)){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);
             }
             // TODO
             // This attack check is only for 1 tile melee attacks, longer ranged attack checks yet to be implemented
-            else if(moveCommandGridAttackableSquares[x][y] &&
-                GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue)){
+            else if(
+                moveCommandGridAttackableSquares[x][y] &&
+                GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue) &&
+                    (map.checkTileForMoveToByUnit(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit) || selectedUnitQueuedPath.isEmpty())
+            ){
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
             }
 

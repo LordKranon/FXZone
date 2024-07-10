@@ -70,6 +70,16 @@ public class Tile extends TileSpaceObject{
     public boolean isMovableThroughBy(Unit unit){
         //TODO
         //Implement more intelligent checks for whether a unit can move through this tile or not
+
+        boolean blockedByOtherUnit = false;
+        if(this.unitOnTile != null){
+            if(this.unitOnTile.getOwnerId() != unit.getOwnerId()){
+                blockedByOtherUnit = true;
+            }
+        }
+        return (!blockedByOtherUnit) && (this.tileType == TileType.PLAINS);
+    }
+    public boolean isMovableToBy(Unit unit){
         return (this.unitOnTile == null) && (this.tileType == TileType.PLAINS);
     }
 
