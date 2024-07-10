@@ -423,6 +423,11 @@ public class Map {
                 }
             }
         }
+        for (Building building : buildings){
+            if(building.getOwnerId() == ownerId){
+                tileVisible[building.getX()][building.getY()] = true;
+            }
+        }
         return tileVisible;
     }
     public boolean[][] getVisionOfGod(){
