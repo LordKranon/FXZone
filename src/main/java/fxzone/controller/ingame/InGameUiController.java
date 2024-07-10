@@ -859,12 +859,19 @@ public class InGameUiController extends AbstractUiController {
     /**
      * The player gives a unit a move command during their turn.
      */
-    protected void onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
+    protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
 
         /*
         If the path leads into the fog of war, the unit might not complete the entire path and might be stopped by a
         previously invisible enemy unit.
          */
+        boolean wasStopped = verifyPathOnMoveCommand(path);
+
+        commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack);
+        turnStateToNeutral();
+        return wasStopped;
+    }
+    protected boolean verifyPathOnMoveCommand(ArrayDeque<Point> path){
         boolean wasStopped = false;
         ArrayDeque<Point> trimmedPath = new ArrayDeque<>();
         for(Point p : path){
@@ -875,9 +882,9 @@ public class InGameUiController extends AbstractUiController {
                 break;
             }
         }
-
-        commandUnitToMove(selectedUnit, trimmedPath, wasStopped?null:pointToAttack);
-        turnStateToNeutral();
+        path.clear();
+        path.addAll(trimmedPath);
+        return wasStopped;
     }
     protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
         createUnit(unitSerializable, statPurchasingPrice);
