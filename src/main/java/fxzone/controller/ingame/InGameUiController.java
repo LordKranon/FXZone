@@ -131,6 +131,7 @@ public class InGameUiController extends AbstractUiController {
     protected Game game;
 
     protected Player thisPlayer;
+    protected boolean[][] thisPlayerFowVision;
 
     /**
      * Only used at initialization to determine players.
@@ -523,7 +524,7 @@ public class InGameUiController extends AbstractUiController {
 
                     // Add more vision
                     if(unit.getOwnerId() == thisPlayer.getId()){
-                        map.setFogOfWarToAdditionalVisionOnUnitMove(unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION);
+                        map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION));
                     }
 
                     if(nextState == UnitState.ATTACKING){
@@ -862,7 +863,7 @@ public class InGameUiController extends AbstractUiController {
 
         // Add more vision
         if(unitSerializable.ownerId == thisPlayer.getId()){
-            map.setFogOfWarToAdditionalVisionOnUnitMove(unitSerializable.x, unitSerializable.y, Codex.getUnitProfile(unitSerializable.unitType).VISION);
+            map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unitSerializable.x, unitSerializable.y, Codex.getUnitProfile(unitSerializable.unitType).VISION));
         }
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
@@ -924,7 +925,8 @@ public class InGameUiController extends AbstractUiController {
     }
     protected void beginTurn(){
         map.setVisible(true);
-        map.setFogOfWarToVision(map.getVisionOfPlayer(thisPlayer.getId()));
+        thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
+        map.setFogOfWarToVision(thisPlayerFowVision);
         turnStateToNeutral();
     }
 

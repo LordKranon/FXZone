@@ -419,16 +419,16 @@ public class Map {
             }
         }
     }
-    public void setFogOfWarToAdditionalVisionOnUnitMove(int unitX, int unitY, int visionRange){
-        // Used to not completely recalculate vision every time and to save processing time
-        // TODO Change or remove this method as it uses redundant Fog of War calculations
+
+    public boolean[][] addVisionOnUnitMove(boolean[][] tileVisibleBefore, int unitX, int unitY, int visionRange){
         ArrayList<Point> pointsInVision = GeometryUtils.getPointsInRange(visionRange);
         for(Point p : pointsInVision){
             int tileX = unitX+p.x;
             int tileY = unitY+p.y;
             if(isInBounds(tileX, tileY)){
-                fogOfWar[tileX][tileY].setVisible(false);
+                tileVisibleBefore[tileX][tileY] = true;
             }
         }
+        return tileVisibleBefore;
     }
 }
