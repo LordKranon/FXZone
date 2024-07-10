@@ -21,6 +21,7 @@ import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.save.Save;
+import java.util.Arrays;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -58,6 +59,8 @@ public class InGameEditorUiController extends InGameUiController{
         Player editorPlayer = new Player("Editor", Color.CYAN, 404);
 
         this.thisPlayer = editorPlayer;
+
+        this.thisPlayerFowVision = map.getVisionOfGod();
 
         super.initializeGameSpecifics();
     }

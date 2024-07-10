@@ -425,6 +425,15 @@ public class Map {
         }
         return tileVisible;
     }
+    public boolean[][] getVisionOfGod(){
+        boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
+        for(int i = 0; i < getWidth(); i++){
+            for(int j = 0; j < getHeight(); j++){
+                tileVisible[i][j] = true;
+            }
+        }
+        return tileVisible;
+    }
 
     public void setFogOfWarToVision(boolean[][] tileVisible){
         if(tileVisible.length != getWidth() || tileVisible[0].length != getHeight()){
