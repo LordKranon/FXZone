@@ -6,6 +6,7 @@ import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.BuildingType;
+import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
@@ -375,6 +376,10 @@ public class Unit extends TileSpaceObject{
      * @return whether this unit will be counterattacking
      */
     public boolean onAttacked(Unit attackingUnit){
+        if(Codex.getUnitProfile(attackingUnit).ATTACKTYPE == UnitAttackType.RANGED || Codex.getUnitProfile(this).ATTACKTYPE == UnitAttackType.RANGED){
+            return false;
+        }
+        // TODO Handle RANGERMELEE Attacks differently
         setStance(UnitStance.ATTACK);
         setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), new Point(attackingUnit.getX(), attackingUnit.getY())));
         this.currentlyAttackedUnit = attackingUnit;

@@ -10,6 +10,7 @@ import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
@@ -459,28 +460,47 @@ public class InGameUiController extends AbstractUiController {
             }
         } else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
-
                 // Deselect unit
                 deselectUnit();
-
             }
             else if(
                 lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y &&
                 map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
             ){
+                // Move and don't attack
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);
             }
-            // TODO
-            // This attack check is only for 1 tile melee attacks, longer ranged attack checks yet to be implemented
-            else if(
-                moveCommandGridAttackableSquares[x][y] &&
-                GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue) &&
-                    (
-                        map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision) ||
-                            selectedUnitQueuedPath.isEmpty()
-                    )
-            ){
-                onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
+
+            else { // Attacks
+
+                /*
+                MELEE ATTACK
+                 */
+                if (
+                    Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE &&
+                    moveCommandGridAttackableSquares[x][y] &&
+                        GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue) &&
+                        (
+                            map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y,
+                                selectedUnit, thisPlayerFowVision) ||
+                                selectedUnitQueuedPath.isEmpty()
+                        )
+                ) {
+                    // Move (or don't, if path is empty) and then melee attack
+                    onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
+                }
+
+                /*
+                RANGED ATTACK
+                 */
+                else if (
+                    Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED &&
+                        moveCommandGridAttackableSquares[x][y] &&
+                        selectedUnitQueuedPath.isEmpty()
+                ){
+                    // Path is empty, do a ranged attack
+                    onPlayerUnitMoveCommand(selectedUnitQueuedPath, new Point(x, y));
+                }
             }
 
         } else if(turnState == TurnState.BUILDING_SELECTED){
@@ -833,10 +853,15 @@ public class InGameUiController extends AbstractUiController {
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
         onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
+        if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
+            onSelectUnitCalculateRangedAttackGrid();
+        }
     }
 
     private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
-        onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
+        if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
+            onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
+        }
         if(remainingSteps > 0){
             if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, selectedUnit, thisPlayerFowVision)){
                 moveCommandGridMovableSquares[x][y-1] = true;
@@ -856,7 +881,6 @@ public class InGameUiController extends AbstractUiController {
             }
         }
     }
-
     private void onCalculateMoveCommandGridAddToAttackGridFromTile(int x, int y){
         if(map.checkTileForAttackByUnit(x, y-1, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x][y-1] = true;
@@ -869,6 +893,18 @@ public class InGameUiController extends AbstractUiController {
         }
         if(map.checkTileForAttackByUnit(x+1, y, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x+1][y] = true;
+        }
+    }
+    private void onSelectUnitCalculateRangedAttackGrid(){
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
+            if(map.checkTileForAttackByUnit(selectedUnit.getX()+p.x, selectedUnit.getY()+p.y, selectedUnit, thisPlayerFowVision)){
+                moveCommandGridAttackableSquares[selectedUnit.getX()+p.x][selectedUnit.getY()+p.y] = true;
+            }
+        }
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MINRANGE-1)){
+            if(map.isInBounds(selectedUnit.getX()+p.x, selectedUnit.getY()+p.y)){
+                moveCommandGridAttackableSquares[selectedUnit.getX()+p.x][selectedUnit.getY()+p.y] = false;
+            }
         }
     }
 

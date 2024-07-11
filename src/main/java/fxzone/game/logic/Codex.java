@@ -37,7 +37,7 @@ public class Codex {
             3, "Truck",
             4, 3, 100, 0, 1, 1, 1,
             1, 1, 1,
-            UnitAttackType.MELEE,
+            UnitAttackType.PACIFIST,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE
         ));
