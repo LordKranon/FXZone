@@ -297,8 +297,12 @@ public class InGameUiController extends AbstractUiController {
     }
 
     void createFXSceneUI(){
-        String css = this.getClass().getResource("../../../views/style.css").toExternalForm();
-        root2D.getStylesheets().add(css);
+        try{
+            String css = this.getClass().getResource("/views/style.css").toExternalForm();
+            root2D.getStylesheets().add(css);
+        }catch (Exception e){
+            System.err.println("[IN-GAME-UI-CONTROLLER] Could not load css");
+        }
 
         escapeMenuButton = new Button("Menu");
         escapeMenuButton.setPrefWidth(400);
