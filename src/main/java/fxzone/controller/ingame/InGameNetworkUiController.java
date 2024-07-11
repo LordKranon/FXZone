@@ -2,16 +2,13 @@ package fxzone.controller.ingame;
 
 import fxzone.controller.NetworkController;
 import fxzone.engine.controller.AbstractGameController;
-import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
-import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.UnitCreatedPacket;
 import fxzone.net.packet.UnitMoveCommandPacket;
 import java.awt.Point;
 import java.util.ArrayDeque;
-import java.util.Queue;
 
 public abstract class InGameNetworkUiController extends InGameUiController implements NetworkController {
 

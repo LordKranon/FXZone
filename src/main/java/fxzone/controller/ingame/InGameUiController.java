@@ -15,7 +15,6 @@ import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
-import fxzone.game.logic.TurnState;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
@@ -142,6 +141,29 @@ public class InGameUiController extends AbstractUiController {
     protected Building selectedBuilding;
     private Pane selectedBuildingUI;
 
+
+    /**
+     * Affects how inputs are processed and how UI elements behave / what is shown on screen during IN-GAME
+     */
+    public enum TurnState {
+
+        GAME_STARTING,
+        NO_TURN,
+        NEUTRAL,
+        UNIT_SELECTED,
+        BUILDING_SELECTED,
+
+        /**
+         * Only for network syncing purposes
+         */
+        ENDING_TURN,
+        BEGINNING_TURN,
+
+        /**
+         * Only in editor mode
+         */
+        EDITOR,
+    }
     protected TurnState turnState = TurnState.GAME_STARTING;
 
     private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
