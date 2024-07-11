@@ -113,6 +113,8 @@ public class InGameUiController extends AbstractUiController {
      */
     private ArrayList<GameObjectUiMoveCommandArrowTile> moveCommandArrowTiles;
 
+    private boolean[][] moveCommandPathFinderMarks;
+
     private boolean[][] moveCommandGridMovableSquares;
     private boolean[][] moveCommandGridAttackableSquares;
     private ArrayList<GameObjectUiMoveCommandGridTile> moveCommandGridTiles;
@@ -423,12 +425,18 @@ public class InGameUiController extends AbstractUiController {
                         selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
                         moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
                 ){
+                    // Player manually adds another tile to pathing arrow
                     addPointToSelectedUnitPathQueue(hoveredPoint);
+                } else if(
+                    moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
+                ){
+                    // Player hovers any green tile and arrow is either too long already or arrowhead is not neighboring
+                    // Redo the pathing arrow with automatic pathfinding
+                    autoFindNewSelectedUnitPathQueue(hoveredPoint);
                 }
             }
         }
     }
-
     private void addPointToSelectedUnitPathQueue(Point point){
 
         selectedUnitQueuedPath.add(point);
@@ -449,6 +457,127 @@ public class InGameUiController extends AbstractUiController {
             point.x, point.y, map, root2D, directionOfThisAsSuccessor
         );
         moveCommandArrowTiles.add(arrowTile);
+    }
+    private void autoFindNewSelectedUnitPathQueue(Point point){
+        if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Finding path");
+
+        // Clear old path (geometric part and graphical part)
+        selectedUnitQueuedPath.clear();
+        if(moveCommandArrowTiles != null){
+            for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+                arrowTile.removeSelfFromRoot(root2D);
+            }
+        }
+        // Reset pathfinder markings
+        // These are used to remember which tiles were already visited
+        moveCommandPathFinderMarks = new boolean[map.getWidth()][map.getHeight()];
+
+
+        PathFinder pathFinder = new PathFinder(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit).SPEED, point);
+        int pathLength = 0;
+        boolean pathFound = false;
+        for(int i = 0; i <= Codex.getUnitProfile(selectedUnit).SPEED; i++){
+            if(pathFinder.find(i)){
+                if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Found path with length "+i);
+                pathFound = true;
+                pathLength = i;
+                break;
+            }
+        }
+        if(!pathFound){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Could not find path");
+            return;
+        }
+        addPathQueueArrowBase();
+        for(int i = 1; i <= pathLength; i++){
+            addPointToSelectedUnitPathQueue(pathFinder.traceFoundPath(i));
+        }
+
+    }
+    private class PathFinder {
+        // TODO Can probably optimize and remove some checks and variables here
+        private PathFinder up, left, down, right;
+        private int x, y;
+        private Point destination;
+        private boolean found;
+        private int stepsLeft;
+        private PathFinder(int x, int y, int stepsLeft, Point destination){
+            this.x = x;
+            this.y = y;
+            this.stepsLeft = stepsLeft;
+            this.destination = destination;
+            moveCommandPathFinderMarks[x][y] = true;
+        }
+        private boolean find(int currentDepth){
+            if(this.x == destination.x && this.y == destination.y){
+                this.found = true;
+                return true;
+            } else if(stepsLeft <= 0){
+                return false;
+            } else if(currentDepth > 0) {
+                if(checkForPathFinding(x, y-1)){
+                    this.up = new PathFinder(x, y-1, stepsLeft - 1, destination);
+                }
+                if(checkForPathFinding(x-1, y)){
+                    this.left = new PathFinder(x-1, y, stepsLeft - 1, destination);
+                }
+                if(checkForPathFinding(x, y+1)){
+                    this.down = new PathFinder(x, y+1, stepsLeft - 1, destination);
+                }
+                if(checkForPathFinding(x+1, y)){
+                    this.right = new PathFinder(x+1, y, stepsLeft - 1, destination);
+                }
+
+                boolean upFound = false, leftFound = false, downFound = false, rightFound = false;
+                if(up != null){
+                    upFound = up.find(currentDepth-1);
+                }
+                if(left != null){
+                    leftFound = left.find(currentDepth-1);
+                }
+                if(down != null){
+                    downFound = down.find(currentDepth-1);
+                }
+                if(right != null){
+                    rightFound = right.find(currentDepth-1);
+                }
+                this.found = upFound || leftFound || downFound || rightFound;
+                return this.found;
+            } else {
+                return false;
+            }
+        }
+        private boolean checkForPathFinding(int x, int y){
+            return map.isInBounds(x, y) && moveCommandGridMovableSquares[x][y] && !moveCommandPathFinderMarks[x][y];
+        }
+        private Point traceFoundPath(int currentDepth){
+            if(currentDepth <= 0){
+                return new Point(x, y);
+            } else {
+                if(up != null && up.found){
+                    return up.traceFoundPath(currentDepth-1);
+                }
+                if(left != null && left.found){
+                    return left.traceFoundPath(currentDepth-1);
+                }
+                if(down != null && down.found){
+                    return down.traceFoundPath(currentDepth-1);
+                }
+                if(right != null && right.found){
+                    return right.traceFoundPath(currentDepth-1);
+                }
+                System.err.println("[PATH-FINDER] Error when tracing found path");
+                return null;
+            }
+        }
+    }
+    private void addPathQueueArrowBase(){
+        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
+            selectedUnit.getX(), selectedUnit.getY(), map, root2D, Direction.NONE
+        );
+        moveCommandArrowTiles.add(arrowTile);
+
+        lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
     }
 
     void tileClicked(int x, int y){
@@ -770,10 +899,7 @@ public class InGameUiController extends AbstractUiController {
             moveCommandArrowTiles = new ArrayList<>();
 
             // Add the first part of the arrow, which is on the tile that the selected unit is standing on
-            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
-                selectedUnit.getX(), selectedUnit.getY(), map, root2D, Direction.NONE
-            );
-            moveCommandArrowTiles.add(arrowTile);
+            addPathQueueArrowBase();
 
             // Calculate the move command grid
             onSelectUnitCalculateMoveCommandGrid();
