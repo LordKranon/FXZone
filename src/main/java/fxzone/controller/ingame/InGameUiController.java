@@ -859,7 +859,10 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
-        if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
+        if(
+            Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE &&
+                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
+        ){
             onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
         }
         if(remainingSteps > 0){
