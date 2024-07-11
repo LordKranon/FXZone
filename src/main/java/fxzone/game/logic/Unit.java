@@ -177,11 +177,6 @@ public class Unit extends TileSpaceObject{
             }
             setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
 
-            /*
-            Capture any building on destination tile (Temporary test).
-            TODO Will need changes
-            */
-            doCapture(game);
 
             setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
 
@@ -449,6 +444,9 @@ public class Unit extends TileSpaceObject{
     public int getStatRemainingHealth(){
         return statRemainingHealth;
     }
+    public int getStatMaxHealth(){
+        return statMaxHealth;
+    }
 
     @Override
     public String toString(){
@@ -458,11 +456,15 @@ public class Unit extends TileSpaceObject{
     /**
      * If any building is on the same tile as this unit, that building is captured.
      */
-    private void doCapture(Game game){
+    public void doCaptureAtEndOfTurn(Game game){
         Building buildingToCapture = game.getMap().getTiles()[x][y].getBuildingOnTile();
         if(buildingToCapture != null){
             if(buildingToCapture.getOwnerId() != this.ownerId){
-                buildingToCapture.ownerChanged(this.ownerId, game);
+                buildingToCapture.captureAtEndOfTurn(
+                    Codex.getUnitHealthDigit((double) statRemainingHealth / (double) statMaxHealth),
+                    this.ownerId,
+                    game
+                );
             }
         }
     }

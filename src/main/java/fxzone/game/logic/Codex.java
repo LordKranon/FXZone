@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Unit.UnitState;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Codex {
+
+    public static final int BUILDING_CAPTURE_TOTAL = 20;
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
@@ -232,5 +235,22 @@ public class Codex {
         System.out.println("[CODEX] "+defender+" is hit for "+finalDamage+" damage");
 
         return finalDamage;
+    }
+
+    public static int getUnitHealthDigit(double fractionOfMaxHealthRemaining){
+        if(fractionOfMaxHealthRemaining >= 1){
+            return 10;
+        } else if(fractionOfMaxHealthRemaining <= 0){
+            return 0;
+        } else {
+            int hpDigit = (int)(fractionOfMaxHealthRemaining * 10.0);
+            if (hpDigit == 0){
+                hpDigit = 1;
+            }
+            return hpDigit;
+        }
+    }
+    public static int getUnitHealthDigit(Unit unit){
+        return getUnitHealthDigit((double)(unit.getStatRemainingHealth())/(double)(unit.getStatMaxHealth()));
     }
 }

@@ -2,6 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Codex;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 
@@ -15,16 +16,13 @@ public class GameObjectUiUnitHealth extends GameObjectInTileSpace{
     }
 
     public void updateUnitHealth(double fractionOfMaxHealthRemaining){
-        if(fractionOfMaxHealthRemaining >= 1){
+        int hpDigit = Codex.getUnitHealthDigit(fractionOfMaxHealthRemaining);
+        if(hpDigit >= 10){
             this.setVisible(false);
-        } else if(fractionOfMaxHealthRemaining <= 0){
+        } else if(hpDigit <= 0){
             this.setImage(AssetHandler.getImage("/images/misc/zone_hp_ui_0.png"));
             this.setVisible(true);
         } else {
-            int hpDigit = (int)(fractionOfMaxHealthRemaining * 10.0);
-            if (hpDigit == 0){
-                hpDigit = 1;
-            }
             this.setImage(AssetHandler.getImage("/images/misc/zone_hp_ui_"+hpDigit+".png"));
             this.setVisible(true);
         }

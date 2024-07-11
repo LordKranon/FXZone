@@ -28,14 +28,15 @@
 
     <HBox spacing="40" style="-fx-background-color: #303030;">
       <VBox fx:id="vBoxPlayerInfo">
-        <Label contentDisplay="RIGHT" text="INGAMETEST" textFill="WHITE" fx:id="labelPlayerName">
+        <Label contentDisplay="RIGHT" text="labelPlayerName" textFill="WHITE" fx:id="labelPlayerName"
+          prefWidth="350.0">
           <font>
             <Font size="50.0"/>
           </font>
         </Label>
 
         <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="400.0" text="TESTTEST" fx:id="buttonPlayerCash">
+          prefWidth="350.0" text="buttonPlayerCash" fx:id="buttonPlayerCash">
         </Button>
 
         <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
@@ -46,14 +47,34 @@
       </VBox>
 
       <VBox fx:id="vBoxHoverInfo">
-        <Label contentDisplay="RIGHT" text="INGAMETEST2" textFill="WHITE" fx:id="labelHoverName">
+        <Label contentDisplay="RIGHT" text="labelHoverName" textFill="WHITE" fx:id="labelHoverName"
+          prefWidth="350.0">
           <font>
             <Font size="50.0"/>
           </font>
         </Label>
 
         <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="400.0" text="TESTTEST2" fx:id="buttonHoverInfo">
+          prefWidth="350.0" text="buttonHoverInfo" fx:id="buttonHoverInfo">
+        </Button>
+
+        <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
+          <font>
+            <Font size="50.0"/>
+          </font>
+        </Label>
+      </VBox>
+
+      <VBox fx:id="vBoxAdditionalInfo">
+        <Label contentDisplay="RIGHT" text="labelAdditionalInfo" textFill="WHITE" fx:id="labelAdditionalInfo"
+        prefWidth="350.0">
+          <font>
+            <Font size="50.0"/>
+          </font>
+        </Label>
+
+        <Button graphicTextGap="20.0" mnemonicParsing="false"
+          prefWidth="350.0" text="buttonAdditionalInfo" fx:id="buttonAdditionalInfo">
         </Button>
 
         <Label contentDisplay="RIGHT" text=" " textFill="WHITE">

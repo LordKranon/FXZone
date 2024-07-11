@@ -29,6 +29,14 @@ public class Building extends TileSpaceObject{
 
     private ArrayList<ButtonBuildingBuyUnit> constructionMenuButtons;
 
+    /*
+    GAMEPLAY
+     */
+    private int statCaptureProgress;
+
+    /*
+    DEBUG
+     */
     private static final boolean verbose = true;
 
     public Building(BuildingType buildingType, int x, int y) {
@@ -111,7 +119,20 @@ public class Building extends TileSpaceObject{
     public void setOwnerId(int ownerId){
         this.ownerId = ownerId;
     }
+    public void setStatCaptureProgress(int captureProgress){
+        this.statCaptureProgress = captureProgress;
+    }
+    public int getStatCaptureProgress(){
+        return statCaptureProgress;
+    }
 
+    public void captureAtEndOfTurn(int extraCaptureProgress, int newOwnerId, Game game){
+        this.statCaptureProgress += extraCaptureProgress;
+        if(statCaptureProgress >= Codex.BUILDING_CAPTURE_TOTAL){
+            this.statCaptureProgress = 0;
+            this.ownerChanged(newOwnerId, game);
+        }
+    }
     /**
      * This building is captured meaning it gets a new owner,
      * or this buildings owner is gone and it becomes unowned.

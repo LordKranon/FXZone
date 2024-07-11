@@ -65,6 +65,8 @@ public class InGameUiController extends AbstractUiController {
     private Button buttonPlayerCash;
     private Label labelHoverName;
     private Button buttonHoverInfo;
+    private Label labelAdditionalInfo;
+    private Button buttonAdditionalInfo;
 
     Pane escapeMenu;
 
@@ -272,13 +274,18 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(hBox);
         VBox vBox = (VBox) hBox.getChildren().get(0);
         HBox hBoxInner = (HBox) vBox.getChildren().get(2);
+
         VBox vBoxPlayerInfo = (VBox) hBoxInner.lookup("#vBoxPlayerInfo");
         labelPlayerName = (Label) vBoxPlayerInfo.lookup("#labelPlayerName");
         buttonPlayerCash = (Button) vBoxPlayerInfo.lookup("#buttonPlayerCash");
+
         VBox vBoxHoverInfo = (VBox) hBoxInner.lookup("#vBoxHoverInfo");
         labelHoverName = (Label) vBoxHoverInfo.lookup("#labelHoverName");
         buttonHoverInfo = (Button) vBoxHoverInfo.lookup("#buttonHoverInfo");
 
+        VBox vBoxAdditionalInfo = (VBox) hBoxInner.lookup("#vBoxAdditionalInfo");
+        labelAdditionalInfo = (Label) vBoxAdditionalInfo.lookup("#labelAdditionalInfo");
+        buttonAdditionalInfo = (Button) vBoxAdditionalInfo.lookup("#buttonAdditionalInfo");
     }
 
     protected void initializeGameSpecifics(){
@@ -805,6 +812,11 @@ public class InGameUiController extends AbstractUiController {
     private void setHoveredTileInfoLabel(Point hoveredPoint){
         Tile tile = map.getTiles()[hoveredPoint.x][hoveredPoint.y];
         Unit unit = tile.getUnitOnTile();
+        Building building = tile.getBuildingOnTile();
+
+        labelAdditionalInfo.setText("");
+        buttonAdditionalInfo.setText("");
+
         if(unit != null && thisPlayerFowVision[hoveredPoint.x][hoveredPoint.y]){
             labelHoverName.setText(Codex.getUnitProfile(unit.getUnitType()).NAME);
             buttonHoverInfo.setText(unit.getStatRemainingHealth() + "%");
@@ -813,9 +825,12 @@ public class InGameUiController extends AbstractUiController {
             } else {
                 labelHoverName.setTextFill(Color.web("#ffffff"));
             }
+            if(building != null && building.getOwnerId() != unit.getOwnerId()){
+                labelAdditionalInfo.setText("Capturing "+building.getBuildingType());
+                buttonAdditionalInfo.setText(building.getStatCaptureProgress()+"/"+Codex.BUILDING_CAPTURE_TOTAL+" (+"+Codex.getUnitHealthDigit(unit)+")");
+            }
             return;
         }
-        Building building = tile.getBuildingOnTile();
         if(building != null){
             labelHoverName.setText(""+building.getBuildingType());
             buttonHoverInfo.setText("");
@@ -829,6 +844,7 @@ public class InGameUiController extends AbstractUiController {
         labelHoverName.setText(""+tile.getTileType());
         buttonHoverInfo.setText("");
         labelHoverName.setTextFill(Color.web("#ffffff"));
+
     }
 
     /**
@@ -1154,6 +1170,7 @@ public class InGameUiController extends AbstractUiController {
         while still having a unit selected and with move command arrows being displayed.
         */
         turnStateToNoTurn();
+        map.handleEndOfTurnEffects(game);
         game.goNextTurn();
         beginTurn();
     }

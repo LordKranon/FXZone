@@ -467,4 +467,18 @@ public class Map {
         }
         return tileVisibleBefore;
     }
+
+    public void handleEndOfTurnEffects(Game game){
+        for(Unit unit : units){
+            if(unit.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
+                unit.doCaptureAtEndOfTurn(game);
+            }
+        }
+        for(Building building: buildings){
+            Unit unitOnBuilding = tiles[building.getX()][building.getY()].getUnitOnTile();
+            if(unitOnBuilding == null || unitOnBuilding.getOwnerId() == building.getOwnerId()){
+                building.setStatCaptureProgress(0);
+            }
+        }
+    }
 }
