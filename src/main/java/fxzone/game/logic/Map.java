@@ -2,6 +2,7 @@ package fxzone.game.logic;
 
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.TileSerializable;

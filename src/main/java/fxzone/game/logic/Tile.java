@@ -1,14 +1,15 @@
 package fxzone.game.logic;
 
-import fxzone.engine.handler.AssetHandler;
-import fxzone.engine.handler.KeyTile;
 import fxzone.game.logic.serializable.TileSerializable;
-import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectTile;
 import javafx.scene.Group;
 
 public class Tile extends TileSpaceObject{
 
+    public enum TileType {
+        PLAINS,
+        WATER,
+    }
     private final TileType tileType;
 
     private Unit unitOnTile;

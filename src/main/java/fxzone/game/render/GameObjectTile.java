@@ -2,7 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyTile;
-import fxzone.game.logic.TileType;
+import fxzone.game.logic.Tile.TileType;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 

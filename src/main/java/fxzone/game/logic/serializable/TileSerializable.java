@@ -2,7 +2,7 @@ package fxzone.game.logic.serializable;
 
 
 import fxzone.game.logic.Tile;
-import fxzone.game.logic.TileType;
+import fxzone.game.logic.Tile.TileType;
 
 public class TileSerializable extends TileSpaceObjectSerializable{
 

@@ -95,7 +95,7 @@ public class MainMenuUiController extends AbstractUiController {
 
         @FXML
         public void editor(){
-            Map map = new Map(15, 25, null);
+            Map map = new Map(30, 20, null);
             MapSerializable mapSerializable = new MapSerializable(map);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
             //editorPlayerList.add(new Player("Editor", Color.CYAN, 1));

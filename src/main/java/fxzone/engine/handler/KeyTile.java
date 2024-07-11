@@ -1,7 +1,7 @@
 package fxzone.engine.handler;
 
 import fxzone.engine.utils.GeometryUtils;
-import fxzone.game.logic.TileType;
+import fxzone.game.logic.Tile.TileType;
 
 public class KeyTile {
 

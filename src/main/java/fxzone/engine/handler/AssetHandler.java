@@ -3,7 +3,7 @@ package fxzone.engine.handler;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
-import fxzone.game.logic.TileType;
+import fxzone.game.logic.Tile.TileType;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
