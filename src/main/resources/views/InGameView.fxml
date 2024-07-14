@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 <HBox xmlns="http://javafx.com/javafx/16"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="fxzone.controller.ingame.InGameUiController$InGameUiControllerFxml"
@@ -27,62 +28,45 @@
     </HBox>
 
     <HBox spacing="40" style="-fx-background-color: #303030;">
-      <VBox fx:id="vBoxPlayerInfo">
-        <Label contentDisplay="RIGHT" text="labelPlayerName" textFill="WHITE" fx:id="labelPlayerName"
+
+      <VBox fx:id="vBox01">
+        <TextFlow fx:id="tf0101"
           prefWidth="350.0">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
-
-        <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="350.0" text="buttonPlayerCash" fx:id="buttonPlayerCash">
-        </Button>
-
-        <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
-      </VBox>
-
-      <VBox fx:id="vBoxHoverInfo">
-        <Label contentDisplay="RIGHT" text="labelHoverName" textFill="WHITE" fx:id="labelHoverName"
+        </TextFlow>
+        <TextFlow fx:id="tf0102"
           prefWidth="350.0">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
-
-        <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="350.0" text="buttonHoverInfo" fx:id="buttonHoverInfo">
-        </Button>
-
-        <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
+        </TextFlow>
+        <TextFlow fx:id="tf0103"
+          prefWidth="350.0">
+        </TextFlow>
       </VBox>
 
-      <VBox fx:id="vBoxAdditionalInfo">
-        <Label contentDisplay="RIGHT" text="labelAdditionalInfo" textFill="WHITE" fx:id="labelAdditionalInfo"
-        prefWidth="350.0">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
 
-        <Button graphicTextGap="20.0" mnemonicParsing="false"
-          prefWidth="350.0" text="buttonAdditionalInfo" fx:id="buttonAdditionalInfo">
-        </Button>
-
-        <Label contentDisplay="RIGHT" text=" " textFill="WHITE">
-          <font>
-            <Font size="50.0"/>
-          </font>
-        </Label>
+      <VBox fx:id="vBox02">
+        <TextFlow fx:id="tf0201"
+          prefWidth="350.0">
+        </TextFlow>
+        <TextFlow fx:id="tf0202"
+          prefWidth="350.0">
+        </TextFlow>
+        <TextFlow fx:id="tf0203"
+          prefWidth="350.0">
+        </TextFlow>
       </VBox>
+
+
+      <VBox fx:id="vBox03">
+        <TextFlow fx:id="tf0301"
+          >
+        </TextFlow>
+        <TextFlow fx:id="tf0302"
+          prefWidth="350.0">
+        </TextFlow>
+        <TextFlow fx:id="tf0303"
+          prefWidth="350.0">
+        </TextFlow>
+      </VBox>
+
     </HBox>
   </VBox>
 

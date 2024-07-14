@@ -7,6 +7,7 @@ import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
+import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
@@ -42,6 +43,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 public class InGameUiController extends AbstractUiController {
@@ -61,12 +66,8 @@ public class InGameUiController extends AbstractUiController {
     private Button escapeMenuButton;
     private Button endTurnButton;
 
-    private Label labelPlayerName;
-    private Button buttonPlayerCash;
-    private Label labelHoverName;
-    private Button buttonHoverInfo;
-    private Label labelAdditionalInfo;
-    private Button buttonAdditionalInfo;
+    private final Font fontBottomUiBar = new Font(50);
+    private TextFlow[][] textFlowsBottomUiBar;
 
     Pane escapeMenu;
 
@@ -275,17 +276,20 @@ public class InGameUiController extends AbstractUiController {
         VBox vBox = (VBox) hBox.getChildren().get(0);
         HBox hBoxInner = (HBox) vBox.getChildren().get(2);
 
-        VBox vBoxPlayerInfo = (VBox) hBoxInner.lookup("#vBoxPlayerInfo");
-        labelPlayerName = (Label) vBoxPlayerInfo.lookup("#labelPlayerName");
-        buttonPlayerCash = (Button) vBoxPlayerInfo.lookup("#buttonPlayerCash");
 
-        VBox vBoxHoverInfo = (VBox) hBoxInner.lookup("#vBoxHoverInfo");
-        labelHoverName = (Label) vBoxHoverInfo.lookup("#labelHoverName");
-        buttonHoverInfo = (Button) vBoxHoverInfo.lookup("#buttonHoverInfo");
+        textFlowsBottomUiBar = new TextFlow[3][3];
 
-        VBox vBoxAdditionalInfo = (VBox) hBoxInner.lookup("#vBoxAdditionalInfo");
-        labelAdditionalInfo = (Label) vBoxAdditionalInfo.lookup("#labelAdditionalInfo");
-        buttonAdditionalInfo = (Button) vBoxAdditionalInfo.lookup("#buttonAdditionalInfo");
+        for(int i = 0; i < 3; i++){
+            VBox vBoxInner = (VBox) hBoxInner.lookup("#vBox0"+(i+1));
+
+            for(int j = 0; j < 3; j++){
+                textFlowsBottomUiBar[i][j] = (TextFlow) vBoxInner.lookup("#tf0"+(i+1)+"0"+(j+1));
+            }
+        }
+        for(int i = 0; i < 3; i++){
+            textFlowsBottomUiBar[i][1].setStyle("-fx-background-color: #202020;");
+            textFlowsBottomUiBar[i][1].setTextAlignment(TextAlignment.CENTER);
+        }
     }
 
     protected void initializeGameSpecifics(){
@@ -295,10 +299,25 @@ public class InGameUiController extends AbstractUiController {
         setLabelToPlayer(thisPlayer);
     }
     protected void setLabelToPlayer(Player player){
-        labelPlayerName.setText(player.getName());
-        labelPlayerName.setTextFill(Color.web(player.getTextColor().toString()));
 
-        buttonPlayerCash.setText("$"+player.getStatResourceCash());
+        textFlowsBottomUiBar[0][0].getChildren().clear();
+        Text textName = new Text(player.getName());
+        textName.setFont(fontBottomUiBar);
+        textName.setStyle("-fx-fill: "+ FxUtils.toRGBCode(player.getTextColor()));
+        textFlowsBottomUiBar[0][0].getChildren().add(textName);
+
+        textFlowsBottomUiBar[0][1].getChildren().clear();
+        Text textCash = new Text("$"+player.getStatResourceCash());
+        textCash.setFont(fontBottomUiBar);
+        textCash.setStyle("-fx-fill: white");
+        textFlowsBottomUiBar[0][1].getChildren().add(textCash);
+
+        textFlowsBottomUiBar[0][2].getChildren().clear();
+        Text textNothing = new Text(" ");
+        textNothing.setFont(fontBottomUiBar);
+        textFlowsBottomUiBar[0][2].getChildren().add(textNothing);
+
+
     }
 
     private void createTileSelector(){
@@ -814,36 +833,89 @@ public class InGameUiController extends AbstractUiController {
         Unit unit = tile.getUnitOnTile();
         Building building = tile.getBuildingOnTile();
 
-        labelAdditionalInfo.setText("");
-        buttonAdditionalInfo.setText("");
+        textFlowsBottomUiBar[1][0].getChildren().clear();
+        textFlowsBottomUiBar[1][1].getChildren().clear();
+        textFlowsBottomUiBar[2][0].getChildren().clear();
+        textFlowsBottomUiBar[2][1].getChildren().clear();
 
         if(unit != null && thisPlayerFowVision[hoveredPoint.x][hoveredPoint.y]){
-            labelHoverName.setText(Codex.getUnitProfile(unit.getUnitType()).NAME);
-            buttonHoverInfo.setText(unit.getStatRemainingHealth() + "%");
+
+            Text textUnitName = new Text(Codex.getUnitProfile(unit.getUnitType()).NAME);
+            textUnitName.setFont(fontBottomUiBar);
+            textFlowsBottomUiBar[1][0].getChildren().add(textUnitName);
+            Text textUnitHealth = new Text(Codex.getUnitHealthDigit(unit) + " HP");
+            textUnitHealth.setFont(fontBottomUiBar);
+            textFlowsBottomUiBar[1][1].getChildren().add(textUnitHealth);
+            textUnitHealth.setStyle("-fx-fill: white");
+
+
             if(game.playerExists(unit.getOwnerId())){
-                labelHoverName.setTextFill(Color.web(game.getPlayer(unit.getOwnerId()).getTextColor().toString()));
+                textUnitName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
             } else {
-                labelHoverName.setTextFill(Color.web("#ffffff"));
+                textUnitName.setStyle("-fx-fill: white");
             }
             if(building != null && building.getOwnerId() != unit.getOwnerId()){
-                labelAdditionalInfo.setText("Capturing "+building.getBuildingType());
-                buttonAdditionalInfo.setText(building.getStatCaptureProgress()+"/"+Codex.BUILDING_CAPTURE_TOTAL+" (+"+Codex.getUnitHealthDigit(unit)+")");
+
+                String unitColor = ""+(!game.playerExists(unit.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
+                String buildingColor = ""+(!game.playerExists(building.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
+
+                Text textCapturing = new Text("Capturing ");
+                Text textCapturedBuildingName = new Text(""+building.getBuildingType());
+                textCapturing.setFont(fontBottomUiBar);
+                textCapturedBuildingName.setFont(fontBottomUiBar);
+                textCapturing.setStyle("-fx-fill: white");
+                textCapturedBuildingName.setStyle("-fx-fill: "+buildingColor);
+                textFlowsBottomUiBar[2][0].getChildren().add(textCapturing);
+                textFlowsBottomUiBar[2][0].getChildren().add(textCapturedBuildingName);
+
+
+                //Text textCapturedBuildingProgress = new Text(building.getStatCaptureProgress()+"/"+Codex.BUILDING_CAPTURE_TOTAL+" (+"+Codex.getUnitHealthDigit(unit)+")");
+                Text[] textCapturedBuildingProgress = new Text[6];
+                String[] stringsCapturedBuildingProgress = {
+                    ""+building.getStatCaptureProgress(),
+                    "/",
+                    ""+Codex.BUILDING_CAPTURE_TOTAL,
+                    " (+",
+                    ""+Codex.getUnitHealthDigit(unit),
+                    ")"
+                };
+                String[] colorsCapturedBuildingProgress = {
+                    unitColor,
+                    "white",
+                    buildingColor,
+                    "white",
+                    unitColor,
+                    "white"
+                };
+                for(int i = 0; i < 6; i++){
+                    textCapturedBuildingProgress[i] = new Text(stringsCapturedBuildingProgress[i]);
+                    textCapturedBuildingProgress[i].setFont(fontBottomUiBar);
+                    textCapturedBuildingProgress[i].setStyle("-fx-fill: "+colorsCapturedBuildingProgress[i]);
+                    textFlowsBottomUiBar[2][1].getChildren().add(textCapturedBuildingProgress[i]);
+                }
+
             }
-            return;
         }
-        if(building != null){
-            labelHoverName.setText(""+building.getBuildingType());
-            buttonHoverInfo.setText("");
+        else if(building != null){
+
+            Text textBuildingName = new Text(""+building.getBuildingType());
+            textBuildingName.setFont(fontBottomUiBar);
+            textFlowsBottomUiBar[1][0].getChildren().add(textBuildingName);
+
+
             if(game.playerExists(building.getOwnerId())){
-                labelHoverName.setTextFill(Color.web(game.getPlayer(building.getOwnerId()).getTextColor().toString()));
+                textBuildingName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
             } else {
-                labelHoverName.setTextFill(Color.web("#ffffff"));
+                textBuildingName.setStyle("-fx-fill: white");
             }
-            return;
+
+        } else{
+            Text textTileName = new Text(""+tile.getTileType());
+            textTileName.setFont(fontBottomUiBar);
+            textFlowsBottomUiBar[1][0].getChildren().add(textTileName);
+            textTileName.setStyle("-fx-fill: white");
+
         }
-        labelHoverName.setText(""+tile.getTileType());
-        buttonHoverInfo.setText("");
-        labelHoverName.setTextFill(Color.web("#ffffff"));
 
     }
 
