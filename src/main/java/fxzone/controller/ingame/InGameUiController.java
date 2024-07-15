@@ -1055,7 +1055,12 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void buyUnitButtonClicked(UnitType unitType){
-        //TODO Check if valid buy and if unit creation possible
+
+        // Check if sufficient cash and creation tile empty
+        if(turnState != TurnState.BUILDING_SELECTED || thisPlayer.getStatResourceCash() < Codex.getUnitProfile(unitType).COST || map.getTiles()[selectedBuilding.getX()][selectedBuilding.getX()].hasUnitOnTile()){
+            if(verbose) System.err.println("[IN-GAME-UI-CONTROLLER] [buyUnitButtonClicked] Cannot buy unit");
+            return;
+        }
 
         Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY());
         createdUnit.setOwnerId(thisPlayer.getId());

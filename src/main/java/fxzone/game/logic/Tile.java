@@ -67,6 +67,9 @@ public class Tile extends TileSpaceObject{
         if (verbose && buildingOnTile == null) System.err.println(this+" No building on tile");
         return buildingOnTile;
     }
+    public boolean hasUnitOnTile(){
+        return unitOnTile != null;
+    }
 
     public boolean isMovableThroughBy(Unit unit, boolean tileVisible){
         //TODO
