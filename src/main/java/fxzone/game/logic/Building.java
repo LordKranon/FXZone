@@ -57,6 +57,8 @@ public class Building extends TileSpaceObject{
             playerColor = FxUtils.toAwtColor(game.getPlayer(ownerId).getColor());
         }catch (NullPointerException e){
             System.err.println(this+" Initialized without owner color");
+            // Set owner id to 0 if owner-less
+            this.ownerId = 0;
         }
 
         this.gameObjectBuilding = new GameObjectBuilding(
@@ -131,12 +133,17 @@ public class Building extends TileSpaceObject{
     public BuildingType getBuildingType(){
         return buildingType;
     }
+
     public int getOwnerId(){
         return ownerId;
     }
     public void setOwnerId(int ownerId){
         this.ownerId = ownerId;
     }
+    public boolean hasOwner(){
+        return this.ownerId != 0;
+    }
+
     public void setStatCaptureProgress(int captureProgress){
         this.statCaptureProgress = captureProgress;
     }

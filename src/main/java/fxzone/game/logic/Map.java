@@ -9,6 +9,7 @@ import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javafx.scene.Group;
 
@@ -468,10 +469,22 @@ public class Map {
         return tileVisibleBefore;
     }
 
-    public void handleEndOfTurnEffects(Game game){
+    public HashMap<Player, Boolean> handleEndOfTurnEffects(Game game, ArrayList<Player> playersRemaining){
+
+        Player playerWithTurn = game.getPlayers().get(game.whoseTurn());
+
+        HashMap<Player, Boolean> playersEliminated = new HashMap<>();
+
+        for(Player player : game.getPlayers()){
+            playersEliminated.put(player, true);
+        }
+
         for(Unit unit : units){
-            if(unit.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
+            if(unit.getOwnerId() == playerWithTurn.getId()){
                 unit.doCaptureAtEndOfTurn(game);
+            }
+            if(unit.hasOwner()){
+                playersEliminated.put(game.getPlayer(unit.getOwnerId()), false);
             }
         }
         for(Building building: buildings){
@@ -479,6 +492,10 @@ public class Map {
             if(unitOnBuilding == null || unitOnBuilding.getOwnerId() == building.getOwnerId()){
                 building.setStatCaptureProgress(0);
             }
+            if(building.hasOwner()){
+                playersEliminated.put(game.getPlayer(building.getOwnerId()), false);
+            }
         }
+        return playersEliminated;
     }
 }

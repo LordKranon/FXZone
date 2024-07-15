@@ -3,6 +3,7 @@ package fxzone.game.logic;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.PlayerSerializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javafx.scene.Group;
 
@@ -19,7 +20,7 @@ public class Game {
     /*
      * DEBUG
      */
-    static final boolean verbose = false;
+    static final boolean verbose = true;
 
     public Game(List<Player> players, Map map){
         this.players = new ArrayList<>();
@@ -73,9 +74,11 @@ public class Game {
     }
 
     public void goNextTurn(){
-        if (verbose) System.out.println("[GAME] [goNextTurn] Player: "+players.get(whoseTurn)+" 's turn ended");
+
+
+        if (verbose) System.out.println("[GAME] [goNextTurn] Player: "+((whoseTurn>=0 && whoseTurn<amountPlayers)?players.get(whoseTurn):"INDETERMINABLE")+" 's turn ended");
         whoseTurn += 1;
-        if (whoseTurn >= amountPlayers){
+        if (whoseTurn >= amountPlayers ||  whoseTurn < 0){
             whoseTurn = 0;
         }
         for(Unit unit : map.getUnits()){
@@ -92,5 +95,24 @@ public class Game {
 
     public Map getMap(){
         return map;
+    }
+
+    public void handleEndOfTurnEffects(){
+        HashMap<Player, Boolean> playersEliminated = map.handleEndOfTurnEffects(this, players);
+        for(Player player : playersEliminated.keySet()){
+            if(playersEliminated.get(player)){
+                if(verbose) System.out.println("[GAME] "+player+ " ELIMINATED");
+                eliminatePlayer(player);
+            }
+        }
+    }
+
+    public void eliminatePlayer(Player player){
+        if(!players.remove(player)){
+            System.err.println("[GAME] [eliminatePlayer] Could not eliminate "+player);
+            return;
+        }
+        amountPlayers -= 1;
+        whoseTurn -= 1;
     }
 }

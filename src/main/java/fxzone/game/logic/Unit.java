@@ -104,6 +104,8 @@ public class Unit extends TileSpaceObject{
             playerColor = FxUtils.toAwtColor(game.getPlayer(ownerId).getColor());
         }catch (NullPointerException e){
             System.err.println(this+" Initialized without owner color");
+            // Set owner id to 0 if owner-less
+            this.ownerId = 0;
         }
 
         this.gameObjectUnit = new GameObjectUnit(
@@ -323,6 +325,9 @@ public class Unit extends TileSpaceObject{
     }
     public void setOwnerId(int ownerId){
         this.ownerId = ownerId;
+    }
+    public boolean hasOwner(){
+        return this.ownerId != 0;
     }
 
     private void onMovementEnd(Map map){

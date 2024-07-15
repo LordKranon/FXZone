@@ -158,6 +158,7 @@ public class InGameUiController extends AbstractUiController {
         NEUTRAL,
         UNIT_SELECTED,
         BUILDING_SELECTED,
+        GAME_OVER,
 
         /**
          * Only for network syncing purposes
@@ -1248,7 +1249,7 @@ public class InGameUiController extends AbstractUiController {
         while still having a unit selected and with move command arrows being displayed.
         */
         turnStateToNoTurn();
-        map.handleEndOfTurnEffects(game);
+        game.handleEndOfTurnEffects();
         game.goNextTurn();
         beginTurn();
     }
