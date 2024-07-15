@@ -14,8 +14,12 @@ import fxzone.game.render.GameObjectBuilding;
 import java.awt.Color;
 import java.util.ArrayList;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class Building extends TileSpaceObject{
 
@@ -67,7 +71,7 @@ public class Building extends TileSpaceObject{
         constructionMenu = new Pane();
         int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
         int FONT_SIZE = 36 * UI_SIZE / 128;
-        constructionMenu.setPrefWidth(3* UI_SIZE);
+        constructionMenu.setPrefWidth(4* UI_SIZE);
         constructionMenu.setPrefHeight(8* UI_SIZE);
         constructionMenu.setVisible(true);
         constructionMenu.setStyle("-fx-background-color: #282828;");
@@ -85,10 +89,24 @@ public class Building extends TileSpaceObject{
             unitIcon.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
             constructionMenu.getChildren().add(unitIcon);
 
+
+            Label unitCostLabel = new Label();
+            unitCostLabel.setText(""+Codex.getUnitProfile(unitType).COST);
+            unitCostLabel.setPrefWidth(UI_SIZE);
+            unitCostLabel.setPrefHeight(UI_SIZE);
+            unitCostLabel.setTranslateX(UI_SIZE);
+            unitCostLabel.setTranslateY(UI_SIZE*i);
+            unitCostLabel.setVisible(true);
+            unitCostLabel.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
+            unitCostLabel.setStyle("-fx-text-fill: white; -fx-font-size:36; ");
+            unitCostLabel.setTextAlignment(TextAlignment.RIGHT);
+            constructionMenu.getChildren().add(unitCostLabel);
+
+
             ButtonBuildingBuyUnit unitPurchaseButton = new ButtonBuildingBuyUnit(unitType);
             unitPurchaseButton.setPrefWidth(2* UI_SIZE);
             unitPurchaseButton.setPrefHeight(UI_SIZE);
-            unitPurchaseButton.setTranslateX(UI_SIZE);
+            unitPurchaseButton.setTranslateX(UI_SIZE*2);
             unitPurchaseButton.setTranslateY(UI_SIZE*i);
             unitPurchaseButton.setVisible(true);
             unitPurchaseButton.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);

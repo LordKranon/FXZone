@@ -869,7 +869,6 @@ public class InGameUiController extends AbstractUiController {
                 textFlowsBottomUiBar[2][0].getChildren().add(textCapturedBuildingName);
 
 
-                //Text textCapturedBuildingProgress = new Text(building.getStatCaptureProgress()+"/"+Codex.BUILDING_CAPTURE_TOTAL+" (+"+Codex.getUnitHealthDigit(unit)+")");
                 Text[] textCapturedBuildingProgress = new Text[6];
                 String[] stringsCapturedBuildingProgress = {
                     ""+building.getStatCaptureProgress(),
@@ -1061,7 +1060,7 @@ public class InGameUiController extends AbstractUiController {
         Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY());
         createdUnit.setOwnerId(thisPlayer.getId());
         UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
-        onPlayerCreatesUnit(createdUnitSerializable, 40);
+        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST);
         deselectBuilding();
     }
 

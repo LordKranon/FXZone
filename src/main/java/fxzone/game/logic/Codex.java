@@ -18,7 +18,8 @@ public class Codex {
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
-            UnitSuperType.LAND_INFANTRY
+            UnitSuperType.LAND_INFANTRY,
+            80
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
             1, "RPG",
@@ -26,7 +27,8 @@ public class Codex {
             .5, 1.5, 1.5,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_INFANTRY,
-            UnitSuperType.LAND_INFANTRY
+            UnitSuperType.LAND_INFANTRY,
+            90
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
             2, "Car",
@@ -34,7 +36,8 @@ public class Codex {
             1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            160
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
             3, "Truck",
@@ -42,7 +45,8 @@ public class Codex {
             1, 1, 1,
             UnitAttackType.PACIFIST,
             UnitArmorClass.ARMORCLASS_ARMORED,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            200
         ));
         put(UnitType.TANK_HUNTER, new UnitProfile(
             4, "Hunter Tank",
@@ -50,7 +54,8 @@ public class Codex {
             1, 1.25, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            240
         ));
         put(UnitType.ARTILLERY, new UnitProfile(
             5, "Artillery",
@@ -58,7 +63,8 @@ public class Codex {
             1.5, 1, 1,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            200
         ));
         put(UnitType.TANK_BATTLE, new UnitProfile(
             6, "Battle Tank",
@@ -66,7 +72,8 @@ public class Codex {
             1, 1, 1.5,
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            360
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
             7, "Rocket Artillery",
@@ -74,7 +81,8 @@ public class Codex {
             1, 1.5, 1.5,
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
-            UnitSuperType.LAND_VEHICLE
+            UnitSuperType.LAND_VEHICLE,
+            300
         ));
 
     }};
@@ -110,6 +118,7 @@ public class Codex {
     public static class UnitProfile{
         public String NAME;
         public int ID, SPEED, VISION, HEALTH, DAMAGE, DEFENSE, MINRANGE, MAXRANGE;
+        public int COST;
         public double DMG_VS_INFANTRY, DMG_VS_ARMORED, DMG_VS_HEAVY;
         public UnitAttackType ATTACKTYPE;
         public UnitArmorClass ARMORCLASS;
@@ -120,7 +129,8 @@ public class Codex {
             double DMG_VS_INFANTRY, double DMG_VS_ARMORED, double DMG_VS_HEAVY,
             UnitAttackType ATTACKTYPE,
             UnitArmorClass ARMORCLASS,
-            UnitSuperType SUPERTYPE
+            UnitSuperType SUPERTYPE,
+            int COST
         ){
             this.ID = ID;
             this.NAME = NAME;
@@ -140,6 +150,8 @@ public class Codex {
             this.DMG_VS_INFANTRY = DMG_VS_INFANTRY;
             this.DMG_VS_ARMORED = DMG_VS_ARMORED;
             this.DMG_VS_HEAVY = DMG_VS_HEAVY;
+
+            this.COST = COST;
         }
     }
     public static UnitProfile getUnitProfile(UnitType unitType){
