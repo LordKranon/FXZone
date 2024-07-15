@@ -1072,6 +1072,8 @@ public class InGameUiController extends AbstractUiController {
         onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
         if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
             onSelectUnitCalculateRangedAttackGrid();
+        } else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
+            onCalculateMoveCommandGridAddToAttackGridFromTile(selectedUnit.getX(), selectedUnit.getY());
         }
     }
 
