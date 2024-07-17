@@ -74,7 +74,9 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Announce GAME OVER at game end.
      */
+    TextFlow gameOverTextFlow;
     Text gameOverText;
+    Text gameOverName;
 
 
     /**
@@ -378,15 +380,30 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.getChildren().add(quitConfirmButton);
 
 
-        gameOverText = new Text("  DEFEAT");
+        gameOverTextFlow = new TextFlow();
+        gameOverTextFlow.setVisible(false);
+        gameOverTextFlow.setViewOrder(ViewOrder.UI_IN_GAME_ANNOUNCEMENT);
+        gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
+        gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
+        gameOverTextFlow.setTextAlignment(TextAlignment.CENTER);
+
+        gameOverText = new Text("DEFEAT");
         gameOverText.setFont(new Font(100));
-        gameOverText.setVisible(false);
-        gameOverText.setViewOrder(ViewOrder.UI_IN_GAME_ANNOUNCEMENT);
+        gameOverText.setVisible(true);
         gameOverText.setStyle("-fx-fill: white");
-        gameOverText.setTranslateX((subScene2D.getWidth() / 2) - 200);
-        gameOverText.setTranslateY((subScene2D.getHeight() / 2) - 50);
         gameOverText.setTextAlignment(TextAlignment.CENTER);
-        root2D.getChildren().add(gameOverText);
+
+        gameOverTextFlow.getChildren().add(gameOverText);
+
+        gameOverName = new Text("\nName");
+        gameOverName.setFont(new Font(100));
+        gameOverName.setVisible(true);
+        gameOverName.setStyle("-fx-fill: white");
+        gameOverName.setTextAlignment(TextAlignment.CENTER);
+
+        gameOverTextFlow.getChildren().add(gameOverName);
+
+        root2D.getChildren().add(gameOverTextFlow);
     }
 
     void initializeGame(GameSerializable initialGame){
@@ -430,8 +447,8 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
 
-        gameOverText.setTranslateX((subScene2D.getWidth() / 2) - 250);
-        gameOverText.setTranslateY((subScene2D.getHeight() / 2) - 50);
+        gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
+        gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
     }
 
     private void handleOffThreadGraphics(){
@@ -1278,9 +1295,9 @@ public class InGameUiController extends AbstractUiController {
         if(game.eliminationCheckup()){
             ArrayList<Player> playersEliminated = game.getPendingEliminatedPlayers();
             if(playersEliminated.contains(thisPlayer)){
-                turnStateToGameOver();
+                turnStateToGameOver(false, 0);
             } else if(game.getPlayers().size() < 2){
-                turnStateToGameOver();
+                turnStateToGameOver(game.playerExists(thisPlayer.getId()), 0);
             }
         }
         game.goNextTurn();
@@ -1325,12 +1342,19 @@ public class InGameUiController extends AbstractUiController {
         map.setVisible(false);
         turnState = TurnState.NO_TURN;
     }
-    protected void turnStateToGameOver(){
+    protected void turnStateToGameOver(boolean victory, int playerDisplayed){
         map.setVisible(true);
         map.setFogOfWarToVision(map.getVisionOfGod());
-        gameOverText.setVisible(true);
-        if(game.playerExists(thisPlayer.getId())){
+        gameOverTextFlow.setVisible(true);
+        if(victory){
             gameOverText.setText("VICTORY");
+        }
+        if(playerDisplayed == 0){
+            gameOverName.setVisible(false);
+        } else {
+            Player victorDisplayed = game.getPlayer(playerDisplayed);
+            gameOverName.setText("\n"+victorDisplayed.getName());
+            gameOverName.setStyle("-fx-fill: "+FxUtils.toRGBCode(victorDisplayed.getTextColor()));
         }
         turnState = TurnState.GAME_OVER;
     }

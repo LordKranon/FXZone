@@ -24,7 +24,7 @@ public class InGameLocalUiController extends InGameUiController{
         game.handleEndOfTurnEffects();
         if(game.eliminationCheckup()){
             if(game.getPlayers().size() < 2){
-                turnStateToGameOver();
+                turnStateToGameOver(true, game.getPlayers().get(0).getId());
             }
         }
         game.goNextTurn();
