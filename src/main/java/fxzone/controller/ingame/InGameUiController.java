@@ -23,6 +23,7 @@ import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
+import fxzone.game.render.GameObjectTile;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
@@ -818,6 +819,7 @@ public class InGameUiController extends AbstractUiController {
      */
     private void handlePulsatingElements(double delta){
         tileSelector.updateTickingImage(delta);
+        GameObjectTile.updatePulsatingTiles(delta, map.getTiles());
     }
 
     /**

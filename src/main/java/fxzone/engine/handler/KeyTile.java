@@ -9,16 +9,20 @@ public class KeyTile {
 
     public TileType[] keyTileTypesOfNeighbors;
 
-    public KeyTile(TileType keyTileType){
+    public boolean keyTileStance;
+
+    public KeyTile(TileType keyTileType, boolean keyTileStance){
         this.keyTileType = keyTileType;
+        this.keyTileStance = keyTileStance;
 
         this.keyTileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int i = 0; i < keyTileTypesOfNeighbors.length; i++){
             this.keyTileTypesOfNeighbors[i] = TileType.PLAINS;
         }
     }
-    public KeyTile(TileType keyTileType, TileType[] keyTileTypesOfNeighbors){
+    public KeyTile(TileType keyTileType, TileType[] keyTileTypesOfNeighbors, boolean keyTileStance){
         this.keyTileType = keyTileType;
+        this.keyTileStance = keyTileStance;
         this.keyTileTypesOfNeighbors = keyTileTypesOfNeighbors;
     }
 
@@ -28,6 +32,9 @@ public class KeyTile {
             return false;
         KeyTile ref = (KeyTile) obj;
         if(!(ref.keyTileType == this.keyTileType)){
+            return false;
+        }
+        if(ref.keyTileStance != this.keyTileStance){
             return false;
         }
         for(int i = 0; i < this.keyTileTypesOfNeighbors.length; i++){
@@ -47,21 +54,6 @@ public class KeyTile {
     public String toString(){
         StringBuilder s = new StringBuilder("");
 
-
-        /*
-        s.append("\n");
-        for(int i = 0; i < 3; i++){
-            s.append((keyTileTypesOfNeighbors[i] == TileType.PLAINS) ? "P" : "-");
-        }
-        s.append("\n");
-        s.append((keyTileTypesOfNeighbors[3] == TileType.PLAINS) ? "P" : "-");
-        s.append((keyTileType == TileType.PLAINS) ? "P" : "-");
-        s.append((keyTileTypesOfNeighbors[4] == TileType.PLAINS) ? "P" : "-");
-        s.append("\n");
-        for(int i = 0; i < 3; i++){
-            s.append((keyTileTypesOfNeighbors[i+5] == TileType.PLAINS) ? "P" : "-");
-        }
-        */
 
         s.append("\n "+ ((keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS) ? "P" : "-") +" ");
         s.append("\n");

@@ -84,7 +84,7 @@ public class InGameEditorUiController extends InGameUiController{
         this.editorOwnerIdPlaced = 0;
 
         ImageView tileIcon = initializeEditorMenuIcon(50, 200);
-        tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
+        tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));
 
         this.tileTypeButton = initializeEditorMenuButton(150, 200);
         tileTypeButton.setText(""+editorTileTypePlaced);
@@ -100,7 +100,7 @@ public class InGameEditorUiController extends InGameUiController{
                     editorTileTypePlaced = TileType.PLAINS;
                 }
                 tileTypeButton.setText("" + editorTileTypePlaced);
-                tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced)));
+                tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));
             } else {
                 selectPlacingMode(EditorPlacingMode.TILE);
             }

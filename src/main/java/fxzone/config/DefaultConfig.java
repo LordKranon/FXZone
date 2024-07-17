@@ -24,6 +24,7 @@ public class DefaultConfig {
 
         {"GAME_SPEED_UNIT_MOVEMENT_INTERVAL", ".33"},
         {"GAME_SPEED_UNIT_ATTACK_INTERVAL", "1"},
+        {"GAME_SPEED_TILE_PULSATION_INTERVAL", ".5"},
 
         {"UI_SIZE_IN_GAME", "128"},
         {"UI_TIlE_SELECTOR_TICK_INTERVAL", ".5"},

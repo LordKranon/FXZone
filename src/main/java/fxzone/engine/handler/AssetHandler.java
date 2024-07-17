@@ -115,16 +115,16 @@ public class AssetHandler {
     public static Image getImageTile(KeyTile keyTile){
         if(!imagesTiles.containsKey(keyTile)){
 
+            String pathToWaterImg = "/images/terrain/tiles/tile_water_"+(keyTile.keyTileStance?"1":"0")+".png";
+
             if(keyTile.keyTileType == TileType.WATER){
                 // No further handling needed for water
-                String path = "/images/terrain/tiles/tile_water_0.png";
-                Image img = new Image(AssetHandler.class.getResourceAsStream(path), 256, 256, true, false);
+                Image img = new Image(AssetHandler.class.getResourceAsStream(pathToWaterImg), 256, 256, true, false);
                 imagesTiles.put(keyTile, img);
             } else {
                 if(keyTile.keyTileType == TileType.PLAINS){
                     String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
                     String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
-                    String pathToWaterImg = "/images/terrain/tiles/tile_water_0.png";
 
                     BufferedImage base = getBufferedImage(pathToBaseImg);
                     BufferedImage edgesSet = getBufferedImage(pathToEdgesImg);
@@ -246,7 +246,7 @@ public class AssetHandler {
 
                     Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
 
-                    if(verbose) System.out.println("[ASSET-HANDLER] [getImageTile] Loaded terrain variation "+keyTile.keyTileType+" "+keyTile);
+                    if(verbose) System.out.println("[ASSET-HANDLER] [getImageTile] Loaded terrain variation: "+keyTile.keyTileType+" alternate: "+keyTile.keyTileStance+" "+keyTile);
                     imagesTiles.put(keyTile, imageFinished);
                 }
             }

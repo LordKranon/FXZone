@@ -105,4 +105,8 @@ public class Tile extends TileSpaceObject{
         //TODO
         gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors);
     }
+
+    public GameObjectTile getGameObjectTile(){
+        return gameObjectTile;
+    }
 }
