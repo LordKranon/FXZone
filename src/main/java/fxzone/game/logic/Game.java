@@ -13,6 +13,9 @@ public class Game {
 
     private int amountPlayers = 0;
 
+    private boolean eliminationsPending = false;
+    private ArrayList<Player> pendingEliminatedPlayers;
+
     private final ArrayList<Player> players;
 
     private final Map map;
@@ -32,6 +35,7 @@ public class Game {
 
     public Game(GameSerializable gameSerializable, Group group){
         this.players = new ArrayList<>();
+        this.pendingEliminatedPlayers = new ArrayList<>();
         for(PlayerSerializable playerSerializable : gameSerializable.players){
             addPlayer(new Player(playerSerializable));
         }
@@ -114,5 +118,29 @@ public class Game {
         }
         amountPlayers -= 1;
         whoseTurn -= 1;
+        pendingEliminatedPlayers.add(player);
+        eliminationsPending = true;
+    }
+
+    /**
+     * Return true when a player was eliminated and not processed by the app yet.
+     */
+    public boolean eliminationCheckup(){
+        if(eliminationsPending){
+            eliminationsPending = false;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public ArrayList<Player> getPendingEliminatedPlayers(){
+        if(pendingEliminatedPlayers.isEmpty()){
+            System.err.println("[GAME] [getPendingEliminatedPlayers] No pending eliminated players");
+            return null;
+        }
+        ArrayList<Player> list = new ArrayList<>(pendingEliminatedPlayers);
+        pendingEliminatedPlayers.clear();
+        return list;
     }
 }

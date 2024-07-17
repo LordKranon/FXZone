@@ -1,7 +1,9 @@
 package fxzone.controller.ingame;
 
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
+import java.util.ArrayList;
 
 public class InGameLocalUiController extends InGameUiController{
 
@@ -17,11 +19,24 @@ public class InGameLocalUiController extends InGameUiController{
     }
 
     @Override
-    protected void onPlayerEndTurn(){
+    protected void endTurn(){
         turnStateToNoTurn();
         game.handleEndOfTurnEffects();
+        if(game.eliminationCheckup()){
+            if(game.getPlayers().size() < 2){
+                turnStateToGameOver();
+            }
+        }
         game.goNextTurn();
         thisPlayer = game.getPlayers().get(game.whoseTurn());
         setLabelToPlayer(thisPlayer);
+    }
+
+    @Override
+    protected void beginTurn(){
+        map.setVisible(true);
+        thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
+        map.setFogOfWarToVision(thisPlayerFowVision);
+        turnStateToNeutral();
     }
 }

@@ -71,6 +71,11 @@ public class InGameUiController extends AbstractUiController {
 
     Pane escapeMenu;
 
+    /**
+     * Announce GAME OVER at game end.
+     */
+    Text gameOverText;
+
 
     /**
      * Used in secondsPrinter.
@@ -371,6 +376,17 @@ public class InGameUiController extends AbstractUiController {
             quitGame();
         });
         escapeMenu.getChildren().add(quitConfirmButton);
+
+
+        gameOverText = new Text("  DEFEAT");
+        gameOverText.setFont(new Font(100));
+        gameOverText.setVisible(false);
+        gameOverText.setViewOrder(ViewOrder.UI_IN_GAME_ANNOUNCEMENT);
+        gameOverText.setStyle("-fx-fill: white");
+        gameOverText.setTranslateX((subScene2D.getWidth() / 2) - 200);
+        gameOverText.setTranslateY((subScene2D.getHeight() / 2) - 50);
+        gameOverText.setTextAlignment(TextAlignment.CENTER);
+        root2D.getChildren().add(gameOverText);
     }
 
     void initializeGame(GameSerializable initialGame){
@@ -413,6 +429,9 @@ public class InGameUiController extends AbstractUiController {
 
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
+
+        gameOverText.setTranslateX((subScene2D.getWidth() / 2) - 250);
+        gameOverText.setTranslateY((subScene2D.getHeight() / 2) - 50);
     }
 
     private void handleOffThreadGraphics(){
@@ -1248,12 +1267,33 @@ public class InGameUiController extends AbstractUiController {
         graphical elements as it is not on the FX thread. This should, in theory, never occur since you can't end your turn
         while still having a unit selected and with move command arrows being displayed.
         */
-        turnStateToNoTurn();
+        if(!(turnState == TurnState.ENDING_TURN || turnState == TurnState.NEUTRAL || turnState == TurnState.GAME_OVER)){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [endTurn] Bad turn state");
+            return;
+        }
+        if(turnState!=TurnState.GAME_OVER){
+            turnStateToNoTurn();
+        }
         game.handleEndOfTurnEffects();
+        if(game.eliminationCheckup()){
+            ArrayList<Player> playersEliminated = game.getPendingEliminatedPlayers();
+            if(playersEliminated.contains(thisPlayer)){
+                turnStateToGameOver();
+            } else if(game.getPlayers().size() < 2){
+                turnStateToGameOver();
+            }
+        }
         game.goNextTurn();
         beginTurn();
     }
     protected void beginTurn(){
+        if(!(turnState == TurnState.NO_TURN || turnState == TurnState.BEGINNING_TURN || turnState == TurnState.GAME_STARTING || turnState == TurnState.GAME_OVER)){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [beginTurn] Bad turn state");
+            return;
+        }
+        if(turnState == TurnState.GAME_OVER){
+            return;
+        }
         map.setVisible(true);
         thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
         map.setFogOfWarToVision(thisPlayerFowVision);
@@ -1282,9 +1322,17 @@ public class InGameUiController extends AbstractUiController {
         turnState = TurnState.NEUTRAL;
     }
     protected void turnStateToNoTurn(){
-        //turnStateToNeutral();
         map.setVisible(false);
         turnState = TurnState.NO_TURN;
+    }
+    protected void turnStateToGameOver(){
+        map.setVisible(true);
+        map.setFogOfWarToVision(map.getVisionOfGod());
+        gameOverText.setVisible(true);
+        if(game.playerExists(thisPlayer.getId())){
+            gameOverText.setText("VICTORY");
+        }
+        turnState = TurnState.GAME_OVER;
     }
 
     @Override
