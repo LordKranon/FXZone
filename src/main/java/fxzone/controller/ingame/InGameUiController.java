@@ -1235,7 +1235,7 @@ public class InGameUiController extends AbstractUiController {
             for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
                 int x = path.peekLast().x + p.x;
                 int y = path.peekLast().y + p.y;
-                if(moveCommandGridAttackableSquares[x][y]){
+                if(map.isInBounds(x, y) && moveCommandGridAttackableSquares[x][y]){
                     waitForAttack = true;
                     attackableSquaresAfterMove[x][y] = true;
                     moveCommandGridTiles.add(
