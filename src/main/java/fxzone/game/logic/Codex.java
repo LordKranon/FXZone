@@ -85,6 +85,51 @@ public class Codex {
             UnitSuperType.LAND_VEHICLE,
             300
         ));
+        put(UnitType.SHIP_LANDER, new UnitProfile(
+            8, "Landing Craft",
+            5, 3, 100, 0, 4, 1, 1,
+            1, 1, 1,
+            UnitAttackType.PACIFIST,
+            UnitArmorClass.ARMORCLASS_ARMORED,
+            UnitSuperType.SHIP_SMALL,
+            100
+        ));
+        put(UnitType.SHIP_GUNBOAT, new UnitProfile(
+            8, "Gunboat",
+            6, 4, 100, 5, 2, 1, 1,
+            1.5, 1, 1,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_ARMORED,
+            UnitSuperType.SHIP_SMALL,
+            110
+        ));
+        put(UnitType.SHIP_DESTROYER, new UnitProfile(
+            8, "Destroyer",
+            5, 3, 100, 6, 5, 1, 1,
+            1, 1.5, 1.5,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
+            UnitSuperType.SHIP_LARGE,
+            260
+        ));
+        put(UnitType.SHIP_BATTLESHIP, new UnitProfile(
+            8, "Battleship",
+            3, 3, 100, 7, 7, 1, 4,
+            1, 1, 1.5,
+            UnitAttackType.RANGERMELEE,
+            UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
+            UnitSuperType.SHIP_LARGE,
+            400
+        ));
+        put(UnitType.SHIP_CARRIER, new UnitProfile(
+            8, "Aircraft Carrier",
+            3, 3, 100, 0, 5, 1, 1,
+            1, 1, 1,
+            UnitAttackType.PACIFIST,
+            UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
+            UnitSuperType.SHIP_LARGE,
+            500
+        ));
 
     }};
 
@@ -185,13 +230,13 @@ public class Codex {
         ARTILLERY,
         TANK_BATTLE,
         ARTILLERY_ROCKET,
-/*
+
         SHIP_LANDER,
         SHIP_GUNBOAT,
         SHIP_DESTROYER,
         SHIP_BATTLESHIP,
         SHIP_CARRIER,
-
+/*
         PLANE_PROPELLER,
         PLANE_JET,
         HELICOPTER_CHINOOK,

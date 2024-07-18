@@ -415,6 +415,7 @@ public class Unit extends TileSpaceObject{
     }
     private void unitStateToBlackedOut(){
         gameObjectUnit.setBlackedOut(true);
+        waitForAttackAfterMoving = false;
         unitState = UnitState.BLACKED_OUT;
     }
     private void unitStateToAttacking(){
@@ -491,6 +492,10 @@ public class Unit extends TileSpaceObject{
     }
 
     public void onDeselect(){
+        if(unitState == UnitState.MOVING && waitForAttackAfterMoving){
+            waitForAttackAfterMoving = false;
+            return;
+        }
         setStance(UnitStance.NORMAL);
         if(unitState == UnitState.MOVED_AND_WAITING_FOR_ATTACK){
             if(actionableThisTurn){
