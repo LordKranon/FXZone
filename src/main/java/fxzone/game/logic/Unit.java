@@ -62,6 +62,7 @@ public class Unit extends TileSpaceObject{
     private Point pointToAttackAfterMoving;
     private Unit currentlyAttackedUnit;
     private Unit lastAttackedUnit;
+    private boolean waitForAttackAfterMoving;
 
     private int ownerId;
 
@@ -137,7 +138,8 @@ public class Unit extends TileSpaceObject{
         MOVING,
         BLACKED_OUT,
         ATTACKING,
-        COUNTERATTACKING
+        COUNTERATTACKING,
+        MOVED_AND_WAITING_FOR_ATTACK
     }
     public enum UnitStance {
         NORMAL,
@@ -165,7 +167,7 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack){
+    public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack, boolean waitForAttack){
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= Codex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
@@ -187,6 +189,7 @@ public class Unit extends TileSpaceObject{
                 this.hasAttackCommandAfterMoving = true;
                 this.pointToAttackAfterMoving = pointToAttack;
             }
+            this.waitForAttackAfterMoving = waitForAttack;
             actionableThisTurn = false;
 
 
@@ -200,6 +203,13 @@ public class Unit extends TileSpaceObject{
                 unitState = UnitState.MOVING;
             }
 
+            return this.unitState;
+        }
+        else if(unitState == UnitState.MOVED_AND_WAITING_FOR_ATTACK && path.isEmpty() && pointToAttack != null && !waitForAttack){
+            this.hasAttackCommandAfterMoving = true;
+            this.pointToAttackAfterMoving = pointToAttack;
+            if(verbose) System.out.println(this+" received attack command while moved and waiting for attack");
+            onMovementEnd(game.getMap());
             return this.unitState;
         }
         else {
@@ -346,7 +356,12 @@ public class Unit extends TileSpaceObject{
             if(actionableThisTurn){
                 unitStateToNeutral();
             } else{
-                unitStateToBlackedOut();
+                if(waitForAttackAfterMoving){
+                    waitForAttackAfterMoving = false;
+                    unitState = UnitState.MOVED_AND_WAITING_FOR_ATTACK;
+                } else {
+                    unitStateToBlackedOut();
+                }
             }
         }
     }
@@ -395,6 +410,7 @@ public class Unit extends TileSpaceObject{
     }
     private void unitStateToNeutral(){
         gameObjectUnit.setBlackedOut(false);
+        waitForAttackAfterMoving = false;
         unitState = UnitState.NEUTRAL;
     }
     private void unitStateToBlackedOut(){
@@ -470,6 +486,17 @@ public class Unit extends TileSpaceObject{
                     this.ownerId,
                     game
                 );
+            }
+        }
+    }
+
+    public void onDeselect(){
+        setStance(UnitStance.NORMAL);
+        if(unitState == UnitState.MOVED_AND_WAITING_FOR_ATTACK){
+            if(actionableThisTurn){
+                unitStateToNeutral();
+            } else {
+                unitStateToBlackedOut();
             }
         }
     }

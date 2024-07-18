@@ -31,7 +31,10 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
         //TODO Rework unit identification
 
-        commandUnitToMove(unit, path, unitMoveCommandPacket.getPointToAttack());
+        /*
+        Also implement wait-for-attack for network games
+         */
+        commandUnitToMove(unit, path, unitMoveCommandPacket.getPointToAttack(), false);
     }
 
     /**

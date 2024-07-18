@@ -165,6 +165,7 @@ public class InGameUiController extends AbstractUiController {
         NO_TURN,
         NEUTRAL,
         UNIT_SELECTED,
+        UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE,
         BUILDING_SELECTED,
         GAME_OVER,
 
@@ -655,7 +656,8 @@ public class InGameUiController extends AbstractUiController {
             } else if(buildingOnTileClicked != null){
                 selectBuilding(buildingOnTileClicked);
             }
-        } else if(turnState == TurnState.UNIT_SELECTED){
+        }
+        else if(turnState == TurnState.UNIT_SELECTED){
             if(selectedUnit.getX() == x && selectedUnit.getY() == y){
                 // Deselect unit
                 deselectUnit();
@@ -700,7 +702,20 @@ public class InGameUiController extends AbstractUiController {
                 }
             }
 
-        } else if(turnState == TurnState.BUILDING_SELECTED){
+        }
+        else if(turnState == TurnState.UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE){
+            if(selectedUnit.getX() == x && selectedUnit.getY() == y){
+                // Deselect unit
+                deselectUnit();
+            }
+            else if(
+                moveCommandGridAttackableSquares[x][y] &&
+                    selectedUnit.getUnitState() == UnitState.MOVED_AND_WAITING_FOR_ATTACK
+            ){ // Attack
+                onPlayerUnitMoveCommand(new ArrayDeque<Point>(), new Point(x, y));
+            }
+        }
+        else if(turnState == TurnState.BUILDING_SELECTED){
             if(selectedBuilding.getX() == x && selectedBuilding.getY() == y){
                 // Deselect building
                 deselectBuilding();
@@ -1089,7 +1104,7 @@ public class InGameUiController extends AbstractUiController {
         turnStateToNeutral();
     }
     protected void deselectUnit(){
-        selectedUnit.setStance(UnitStance.NORMAL);
+        selectedUnit.onDeselect();
         turnStateToNeutral();
     }
 
@@ -1175,8 +1190,8 @@ public class InGameUiController extends AbstractUiController {
     }
 
 
-    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack){
-        UnitState unitStateAfterCommand = unit.moveCommand(path, game, pointToAttack);
+    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack){
+        UnitState unitStateAfterCommand = unit.moveCommand(path, game, pointToAttack, waitForAttack);
         if(unitStateAfterCommand == UnitState.MOVING){
             unitsMoving.put(unit, 0.);
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
@@ -1196,14 +1211,46 @@ public class InGameUiController extends AbstractUiController {
      */
     protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
 
+        turnStateToNeutral();
+
         /*
         If the path leads into the fog of war, the unit might not complete the entire path and might be stopped by a
         previously invisible enemy unit.
          */
         boolean wasStopped = verifyPathOnMoveCommand(path);
 
-        commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack);
-        turnStateToNeutral();
+
+        /*
+        If unit is ordered to not attack, but has valid attacks from the tile it goes to, the unit will remain actionable
+        and will be able to receive a non-move attack command after moving.
+         */
+        boolean waitForAttack = false;
+        boolean[][] attackableSquaresAfterMove = new boolean[map.getWidth()][map.getHeight()];
+        if(
+            !wasStopped && pointToAttack == null && !path.isEmpty() &&
+            (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE)
+        ){
+
+            for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
+                int x = path.peekLast().x + p.x;
+                int y = path.peekLast().y + p.y;
+                if(moveCommandGridAttackableSquares[x][y]){
+                    waitForAttack = true;
+                    attackableSquaresAfterMove[x][y] = true;
+                    moveCommandGridTiles.add(
+                        new GameObjectUiMoveCommandGridTile(x, y, map, root2D, true)
+                    );
+                }
+            }
+        }
+
+        if(waitForAttack){
+            turnState = TurnState.UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE;
+            moveCommandGridAttackableSquares = attackableSquaresAfterMove;
+        }
+
+        commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack, waitForAttack);
+
         return wasStopped;
     }
     protected boolean verifyPathOnMoveCommand(ArrayDeque<Point> path){
@@ -1371,9 +1418,14 @@ public class InGameUiController extends AbstractUiController {
     private void escapeKeyPressed(){
         if(turnState == TurnState.BUILDING_SELECTED){
             deselectBuilding();
-        } else if(turnState == TurnState.UNIT_SELECTED){
+        }
+        else if(turnState == TurnState.UNIT_SELECTED){
             deselectUnit();
-        } else if(turnState == TurnState.NEUTRAL || turnState == TurnState.EDITOR){
+        }
+        else if(turnState == TurnState.UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE){
+            deselectUnit();
+        }
+        else if(turnState == TurnState.NEUTRAL || turnState == TurnState.EDITOR){
             toggleEscapeMenu();
         }
     }
