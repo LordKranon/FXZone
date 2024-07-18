@@ -4,6 +4,7 @@ import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.Tile.TileType;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -95,6 +96,18 @@ public class AssetHandler {
         images.put(path, new Image(AssetHandler.class.getResourceAsStream(path), width, height, true, false));
     }
 
+    /**
+     * Load a BufferedImage that always needs to exist in colored state.
+     * Will save this BufferedImage with color applied and that image will only ever be accessible colored.
+     */
+    private static BufferedImage getBufferedImageColorApplied(String path, java.awt.Color color){
+        if(!bufferedImages.containsKey(path)){
+            BufferedImage bufferedImage = loadBufferedImage(path);
+            applyColor(bufferedImage, color);
+            bufferedImages.put(path, bufferedImage);
+        }
+        return bufferedImages.get(path);
+    }
     private static BufferedImage getBufferedImage(String path){
         if(!bufferedImages.containsKey(path)){
             BufferedImage bufferedImage = loadBufferedImage(path);
@@ -124,7 +137,7 @@ public class AssetHandler {
             } else {
 
                 String pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png";
-                BufferedImage tilesetBeach = getBufferedImage(pathToTileSetBeach);
+                BufferedImage tilesetBeach = getBufferedImageColorApplied(pathToTileSetBeach, Color.white);
 
                 if(keyTile.keyTileType == TileType.PLAINS){
                     String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
