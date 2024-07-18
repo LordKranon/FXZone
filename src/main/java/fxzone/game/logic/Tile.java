@@ -9,6 +9,7 @@ public class Tile extends TileSpaceObject{
     public enum TileType {
         PLAINS,
         WATER,
+        BEACH,
     }
     private final TileType tileType;
 

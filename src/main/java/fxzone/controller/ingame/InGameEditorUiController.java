@@ -95,6 +95,8 @@ public class InGameEditorUiController extends InGameUiController{
             if(tileTypeButton == selectedPlacingButton) {
 
                 if (editorTileTypePlaced == TileType.PLAINS) {
+                    editorTileTypePlaced = TileType.BEACH;
+                } else if(editorTileTypePlaced == TileType.BEACH){
                     editorTileTypePlaced = TileType.WATER;
                 } else {
                     editorTileTypePlaced = TileType.PLAINS;
