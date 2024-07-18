@@ -132,6 +132,17 @@ public class Codex {
         ));
 
     }};
+    public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
+        put(BuildingType.CITY, "City");
+        put(BuildingType.FACTORY, "Factory");
+        put(BuildingType.PORT, "Port");
+        put(BuildingType.AIRPORT, "Airport");
+    }};
+    public static final HashMap<TileType, String> TILE_NAMES = new HashMap<>(){{
+        put(TileType.PLAINS, "Plains");
+        put(TileType.WATER, "Water");
+        put(TileType.BEACH, "Beach");
+    }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{
         put(UnitType.INFANTRY, "infantry");

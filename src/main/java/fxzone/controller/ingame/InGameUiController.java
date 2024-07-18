@@ -914,7 +914,7 @@ public class InGameUiController extends AbstractUiController {
                 String buildingColor = ""+(!game.playerExists(building.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
 
                 Text textCapturing = new Text("Capturing ");
-                Text textCapturedBuildingName = new Text(""+building.getBuildingType());
+                Text textCapturedBuildingName = new Text(Codex.BUILDING_NAMES.get(building.getBuildingType()));
                 textCapturing.setFont(fontBottomUiBar);
                 textCapturedBuildingName.setFont(fontBottomUiBar);
                 textCapturing.setStyle("-fx-fill: white");
@@ -951,7 +951,7 @@ public class InGameUiController extends AbstractUiController {
         }
         else if(building != null){
 
-            Text textBuildingName = new Text(""+building.getBuildingType());
+            Text textBuildingName = new Text(Codex.BUILDING_NAMES.get(building.getBuildingType()));
             textBuildingName.setFont(fontBottomUiBar);
             textFlowsBottomUiBar[1][0].getChildren().add(textBuildingName);
 
@@ -963,7 +963,7 @@ public class InGameUiController extends AbstractUiController {
             }
 
         } else{
-            Text textTileName = new Text(""+tile.getTileType());
+            Text textTileName = new Text(Codex.TILE_NAMES.get(tile.getTileType()));
             textTileName.setFont(fontBottomUiBar);
             textFlowsBottomUiBar[1][0].getChildren().add(textTileName);
             textTileName.setStyle("-fx-fill: white");
