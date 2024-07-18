@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
 import javafx.scene.Group;
@@ -82,11 +83,12 @@ public class Tile extends TileSpaceObject{
                 blockedByOtherUnit = true;
             }
         }
-        return (!blockedByOtherUnit) && (this.tileType == TileType.PLAINS);
+        return (!blockedByOtherUnit) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
     }
     public boolean isMovableToBy(Unit unit, boolean tileVisible){
-        return (!tileVisible || this.unitOnTile == null) && (this.tileType == TileType.PLAINS);
+        return (!tileVisible || this.unitOnTile == null) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
     }
+
 
     public boolean isAttackableBy(Unit unit, boolean tileVisible){
         return tileVisible && (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId();

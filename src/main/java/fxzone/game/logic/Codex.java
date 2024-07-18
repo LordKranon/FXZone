@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.engine.handler.AssetHandler;
+import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.Unit.UnitState;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -203,7 +204,8 @@ public class Codex {
         LAND_INFANTRY,
         LAND_VEHICLE,
         AIRCRAFT,
-        SHIP
+        SHIP_LARGE,
+        SHIP_SMALL,
     }
     public enum UnitAttackType{
         MELEE,
@@ -264,5 +266,15 @@ public class Codex {
     }
     public static int getUnitHealthDigit(Unit unit){
         return getUnitHealthDigit((double)(unit.getStatRemainingHealth())/(double)(unit.getStatMaxHealth()));
+    }
+
+    public static boolean tileTypeFitsUnitSuperType(TileType tileType, Unit unit){
+        UnitSuperType superType = Codex.getUnitProfile(unit).SUPERTYPE;
+        return
+            (superType == UnitSuperType.LAND_INFANTRY && tileType != TileType.WATER) ||
+                (superType == UnitSuperType.LAND_VEHICLE && (tileType == TileType.PLAINS || tileType == TileType.BEACH)) ||
+                (superType == UnitSuperType.SHIP_SMALL && (tileType == TileType.WATER || tileType == TileType.BEACH)) ||
+                (superType == UnitSuperType.SHIP_LARGE && (tileType == TileType.WATER)) ||
+                (superType == UnitSuperType.AIRCRAFT);
     }
 }
