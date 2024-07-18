@@ -1077,7 +1077,8 @@ public class InGameUiController extends AbstractUiController {
         if(
             turnState == TurnState.NEUTRAL &&
             thisPlayer != null &&
-            (thisPlayer.getId() == building.getOwnerId())
+            (thisPlayer.getId() == building.getOwnerId()) &&
+                building.isSelectable()
         ){
             selectedBuilding = building;
 

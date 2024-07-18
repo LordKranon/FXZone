@@ -9,16 +9,14 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.BuildingSerializable;
-import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectBuilding;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class Building extends TileSpaceObject{
@@ -32,6 +30,9 @@ public class Building extends TileSpaceObject{
     private Pane constructionMenu;
 
     private ArrayList<ButtonBuildingBuyUnit> constructionMenuButtons;
+
+    private List<UnitType> buildableUnitTypes;
+    private boolean selectable;
 
     /*
     GAMEPLAY
@@ -65,7 +66,21 @@ public class Building extends TileSpaceObject{
             buildingType, x, y, tileRenderSize, group, playerColor
         );
         this.gameObjectInTileSpace = this.gameObjectBuilding;
-        initializeConstructionMenuUI(playerColor);
+
+
+        switch (this.buildingType){
+            case FACTORY:
+                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_FACTORY;
+                this.selectable = true;
+                break;
+            case PORT:
+                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_PORT;
+                this.selectable = true;
+                break;
+        }
+        if(this.selectable){
+            initializeConstructionMenuUI(playerColor);
+        }
     }
 
     private void initializeConstructionMenuUI(Color color){
@@ -74,13 +89,13 @@ public class Building extends TileSpaceObject{
         int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
         int FONT_SIZE = 36 * UI_SIZE / 128;
         constructionMenu.setPrefWidth(4* UI_SIZE);
-        constructionMenu.setPrefHeight(8* UI_SIZE);
+        constructionMenu.setPrefHeight(this.buildableUnitTypes.size()* UI_SIZE);
         constructionMenu.setVisible(true);
         constructionMenu.setStyle("-fx-background-color: #282828;");
         constructionMenu.setViewOrder(ViewOrder.GAME_BUILDING_UI_BACKGROUND);
 
         int i = 0;
-        for(UnitType unitType : Codex.BUILDABLE_UNIT_TYPES){
+        for(UnitType unitType : (this.buildableUnitTypes)){
             ImageView unitIcon = new ImageView();
             unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, color)));
             unitIcon.setFitWidth(UI_SIZE);
@@ -181,5 +196,9 @@ public class Building extends TileSpaceObject{
     @Override
     public String toString(){
         return "[BUILDING "+buildingType+"]";
+    }
+
+    public boolean isSelectable(){
+        return this.selectable;
     }
 }

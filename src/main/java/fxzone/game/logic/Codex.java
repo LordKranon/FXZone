@@ -14,7 +14,7 @@ public class Codex {
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
-            0, "Infantry",
+            0, "Rifle Infantry",
             3, 3, 100, 3, 0, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
@@ -23,7 +23,7 @@ public class Codex {
             80
         ));
         put(UnitType.INFANTRY_RPG, new UnitProfile(
-            1, "RPG",
+            1, "RPG Infantry",
             3, 3, 100, 4, 0, 1, 1,
             .5, 1.5, 1.5,
             UnitAttackType.MELEE,
@@ -32,7 +32,7 @@ public class Codex {
             90
         ));
         put(UnitType.CAR_HUMVEE, new UnitProfile(
-            2, "Car",
+            2, "Humvee",
             7, 5, 100, 4, 2, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
@@ -41,7 +41,7 @@ public class Codex {
             160
         ));
         put(UnitType.TRUCK_TRANSPORT, new UnitProfile(
-            3, "Truck",
+            3, "Supply Truck",
             4, 3, 100, 0, 1, 1, 1,
             1, 1, 1,
             UnitAttackType.PACIFIST,
@@ -142,6 +142,11 @@ public class Codex {
         put(UnitType.ARTILLERY, "artillery");
         put(UnitType.TANK_BATTLE, "tank");
         put(UnitType.ARTILLERY_ROCKET, "rocketartillery");
+        put(UnitType.SHIP_LANDER, "ship_lander");
+        put(UnitType.SHIP_GUNBOAT, "ship_gunboat");
+        put(UnitType.SHIP_DESTROYER, "ship_destroyer");
+        put(UnitType.SHIP_BATTLESHIP, "ship_battleship");
+        put(UnitType.SHIP_CARRIER, "ship_carrier");
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
@@ -150,7 +155,7 @@ public class Codex {
         put(BuildingType.AIRPORT, "airport");
     }};
 
-    public static final List<UnitType> BUILDABLE_UNIT_TYPES = Arrays.asList(
+    public static final List<UnitType> BUILDABLE_UNIT_TYPES_FACTORY = Arrays.asList(
         UnitType.INFANTRY,
         UnitType.INFANTRY_RPG,
         UnitType.CAR_HUMVEE,
@@ -159,6 +164,13 @@ public class Codex {
         UnitType.ARTILLERY,
         UnitType.TANK_BATTLE,
         UnitType.ARTILLERY_ROCKET
+    );
+    public static final List<UnitType> BUILDABLE_UNIT_TYPES_PORT = Arrays.asList(
+        UnitType.SHIP_LANDER,
+        UnitType.SHIP_GUNBOAT,
+        UnitType.SHIP_DESTROYER,
+        UnitType.SHIP_BATTLESHIP,
+        UnitType.SHIP_CARRIER
     );
 
     public static class UnitProfile{

@@ -42,12 +42,18 @@ public class GameObjectUnit extends GameObjectInTileSpace{
                 this.imageStanceAttack = imageStanceNormal;
                 break;
             case LAND_INFANTRY:
-            default:
                 this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
                 this.imageStanceMove1 = AssetHandler.getImageUnit(new KeyUnit(unitType, 2, playerColor));
                 this.imageStanceMove2 = AssetHandler.getImageUnit(new KeyUnit(unitType, 3, playerColor));
                 this.imageStanceAttack = AssetHandler.getImageUnit(new KeyUnit(unitType, 1, playerColor));
                 break;
+            case SHIP_SMALL:
+            case SHIP_LARGE:
+            default:
+                this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceMove1 = this.imageStanceNormal;
+                this.imageStanceMove2 = this.imageStanceNormal;
+                this.imageStanceAttack = this.imageStanceNormal;
         }
         this.setImage(imageStanceNormal);
         this.setViewOrder(ViewOrder.GAME_UNIT);
