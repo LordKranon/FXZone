@@ -37,13 +37,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -673,12 +671,12 @@ public class InGameUiController extends AbstractUiController {
             else { // Attacks
 
                 /*
-                MELEE ATTACK
+                MELEE / RANGERMELEE ATTACK
                  */
                 if (
-                    Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE &&
+                    (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE) &&
                     moveCommandGridAttackableSquares[x][y] &&
-                        GeometryUtils.isPointNeighborOf(new Point(x, y), lastTileAddedToPathQueue) &&
+                        GeometryUtils.getPointToPointDistance(new Point(x, y), lastTileAddedToPathQueue) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
                         (
                             map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y,
                                 selectedUnit, thisPlayerFowVision) ||
@@ -1130,10 +1128,15 @@ public class InGameUiController extends AbstractUiController {
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
         onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
+
+        // Add attacks that are possible from start square without moving
         if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
             onSelectUnitCalculateRangedAttackGrid();
-        } else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
-            onCalculateMoveCommandGridAddToAttackGridFromTile(selectedUnit.getX(), selectedUnit.getY());
+        }
+        else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
+            onCalculateMoveCommandGridAddToAttackGridFromTileMelee(selectedUnit.getX(), selectedUnit.getY());
+        } else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY());
         }
     }
 
@@ -1142,7 +1145,13 @@ public class InGameUiController extends AbstractUiController {
             Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE &&
                 map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
         ){
-            onCalculateMoveCommandGridAddToAttackGridFromTile(x, y);
+            onCalculateMoveCommandGridAddToAttackGridFromTileMelee(x, y);
+        }
+        else if(
+            Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE &&
+                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
+        ){
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y);
         }
         if(remainingSteps > 0){
             if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, selectedUnit, thisPlayerFowVision)){
@@ -1163,7 +1172,7 @@ public class InGameUiController extends AbstractUiController {
             }
         }
     }
-    private void onCalculateMoveCommandGridAddToAttackGridFromTile(int x, int y){
+    private void onCalculateMoveCommandGridAddToAttackGridFromTileMelee(int x, int y){
         if(map.checkTileForAttackByUnit(x, y-1, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x][y-1] = true;
         }
@@ -1175,6 +1184,13 @@ public class InGameUiController extends AbstractUiController {
         }
         if(map.checkTileForAttackByUnit(x+1, y, selectedUnit, thisPlayerFowVision)){
             moveCommandGridAttackableSquares[x+1][y] = true;
+        }
+    }
+    private void onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(int x, int y){
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
+            if(map.checkTileForAttackByUnit(x+p.x, y+p.y, selectedUnit, thisPlayerFowVision)){
+                moveCommandGridAttackableSquares[x+p.x][y+p.y] = true;
+            }
         }
     }
     private void onSelectUnitCalculateRangedAttackGrid(){

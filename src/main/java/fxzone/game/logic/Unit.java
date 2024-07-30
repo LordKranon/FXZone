@@ -391,10 +391,13 @@ public class Unit extends TileSpaceObject{
      * @return whether this unit will be counterattacking
      */
     public boolean onAttacked(Unit attackingUnit){
-        if(Codex.getUnitProfile(attackingUnit).ATTACKTYPE == UnitAttackType.RANGED || Codex.getUnitProfile(this).ATTACKTYPE == UnitAttackType.RANGED){
+        if(
+            Codex.getUnitProfile(attackingUnit).ATTACKTYPE == UnitAttackType.RANGED ||
+            Codex.getUnitProfile(this).ATTACKTYPE == UnitAttackType.RANGED ||
+            (GeometryUtils.getPointToPointDistance(new Point(attackingUnit.getX(), attackingUnit.getY()), new Point(this.getX(), this.getY())) > Codex.getUnitProfile(this).MAXRANGE)
+        ){
             return false;
         }
-        // TODO Handle RANGERMELEE Attacks differently
         setStance(UnitStance.ATTACK);
         setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), new Point(attackingUnit.getX(), attackingUnit.getY())));
         this.currentlyAttackedUnit = attackingUnit;

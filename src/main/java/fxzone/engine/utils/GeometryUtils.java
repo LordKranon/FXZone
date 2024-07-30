@@ -25,7 +25,10 @@ public class GeometryUtils {
     }
 
     public static boolean isPointNeighborOf(Point a, Point b){
-        return Math.abs(a.x-b.x) + Math.abs(a.y-b.y) == 1;
+        return getPointToPointDistance(a, b) == 1;
+    }
+    public static int getPointToPointDistance(Point a, Point b){
+        return Math.abs(a.x-b.x) + Math.abs(a.y-b.y);
     }
 
     public static Point getNeighborsPosition(int x, int y, int neighborDirection){
