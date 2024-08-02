@@ -496,6 +496,52 @@ public class InGameUiController extends AbstractUiController {
                     // Player hovers any green tile and arrow is either too long already or arrowhead is not neighboring
                     // Redo the pathing arrow with automatic pathfinding
                     autoFindNewSelectedUnitPathQueue(hoveredPoint);
+                } else if (moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]){
+                    // Attackable square hovered
+                    // Do nothing if path already allows the attack, else find a path that allows the attack
+                    // Or, in case of RANGED units, remove path
+                    if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
+                        clearSelectedUnitPathQueue();
+                        addPathQueueArrowBase();
+                    } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
+                        if(
+                            GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
+                                map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision)
+                        ){
+                            // Move & Attack command is valid as is, do nothing
+                            return;
+                        }
+                        else {
+                            // Move & Attack command is not valid as is, find a move path which allows attack of hovered point
+
+                            // From all movable squares, find ones that are in range of proposed attack, and check for moveTo
+                            // From all candidates that fulfill requirements, pick closest one to unit and auto-find path to there
+                            ArrayList<Point> movableTilesInRange = new ArrayList<>();
+                            for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
+                                for(int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
+                                    if(
+                                        moveCommandGridMovableSquares[i][j] &&
+                                        GeometryUtils.getPointToPointDistance(new Point(i, j), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
+                                            map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision)
+                                    ){
+                                        movableTilesInRange.add(new Point(i, j));
+                                    }
+                                }
+                            }
+                            if(movableTilesInRange.isEmpty()){
+                                System.err.println("[IN-GAME-UI-CONTROLLER] FATAL ERROR on pathfinding");
+                            } else {
+                                Point closest = movableTilesInRange.get(0);
+                                Point selectedUnitPosition = new Point(selectedUnit.getX(), selectedUnit.getY());
+                                for(Point p : movableTilesInRange){
+                                    if(GeometryUtils.getPointToPointDistance(p, selectedUnitPosition) < GeometryUtils.getPointToPointDistance(closest, selectedUnitPosition)){
+                                        closest = p;
+                                    }
+                                }
+                                autoFindNewSelectedUnitPathQueue(closest);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -525,12 +571,7 @@ public class InGameUiController extends AbstractUiController {
         if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Finding path");
 
         // Clear old path (geometric part and graphical part)
-        selectedUnitQueuedPath.clear();
-        if(moveCommandArrowTiles != null){
-            for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
-                arrowTile.removeSelfFromRoot(root2D);
-            }
-        }
+        clearSelectedUnitPathQueue();
         // Reset pathfinder markings
         // These are used to remember which tiles were already visited
         moveCommandPathFinderMarks = new boolean[map.getWidth()][map.getHeight()];
@@ -641,6 +682,17 @@ public class InGameUiController extends AbstractUiController {
         moveCommandArrowTiles.add(arrowTile);
 
         lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+    }
+    private void clearSelectedUnitPathQueue(){
+
+        selectedUnitQueuedPath = new ArrayDeque<>();
+        lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
+
+        if(moveCommandArrowTiles != null){
+            for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
+                arrowTile.removeSelfFromRoot(root2D);
+            }
+        }
     }
 
     void tileClicked(int x, int y){
@@ -1030,9 +1082,7 @@ public class InGameUiController extends AbstractUiController {
             selectedUnit = unit;
 
             // Initialize unit path queue
-            selectedUnitQueuedPath = new ArrayDeque<>();
-            lastTileHoveredForUnitPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
-            lastTileAddedToPathQueue = lastTileHoveredForUnitPathQueue;
+            clearSelectedUnitPathQueue();
 
             // Initialize move command arrow
             moveCommandArrowTiles = new ArrayList<>();
