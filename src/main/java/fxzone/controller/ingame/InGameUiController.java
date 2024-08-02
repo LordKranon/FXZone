@@ -505,8 +505,10 @@ public class InGameUiController extends AbstractUiController {
                         addPathQueueArrowBase();
                     } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
                         if(
-                            GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                                map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision)
+                            (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
+                            map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision)) ||
+                            (selectedUnitQueuedPath.isEmpty() &&
+                            GeometryUtils.getPointToPointDistance(new Point(selectedUnit.getX(), selectedUnit.getY()), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE)
                         ){
                             // Move & Attack command is valid as is, do nothing
                             return;
@@ -514,8 +516,18 @@ public class InGameUiController extends AbstractUiController {
                         else {
                             // Move & Attack command is not valid as is, find a move path which allows attack of hovered point
 
+                            // First, check if a move is necessary at all
+                            // Then, if it is:
                             // From all movable squares, find ones that are in range of proposed attack, and check for moveTo
                             // From all candidates that fulfill requirements, pick closest one to unit and auto-find path to there
+
+                            Point selectedUnitPosition = new Point(selectedUnit.getX(), selectedUnit.getY());
+                            if(GeometryUtils.getPointToPointDistance(selectedUnitPosition, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE){
+                                clearSelectedUnitPathQueue();
+                                addPathQueueArrowBase();
+                                return;
+                            }
+
                             ArrayList<Point> movableTilesInRange = new ArrayList<>();
                             for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
                                 for(int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
@@ -532,7 +544,7 @@ public class InGameUiController extends AbstractUiController {
                                 System.err.println("[IN-GAME-UI-CONTROLLER] FATAL ERROR on pathfinding");
                             } else {
                                 Point closest = movableTilesInRange.get(0);
-                                Point selectedUnitPosition = new Point(selectedUnit.getX(), selectedUnit.getY());
+
                                 for(Point p : movableTilesInRange){
                                     if(GeometryUtils.getPointToPointDistance(p, selectedUnitPosition) < GeometryUtils.getPointToPointDistance(closest, selectedUnitPosition)){
                                         closest = p;
