@@ -78,12 +78,13 @@ public class Building extends TileSpaceObject{
                 this.selectable = true;
                 break;
         }
-        if(this.selectable){
-            initializeConstructionMenuUI(playerColor);
-        }
+        initializeConstructionMenuUI(playerColor);
     }
 
     private void initializeConstructionMenuUI(Color color){
+        if(!this.selectable){
+            return;
+        }
         constructionMenuButtons = new ArrayList<>();
         constructionMenu = new Pane();
         int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
