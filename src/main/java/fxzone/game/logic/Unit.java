@@ -252,7 +252,13 @@ public class Unit extends TileSpaceObject{
         }
     }
     private boolean onAttackHitBy(Unit attackingUnit){
-        this.statRemainingHealth -= Codex.calculateDamageOnAttack(attackingUnit, this);
+        return this.changeStatRemainingHealth(-Codex.calculateDamageOnAttack(attackingUnit, this));
+    }
+    public boolean changeStatRemainingHealth(int healthDelta){
+        this.statRemainingHealth += healthDelta;
+        if(statRemainingHealth > statMaxHealth){
+            statRemainingHealth = statMaxHealth;
+        }
         if(verbose) System.out.println(this+" now has "+statRemainingHealth+" HP remaining");
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
         return statRemainingHealth > 0;

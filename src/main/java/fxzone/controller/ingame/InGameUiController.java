@@ -1439,6 +1439,8 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.GAME_OVER){
             return;
         }
+        map.handleStartOfTurnEffects(game);
+        setLabelToPlayer(thisPlayer);
         map.setVisible(true);
         thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
         map.setFogOfWarToVision(thisPlayerFowVision);

@@ -2,6 +2,7 @@ package fxzone.game.logic;
 
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -499,5 +500,28 @@ public class Map {
             }
         }
         return playersEliminated;
+    }
+    public void handleStartOfTurnEffects(Game game){
+        Player playerWithStartedTurn = game.getPlayers().get(game.whoseTurn());
+
+        for(Building building: buildings){
+
+            if(building.hasOwner() && building.getOwnerId() == playerWithStartedTurn.getId()) {
+
+                Unit unitOnBuilding = tiles[building.getX()][building.getY()].getUnitOnTile();
+
+                if (unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
+                    && building.getBuildingType() == BuildingType.CITY) {
+                    //Cities heal units
+                    if(unitOnBuilding.isDamaged()){
+                        unitOnBuilding.changeStatRemainingHealth(20);
+                    }
+                }
+                if (building.getBuildingType() == BuildingType.CITY) {
+                    //Cities generate money
+                    playerWithStartedTurn.setStatResourceCash(playerWithStartedTurn.getStatResourceCash() + 10);
+                }
+            }
+        }
     }
 }
