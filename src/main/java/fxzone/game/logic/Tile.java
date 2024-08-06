@@ -72,6 +72,9 @@ public class Tile extends TileSpaceObject{
     public boolean hasUnitOnTile(){
         return unitOnTile != null;
     }
+    public boolean hasBuildingOnTile(){
+        return buildingOnTile != null;
+    }
 
     public boolean isMovableThroughBy(Unit unit, boolean tileVisible){
         //TODO

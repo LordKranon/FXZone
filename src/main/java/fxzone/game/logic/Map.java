@@ -271,6 +271,10 @@ public class Map {
             System.err.println("[MAP] Unit is not in bounds of map");
         }
         unit.onRemoval(subGroupMapUnits);
+        //If unit is removed from tile with building, reset that buildings capture progress
+        if(tiles[unit.x][unit.y].hasBuildingOnTile()){
+            tiles[unit.x][unit.y].getBuildingOnTile().setStatCaptureProgress(0);
+        }
     }
     private void addBuilding(Building building){
         buildings.add(building);

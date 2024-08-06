@@ -34,7 +34,7 @@ public class Player {
         initializeStats();
     }
     private void initializeStats(){
-        this.statResourceCash = 10000;
+        this.statResourceCash = 500;
     }
 
     public Color getColor(){
