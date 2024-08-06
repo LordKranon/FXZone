@@ -58,6 +58,13 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         offThreadGraphicsNeedHandling = true;
     }
 
+    @Override
+    protected void beginTurn(){
+        super.beginTurn();
+        startOfTurnEffectFlag = true;
+        offThreadGraphicsNeedHandling = true;
+    }
+
     protected void onNetworkPlayerGameAction(GameActionPacket gameActionPacket){
         switch (gameActionPacket.getGameActionSpecification()){
             case UNIT_MOVE_COMMAND: onNetworkPlayerUnitMoveCommandReceived((UnitMoveCommandPacket) gameActionPacket); break;

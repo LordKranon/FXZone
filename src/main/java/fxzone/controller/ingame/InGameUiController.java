@@ -58,6 +58,7 @@ public class InGameUiController extends AbstractUiController {
     private final AbstractGameController gameController;
 
     protected boolean offThreadGraphicsNeedHandling;
+    protected boolean startOfTurnEffectFlag;
 
     /*
     UI ELEMENTS
@@ -454,13 +455,18 @@ public class InGameUiController extends AbstractUiController {
     private void handleOffThreadGraphics(){
         if(offThreadGraphicsNeedHandling){
             offThreadGraphicsNeedHandling = false;
-            if(unitsToBeCreated.isEmpty()){
-                System.err.println("[IN-GAME-UI-CONTROLLER] Tried to handle off-thread graphics, but no newly created units were found");
-            } else {
+            if(!unitsToBeCreated.isEmpty()) {
                 for(UnitSerializable unitSerializable : unitsToBeCreated.keySet()){
                     createUnit(unitSerializable, unitsToBeCreated.get(unitSerializable));
                 }
                 unitsToBeCreated.clear();
+            }
+
+            if(startOfTurnEffectFlag){
+                startOfTurnEffectFlag = false;
+
+                map.handleStartOfTurnEffects(game);
+                setLabelToPlayer(thisPlayer);
             }
         }
     }
@@ -1439,8 +1445,6 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.GAME_OVER){
             return;
         }
-        map.handleStartOfTurnEffects(game);
-        setLabelToPlayer(thisPlayer);
         map.setVisible(true);
         thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
         map.setFogOfWarToVision(thisPlayerFowVision);
