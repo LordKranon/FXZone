@@ -1178,7 +1178,7 @@ public class InGameUiController extends AbstractUiController {
     private void buyUnitButtonClicked(UnitType unitType){
 
         // Check if sufficient cash and creation tile empty
-        if(turnState != TurnState.BUILDING_SELECTED || thisPlayer.getStatResourceCash() < Codex.getUnitProfile(unitType).COST || map.getTiles()[selectedBuilding.getX()][selectedBuilding.getX()].hasUnitOnTile()){
+        if(turnState != TurnState.BUILDING_SELECTED || thisPlayer.getStatResourceCash() < Codex.getUnitProfile(unitType).COST || map.getTiles()[selectedBuilding.getX()][selectedBuilding.getY()].hasUnitOnTile()){
             if(verbose) System.err.println("[IN-GAME-UI-CONTROLLER] [buyUnitButtonClicked] Cannot buy unit");
             return;
         }
