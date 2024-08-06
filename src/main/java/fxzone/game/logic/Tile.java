@@ -77,9 +77,6 @@ public class Tile extends TileSpaceObject{
     }
 
     public boolean isMovableThroughBy(Unit unit, boolean tileVisible){
-        //TODO
-        //Implement more intelligent checks for whether a unit can move through this tile or not
-
         boolean blockedByOtherUnit = false;
         if(tileVisible && this.unitOnTile != null){
             if(this.unitOnTile.getOwnerId() != unit.getOwnerId()){
@@ -107,8 +104,10 @@ public class Tile extends TileSpaceObject{
         super.onRemoval(group);
     }
 
+    /**
+     * Change graphical image displayed of this tile depending on neighboring tile types.
+     */
     public void updateTileTypesOfNeighbors(TileType[] tileTypesOfNeighbors){
-        //TODO
         gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors);
     }
 

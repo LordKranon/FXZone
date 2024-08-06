@@ -323,8 +323,6 @@ public class Map {
      * an inaccessible tile that has its obstruction hidden by fog of war will still be classified as accessible.
      */
     public boolean checkTileForMoveThroughByUnitPerceived(int x, int y, Unit unit, boolean[][] vision){
-        //TODO
-        //See Tile.isMovableThroughBy(Unit unit)
         if(!isInBounds(x, y)){
             return false;
         }
