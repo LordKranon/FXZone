@@ -435,6 +435,9 @@ public class Unit extends TileSpaceObject{
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
         mediaPlayerMovement.stop();
     }
+    public void blackOutOnCreated(){
+        unitStateToBlackedOut();
+    }
 
     public void setActionableThisTurn(boolean actionable){
         if(actionable){
