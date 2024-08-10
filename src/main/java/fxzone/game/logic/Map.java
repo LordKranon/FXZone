@@ -246,7 +246,7 @@ public class Map {
 
     public void createNewUnit(UnitSerializable unitSerializable, Game game){
         Unit unit = new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game);
-        unit.blackOutOnCreated();
+        unit.setActionableThisTurn(false);
         addUnit(unit);
     }
     /**
