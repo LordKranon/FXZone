@@ -3,6 +3,7 @@ package fxzone.game.render;
 import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyTile;
+import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.Tile.TileType;
 import javafx.scene.Group;
@@ -29,7 +30,7 @@ public class GameObjectTile extends GameObjectInTileSpace{
 
     }
 
-    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileType[] tileTypesOfNeighbors){
+    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileSuperType[] tileTypesOfNeighbors){
         Image imageAdjusted = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, false));
         Image imageAdjustedAlternate = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, true));
         this.imageBase = imageAdjusted;

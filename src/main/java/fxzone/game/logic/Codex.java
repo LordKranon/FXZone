@@ -265,7 +265,7 @@ public class Codex {
         HELICOPTER_CHINOOK,
 
         INFANTRY_GUERRILLA,
-
+        CAR_PICKUP,
  */
     }
     public enum UnitSuperType{
@@ -285,6 +285,26 @@ public class Codex {
         ARMORCLASS_INFANTRY,
         ARMORCLASS_ARMORED,
         ARMORCLASS_HEAVY_ARMOR
+    }
+
+    public enum TileSuperType {
+        TS_LAND,
+        TS_BEACH,
+        TS_WATER
+    }
+    public static TileSuperType getTileSuperType(TileType tileType){
+        switch (tileType){
+            case PLAINS:
+            case FOREST:
+                return TileSuperType.TS_LAND;
+            case BEACH:
+                return TileSuperType.TS_BEACH;
+            case WATER:
+                return TileSuperType.TS_WATER;
+            default:
+                System.err.println("[CODEX] Can't determine tile super type, invalid tile type");
+                return null;
+        }
     }
 
     public static int calculateDamageOnAttack(Unit offender, Unit defender){

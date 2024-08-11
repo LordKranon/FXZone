@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
@@ -11,6 +12,7 @@ public class Tile extends TileSpaceObject{
         PLAINS,
         WATER,
         BEACH,
+        FOREST
     }
     private final TileType tileType;
 
@@ -46,6 +48,9 @@ public class Tile extends TileSpaceObject{
 
     public TileType getTileType(){
         return tileType;
+    }
+    public TileSuperType getTileSuperType(){
+        return Codex.getTileSuperType(tileType);
     }
 
     public void setUnitOnTile(Unit unit){
@@ -107,7 +112,7 @@ public class Tile extends TileSpaceObject{
     /**
      * Change graphical image displayed of this tile depending on neighboring tile types.
      */
-    public void updateTileTypesOfNeighbors(TileType[] tileTypesOfNeighbors){
+    public void updateTileTypesOfNeighbors(TileSuperType[] tileTypesOfNeighbors){
         gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors);
     }
 

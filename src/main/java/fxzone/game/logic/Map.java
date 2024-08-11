@@ -3,6 +3,7 @@ package fxzone.game.logic;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
+import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -132,17 +133,17 @@ public class Map {
     }
 
     private void setNeighborTileTypeInfoForTile(int x, int y, TileSerializable[][] tilesSerializable) throws ArrayIndexOutOfBoundsException{
-        TileType[] tileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
+        TileSuperType[] tileTypesOfNeighbors = new TileSuperType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int k = 0; k < tileTypesOfNeighbors.length; k++) {
             try {
                 Point neighborsPosition = GeometryUtils.getNeighborsPosition(x, y, k);
                 if(tilesSerializable != null){
-                    tileTypesOfNeighbors[k] = tilesSerializable[neighborsPosition.x][neighborsPosition.y].tileType;
+                    tileTypesOfNeighbors[k] = Codex.getTileSuperType(tilesSerializable[neighborsPosition.x][neighborsPosition.y].tileType);
                 } else {
-                    tileTypesOfNeighbors[k] = this.tiles[neighborsPosition.x][neighborsPosition.y].getTileType();
+                    tileTypesOfNeighbors[k] = this.tiles[neighborsPosition.x][neighborsPosition.y].getTileSuperType();
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                tileTypesOfNeighbors[k] = TileType.PLAINS;
+                tileTypesOfNeighbors[k] = TileSuperType.TS_LAND;
             }
         }
         this.tiles[x][y].updateTileTypesOfNeighbors(tileTypesOfNeighbors);

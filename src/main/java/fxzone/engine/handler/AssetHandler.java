@@ -1,6 +1,7 @@
 package fxzone.engine.handler;
 
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.Tile.TileType;
@@ -154,16 +155,16 @@ public class AssetHandler {
                     gBaseAllCornersCut.drawImage(baseWater, 0, 0, null);
 
                     // Fill darkened corners for neighboring beaches
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.BEACH){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_BEACH){
                         gBaseAllCornersCut.drawImage(tilesetBeach.getSubimage(72, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.BEACH){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_BEACH){
                         gBaseAllCornersCut.drawImage(tilesetBeach.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.BEACH){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_BEACH){
                         gBaseAllCornersCut.drawImage(tilesetBeach.getSubimage(72, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.BEACH){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_BEACH){
                         gBaseAllCornersCut.drawImage(tilesetBeach.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                     }
 
@@ -181,19 +182,19 @@ public class AssetHandler {
                     int directPlainsNeighbors = 0;
 
                     // Fill corners where necessary
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND){
                         gTerrain.drawImage(base.getSubimage(0, 0, 24, 4), 0, 0, 24, 4, 0, 0, 24, 4, null);
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                         gTerrain.drawImage(base.getSubimage(0, 0, 4, 24), 0, 0, 4, 24, 0, 0, 4, 24, null);
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                         gTerrain.drawImage(base.getSubimage(0, 20, 24, 4), 0, 20, 24, 24, 0, 0, 24, 4, null);
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                         gTerrain.drawImage(base.getSubimage(20, 0, 4, 24), 20, 0, 24, 24, 0, 0, 4, 24, null);
                         directPlainsNeighbors++;
                     }
@@ -209,13 +210,13 @@ public class AssetHandler {
 
                         // 1 direct plains neighbor: This is a peninsula, determine direction of peninsula
                         case 1:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(72, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
@@ -224,25 +225,25 @@ public class AssetHandler {
 
                         // 2 neighbors: Either a corner or a double side
                         case 2:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                                 gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 24, 24, 0, 0, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
@@ -251,13 +252,13 @@ public class AssetHandler {
 
                         // 3 neighbors: One side to the sea
                         case 3:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] != TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] != TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] != TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] != TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] != TileSuperType.TS_LAND){
                                 gTerrain.drawImage(edgesSet.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
@@ -293,16 +294,16 @@ public class AssetHandler {
                     int directPlainsNeighbors = 0;
 
                     // Determine amount of neighbors to deduct which beach tile to draw
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND){
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                         directPlainsNeighbors++;
                     }
-                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                         directPlainsNeighbors++;
                     }
 
@@ -317,51 +318,51 @@ public class AssetHandler {
                             gBase.drawImage(tilesetBeach.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                             break;
                         case 1:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(48, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(24, 0, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(48, 0, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
                             }
                             break;
                         case 2:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 // No good fit
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND){
                                 // No good fit
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 0, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 24, 24, 0, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileType.PLAINS &&
-                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND &&
+                                keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(0, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
                             }
                             break;
                         case 3:
-                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] != TileType.PLAINS){
+                            if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.NORTH] != TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(24, 24, 24, 24), 0, 0, 24, 24, 0, 24, 24, 0, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.WEST] != TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 24, 0, 0, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] != TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(24, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
-                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] != TileType.PLAINS){
+                            } else if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.EAST] != TileSuperType.TS_LAND){
                                 gBase.drawImage(tilesetBeach.getSubimage(48, 24, 24, 24), 0, 0, 24, 24, 0, 0, 24, 24, null);
                             } else {
                                 System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
