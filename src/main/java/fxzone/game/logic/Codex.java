@@ -357,12 +357,13 @@ public class Codex {
     }
 
     public static boolean tileTypeFitsUnitSuperType(TileType tileType, Unit unit){
-        UnitSuperType superType = Codex.getUnitProfile(unit).SUPERTYPE;
+        UnitSuperType unitSuperType = Codex.getUnitProfile(unit).SUPERTYPE;
+        TileSuperType tileSuperType = getTileSuperType(tileType);
         return
-            (superType == UnitSuperType.LAND_INFANTRY && tileType != TileType.WATER) ||
-                (superType == UnitSuperType.LAND_VEHICLE && (tileType == TileType.PLAINS || tileType == TileType.BEACH)) ||
-                (superType == UnitSuperType.SHIP_SMALL && (tileType == TileType.WATER || tileType == TileType.BEACH)) ||
-                (superType == UnitSuperType.SHIP_LARGE && (tileType == TileType.WATER)) ||
-                (superType == UnitSuperType.AIRCRAFT);
+            (unitSuperType == UnitSuperType.LAND_INFANTRY && tileSuperType != TileSuperType.TS_WATER) ||
+                (unitSuperType == UnitSuperType.LAND_VEHICLE && (tileSuperType == TileSuperType.TS_LAND || tileSuperType == TileSuperType.TS_BEACH)) ||
+                (unitSuperType == UnitSuperType.SHIP_SMALL && (tileSuperType == TileSuperType.TS_WATER || tileSuperType == TileSuperType.TS_BEACH)) ||
+                (unitSuperType == UnitSuperType.SHIP_LARGE && (tileSuperType == TileSuperType.TS_WATER)) ||
+                (unitSuperType == UnitSuperType.AIRCRAFT);
     }
 }

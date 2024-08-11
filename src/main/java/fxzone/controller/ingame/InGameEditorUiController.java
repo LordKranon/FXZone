@@ -94,12 +94,20 @@ public class InGameEditorUiController extends InGameUiController{
         tileTypeButton.setOnMouseClicked(mouseEvent -> {
             if(tileTypeButton == selectedPlacingButton) {
 
-                if (editorTileTypePlaced == TileType.PLAINS) {
-                    editorTileTypePlaced = TileType.BEACH;
-                } else if(editorTileTypePlaced == TileType.BEACH){
-                    editorTileTypePlaced = TileType.WATER;
-                } else {
-                    editorTileTypePlaced = TileType.PLAINS;
+                switch (editorTileTypePlaced){
+                    case PLAINS:
+                        editorTileTypePlaced = TileType.BEACH;
+                        break;
+                    case BEACH:
+                        editorTileTypePlaced = TileType.WATER;
+                        break;
+                    case WATER:
+                        editorTileTypePlaced = TileType.FOREST;
+                        break;
+                    case FOREST:
+                    default:
+                        editorTileTypePlaced = TileType.PLAINS;
+                        break;
                 }
                 tileTypeButton.setText("" + editorTileTypePlaced);
                 tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));

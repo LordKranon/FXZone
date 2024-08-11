@@ -140,7 +140,7 @@ public class AssetHandler {
                 String pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png";
                 BufferedImage tilesetBeach = getBufferedImageColorApplied(pathToTileSetBeach, Color.white);
 
-                if(keyTile.keyTileType == TileType.PLAINS){
+                if(keyTile.keyTileType == TileType.PLAINS || keyTile.keyTileType == TileType.FOREST){
                     String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
                     String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
 
@@ -271,6 +271,13 @@ public class AssetHandler {
                         default:
                             System.err.println("[ASSET-HANDLER] FATAL ERROR on terrain generation");
                             break;
+                    }
+
+                    // Add terrain feature if needed
+                    if(keyTile.keyTileType == TileType.FOREST){
+                        String pathToForestImg = "/images/terrain/tiles/tile_forest_0.png";
+                        BufferedImage forest = getBufferedImage(pathToForestImg);
+                        gTerrain.drawImage(forest, 0, 0, 24, 24, 0, 0, 24, 24, null);
                     }
 
                     gTerrain.dispose();
