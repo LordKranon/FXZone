@@ -247,10 +247,11 @@ public class InGameUiController extends AbstractUiController {
 
     @Override
     public void update(AbstractGameController gameController, double delta) {
-        refreshUi();
+
         handleOffThreadGraphics();
         handleClicks();
         moveMap(delta);
+        refreshUi();
         handlePulsatingElements(delta);
         zoomMap();
         handleHoveredTile();
