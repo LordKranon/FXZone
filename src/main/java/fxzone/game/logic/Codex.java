@@ -142,6 +142,7 @@ public class Codex {
         put(TileType.PLAINS, "Plains");
         put(TileType.WATER, "Water");
         put(TileType.BEACH, "Beach");
+        put(TileType.FOREST, "Forest");
     }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{

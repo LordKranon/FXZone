@@ -425,7 +425,16 @@ public class Map {
                     int tileX = unit.getX()+p.x;
                     int tileY = unit.getY()+p.y;
                     if(isInBounds(tileX, tileY)){
-                        tileVisible[tileX][tileY] = true;
+
+                        // Obstruct vision with forests
+                        if(tiles[tileX][tileY].getTileType() == TileType.FOREST){
+                            if(GeometryUtils.getPointToPointDistance(new Point(unit.getX(), unit.getY()), new Point(tileX, tileY)) <= 1){
+                                tileVisible[tileX][tileY] = true;
+                            }
+                        } else{
+                            // Vision unobstructed
+                            tileVisible[tileX][tileY] = true;
+                        }
                     }
                 }
             }
@@ -468,7 +477,15 @@ public class Map {
             int tileX = unitX+p.x;
             int tileY = unitY+p.y;
             if(isInBounds(tileX, tileY)){
-                tileVisibleBefore[tileX][tileY] = true;
+                // Obstruct vision with forests
+                if(tiles[tileX][tileY].getTileType() == TileType.FOREST){
+                    if(GeometryUtils.getPointToPointDistance(new Point(unitX, unitY), new Point(tileX, tileY)) <= 1){
+                        tileVisibleBefore[tileX][tileY] = true;
+                    }
+                } else{
+                    // Vision unobstructed
+                    tileVisibleBefore[tileX][tileY] = true;
+                }
             }
         }
         return tileVisibleBefore;
