@@ -27,7 +27,7 @@
 
     </HBox>
 
-    <HBox spacing="40" style="-fx-background-color: #303030;">
+    <HBox spacing="40" style="-fx-background-color: #303030;" prefHeight="220">
 
       <VBox fx:id="vBox01">
         <TextFlow fx:id="tf0101"

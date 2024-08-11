@@ -448,8 +448,24 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
 
-        gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
-        gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
+        if(turnState == TurnState.GAME_OVER){
+            gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
+            gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
+        } else if(turnState == TurnState.BUILDING_SELECTED){
+            adjustSelectedBuildingUI();
+        }
+    }
+    private void adjustSelectedBuildingUI(){
+        double buildingUIX = (double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX();
+        double buildingUIY = (double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY();
+        if(buildingUIY < 0){
+            buildingUIY = 0;
+        } else if(buildingUIY + selectedBuildingUI.getHeight() > subScene2D.getHeight() - 26 - 220){
+            buildingUIY = subScene2D.getHeight() - selectedBuildingUI.getHeight() - 26 - 220;
+        }
+
+        selectedBuildingUI.setTranslateX(buildingUIX);
+        selectedBuildingUI.setTranslateY(buildingUIY);
     }
 
     private void handleOffThreadGraphics(){
@@ -1150,8 +1166,7 @@ public class InGameUiController extends AbstractUiController {
 
             // Show the building UI
             selectedBuildingUI = selectedBuilding.getConstructionMenu();
-            selectedBuildingUI.setTranslateX((double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX());
-            selectedBuildingUI.setTranslateY((double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY());
+            adjustSelectedBuildingUI();
             root2D.getChildren().add(selectedBuildingUI);
 
             // Configure construction menu buttons

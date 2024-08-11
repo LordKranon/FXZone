@@ -303,7 +303,7 @@ public class Codex {
             case WATER:
                 return TileSuperType.TS_WATER;
             default:
-                System.err.println("[CODEX] Can't determine tile super type, invalid tile type");
+                System.err.println("[CODEX] ERROR Can't determine tile super type, invalid tile type");
                 return null;
         }
     }
