@@ -117,4 +117,7 @@ public abstract class AbstractGameController extends AnimationTimer {
     public void keyPressed(KeyCode keyCode){
         activeUiController.keyPressed(keyCode);
     }
+    public void keyReleased(KeyCode keyCode){
+        activeUiController.keyReleased(keyCode);
+    }
 }

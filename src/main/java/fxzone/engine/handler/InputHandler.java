@@ -32,10 +32,15 @@ public class InputHandler {
         keysPressed = new HashSet<>();
 
         scene.setOnKeyPressed(keyEvent -> {
+            if(!keysPressed.contains(keyEvent.getCode())){
+                gameController.keyPressed(keyEvent.getCode());
+            }
             keysPressed.add(keyEvent.getCode());
-            gameController.keyPressed(keyEvent.getCode());
         });
         scene.setOnKeyReleased(keyEvent -> {
+            if(keysPressed.contains(keyEvent.getCode())){
+                gameController.keyReleased(keyEvent.getCode());
+            }
             keysPressed.remove(keyEvent.getCode());
         });
 

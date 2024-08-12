@@ -69,4 +69,6 @@ public abstract class AbstractUiController implements Initializable, Updatable {
 
     public void keyPressed(KeyCode keyCode){
     }
+    public void keyReleased(KeyCode keyCode){
+    }
 }

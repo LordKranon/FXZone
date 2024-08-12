@@ -130,6 +130,8 @@ public class InGameUiController extends AbstractUiController {
     private boolean[][] moveCommandGridAttackableSquares;
     private ArrayList<GameObjectUiMoveCommandGridTile> moveCommandGridTiles;
 
+    private ArrayList<GameObjectUiMoveCommandGridTile> rangeCheckGridTiles;
+
     /*
     SOUND
      */
@@ -1218,81 +1220,70 @@ public class InGameUiController extends AbstractUiController {
         moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
-        onSelectUnitCalculateMoveCommandGridRecursive(selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED);
+        onSelectUnitCalculateMoveCommandGridRecursive(
+            selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED, selectedUnit,
+            moveCommandGridMovableSquares, moveCommandGridAttackableSquares, false
+        );
 
         // Add attacks that are possible from start square without moving
         if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
-            onSelectUnitCalculateRangedAttackGrid();
+            onSelectUnitCalculateRangedAttackGrid(selectedUnit, moveCommandGridAttackableSquares, false);
         }
-        else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
-            onCalculateMoveCommandGridAddToAttackGridFromTileMelee(selectedUnit.getX(), selectedUnit.getY());
-        } else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
-            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY());
+        else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE ||
+        Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY(), selectedUnit, moveCommandGridAttackableSquares, false);
         }
     }
 
-    private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps){
+    private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps, Unit unit, boolean[][] refArrayMove, boolean[][] refArrayAttack, boolean addAllInRange){
         if(
-            Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE &&
-                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
+            (Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.MELEE ||
+                Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.RANGERMELEE) &&
+                map.checkTileForMoveToByUnitPerceived(x, y, unit, thisPlayerFowVision)
         ){
-            onCalculateMoveCommandGridAddToAttackGridFromTileMelee(x, y);
-        }
-        else if(
-            Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE &&
-                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
-        ){
-            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y);
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y, unit, refArrayAttack, addAllInRange);
         }
         if(remainingSteps > 0){
-            if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridMovableSquares[x][y-1] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1);
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, unit, thisPlayerFowVision)){
+                refArrayMove[x][y-1] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x-1, y, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridMovableSquares[x-1][y] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1);
+            if(map.checkTileForMoveThroughByUnitPerceived(x-1, y, unit, thisPlayerFowVision)){
+                refArrayMove[x-1][y] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x, y+1, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridMovableSquares[x][y+1] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1);
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y+1, unit, thisPlayerFowVision)){
+                refArrayMove[x][y+1] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x+1, y, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridMovableSquares[x+1][y] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1);
-            }
-        }
-    }
-    private void onCalculateMoveCommandGridAddToAttackGridFromTileMelee(int x, int y){
-        if(map.checkTileForAttackByUnit(x, y-1, selectedUnit, thisPlayerFowVision)){
-            moveCommandGridAttackableSquares[x][y-1] = true;
-        }
-        if(map.checkTileForAttackByUnit(x-1, y, selectedUnit, thisPlayerFowVision)){
-            moveCommandGridAttackableSquares[x-1][y] = true;
-        }
-        if(map.checkTileForAttackByUnit(x, y+1, selectedUnit, thisPlayerFowVision)){
-            moveCommandGridAttackableSquares[x][y+1] = true;
-        }
-        if(map.checkTileForAttackByUnit(x+1, y, selectedUnit, thisPlayerFowVision)){
-            moveCommandGridAttackableSquares[x+1][y] = true;
-        }
-    }
-    private void onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(int x, int y){
-        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
-            if(map.checkTileForAttackByUnit(x+p.x, y+p.y, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridAttackableSquares[x+p.x][y+p.y] = true;
+            if(map.checkTileForMoveThroughByUnitPerceived(x+1, y, unit, thisPlayerFowVision)){
+                refArrayMove[x+1][y] = true;
+                onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
             }
         }
     }
-    private void onSelectUnitCalculateRangedAttackGrid(){
-        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
-            if(map.checkTileForAttackByUnit(selectedUnit.getX()+p.x, selectedUnit.getY()+p.y, selectedUnit, thisPlayerFowVision)){
-                moveCommandGridAttackableSquares[selectedUnit.getX()+p.x][selectedUnit.getY()+p.y] = true;
+    private void onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(int x, int y, Unit unit, boolean[][] refArray, boolean addAllInRange){
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).MAXRANGE)){
+            if(
+                map.checkTileForAttackByUnit(x+p.x, y+p.y, unit, thisPlayerFowVision) ||
+                    (addAllInRange && map.isInBounds(x+p.x, y+p.y))
+            ){
+                refArray[x+p.x][y+p.y] = true;
             }
         }
-        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MINRANGE-1)){
-            if(map.isInBounds(selectedUnit.getX()+p.x, selectedUnit.getY()+p.y)){
-                moveCommandGridAttackableSquares[selectedUnit.getX()+p.x][selectedUnit.getY()+p.y] = false;
+    }
+    private void onSelectUnitCalculateRangedAttackGrid(Unit unit, boolean[][] refArray, boolean addAllInRange){
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).MAXRANGE)){
+            if(
+                map.checkTileForAttackByUnit(unit.getX()+p.x, unit.getY()+p.y, unit, thisPlayerFowVision) ||
+                (addAllInRange && map.isInBounds(unit.getX()+p.x, unit.getY()+p.y))
+            ){
+                refArray[unit.getX()+p.x][unit.getY()+p.y] = true;
+            }
+        }
+        for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).MINRANGE-1)){
+            if(map.isInBounds(unit.getX()+p.x, unit.getY()+p.y)){
+                refArray[unit.getX()+p.x][unit.getY()+p.y] = false;
             }
         }
     }
@@ -1520,6 +1511,14 @@ public class InGameUiController extends AbstractUiController {
     public void keyPressed(KeyCode keyCode){
         switch (keyCode){
             case ESCAPE: escapeKeyPressed(); break;
+            case K: showRangeKeyChanged(true); break;
+            default: break;
+        }
+    }
+    @Override
+    public void keyReleased(KeyCode keyCode){
+        switch (keyCode){
+            case K: showRangeKeyChanged(false); break;
             default: break;
         }
     }
@@ -1535,6 +1534,42 @@ public class InGameUiController extends AbstractUiController {
         }
         else if(turnState == TurnState.NEUTRAL || turnState == TurnState.EDITOR){
             toggleEscapeMenu();
+        }
+    }
+    private void showRangeKeyChanged(boolean pressed){
+        if(pressed && turnState == TurnState.NEUTRAL && map.getTiles()[tileHoveredX][tileHoveredY].hasUnitOnTile()){
+            Unit rangeCheckedUnit = map.getTiles()[tileHoveredX][tileHoveredY].getUnitOnTile();
+
+            boolean[][] rangeCheckGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
+            boolean[][] rangeCheckGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
+
+            if(Codex.getUnitProfile(rangeCheckedUnit).ATTACKTYPE == UnitAttackType.RANGED){
+                onSelectUnitCalculateRangedAttackGrid(rangeCheckedUnit, rangeCheckGridAttackableSquares, true);
+            } else{
+                onSelectUnitCalculateMoveCommandGridRecursive(rangeCheckedUnit.getX(), rangeCheckedUnit.getY(), Codex.getUnitProfile(rangeCheckedUnit.getUnitType()).SPEED, rangeCheckedUnit,
+                    rangeCheckGridMovableSquares, rangeCheckGridAttackableSquares, true);
+            }
+
+
+
+            rangeCheckGridTiles = new ArrayList<>();
+            for(int i_x = 0; i_x < rangeCheckGridAttackableSquares.length; i_x++){
+                for(int i_y = 0; i_y < rangeCheckGridAttackableSquares[i_x].length; i_y++){
+                    if(rangeCheckGridAttackableSquares[i_x][i_y]){
+                        rangeCheckGridTiles.add(
+                            new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, true)
+                        );
+                    }
+                }
+            }
+        }
+
+        else if(!pressed){
+            if(rangeCheckGridTiles != null){
+                for(GameObjectUiMoveCommandGridTile gridTile : rangeCheckGridTiles){
+                    gridTile.removeSelfFromRoot(root2D);
+                }
+            }
         }
     }
 }
