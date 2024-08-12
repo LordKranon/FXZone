@@ -105,7 +105,7 @@ public class Codex {
         ));
         put(UnitType.SHIP_DESTROYER, new UnitProfile(
             8, "Destroyer",
-            5, 3, 100, 6, 5, 1, 1,
+            5, 4, 100, 6, 5, 1, 1,
             1, 1.5, 1.5,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
@@ -131,6 +131,22 @@ public class Codex {
             500
         ));
 
+    }};
+    public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
+        put(UnitType.INFANTRY, "DMG 3  DFN 0  SPD 3  VIS 3\nStrong vs Infantry\nWeak vs Vehicles");
+        put(UnitType.INFANTRY_RPG, "DMG 4  DFN 0  SPD 3  VIS 3\nStrong vs Light Vehicles\nWeak vs Infantry");
+        put(UnitType.CAR_HUMVEE, "DMG 4  DFN 2  SPD 7  VIS 5\nVery fast and a good Scout\nVery Strong vs Infantry\nWeak vs Tanks");
+        put(UnitType.TRUCK_TRANSPORT, "DMG 0  DFN 1  SPD 4  VIS 3\nGenerates income when moving to cities\nWeak vs RPGs and all Vehicles");
+        put(UnitType.TANK_HUNTER, "DMG 6  DFN 5  SPD 5  VIS 4\nFast and very powerful\nVery Strong vs Light Vehicles");
+        put(UnitType.ARTILLERY, "DMG 6  DFN 4  SPD 3  VIS 3\nFires over a 5 tile range\nCan't hit targets that are too close\nBonus Damage vs Infantry");
+        put(UnitType.TANK_BATTLE, "DMG 9  DFN 7  SPD 4  VIS 3\nSuper powerful\nCan fire over 2 tiles, out-ranging other units");
+        put(UnitType.ARTILLERY_ROCKET, "DMG 6  DFN 2  SPD 3  VIS 3\nFires over a 6 tile range\nCan't hit targets that are too close\nBonus Damage vs Vehicles");
+
+        put(UnitType.SHIP_LANDER, "DMG 0  DFN 4  SPD 5  VIS 3\nTransports units over water\nHolds up to 2 Land Units");
+        put(UnitType.SHIP_GUNBOAT, "DMG 5  DFN 2  SPD 6  VIS 4\nVery fast and a good Scout\nVery Strong vs Infantry");
+        put(UnitType.SHIP_DESTROYER, "DMG 6  DFN 5  SPD 5  VIS 4\nFast and very powerful\nStrong vs other Ships");
+        put(UnitType.SHIP_BATTLESHIP, "DMG 7  DFN 7  SPD 3  VIS 3\nSuper powerful\nCan fire over 4 tiles,\nout-ranging other ships and striking at Land Units");
+        put(UnitType.SHIP_CARRIER, "DMG 0  DFN 5  SPD 3  VIS 3\nCarries and launches aircraft\nWeak vs other Ships");
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
         put(BuildingType.CITY, "City");

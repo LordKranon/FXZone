@@ -67,6 +67,7 @@ public class InGameUiController extends AbstractUiController {
     private Button endTurnButton;
 
     private final Font fontBottomUiBar = new Font(50);
+    private final Font fontBottomUiBarSmall = new Font(25);
     private TextFlow[][] textFlowsBottomUiBar;
 
     Pane escapeMenu;
@@ -1032,6 +1033,12 @@ public class InGameUiController extends AbstractUiController {
                     textFlowsBottomUiBar[2][1].getChildren().add(textCapturedBuildingProgress[i]);
                 }
 
+            }
+            else {
+                Text textUnitDescription = new Text("\n"+Codex.UNIT_DESCRIPTIONS.get(unit.getUnitType()));
+                textUnitDescription.setFont(fontBottomUiBarSmall);
+                textUnitDescription.setStyle("-fx-fill: #a0a0a0");
+                textFlowsBottomUiBar[2][0].getChildren().add(textUnitDescription);
             }
         }
         else if(building != null){
