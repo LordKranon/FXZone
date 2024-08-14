@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -66,6 +67,9 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         AnchorPane anchorPane;
 
         @FXML
+        TextField mapName;
+
+        @FXML
         public void initialize(){
             resize(anchorPane, gameController.getStage());
             initializeOuter(anchorPane);
@@ -73,7 +77,7 @@ public abstract class LobbyUiController extends AbstractUiController implements 
 
         @FXML
         public void start(){
-            startOuter(gameController);
+            startOuter(gameController, mapName.getText());
         }
 
         @FXML
@@ -96,7 +100,7 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         this.vBoxIcons = (VBox) gridPaneInner.getChildren().get(2);
     }
 
-    protected abstract void startOuter(AbstractGameController gameController);
+    protected abstract void startOuter(AbstractGameController gameController, String mapName);
 
     protected abstract void quitOuter(AbstractGameController gameController);
 

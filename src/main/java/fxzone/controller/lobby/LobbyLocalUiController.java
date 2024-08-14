@@ -35,9 +35,15 @@ public class LobbyLocalUiController extends LobbyUiController{
     }
 
     @Override
-    protected void startOuter(AbstractGameController gameController) {
+    protected void startOuter(AbstractGameController gameController, String mapName) {
 
-        GameSerializable gameSerializable = new GameSerializable(Save.loadMap(), localPlayerList);
+        MapSerializable loadedMap = Save.loadMap(mapName);
+        if(loadedMap == null){
+            System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [start] ERROR Could not load map on game start");
+            return;
+        }
+
+        GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList);
 
         gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
     }

@@ -21,8 +21,10 @@ import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.save.Save;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class InGameEditorUiController extends InGameUiController{
 
@@ -47,6 +49,8 @@ public class InGameEditorUiController extends InGameUiController{
     private EditorPlacingMode placingMode;
 
     private Button tileTypeButton, buildingTypeButton, unitTypeButton;
+
+    private TextField nameMapTextField;
 
     public InGameEditorUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
@@ -239,6 +243,16 @@ public class InGameEditorUiController extends InGameUiController{
         saveMapButton.setOnMouseClicked(mouseEvent -> {
             saveMap();
         });
+
+        nameMapTextField = new TextField();
+        nameMapTextField.setTranslateX(100);
+        nameMapTextField.setTranslateY(700);
+        nameMapTextField.setPrefWidth(400);
+        nameMapTextField.setViewOrder(ViewOrder.UI_BUTTON);
+        nameMapTextField.setVisible(true);
+        nameMapTextField.setFont(new Font(30));
+        nameMapTextField.setPromptText("Name map");
+        escapeMenu.getChildren().add(nameMapTextField);
     }
 
     private void selectPlacingMode(EditorPlacingMode newPlacingMode){
@@ -299,8 +313,13 @@ public class InGameEditorUiController extends InGameUiController{
     }
 
     private void saveMap(){
+        String mapName = nameMapTextField.getText();
+        if(mapName.equals("")){
+            System.err.println("[EDITOR] [saveMap] ERROR Map has no name");
+            return;
+        }
         if(verbose) System.out.println("[EDITOR] [saveMap] saving...");
-        Save.saveMap(new MapSerializable(map));
+        Save.saveMap(new MapSerializable(map), mapName);
         if(verbose) System.out.println("[EDITOR] [saveMap] saved");
     }
 

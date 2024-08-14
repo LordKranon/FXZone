@@ -61,7 +61,7 @@ public class LobbyJoinedUiController extends LobbyUiController implements Client
     }
 
     @Override
-    protected void startOuter(AbstractGameController gameController) {
+    protected void startOuter(AbstractGameController gameController, String mapName) {
 
     }
 

@@ -62,10 +62,11 @@
                   prefWidth="400.0" text="START"
                   onAction="#start">
                 </Button>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="SEND TEST MESSAGE"
-                  onAction="#sendTestMessage">
-                </Button>
+                <TextField fx:id="mapName" maxWidth="400.0" promptText="Map name">
+                  <font>
+                    <Font size="30.0"/>
+                  </font>
+                </TextField>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="QUIT"
                   onAction="#quit">

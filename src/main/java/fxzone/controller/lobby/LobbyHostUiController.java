@@ -62,7 +62,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     }
 
     @Override
-    protected void startOuter(AbstractGameController gameController) {
+    protected void startOuter(AbstractGameController gameController, String mapName) {
 
 
         ArrayList<Player> playerList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         playerList.addAll(server.getPlayers());
 
 
-        GameSerializable gameSerializable = new GameSerializable(Save.loadMap(), playerList);
+        GameSerializable gameSerializable = new GameSerializable(Save.loadMap("map"), playerList);
 
 
         InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, gameSerializable);

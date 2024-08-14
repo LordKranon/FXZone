@@ -11,11 +11,11 @@ import java.io.ObjectOutputStream;
 
 public class Save {
 
-    private static final String SAVE_FILE_PATH = "./fxzone/map.zonemap";
+    private static final String SAVE_FILE_PATH = "./fxzone/";
 
-    public static MapSerializable loadMap(){
+    public static MapSerializable loadMap(String name){
         try {
-            File saveFile = new File(SAVE_FILE_PATH);
+            File saveFile = new File(SAVE_FILE_PATH + name + ".zonemap");
 
             if (!saveFile.exists()) {
                 System.err.println("[SAVE] [loadMap] Save file does not exist");
@@ -35,9 +35,9 @@ public class Save {
         }
     }
 
-    public static void saveMap(MapSerializable map){
+    public static void saveMap(MapSerializable map, String name){
         try {
-            File saveFile = new File(SAVE_FILE_PATH);
+            File saveFile = new File(SAVE_FILE_PATH + name + ".zonemap");
             ObjectOutputStream outStream =
                 new ObjectOutputStream(new FileOutputStream(saveFile));
             outStream.writeObject(map);
