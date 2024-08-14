@@ -12,6 +12,7 @@ import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
+import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.net.packet.GameActionPacket;
 import fxzone.net.packet.LobbyPlayerListPacket;
 import fxzone.net.server.Server;
@@ -64,13 +65,19 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
     @Override
     protected void startOuter(AbstractGameController gameController, String mapName) {
 
+        MapSerializable loadedMap = Save.loadMap(mapName);
+        if(loadedMap == null){
+            System.err.println("[LOBBY-HOST-UI-CONTROLLER] [start] ERROR Could not load map on game start");
+            return;
+        }
+
 
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(hostingPlayer);
         playerList.addAll(server.getPlayers());
 
 
-        GameSerializable gameSerializable = new GameSerializable(Save.loadMap("map"), playerList);
+        GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList);
 
 
         InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, gameSerializable);
