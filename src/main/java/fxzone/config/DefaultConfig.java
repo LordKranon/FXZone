@@ -29,6 +29,9 @@ public class DefaultConfig {
         {"UI_SIZE_IN_GAME", "128"},
         {"UI_TIlE_SELECTOR_TICK_INTERVAL", ".5"},
 
-        {"GAME_SOUND_MUSIC_ENABLED", "false"}
+        {"GAME_SOUND_MUSIC_ENABLED", "false"},
+
+        {"LAST_USED_MAP_ONLINE", ""},
+        {"LAST_USED_MAP_LOCAL", ""},
     };
 }

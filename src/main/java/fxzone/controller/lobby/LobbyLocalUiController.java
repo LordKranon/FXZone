@@ -1,5 +1,6 @@
 package fxzone.controller.lobby;
 
+import fxzone.config.Config;
 import fxzone.controller.ingame.InGameLocalUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
@@ -16,6 +17,7 @@ import fxzone.save.Save;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 public class LobbyLocalUiController extends LobbyUiController{
@@ -35,6 +37,12 @@ public class LobbyLocalUiController extends LobbyUiController{
     }
 
     @Override
+    protected void initializeOuter(AnchorPane anchorPane){
+        super.initializeOuter(anchorPane);
+        textFieldMapName.setText(Config.getString("LAST_USED_MAP_LOCAL"));
+    }
+
+    @Override
     protected void startOuter(AbstractGameController gameController, String mapName) {
 
         MapSerializable loadedMap = Save.loadMap(mapName);
@@ -42,6 +50,8 @@ public class LobbyLocalUiController extends LobbyUiController{
             System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [start] ERROR Could not load map on game start");
             return;
         }
+
+        Config.set("LAST_USED_MAP_LOCAL", mapName);
 
         GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList);
 

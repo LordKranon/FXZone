@@ -29,6 +29,8 @@ public abstract class LobbyUiController extends AbstractUiController implements 
     protected VBox vBoxPlayerList;
     protected VBox vBoxIcons;
 
+    protected TextField textFieldMapName;
+
     /**
      * Indicates that the lobby status has updated and needs graphical adjustments.
      */
@@ -98,6 +100,8 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         this.gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
         this.vBoxPlayerList = (VBox) gridPaneInner.getChildren().get(1);
         this.vBoxIcons = (VBox) gridPaneInner.getChildren().get(2);
+        VBox vBoxButtons = (VBox) gridPaneInner.getChildren().get(0);
+        this.textFieldMapName = (TextField) vBoxButtons.getChildren().get(1);
     }
 
     protected abstract void startOuter(AbstractGameController gameController, String mapName);

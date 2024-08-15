@@ -1,5 +1,6 @@
 package fxzone.controller.lobby;
 
+import fxzone.config.Config;
 import fxzone.controller.ServerHostController;
 import fxzone.controller.ingame.InGameHostUiController;
 import fxzone.controller.menu.PlayMenuUiController;
@@ -60,6 +61,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         GridPane gridPane = (GridPane) anchorPane.getChildren().get(0);
         Label label = (Label) gridPane.getChildren().get(1);
         label.setText("HOST LOBBY");
+        textFieldMapName.setText(Config.getString("LAST_USED_MAP_ONLINE"));
     }
 
     @Override
@@ -71,6 +73,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
             return;
         }
 
+        Config.set("LAST_USED_MAP_ONLINE", mapName);
 
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(hostingPlayer);
