@@ -49,6 +49,11 @@ public class LobbyLocalUiController extends LobbyUiController{
     @Override
     protected void startOuter(AbstractGameController gameController, String mapName) {
 
+        if(localPlayerList.isEmpty()){
+            System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [start] ERROR Player list empty");
+            return;
+        }
+
         MapSerializable loadedMap = Save.loadMap(mapName);
         if(loadedMap == null){
             System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [start] ERROR Could not load map on game start");
