@@ -58,15 +58,32 @@
               </GridPane.margin>
               -->
               <children>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="START"
-                  onAction="#start">
-                </Button>
                 <TextField fx:id="mapName" maxWidth="400.0" promptText="Map name">
                   <font>
                     <Font size="30.0"/>
                   </font>
                 </TextField>
+
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="START"
+                  onAction="#start">
+                </Button>
+
+                <TextField fx:id="playerColor" maxWidth="400.0" promptText="Player color" visible="false">
+                  <font>
+                    <Font size="30.0"/>
+                  </font>
+                </TextField>
+                <TextField fx:id="playerName" maxWidth="400.0" promptText="Player name" visible="false">
+                  <font>
+                    <Font size="30.0"/>
+                  </font>
+                </TextField>
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="ADD PLAYER" visible="false"
+                  onAction="#addPlayer">
+                </Button>
+
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="QUIT"
                   onAction="#quit">

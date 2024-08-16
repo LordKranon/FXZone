@@ -4,7 +4,9 @@ import fxzone.controller.NetworkController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Player;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public abstract class LobbyUiController extends AbstractUiController implements 
     protected GridPane gridPaneInner;
     protected VBox vBoxPlayerList;
     protected VBox vBoxIcons;
+    protected VBox vBoxButtons;
 
     protected TextField textFieldMapName;
 
@@ -70,6 +73,10 @@ public abstract class LobbyUiController extends AbstractUiController implements 
 
         @FXML
         TextField mapName;
+        @FXML
+        TextField playerName;
+        @FXML
+        TextField playerColor;
 
         @FXML
         public void initialize(){
@@ -80,6 +87,11 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         @FXML
         public void start(){
             startOuter(gameController, mapName.getText());
+        }
+
+        @FXML
+        public void addPlayer(){
+            addPlayerOuter(gameController, playerName.getText(), playerColor.getText());
         }
 
         @FXML
@@ -100,13 +112,17 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         this.gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
         this.vBoxPlayerList = (VBox) gridPaneInner.getChildren().get(1);
         this.vBoxIcons = (VBox) gridPaneInner.getChildren().get(2);
-        VBox vBoxButtons = (VBox) gridPaneInner.getChildren().get(0);
-        this.textFieldMapName = (TextField) vBoxButtons.getChildren().get(1);
+        this.vBoxButtons = (VBox) gridPaneInner.getChildren().get(0);
+        this.textFieldMapName = (TextField) vBoxButtons.getChildren().get(0);
     }
 
     protected abstract void startOuter(AbstractGameController gameController, String mapName);
 
     protected abstract void quitOuter(AbstractGameController gameController);
+
+    protected void addPlayerOuter(AbstractGameController gameController, String playerName, String playerColor){
+
+    }
 
     protected abstract void sendTestMessageOuter();
 
@@ -136,7 +152,7 @@ public abstract class LobbyUiController extends AbstractUiController implements 
         vBoxPlayerList.getChildren().add(button);
 
         ImageView imageView = new ImageView();
-        imageView.setImage(AssetHandler.getImage("/images/icon_tank_red.png"));
+        imageView.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.TANK_BATTLE, 0, FxUtils.toAwtColor(player.getColor()))));
         imageView.setFitHeight(110);
         imageView.setFitWidth(110);
 

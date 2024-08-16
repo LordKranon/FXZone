@@ -17,12 +17,15 @@ import fxzone.save.Save;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 public class LobbyLocalUiController extends LobbyUiController{
 
     private final ArrayList<Player> localPlayerList;
+
+    private int runningPlayerIdNumber = 1;
 
     public LobbyLocalUiController(AbstractGameController gameController) {
         super(gameController);
@@ -31,8 +34,6 @@ public class LobbyLocalUiController extends LobbyUiController{
     }
 
     private void initializePlayerListOfLocalLobby(){
-        localPlayerList.add(new Player("Alpha", Color.web("#ff0000"), 1));
-        localPlayerList.add(new Player("Bravo", Color.web("#0000ff"), 2));
         updatePlayerList(localPlayerList);
     }
 
@@ -40,6 +41,9 @@ public class LobbyLocalUiController extends LobbyUiController{
     protected void initializeOuter(AnchorPane anchorPane){
         super.initializeOuter(anchorPane);
         textFieldMapName.setText(Config.getString("LAST_USED_MAP_LOCAL"));
+        vBoxButtons.getChildren().get(2).setVisible(true);
+        vBoxButtons.getChildren().get(3).setVisible(true);
+        vBoxButtons.getChildren().get(4).setVisible(true);
     }
 
     @Override
@@ -56,6 +60,23 @@ public class LobbyLocalUiController extends LobbyUiController{
         GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList);
 
         gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
+    }
+
+    @Override
+    protected void addPlayerOuter(AbstractGameController gameController, String playerName, String playerColor){
+        javafx.scene.paint.Color color;
+        try {
+            color = Color.web(playerColor);
+        } catch (Exception e){
+            System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [addPlayer] ERROR Invalid player color");
+            return;
+        }
+        if(playerName == null || playerName.equals("")){
+            System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [addPlayer] ERROR Invalid player name");
+            return;
+        }
+        localPlayerList.add(new Player(playerName, color, runningPlayerIdNumber++));
+        updatePlayerList(localPlayerList);
     }
 
     @Override
