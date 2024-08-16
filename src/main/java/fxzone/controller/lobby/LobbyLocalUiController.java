@@ -27,6 +27,8 @@ public class LobbyLocalUiController extends LobbyUiController{
 
     private int runningPlayerIdNumber = 1;
 
+    private TextField textFieldPlayerName, textFieldPlayerColor;
+
     public LobbyLocalUiController(AbstractGameController gameController) {
         super(gameController);
         this.localPlayerList = new ArrayList<>();
@@ -41,8 +43,15 @@ public class LobbyLocalUiController extends LobbyUiController{
     protected void initializeOuter(AnchorPane anchorPane){
         super.initializeOuter(anchorPane);
         textFieldMapName.setText(Config.getString("LAST_USED_MAP_LOCAL"));
-        vBoxButtons.getChildren().get(2).setVisible(true);
-        vBoxButtons.getChildren().get(3).setVisible(true);
+
+        textFieldPlayerName = (TextField) vBoxButtons.getChildren().get(3);
+        textFieldPlayerName.setVisible(true);
+        textFieldPlayerName.setText(Config.getString("LAST_USED_PLAYER_NAME_LOCAL"));
+
+        textFieldPlayerColor = (TextField) vBoxButtons.getChildren().get(2);
+        textFieldPlayerColor.setVisible(true);
+        textFieldPlayerColor.setText(Config.getString("LAST_USED_PLAYER_COLOR_LOCAL"));
+
         vBoxButtons.getChildren().get(4).setVisible(true);
     }
 
@@ -80,6 +89,10 @@ public class LobbyLocalUiController extends LobbyUiController{
             System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [addPlayer] ERROR Invalid player name");
             return;
         }
+
+        Config.set("LAST_USED_PLAYER_NAME_LOCAL", playerName);
+        Config.set("LAST_USED_PLAYER_COLOR_LOCAL", playerColor);
+
         localPlayerList.add(new Player(playerName, color, runningPlayerIdNumber++));
         updatePlayerList(localPlayerList);
     }

@@ -33,5 +33,7 @@ public class DefaultConfig {
 
         {"LAST_USED_MAP_ONLINE", ""},
         {"LAST_USED_MAP_LOCAL", ""},
+        {"LAST_USED_PLAYER_NAME_LOCAL", "Alpha"},
+        {"LAST_USED_PLAYER_COLOR_LOCAL", "#ff0000"},
     };
 }
