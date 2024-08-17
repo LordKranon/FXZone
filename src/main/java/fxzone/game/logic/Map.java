@@ -467,7 +467,7 @@ public class Map {
             }
         }
         for(Unit unit : units){
-            unit.setVisible(tileVisible[unit.getX()][unit.getY()]);
+            unit.setInVision(tileVisible[unit.getX()][unit.getY()]);
         }
     }
 

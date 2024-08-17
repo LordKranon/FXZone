@@ -91,7 +91,11 @@ public class Tile extends TileSpaceObject{
         return (!blockedByOtherUnit) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
     }
     public boolean isMovableToBy(Unit unit, boolean tileVisible){
-        return (!tileVisible || this.unitOnTile == null) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
+        return (!tileVisible ||
+            (this.unitOnTile == null ||
+                (this.unitOnTile.getOwnerId() == unit.getOwnerId() && this.unitOnTile.canTransportLoad(unit))
+                )
+        ) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
     }
 
 

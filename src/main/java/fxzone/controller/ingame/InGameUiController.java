@@ -993,7 +993,8 @@ public class InGameUiController extends AbstractUiController {
 
             if(game.playerExists(unit.getOwnerId())){
                 textUnitName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
-            } else {
+            }
+            else {
                 textUnitName.setStyle("-fx-fill: white");
             }
             if(building != null && building.getOwnerId() != unit.getOwnerId()){
@@ -1036,6 +1037,15 @@ public class InGameUiController extends AbstractUiController {
                 }
 
             }
+            else if(!unit.getTransportLoadedUnits().isEmpty()) {
+                Text textTransportedUnits = new Text("");
+                for(Unit transported : unit.getTransportLoadedUnits()){
+                    textTransportedUnits.setText(textTransportedUnits.getText()+transported.getUnitType()+"\n");
+                }
+                textTransportedUnits.setFont(fontBottomUiBarSmall);
+                textTransportedUnits.setStyle("-fx-fill: white");
+                textFlowsBottomUiBar[2][0].getChildren().add(textTransportedUnits);
+            }
             else {
                 Text textUnitDescription = new Text("\n"+Codex.UNIT_DESCRIPTIONS.get(unit.getUnitType()));
                 textUnitDescription.setFont(fontBottomUiBarSmall);
@@ -1056,7 +1066,8 @@ public class InGameUiController extends AbstractUiController {
                 textBuildingName.setStyle("-fx-fill: white");
             }
 
-        } else{
+        }
+        else{
             Text textTileName = new Text(Codex.TILE_NAMES.get(tile.getTileType()));
             textTileName.setFont(fontBottomUiBar);
             textFlowsBottomUiBar[1][0].getChildren().add(textTileName);
@@ -1289,8 +1300,8 @@ public class InGameUiController extends AbstractUiController {
     }
 
 
-    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack){
-        UnitState unitStateAfterCommand = unit.moveCommand(path, game, pointToAttack, waitForAttack);
+    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack, boolean enterTransport){
+        UnitState unitStateAfterCommand = unit.moveCommand(path, game, pointToAttack, waitForAttack, enterTransport);
         if(unitStateAfterCommand == UnitState.MOVING){
             unitsMoving.put(unit, 0.);
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
@@ -1320,13 +1331,21 @@ public class InGameUiController extends AbstractUiController {
 
 
         /*
+        Enter transport
+         */
+        boolean enterTransport = false;
+        if(!path.isEmpty() && map.getTiles()[path.peekLast().x][path.peekLast().y].hasUnitOnTile()){
+            enterTransport = true;
+        }
+
+        /*
         If unit is ordered to not attack, but has valid attacks from the tile it goes to, the unit will remain actionable
         and will be able to receive a non-move attack command after moving.
          */
         boolean waitForAttack = false;
         boolean[][] attackableSquaresAfterMove = new boolean[map.getWidth()][map.getHeight()];
         if(
-            !wasStopped && pointToAttack == null && !path.isEmpty() &&
+            !wasStopped && pointToAttack == null && !path.isEmpty() && !enterTransport &&
             (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE)
         ){
 
@@ -1348,7 +1367,7 @@ public class InGameUiController extends AbstractUiController {
             moveCommandGridAttackableSquares = attackableSquaresAfterMove;
         }
 
-        commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack, waitForAttack);
+        commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack, waitForAttack, enterTransport);
 
         return wasStopped;
     }

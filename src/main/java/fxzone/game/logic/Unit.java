@@ -14,6 +14,7 @@ import fxzone.game.render.GameObjectUnit;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import javafx.scene.Group;
 import javafx.scene.media.MediaPlayer;
 
@@ -24,6 +25,8 @@ public class Unit extends TileSpaceObject{
      * Alters from actual position when unit is moving.
      */
     private int visualTileX, visualTileY;
+
+    private boolean inVision;
 
     /**
      * Identifies what kind of unit this is.
@@ -63,6 +66,9 @@ public class Unit extends TileSpaceObject{
     private Unit currentlyAttackedUnit;
     private Unit lastAttackedUnit;
     private boolean waitForAttackAfterMoving;
+
+    private ArrayList<Unit> transportLoadedUnits;
+    private boolean disappearIntoTransportAfterMoving;
 
     private int ownerId;
 
@@ -115,6 +121,8 @@ public class Unit extends TileSpaceObject{
         this.gameObjectInTileSpace = this.gameObjectUnit;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
+
+        this.transportLoadedUnits = new ArrayList<>();
         initializeStats();
         initializeMediaPlayer();
     }
@@ -139,7 +147,8 @@ public class Unit extends TileSpaceObject{
         BLACKED_OUT,
         ATTACKING,
         COUNTERATTACKING,
-        MOVED_AND_WAITING_FOR_ATTACK
+        MOVED_AND_WAITING_FOR_ATTACK,
+        IN_TRANSPORT
     }
     public enum UnitStance {
         NORMAL,
@@ -167,7 +176,7 @@ public class Unit extends TileSpaceObject{
      * During a game turn, receive a move command and start moving across the map.
      * @param path the path of tiles this unit will take
      */
-    public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack, boolean waitForAttack){
+    public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack, boolean waitForAttack, boolean enterTransport){
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= Codex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
@@ -179,8 +188,12 @@ public class Unit extends TileSpaceObject{
                 directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
                 setFacingDirection(directionNextPointOnMovePath);
             }
-            setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
 
+            if(!enterTransport){
+                setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+            } else {
+                game.getMap().getTiles()[this.x][this.y].setUnitOnTile(null);
+            }
 
             setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
 
@@ -191,6 +204,16 @@ public class Unit extends TileSpaceObject{
             }
             this.waitForAttackAfterMoving = waitForAttack;
             actionableThisTurn = false;
+
+            if(enterTransport){
+                Unit transporter = game.getMap().getTiles()[finalPosition.x][finalPosition.y].getUnitOnTile();
+                if(transporter == null){
+                    System.err.println(this+" [moveCommand] ERROR Could not find transporter to enter");
+                } else {
+                    this.disappearIntoTransportAfterMoving = true;
+                    transporter.loadToTransport(this);
+                }
+            }
 
 
             if(verbose) System.out.println(this+" received a move command");
@@ -205,7 +228,7 @@ public class Unit extends TileSpaceObject{
 
             return this.unitState;
         }
-        else if(unitState == UnitState.MOVED_AND_WAITING_FOR_ATTACK && path.isEmpty() && pointToAttack != null && !waitForAttack){
+        else if(unitState == UnitState.MOVED_AND_WAITING_FOR_ATTACK && path.isEmpty() && pointToAttack != null && !waitForAttack && !enterTransport){
             this.hasAttackCommandAfterMoving = true;
             this.pointToAttackAfterMoving = pointToAttack;
             if(verbose) System.out.println(this+" received attack command while moved and waiting for attack");
@@ -357,7 +380,13 @@ public class Unit extends TileSpaceObject{
             statRemainingHealthOnAttack = statRemainingHealth;
             mediaPlayerGunshot.play();
             unitStateToAttacking();
-        } else {
+        }
+        else if(disappearIntoTransportAfterMoving){
+            disappearIntoTransportAfterMoving = false;
+            setStance(UnitStance.NORMAL);
+            unitStateToInTransport();
+        }
+        else {
             setStance(UnitStance.NORMAL);
             if(actionableThisTurn){
                 unitStateToNeutral();
@@ -431,6 +460,10 @@ public class Unit extends TileSpaceObject{
         this.hasAttackCommandAfterMoving = false;
         unitState = UnitState.ATTACKING;
     }
+    private void unitStateToInTransport(){
+        this.setVisible(false);
+        unitState = UnitState.IN_TRANSPORT;
+    }
     private void cleanUpMovingState(Map map){
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
         mediaPlayerMovement.stop();
@@ -463,6 +496,14 @@ public class Unit extends TileSpaceObject{
         super.setVisible(visible);
         if(this.isDamaged()){
             gameObjectUiUnitHealth.setVisible(visible);
+        }
+    }
+    public void setInVision(boolean inVision){
+        this.inVision = inVision;
+        if(!inVision){
+            setVisible(false);
+        } else if(inVision && unitState != UnitState.IN_TRANSPORT){
+            setVisible(true);
         }
     }
 
@@ -513,5 +554,20 @@ public class Unit extends TileSpaceObject{
                 unitStateToBlackedOut();
             }
         }
+    }
+
+    public boolean canTransportLoad(Unit unit){
+        return Codex.canTransport(this, unit) && this.transportLoadedUnits.size() < Codex.getTransportCapacity(this);
+    }
+    public void loadToTransport(Unit unit){
+        transportLoadedUnits.add(unit);
+    }
+    public void unloadFromTransport(Unit unit){
+        if(!transportLoadedUnits.remove(unit)){
+            System.err.println(this+" [unloadFromTransport] ERROR Unit left transport that was not loaded up for transport");
+        }
+    }
+    public ArrayList<Unit> getTransportLoadedUnits(){
+        return transportLoadedUnits;
     }
 }

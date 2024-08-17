@@ -383,4 +383,23 @@ public class Codex {
                 (unitSuperType == UnitSuperType.SHIP_LARGE && (tileSuperType == TileSuperType.TS_WATER)) ||
                 (unitSuperType == UnitSuperType.AIRCRAFT);
     }
+
+    public static boolean canTransport(Unit transporter, Unit loaded){
+        if(transporter.getUnitType() == UnitType.SHIP_LANDER){
+            return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_VEHICLE;
+        } else if(transporter.getUnitType() == UnitType.SHIP_CARRIER){
+            return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT;
+        } else {
+            return false;
+        }
+    }
+    public static int getTransportCapacity(Unit unit){
+        switch (unit.getUnitType()){
+            case SHIP_LANDER:
+            case SHIP_CARRIER:
+                return 2;
+            default:
+                return 0;
+        }
+    }
 }
