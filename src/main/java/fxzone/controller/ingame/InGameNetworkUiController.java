@@ -35,7 +35,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         Also implement wait-for-attack for network games
         Also implement enter transport for network games
          */
-        commandUnitToMove(unit, path, unitMoveCommandPacket.getPointToAttack(), false, false);
+        commandUnitToMove(unit, path, unitMoveCommandPacket.getPointToAttack(), unitMoveCommandPacket.getWaitForAttack(), unitMoveCommandPacket.getEnterTransport());
     }
 
     /**

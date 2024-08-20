@@ -49,8 +49,12 @@ public class InGameHostUiController extends InGameNetworkUiController implements
 
     @Override
     protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
-        boolean wasStoppedOnFow = super.onPlayerUnitMoveCommand(path, pointToAttack);
-        server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path, wasStoppedOnFow?null:pointToAttack));
+        turnStateToNeutral();
+        boolean wasStoppedOnFow = verifyPathOnMoveCommand(path);
+        boolean enterTransport = checkEnterTransportOnMoveCommand(path);
+        boolean waitForAttack = checkWaitForAttackOnMoveCommand(path, pointToAttack, wasStoppedOnFow, enterTransport);
+        commandUnitToMove(selectedUnit, path, wasStoppedOnFow?null:pointToAttack, waitForAttack, enterTransport);
+        server.sendPacketToAllVerifiedPlayers(new UnitMoveCommandPacket(new Point(selectedUnit.getVisualTileX(), selectedUnit.getVisualTileY()), path, wasStoppedOnFow?null:pointToAttack, waitForAttack, enterTransport));
         return wasStoppedOnFow;
     }
 

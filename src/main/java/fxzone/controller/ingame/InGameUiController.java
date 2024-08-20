@@ -1329,43 +1329,16 @@ public class InGameUiController extends AbstractUiController {
          */
         boolean wasStopped = verifyPathOnMoveCommand(path);
 
-
         /*
         Enter transport
          */
-        boolean enterTransport = false;
-        if(!path.isEmpty() && map.getTiles()[path.peekLast().x][path.peekLast().y].hasUnitOnTile()){
-            enterTransport = true;
-        }
+        boolean enterTransport = checkEnterTransportOnMoveCommand(path);
 
         /*
         If unit is ordered to not attack, but has valid attacks from the tile it goes to, the unit will remain actionable
         and will be able to receive a non-move attack command after moving.
          */
-        boolean waitForAttack = false;
-        boolean[][] attackableSquaresAfterMove = new boolean[map.getWidth()][map.getHeight()];
-        if(
-            !wasStopped && pointToAttack == null && !path.isEmpty() && !enterTransport &&
-            (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE)
-        ){
-
-            for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
-                int x = path.peekLast().x + p.x;
-                int y = path.peekLast().y + p.y;
-                if(map.isInBounds(x, y) && moveCommandGridAttackableSquares[x][y]){
-                    waitForAttack = true;
-                    attackableSquaresAfterMove[x][y] = true;
-                    moveCommandGridTiles.add(
-                        new GameObjectUiMoveCommandGridTile(x, y, map, root2D, true)
-                    );
-                }
-            }
-        }
-
-        if(waitForAttack){
-            turnState = TurnState.UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE;
-            moveCommandGridAttackableSquares = attackableSquaresAfterMove;
-        }
+        boolean waitForAttack = checkWaitForAttackOnMoveCommand(path, pointToAttack, wasStopped, enterTransport);
 
         commandUnitToMove(selectedUnit, path, wasStopped?null:pointToAttack, waitForAttack, enterTransport);
 
@@ -1386,6 +1359,39 @@ public class InGameUiController extends AbstractUiController {
         path.addAll(trimmedPath);
         return wasStopped;
     }
+    protected boolean checkEnterTransportOnMoveCommand(ArrayDeque<Point> path){
+        boolean enterTransport = false;
+        if(!path.isEmpty() && map.getTiles()[path.peekLast().x][path.peekLast().y].hasUnitOnTile()){
+            enterTransport = true;
+        }
+        return enterTransport;
+    }
+    protected boolean checkWaitForAttackOnMoveCommand(ArrayDeque<Point> path, Point pointToAttack, boolean wasStopped, boolean enterTransport){
+        boolean waitForAttack = false;
+        boolean[][] attackableSquaresAfterMove = new boolean[map.getWidth()][map.getHeight()];
+        if(
+            !wasStopped && pointToAttack == null && !path.isEmpty() && !enterTransport &&
+                (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE)
+        ){
+            for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(selectedUnit).MAXRANGE)){
+                int x = path.peekLast().x + p.x;
+                int y = path.peekLast().y + p.y;
+                if(map.isInBounds(x, y) && moveCommandGridAttackableSquares[x][y]){
+                    waitForAttack = true;
+                    attackableSquaresAfterMove[x][y] = true;
+                    moveCommandGridTiles.add(
+                        new GameObjectUiMoveCommandGridTile(x, y, map, root2D, true)
+                    );
+                }
+            }
+        }
+        if(waitForAttack){
+            turnState = TurnState.UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE;
+            moveCommandGridAttackableSquares = attackableSquaresAfterMove;
+        }
+        return waitForAttack;
+    }
+
     protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
         createUnit(unitSerializable, statPurchasingPrice);
     }

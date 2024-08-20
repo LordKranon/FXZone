@@ -69,9 +69,11 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     @Override
     protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
-        boolean stoppedOnFow = verifyPathOnMoveCommand(path);
-        client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path, stoppedOnFow?null:pointToAttack));
         turnStateToNeutral();
+        boolean stoppedOnFow = verifyPathOnMoveCommand(path);
+        boolean enterTransport = checkEnterTransportOnMoveCommand(path);
+        boolean waitForAttack = checkWaitForAttackOnMoveCommand(path, pointToAttack, stoppedOnFow, enterTransport);
+        client.sendPacket(new UnitMoveCommandPacket(new Point(selectedUnit.getX(), selectedUnit.getY()), path, stoppedOnFow?null:pointToAttack, waitForAttack, enterTransport));
         return stoppedOnFow;
     }
 
