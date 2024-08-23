@@ -69,6 +69,7 @@ public class Unit extends TileSpaceObject{
 
     private ArrayList<Unit> transportLoadedUnits;
     private boolean disappearIntoTransportAfterMoving;
+    private Unit transportedBy;
 
     private int ownerId;
 
@@ -193,6 +194,12 @@ public class Unit extends TileSpaceObject{
                 setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
             } else {
                 game.getMap().getTiles()[this.x][this.y].setUnitOnTile(null);
+                this.x = finalPosition.x;
+                this.y = finalPosition.y;
+            }
+            for(Unit transportedUnit : transportLoadedUnits){
+                transportedUnit.x = this.x;
+                transportedUnit.y = this.y;
             }
 
             setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
@@ -212,6 +219,7 @@ public class Unit extends TileSpaceObject{
                 } else {
                     this.disappearIntoTransportAfterMoving = true;
                     transporter.loadToTransport(this);
+                    this.transportedBy = transporter;
                 }
             }
 
@@ -233,6 +241,33 @@ public class Unit extends TileSpaceObject{
             this.pointToAttackAfterMoving = pointToAttack;
             if(verbose) System.out.println(this+" received attack command while moved and waiting for attack");
             onMovementEnd(game.getMap());
+            return this.unitState;
+        }
+        else if(unitState == UnitState.IN_TRANSPORT && pointToAttack == null && !waitForAttack && !enterTransport && !path.isEmpty()){
+            // Exit transport
+            transportedBy.getTransportLoadedUnits().remove(this);
+            unitStateToNeutral();
+            this.movePath = path;
+            Point oldPosition = new Point(transportedBy.getX(), transportedBy.getY());
+            Point finalPosition = new Point(path.peekLast());
+            directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+            setFacingDirection(directionNextPointOnMovePath);
+
+            super.setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+            game.getMap().getTiles()[finalPosition.x][finalPosition.y].setUnitOnTile(this);
+            this.gameObjectUiUnitHealth.setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+            setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
+            setVisible(true);
+
+            this.hasAttackCommandAfterMoving = false;
+            this.waitForAttackAfterMoving = false;
+            this.actionableThisTurn = false;
+
+            if(verbose) System.out.println(this+" received an exit transport move command");
+
+            mediaPlayerMovement.play();
+            unitState = UnitState.MOVING;
+
             return this.unitState;
         }
         else {
@@ -493,6 +528,9 @@ public class Unit extends TileSpaceObject{
     }
     @Override
     public void setVisible(boolean visible){
+        if(visible && !inVision){
+            return;
+        }
         super.setVisible(visible);
         if(this.isDamaged()){
             gameObjectUiUnitHealth.setVisible(visible);

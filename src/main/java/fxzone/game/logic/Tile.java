@@ -2,6 +2,7 @@ package fxzone.game.logic;
 
 import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitSuperType;
+import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
 import javafx.scene.Group;
@@ -98,7 +99,7 @@ public class Tile extends TileSpaceObject{
     public boolean isMovableToOrCanEnterTransportBy(Unit unit, boolean tileVisible){
         return (!tileVisible ||
             (this.unitOnTile == null ||
-                (this.unitOnTile.getOwnerId() == unit.getOwnerId() && this.unitOnTile.canTransportLoad(unit))
+                (this.unitOnTile.getOwnerId() == unit.getOwnerId() && this.unitOnTile.canTransportLoad(unit) && (unit.getUnitState() != UnitState.IN_TRANSPORT))
             )
         ) && (Codex.tileTypeFitsUnitSuperType(this.tileType, unit));
     }

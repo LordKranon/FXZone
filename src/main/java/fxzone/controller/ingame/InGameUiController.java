@@ -740,7 +740,7 @@ public class InGameUiController extends AbstractUiController {
             Unit unitOnTileClicked = tileClicked.getUnitOnTile();
             Building buildingOnTileClicked = tileClicked.getBuildingOnTile();
             if(unitOnTileClicked != null){
-                selectUnit(unitOnTileClicked);
+                trySelectUnit(unitOnTileClicked);
             } else if(buildingOnTileClicked != null){
                 selectBuilding(buildingOnTileClicked);
             }
@@ -1126,54 +1126,70 @@ public class InGameUiController extends AbstractUiController {
      *
      * @param unit unit being selected
      */
-    protected void selectUnit(Unit unit){
-        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] trying");
+    protected void trySelectUnit(Unit unit){
+        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [trySelectUnit]");
         if(
             turnState == TurnState.NEUTRAL &&
             unit.getUnitState() == UnitState.NEUTRAL &&
             thisPlayer != null &&
             (thisPlayer.getId() == unit.getOwnerId())
         ){
-            selectedUnit = unit;
+            selectUnit(unit);
+        }
+        else if(
+            turnState == TurnState.NEUTRAL &&
+                unit.getUnitState() == UnitState.BLACKED_OUT &&
+                thisPlayer != null &&
+                (thisPlayer.getId() == unit.getOwnerId()) &&
+                Codex.getTransportCapacity(unit) > 0 &&
+                !unit.getTransportLoadedUnits().isEmpty()
+        ){
+            Unit transportedByClickedUnit = unit.getTransportLoadedUnits().get(0);
+            if(transportedByClickedUnit.getUnitState() == UnitState.IN_TRANSPORT){
+                selectUnit(transportedByClickedUnit);
+            }
+        }
+    }
+    private void selectUnit(Unit unit){
+        selectedUnit = unit;
 
-            // Initialize unit path queue
-            clearSelectedUnitPathQueue();
+        // Initialize unit path queue
+        clearSelectedUnitPathQueue();
 
-            // Initialize move command arrow
-            moveCommandArrowTiles = new ArrayList<>();
+        // Initialize move command arrow
+        moveCommandArrowTiles = new ArrayList<>();
 
-            // Add the first part of the arrow, which is on the tile that the selected unit is standing on
-            addPathQueueArrowBase();
+        // Add the first part of the arrow, which is on the tile that the selected unit is standing on
+        addPathQueueArrowBase();
 
-            // Calculate the move command grid
-            onSelectUnitCalculateMoveCommandGrid();
+        // Calculate the move command grid
+        onSelectUnitCalculateMoveCommandGrid();
 
-            // Initialize move command grid graphics
-            moveCommandGridTiles = new ArrayList<>();
+        // Initialize move command grid graphics
+        moveCommandGridTiles = new ArrayList<>();
 
-            // For all squares the selected unit can move to, add a green tile to the move command grid
-            // For squares with attackable enemies, add a red tile
-            for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
-                for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
-                    if(moveCommandGridMovableSquares[i_x][i_y]){
-                        moveCommandGridTiles.add(
-                            new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, false)
-                        );
-                    }
-                    if(moveCommandGridAttackableSquares[i_x][i_y]){
-                        moveCommandGridTiles.add(
-                            new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, true)
-                        );
-                    }
+        // For all squares the selected unit can move to, add a green tile to the move command grid
+        // For squares with attackable enemies, add a red tile
+        for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
+            for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
+                if(moveCommandGridMovableSquares[i_x][i_y]){
+                    moveCommandGridTiles.add(
+                        new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, false)
+                    );
+                }
+                if(moveCommandGridAttackableSquares[i_x][i_y]){
+                    moveCommandGridTiles.add(
+                        new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, true)
+                    );
                 }
             }
-
-            // To make the unit graphically move - rotating its tracks or walking in place
-            selectedUnit.setStance(UnitStance.MOVE_1);
-
-            turnState = TurnState.UNIT_SELECTED;
-            if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
         }
+
+        // To make the unit graphically move - rotating its tracks or walking in place
+        selectedUnit.setStance(UnitStance.MOVE_1);
+
+        turnState = TurnState.UNIT_SELECTED;
+        if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
     }
     protected void selectBuilding(Building building){
         if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectBuilding] trying");
@@ -1230,6 +1246,15 @@ public class InGameUiController extends AbstractUiController {
         // Initialize move command grid logic
         moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
+
+        //For units in transport, only calculate move grid and skip any attack options
+        if(selectedUnit.getUnitState() == UnitState.IN_TRANSPORT){
+            onSelectUnitCalculateMoveCommandGridRecursive(
+                selectedUnit.getX(), selectedUnit.getY(), 1, selectedUnit,
+                moveCommandGridMovableSquares, new boolean[map.getWidth()][map.getHeight()], false
+            );
+            return;
+        }
 
         onSelectUnitCalculateMoveCommandGridRecursive(
             selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED, selectedUnit,
