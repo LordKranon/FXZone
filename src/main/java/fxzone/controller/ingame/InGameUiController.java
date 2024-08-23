@@ -532,7 +532,7 @@ public class InGameUiController extends AbstractUiController {
                     } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
                         if(
                             (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                            map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision)) ||
+                            map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision, false)) ||
                             (selectedUnitQueuedPath.isEmpty() &&
                             GeometryUtils.getPointToPointDistance(new Point(selectedUnit.getX(), selectedUnit.getY()), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE)
                         ){
@@ -560,7 +560,7 @@ public class InGameUiController extends AbstractUiController {
                                     if(
                                         moveCommandGridMovableSquares[i][j] &&
                                         GeometryUtils.getPointToPointDistance(new Point(i, j), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                                            map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision)
+                                            map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision, false)
                                     ){
                                         movableTilesInRange.add(new Point(i, j));
                                     }
@@ -752,7 +752,7 @@ public class InGameUiController extends AbstractUiController {
             }
             else if(
                 lastTileAddedToPathQueue.x == x && lastTileAddedToPathQueue.y == y &&
-                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision)
+                map.checkTileForMoveToByUnitPerceived(x, y, selectedUnit, thisPlayerFowVision, true)
             ){
                 // Move and don't attack
                 onPlayerUnitMoveCommand(selectedUnitQueuedPath, null);
@@ -769,7 +769,7 @@ public class InGameUiController extends AbstractUiController {
                         GeometryUtils.getPointToPointDistance(new Point(x, y), lastTileAddedToPathQueue) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
                         (
                             map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y,
-                                selectedUnit, thisPlayerFowVision) ||
+                                selectedUnit, thisPlayerFowVision, false) ||
                                 selectedUnitQueuedPath.isEmpty()
                         )
                 ) {
@@ -1250,7 +1250,7 @@ public class InGameUiController extends AbstractUiController {
         if(
             (Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.MELEE ||
                 Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.RANGERMELEE) &&
-                map.checkTileForMoveToByUnitPerceived(x, y, unit, thisPlayerFowVision)
+                map.checkTileForMoveToByUnitPerceived(x, y, unit, thisPlayerFowVision, false)
         ){
             onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y, unit, refArrayAttack, addAllInRange);
         }

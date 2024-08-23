@@ -333,12 +333,14 @@ public class Map {
             return this.tiles[x][y].isMovableThroughBy(unit, vision[x][y]);
         }
     }
-    public boolean checkTileForMoveToByUnitPerceived(int x, int y, Unit unit, boolean[][] vision){
+    public boolean checkTileForMoveToByUnitPerceived(int x, int y, Unit unit, boolean[][] vision, boolean includeEnterTransport){
         if(!isInBounds(x, y)){
             return false;
         }
-        else {
+        else if(!includeEnterTransport) {
             return this.tiles[x][y].isMovableToBy(unit, vision[x][y]);
+        } else {
+            return this.tiles[x][y].isMovableToOrCanEnterTransportBy(unit, vision[x][y]);
         }
     }
     public boolean checkTileForMoveThroughByUnitFinal(int x, int y, Unit unit){
