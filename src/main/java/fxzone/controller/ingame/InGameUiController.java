@@ -6,6 +6,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
@@ -37,6 +38,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -1038,12 +1041,18 @@ public class InGameUiController extends AbstractUiController {
 
             }
             else if(!unit.getTransportLoadedUnits().isEmpty()) {
-                Text textTransportedUnits = new Text("");
+                Text textTransportedUnits = new Text("\n");
                 for(Unit transported : unit.getTransportLoadedUnits()){
-                    textTransportedUnits.setText(textTransportedUnits.getText()+transported.getUnitType()+"\n");
+                    textTransportedUnits.setText(textTransportedUnits.getText()+Codex.UNIT_PROFILE_VALUES.get(transported.getUnitType()).NAME+"   ");
+                    ImageView imgTransportedUnit = new ImageView(AssetHandler.getImageUnit(new KeyUnit(transported.getUnitType(), 0, FxUtils.toAwtColor(game.getPlayer(transported.getOwnerId()).getColor()))));
+                    //imgTransportedUnit.setScaleX(.5);
+                    //imgTransportedUnit.setScaleY(.5);
+                    imgTransportedUnit.setFitWidth(96);
+                    imgTransportedUnit.setFitHeight(96);
+                    textFlowsBottomUiBar[2][1].getChildren().add(imgTransportedUnit);
                 }
                 textTransportedUnits.setFont(fontBottomUiBarSmall);
-                textTransportedUnits.setStyle("-fx-fill: white");
+                textTransportedUnits.setStyle("-fx-fill: #a0a0a0");
                 textFlowsBottomUiBar[2][0].getChildren().add(textTransportedUnits);
             }
             else {
