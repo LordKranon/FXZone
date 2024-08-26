@@ -1045,8 +1045,6 @@ public class InGameUiController extends AbstractUiController {
                 for(Unit transported : unit.getTransportLoadedUnits()){
                     textTransportedUnits.setText(textTransportedUnits.getText()+Codex.UNIT_PROFILE_VALUES.get(transported.getUnitType()).NAME+"   ");
                     ImageView imgTransportedUnit = new ImageView(AssetHandler.getImageUnit(new KeyUnit(transported.getUnitType(), 0, FxUtils.toAwtColor(game.getPlayer(transported.getOwnerId()).getColor()))));
-                    //imgTransportedUnit.setScaleX(.5);
-                    //imgTransportedUnit.setScaleY(.5);
                     imgTransportedUnit.setFitWidth(96);
                     imgTransportedUnit.setFitHeight(96);
                     textFlowsBottomUiBar[2][1].getChildren().add(imgTransportedUnit);
