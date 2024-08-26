@@ -38,7 +38,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -67,7 +66,7 @@ public class InGameUiController extends AbstractUiController {
     UI ELEMENTS
      */
     private Button escapeMenuButton;
-    private Button endTurnButton;
+    protected Button endTurnButton;
 
     private final Font fontBottomUiBar = new Font(50);
     private final Font fontBottomUiBarSmall = new Font(25);
@@ -78,9 +77,9 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Announce GAME OVER at game end.
      */
-    TextFlow gameOverTextFlow;
-    Text gameOverText;
-    Text gameOverName;
+    TextFlow globalMessageTextFlow;
+    Text globalMessageText;
+    Text globalMessageName;
 
 
     /**
@@ -388,30 +387,30 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.getChildren().add(quitConfirmButton);
 
 
-        gameOverTextFlow = new TextFlow();
-        gameOverTextFlow.setVisible(false);
-        gameOverTextFlow.setViewOrder(ViewOrder.UI_IN_GAME_ANNOUNCEMENT);
-        gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
-        gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
-        gameOverTextFlow.setTextAlignment(TextAlignment.CENTER);
+        globalMessageTextFlow = new TextFlow();
+        globalMessageTextFlow.setVisible(false);
+        globalMessageTextFlow.setViewOrder(ViewOrder.UI_IN_GAME_ANNOUNCEMENT);
+        globalMessageTextFlow.setTranslateX((subScene2D.getWidth() - globalMessageTextFlow.getWidth()) / 2);
+        globalMessageTextFlow.setTranslateY((subScene2D.getHeight() - globalMessageTextFlow.getHeight()) / 2);
+        globalMessageTextFlow.setTextAlignment(TextAlignment.CENTER);
 
-        gameOverText = new Text("DEFEAT");
-        gameOverText.setFont(new Font(100));
-        gameOverText.setVisible(true);
-        gameOverText.setStyle("-fx-fill: white");
-        gameOverText.setTextAlignment(TextAlignment.CENTER);
+        globalMessageText = new Text("DEFEAT");
+        globalMessageText.setFont(new Font(100));
+        globalMessageText.setVisible(true);
+        globalMessageText.setStyle("-fx-fill: white");
+        globalMessageText.setTextAlignment(TextAlignment.CENTER);
 
-        gameOverTextFlow.getChildren().add(gameOverText);
+        globalMessageTextFlow.getChildren().add(globalMessageText);
 
-        gameOverName = new Text("\nName");
-        gameOverName.setFont(new Font(100));
-        gameOverName.setVisible(true);
-        gameOverName.setStyle("-fx-fill: white");
-        gameOverName.setTextAlignment(TextAlignment.CENTER);
+        globalMessageName = new Text("\nName");
+        globalMessageName.setFont(new Font(100));
+        globalMessageName.setVisible(true);
+        globalMessageName.setStyle("-fx-fill: white");
+        globalMessageName.setTextAlignment(TextAlignment.CENTER);
 
-        gameOverTextFlow.getChildren().add(gameOverName);
+        globalMessageTextFlow.getChildren().add(globalMessageName);
 
-        root2D.getChildren().add(gameOverTextFlow);
+        root2D.getChildren().add(globalMessageTextFlow);
     }
 
     void initializeGame(GameSerializable initialGame){
@@ -450,14 +449,14 @@ public class InGameUiController extends AbstractUiController {
         escapeMenuButton.setTranslateX(subScene2D.getWidth() - escapeMenuButton.getWidth() - 24);
         escapeMenuButton.setTranslateY(subScene2D.getHeight() - escapeMenuButton.getHeight() - 46);
         endTurnButton.setTranslateX(subScene2D.getWidth() - endTurnButton.getWidth() - 24);
-        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 46 - escapeMenuButton.getHeight());
+        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 66 - escapeMenuButton.getHeight());
 
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
 
-        if(turnState == TurnState.GAME_OVER){
-            gameOverTextFlow.setTranslateX((subScene2D.getWidth() - gameOverTextFlow.getWidth()) / 2);
-            gameOverTextFlow.setTranslateY((subScene2D.getHeight() - gameOverTextFlow.getHeight()) / 2);
+        if(turnState == TurnState.GAME_OVER || turnState == TurnState.NO_TURN){
+            globalMessageTextFlow.setTranslateX((subScene2D.getWidth() - globalMessageTextFlow.getWidth()) / 2);
+            globalMessageTextFlow.setTranslateY((subScene2D.getHeight() - globalMessageTextFlow.getHeight()) / 2);
         } else if(turnState == TurnState.BUILDING_SELECTED){
             adjustSelectedBuildingUI();
         }
@@ -1501,8 +1500,10 @@ public class InGameUiController extends AbstractUiController {
             ArrayList<Player> playersEliminated = game.getPendingEliminatedPlayers();
             if(playersEliminated.contains(thisPlayer)){
                 turnStateToGameOver(false, 0);
+                return;
             } else if(game.getPlayers().size() < 2){
                 turnStateToGameOver(game.playerExists(thisPlayer.getId()), 0);
+                return;
             }
         }
         game.goNextTurn();
@@ -1548,18 +1549,21 @@ public class InGameUiController extends AbstractUiController {
         turnState = TurnState.NO_TURN;
     }
     protected void turnStateToGameOver(boolean victory, int playerDisplayed){
+        if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] GAME OVER");
         map.setVisible(true);
         map.setFogOfWarToVision(map.getVisionOfGod());
-        gameOverTextFlow.setVisible(true);
+        globalMessageTextFlow.setVisible(true);
         if(victory){
-            gameOverText.setText("VICTORY");
+            globalMessageText.setText("VICTORY");
+        } else {
+            globalMessageText.setText("DEFEAT");
         }
         if(playerDisplayed == 0){
-            gameOverName.setVisible(false);
+            globalMessageName.setVisible(false);
         } else {
             Player victorDisplayed = game.getPlayer(playerDisplayed);
-            gameOverName.setText("\n"+victorDisplayed.getName());
-            gameOverName.setStyle("-fx-fill: "+FxUtils.toRGBCode(victorDisplayed.getTextColor()));
+            globalMessageName.setText("\n"+victorDisplayed.getName());
+            globalMessageName.setStyle("-fx-fill: "+FxUtils.toRGBCode(victorDisplayed.getTextColor()));
         }
         turnState = TurnState.GAME_OVER;
     }

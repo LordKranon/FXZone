@@ -9,6 +9,7 @@ import javafx.scene.Group;
 
 public class Game {
 
+    private int turnCount = 1;
     private int whoseTurn;
 
     private int amountPlayers = 0;
@@ -77,6 +78,10 @@ public class Game {
         return whoseTurn;
     }
 
+    public int getTurnCount(){
+        return turnCount;
+    }
+
     public void goNextTurn(){
 
 
@@ -84,6 +89,7 @@ public class Game {
         whoseTurn += 1;
         if (whoseTurn >= amountPlayers ||  whoseTurn < 0){
             whoseTurn = 0;
+            turnCount++;
         }
         for(Unit unit : map.getUnits()){
             unit.setActionableThisTurn(true);
@@ -92,9 +98,16 @@ public class Game {
     }
 
     public boolean itsMyTurn(Player player){
-        if (verbose) System.out.println("[GAME] [itsMyTurn?]\n[GAME] [PlayerIsAsking] "+player+"\n[GAME] [PlayerWithTurn] "+players.get(whoseTurn));
+        Player playerWithTurn;
+        try {
+            playerWithTurn = players.get(whoseTurn);
+        } catch (IndexOutOfBoundsException e){
+            System.err.println("[GAME] [itsMyTurn?] ERROR Player doesn't exist");
+            return false;
+        }
+        if (verbose) System.out.println("[GAME] [itsMyTurn?]\n[GAME] [PlayerIsAsking] "+player+"\n[GAME] [PlayerWithTurn] "+playerWithTurn);
 
-        return players.get(whoseTurn).equals(player);
+        return playerWithTurn.equals(player);
     }
 
     public Map getMap(){
