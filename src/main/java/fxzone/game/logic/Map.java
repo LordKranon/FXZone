@@ -278,6 +278,11 @@ public class Map {
         if(tiles[unit.x][unit.y].hasBuildingOnTile()){
             tiles[unit.x][unit.y].getBuildingOnTile().setStatCaptureProgress(0);
         }
+
+        //Remove transported units
+        for(Unit transportedUnit : unit.getTransportLoadedUnits()){
+            removeUnit(transportedUnit);
+        }
     }
     private void addBuilding(Building building){
         buildings.add(building);
