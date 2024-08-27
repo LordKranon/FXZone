@@ -1151,7 +1151,7 @@ public class InGameUiController extends AbstractUiController {
                 !unit.getTransportLoadedUnits().isEmpty()
         ){
             Unit transportedByClickedUnit = unit.getTransportLoadedUnits().get(0);
-            if(transportedByClickedUnit.getUnitState() == UnitState.IN_TRANSPORT){
+            if(transportedByClickedUnit.getUnitState() == UnitState.IN_TRANSPORT && map.checkTileForMoveThroughByUnitFinal(unit.getX(), unit.getY(), transportedByClickedUnit)){
                 selectUnit(transportedByClickedUnit);
             }
         }
