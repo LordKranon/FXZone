@@ -4,6 +4,7 @@ import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.TileSuperType;
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -540,6 +541,16 @@ public class Map {
                     && building.getBuildingType() == BuildingType.CITY) {
                     //Cities heal units
                     if(unitOnBuilding.isDamaged()){
+                        unitOnBuilding.changeStatRemainingHealth(20);
+                    }
+                } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
+                    && building.getBuildingType() == BuildingType.PORT){
+                    //Ports heal water units
+                    if(unitOnBuilding.isDamaged() && (
+                        Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.SHIP_SMALL ||
+                        Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.SHIP_LARGE
+                    )
+                    ){
                         unitOnBuilding.changeStatRemainingHealth(20);
                     }
                 }
