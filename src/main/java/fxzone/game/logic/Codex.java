@@ -373,14 +373,15 @@ public class Codex {
         return getUnitHealthDigit((double)(unit.getStatRemainingHealth())/(double)(unit.getStatMaxHealth()));
     }
 
-    public static boolean tileTypeFitsUnitSuperType(TileType tileType, Unit unit){
+    public static boolean tileTypeFitsUnitSuperType(Tile tile, Unit unit){
+        TileType tileType = tile.getTileType();
         UnitSuperType unitSuperType = Codex.getUnitProfile(unit).SUPERTYPE;
         TileSuperType tileSuperType = getTileSuperType(tileType);
         return
             (unitSuperType == UnitSuperType.LAND_INFANTRY && tileSuperType != TileSuperType.TS_WATER) ||
                 (unitSuperType == UnitSuperType.LAND_VEHICLE && (tileSuperType == TileSuperType.TS_LAND || tileSuperType == TileSuperType.TS_BEACH)) ||
-                (unitSuperType == UnitSuperType.SHIP_SMALL && (tileSuperType == TileSuperType.TS_WATER || tileSuperType == TileSuperType.TS_BEACH)) ||
-                (unitSuperType == UnitSuperType.SHIP_LARGE && (tileSuperType == TileSuperType.TS_WATER)) ||
+                (unitSuperType == UnitSuperType.SHIP_SMALL && (tileSuperType == TileSuperType.TS_WATER || tileSuperType == TileSuperType.TS_BEACH || (tile.hasBuildingOnTile() && tile.getBuildingOnTile().getBuildingType()==BuildingType.PORT))) ||
+                (unitSuperType == UnitSuperType.SHIP_LARGE && (tileSuperType == TileSuperType.TS_WATER || (tile.hasBuildingOnTile() && tile.getBuildingOnTile().getBuildingType()==BuildingType.PORT))) ||
                 (unitSuperType == UnitSuperType.AIRCRAFT);
     }
 
