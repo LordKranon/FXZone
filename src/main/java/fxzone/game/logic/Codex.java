@@ -12,6 +12,8 @@ public class Codex {
 
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
+    public static final int PLAYER_STARTING_CASH = 200;
+
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
             0, "Rifle Infantry",

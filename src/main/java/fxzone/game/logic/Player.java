@@ -34,7 +34,7 @@ public class Player {
         initializeStats();
     }
     private void initializeStats(){
-        this.statResourceCash = 500;
+        this.statResourceCash = Codex.PLAYER_STARTING_CASH;
     }
 
     public Color getColor(){
