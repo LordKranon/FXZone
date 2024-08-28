@@ -1,6 +1,7 @@
 package fxzone.game.logic;
 
 import fxzone.game.logic.Codex.TileSuperType;
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
@@ -85,7 +86,12 @@ public class Tile extends TileSpaceObject{
         boolean blockedByOtherUnit = false;
         if(tileVisible && this.unitOnTile != null){
             if(this.unitOnTile.getOwnerId() != unit.getOwnerId()){
-                blockedByOtherUnit = true;
+                blockedByOtherUnit = !(
+                    Codex.getUnitProfile(unit).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER ||
+                        Codex.getUnitProfile(unit).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE ||
+                        Codex.getUnitProfile(this.unitOnTile).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER ||
+                        Codex.getUnitProfile(this.unitOnTile).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE
+                );
             }
         }
         return (!blockedByOtherUnit) && (Codex.tileTypeFitsUnitSuperType(this, unit));

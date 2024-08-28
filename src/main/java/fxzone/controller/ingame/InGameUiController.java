@@ -12,6 +12,7 @@ import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex;
 import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
@@ -22,7 +23,6 @@ import fxzone.game.logic.Tile;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Unit.UnitState;
-import fxzone.game.logic.Codex;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectTile;
@@ -516,12 +516,14 @@ public class InGameUiController extends AbstractUiController {
                 if(
                     GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
                         selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
-                        moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
+                        moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
+                        !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
                 ){
                     // Player manually adds another tile to pathing arrow
                     addPointToSelectedUnitPathQueue(hoveredPoint);
                 } else if(
-                    moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y]
+                    moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
+                    !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
                 ){
                     // Player hovers any green tile and arrow is either too long already or arrowhead is not neighboring
                     // Redo the pathing arrow with automatic pathfinding
@@ -1186,7 +1188,7 @@ public class InGameUiController extends AbstractUiController {
         // For squares with attackable enemies, add a red tile
         for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
             for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
-                if(moveCommandGridMovableSquares[i_x][i_y]){
+                if(moveCommandGridMovableSquares[i_x][i_y] && !moveCommandGridAttackableSquares[i_x][i_y]){
                     moveCommandGridTiles.add(
                         new GameObjectUiMoveCommandGridTile(i_x, i_y, map, root2D, false)
                     );
@@ -1384,8 +1386,13 @@ public class InGameUiController extends AbstractUiController {
         return wasStopped;
     }
     protected boolean verifyPathOnMoveCommand(ArrayDeque<Point> path){
+        if(path.isEmpty()){
+            return false;
+        }
         boolean wasStopped = false;
         ArrayDeque<Point> trimmedPath = new ArrayDeque<>();
+
+
         for(Point p : path){
             if(map.checkTileForMoveThroughByUnitFinal(p.x, p.y, selectedUnit)){
                 trimmedPath.add(p);
@@ -1396,6 +1403,19 @@ public class InGameUiController extends AbstractUiController {
         }
         path.clear();
         path.addAll(trimmedPath);
+
+
+        while(true){
+            Point pl = path.peekLast();
+            if(!map.checkTileForMoveToByUnitPerceived(pl.x, pl.y, selectedUnit, map.getVisionOfGod(), !wasStopped)){
+                path.remove(pl);
+                wasStopped = true;
+            }
+            else {
+                break;
+            }
+        }
+
         return wasStopped;
     }
     protected boolean checkEnterTransportOnMoveCommand(ArrayDeque<Point> path){
