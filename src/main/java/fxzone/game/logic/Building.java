@@ -77,6 +77,10 @@ public class Building extends TileSpaceObject{
                 this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_PORT;
                 this.selectable = true;
                 break;
+            case AIRPORT:
+                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_AIRPORT;
+                this.selectable = true;
+                break;
         }
         initializeConstructionMenuUI(playerColor);
     }

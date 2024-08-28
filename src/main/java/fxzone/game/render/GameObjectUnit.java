@@ -1,12 +1,17 @@
 package fxzone.game.render;
 
+import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitStance;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -32,6 +37,12 @@ public class GameObjectUnit extends GameObjectInTileSpace{
 
     private boolean facingLeft;
 
+    private boolean reverseImage = false;
+
+    private static boolean aircraftStance = false;
+    private static double cumulativeDeltaOnAircraftImageTicks;
+    private static final double totalAircraftImageTickDelay = Config.getDouble("GAME_SPEED_AIRCRAFT_PULSATION_INTERVAL");
+
     public GameObjectUnit(UnitType unitType, int x, int y, double tileRenderSize, Group group, java.awt.Color playerColor) {
         super(null, x, y, tileRenderSize, group);
         switch (Codex.getUnitProfile(unitType).SUPERTYPE){
@@ -46,6 +57,14 @@ public class GameObjectUnit extends GameObjectInTileSpace{
                 this.imageStanceMove1 = AssetHandler.getImageUnit(new KeyUnit(unitType, 2, playerColor));
                 this.imageStanceMove2 = AssetHandler.getImageUnit(new KeyUnit(unitType, 3, playerColor));
                 this.imageStanceAttack = AssetHandler.getImageUnit(new KeyUnit(unitType, 1, playerColor));
+                break;
+            case AIRCRAFT_HELICOPTER:
+            case AIRCRAFT_PLANE:
+                this.reverseImage = true;
+                this.imageStanceNormal = AssetHandler.getImageUnit(new KeyUnit(unitType, 0, playerColor));
+                this.imageStanceMove1 = this.imageStanceNormal;
+                this.imageStanceMove2 =  AssetHandler.getImageUnit(new KeyUnit(unitType, 1, playerColor));
+                this.imageStanceAttack = this.imageStanceNormal;
                 break;
             case SHIP_SMALL:
             case SHIP_LARGE:
@@ -94,6 +113,9 @@ public class GameObjectUnit extends GameObjectInTileSpace{
     }
 
     public void setFacingLeft(boolean facingLeft){
+        if(this.reverseImage){
+            facingLeft = !facingLeft;
+        }
         if(this.facingLeft == facingLeft){
             return;
         }
@@ -102,6 +124,19 @@ public class GameObjectUnit extends GameObjectInTileSpace{
             getImageView().setScaleX(-1);
         } else {
             getImageView().setScaleX(1);
+        }
+    }
+
+    public static void updatePulsatingAircraft(double delta, List<Unit> units){
+        cumulativeDeltaOnAircraftImageTicks += delta;
+        if(cumulativeDeltaOnAircraftImageTicks > totalAircraftImageTickDelay){
+            cumulativeDeltaOnAircraftImageTicks -= totalAircraftImageTickDelay;
+            aircraftStance = !aircraftStance;
+            for(Unit unit : units){
+                if(Codex.getUnitProfile(unit).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER){
+                    unit.setStance(aircraftStance?UnitStance.MOVE_1: UnitStance.MOVE_2);
+                }
+            }
         }
     }
 }

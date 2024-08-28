@@ -543,6 +543,8 @@ public class AssetHandler {
     public static Media getSound(UnitType unitType){
         switch (Codex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
+            case AIRCRAFT_HELICOPTER: return getSound("/sounds/mixkit-helicopter-propellers-in-the-sky-2704.mp3");
+            case AIRCRAFT_PLANE: return unitType == UnitType.PLANE_PROPELLER?getSound("/sounds/mixkit-helicopter-propellers-in-the-sky-2704.mp3"):getSound("/sounds/mixkit-engine-whoosh-flying-2701.mp3");
             default: return getSound("/sounds/mixkit-truck-driving-steady-1621.mp3");
         }
     }

@@ -13,6 +13,7 @@ import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex.UnitAttackType;
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Game;
 import fxzone.game.logic.Map;
@@ -28,6 +29,7 @@ import fxzone.game.render.GameObjectTile;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
+import fxzone.game.render.GameObjectUnit;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -822,7 +824,10 @@ public class InGameUiController extends AbstractUiController {
             this.cumulativeDeltaUnitStance += delta;
             if(this.cumulativeDeltaUnitStance > TOTAL_UNIT_MOVEMENT_INTERVAL){
                 this.cumulativeDeltaUnitStance -= TOTAL_UNIT_MOVEMENT_INTERVAL;
-                selectedUnit.switchStanceOnMove();
+
+                if(Codex.getUnitProfile(selectedUnit).SUPERTYPE != UnitSuperType.AIRCRAFT_HELICOPTER){
+                    selectedUnit.switchStanceOnMove();
+                }
             }
         }
     }
@@ -868,7 +873,9 @@ public class InGameUiController extends AbstractUiController {
                 cumulativeDelta -= TOTAL_UNIT_MOVEMENT_INTERVAL;
 
                 /*TODO Remove this, it is temporary for testing*/
-                unit.switchStanceOnMove();
+                if(Codex.getUnitProfile(unit).SUPERTYPE != UnitSuperType.AIRCRAFT_HELICOPTER){
+                    unit.switchStanceOnMove();
+                }
                 /* ^ remove */
 
                 UnitState nextState = unit.performFullTileMove(map);
@@ -925,6 +932,7 @@ public class InGameUiController extends AbstractUiController {
     private void handlePulsatingElements(double delta){
         tileSelector.updateTickingImage(delta);
         GameObjectTile.updatePulsatingTiles(delta, map.getTiles());
+        GameObjectUnit.updatePulsatingAircraft(delta, map.getUnits());
     }
 
     /**
