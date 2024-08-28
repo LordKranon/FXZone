@@ -539,8 +539,8 @@ public class Map {
 
                 if (unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
                     && building.getBuildingType() == BuildingType.CITY) {
-                    //Cities heal units
-                    if(unitOnBuilding.isDamaged()){
+                    //Cities heal units, except aircraft
+                    if(unitOnBuilding.isDamaged() && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_HELICOPTER && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_PLANE){
                         unitOnBuilding.changeStatRemainingHealth(20);
                     }
                 } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
@@ -549,6 +549,16 @@ public class Map {
                     if(unitOnBuilding.isDamaged() && (
                         Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.SHIP_SMALL ||
                         Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.SHIP_LARGE
+                    )
+                    ){
+                        unitOnBuilding.changeStatRemainingHealth(20);
+                    }
+                } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
+                    && building.getBuildingType() == BuildingType.AIRPORT){
+                    //Airports heal aircraft
+                    if(unitOnBuilding.isDamaged() && (
+                        Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE ||
+                            Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER
                     )
                     ){
                         unitOnBuilding.changeStatRemainingHealth(20);

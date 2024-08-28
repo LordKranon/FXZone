@@ -471,4 +471,8 @@ public class Codex {
             return offender.getUnitType() != UnitType.PLANE_JET;
         }
     }
+    public static boolean canCapture(Unit unit){
+        UnitSuperType superType = getUnitProfile(unit).SUPERTYPE;
+        return !(superType == UnitSuperType.AIRCRAFT_PLANE);
+    }
 }

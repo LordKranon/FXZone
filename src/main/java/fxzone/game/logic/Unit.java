@@ -570,7 +570,7 @@ public class Unit extends TileSpaceObject{
     public void doCaptureAtEndOfTurn(Game game){
         Building buildingToCapture = game.getMap().getTiles()[x][y].getBuildingOnTile();
         if(buildingToCapture != null){
-            if(buildingToCapture.getOwnerId() != this.ownerId){
+            if(buildingToCapture.getOwnerId() != this.ownerId && Codex.canCapture(this)){
                 buildingToCapture.captureAtEndOfTurn(
                     Codex.getUnitHealthDigit((double) statRemainingHealth / (double) statMaxHealth),
                     this.ownerId,

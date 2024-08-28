@@ -1009,7 +1009,7 @@ public class InGameUiController extends AbstractUiController {
             else {
                 textUnitName.setStyle("-fx-fill: white");
             }
-            if(building != null && building.getOwnerId() != unit.getOwnerId()){
+            if(building != null && building.getOwnerId() != unit.getOwnerId() && Codex.canCapture(unit)){
 
                 String unitColor = ""+(!game.playerExists(unit.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
                 String buildingColor = ""+(!game.playerExists(building.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
@@ -1405,7 +1405,7 @@ public class InGameUiController extends AbstractUiController {
         path.addAll(trimmedPath);
 
 
-        while(true){
+        while(!path.isEmpty()){
             Point pl = path.peekLast();
             if(!map.checkTileForMoveToByUnitPerceived(pl.x, pl.y, selectedUnit, map.getVisionOfGod(), !wasStopped)){
                 path.remove(pl);
