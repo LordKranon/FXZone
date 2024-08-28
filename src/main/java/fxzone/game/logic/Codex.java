@@ -236,7 +236,7 @@ public class Codex {
         UnitType.INFANTRY,
         UnitType.INFANTRY_RPG,
         UnitType.CAR_HUMVEE,
-        UnitType.TRUCK_TRANSPORT,
+        //UnitType.TRUCK_TRANSPORT,
         UnitType.TANK_HUNTER,
         UnitType.ARTILLERY,
         UnitType.TANK_BATTLE,
