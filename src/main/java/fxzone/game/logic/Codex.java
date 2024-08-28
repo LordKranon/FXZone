@@ -174,7 +174,7 @@ public class Codex {
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
         put(UnitType.INFANTRY, "DMG 3  DFN 0  SPD 3  VIS 3\nStrong vs Infantry\nWeak vs Vehicles");
         put(UnitType.INFANTRY_RPG, "DMG 4  DFN 0  SPD 3  VIS 3\nStrong vs Light Vehicles\nWeak vs Infantry");
-        put(UnitType.CAR_HUMVEE, "DMG 4  DFN 2  SPD 7  VIS 5\nVery fast and a good Scout\nVery Strong vs Infantry\nWeak vs Tanks");
+        put(UnitType.CAR_HUMVEE, "DMG 4  DFN 2  SPD 7  VIS 4\nVery fast and a good Scout\nVery Strong vs Infantry\nWeak vs Tanks");
         put(UnitType.TRUCK_TRANSPORT, "DMG 0  DFN 1  SPD 4  VIS 3\nGenerates income when moving to cities\nWeak vs RPGs and all Vehicles");
         put(UnitType.TANK_HUNTER, "DMG 6  DFN 5  SPD 5  VIS 4\nFast and very powerful\nVery Strong vs Light Vehicles");
         put(UnitType.ARTILLERY, "DMG 6  DFN 4  SPD 3  VIS 3\nFires over a 5 tile range\nCan't hit targets that are too close\nBonus Damage vs Infantry");
