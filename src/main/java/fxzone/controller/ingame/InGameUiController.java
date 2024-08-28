@@ -1264,7 +1264,12 @@ public class InGameUiController extends AbstractUiController {
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
         //For units in transport, only calculate move grid and skip any attack options
-        if(selectedUnit.getUnitState() == UnitState.IN_TRANSPORT){
+        //Except planes in an aircraft carrier, which can receive a normal command
+        if(
+            selectedUnit.getUnitState() == UnitState.IN_TRANSPORT &&
+                !(Codex.getUnitProfile(selectedUnit).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE)
+
+        ){
             onSelectUnitCalculateMoveCommandGridRecursive(
                 selectedUnit.getX(), selectedUnit.getY(), 1, selectedUnit,
                 moveCommandGridMovableSquares, new boolean[map.getWidth()][map.getHeight()], false

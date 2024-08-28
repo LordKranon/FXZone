@@ -7,6 +7,7 @@ import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitAttackType;
+import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
@@ -244,7 +245,7 @@ public class Unit extends TileSpaceObject{
             return this.unitState;
         }
         else if(unitState == UnitState.IN_TRANSPORT && pointToAttack == null && !waitForAttack && !enterTransport && !path.isEmpty()){
-            // Exit transport
+            // Exit transport normal (limited)
             transportedBy.getTransportLoadedUnits().remove(this);
             unitStateToNeutral();
             this.movePath = path;
@@ -264,6 +265,36 @@ public class Unit extends TileSpaceObject{
             this.actionableThisTurn = false;
 
             if(verbose) System.out.println(this+" received an exit transport move command");
+
+            mediaPlayerMovement.play();
+            unitState = UnitState.MOVING;
+
+            return this.unitState;
+        }
+        else if(unitState == UnitState.IN_TRANSPORT && !enterTransport && !path.isEmpty() && Codex.getUnitProfile(this).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE){
+            // Exit transport plane (unlimited)
+            transportedBy.getTransportLoadedUnits().remove(this);
+            unitStateToNeutral();
+            this.movePath = path;
+            Point oldPosition = new Point(transportedBy.getX(), transportedBy.getY());
+            Point finalPosition = new Point(path.peekLast());
+            directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
+            setFacingDirection(directionNextPointOnMovePath);
+
+            super.setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+            game.getMap().getTiles()[finalPosition.x][finalPosition.y].setUnitOnTile(this);
+            this.gameObjectUiUnitHealth.setPositionInMap(finalPosition.x, finalPosition.y, game.getMap());
+            setPositionInMapVisual(oldPosition.x, oldPosition.y, game.getMap());
+            setVisible(true);
+
+            if(pointToAttack != null){
+                this.hasAttackCommandAfterMoving = true;
+                this.pointToAttackAfterMoving = pointToAttack;
+            }
+            this.waitForAttackAfterMoving = waitForAttack;
+            actionableThisTurn = false;
+
+            if(verbose) System.out.println(this+" received an exit transport move command for planes");
 
             mediaPlayerMovement.play();
             unitState = UnitState.MOVING;
