@@ -460,4 +460,15 @@ public class Codex {
                 return 0;
         }
     }
+
+    public static boolean canHit(Unit offender, Unit defender){
+        UnitSuperType atk = getUnitProfile(offender).SUPERTYPE;
+        UnitSuperType def = getUnitProfile(defender).SUPERTYPE;
+        if(def == UnitSuperType.AIRCRAFT_PLANE || def == UnitSuperType.AIRCRAFT_HELICOPTER){
+            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER;
+        }
+        else {
+            return offender.getUnitType() != UnitType.PLANE_JET;
+        }
+    }
 }

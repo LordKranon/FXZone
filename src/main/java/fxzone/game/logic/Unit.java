@@ -464,7 +464,8 @@ public class Unit extends TileSpaceObject{
         if(
             Codex.getUnitProfile(attackingUnit).ATTACKTYPE == UnitAttackType.RANGED ||
             Codex.getUnitProfile(this).ATTACKTYPE == UnitAttackType.RANGED ||
-            (GeometryUtils.getPointToPointDistance(new Point(attackingUnit.getX(), attackingUnit.getY()), new Point(this.getX(), this.getY())) > Codex.getUnitProfile(this).MAXRANGE)
+            (GeometryUtils.getPointToPointDistance(new Point(attackingUnit.getX(), attackingUnit.getY()), new Point(this.getX(), this.getY())) > Codex.getUnitProfile(this).MAXRANGE) ||
+            !Codex.canHit(this, attackingUnit)
         ){
             return false;
         }

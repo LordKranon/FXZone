@@ -1,7 +1,6 @@
 package fxzone.game.logic;
 
 import fxzone.game.logic.Codex.TileSuperType;
-import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
@@ -106,7 +105,7 @@ public class Tile extends TileSpaceObject{
 
 
     public boolean isAttackableBy(Unit unit, boolean tileVisible){
-        return tileVisible && (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId();
+        return tileVisible && (this.unitOnTile!=null) && this.unitOnTile.getOwnerId()!=unit.getOwnerId() && Codex.canHit(unit, this.unitOnTile);
     }
 
     @Override
