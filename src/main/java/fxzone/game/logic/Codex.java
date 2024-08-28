@@ -136,38 +136,38 @@ public class Codex {
         put(UnitType.PLANE_PROPELLER, new UnitProfile(
             13, "Recon Plane",
             7, 5, 100, 4, 2, 1, 1,
-            1, 1, 1,
+            1.25, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.AIRCRAFT_PLANE,
-            200
+            240
         ));
         put(UnitType.PLANE_JET, new UnitProfile(
             13, "Fighter Jet",
-            7, 5, 100, 4, 2, 1, 1,
+            8, 5, 100, 9, 4, 1, 1,
             1, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.AIRCRAFT_PLANE,
-            200
+            300
         ));
         put(UnitType.HELICOPTER_CHINOOK, new UnitProfile(
             13, "Transport Heli",
-            7, 5, 100, 4, 2, 1, 1,
+            6, 4, 100, 0, 3, 1, 1,
             1, 1, 1,
-            UnitAttackType.MELEE,
+            UnitAttackType.PACIFIST,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.AIRCRAFT_HELICOPTER,
-            200
+            100
         ));
         put(UnitType.HELICOPTER_APACHE, new UnitProfile(
             13, "Attack Heli",
-            7, 5, 100, 4, 2, 1, 1,
-            1, 1, 1,
+            5, 4, 100, 5, 2, 1, 1,
+            1, 1.25, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.AIRCRAFT_HELICOPTER,
-            200
+            250
         ));
 
     }};
@@ -183,14 +183,14 @@ public class Codex {
 
         put(UnitType.SHIP_LANDER, "DMG 0  DFN 4  SPD 5  VIS 3\nTransports units over water\nHolds up to 2 Land Units");
         put(UnitType.SHIP_GUNBOAT, "DMG 5  DFN 2  SPD 6  VIS 4\nVery fast and a good Scout\nVery Strong vs Infantry");
-        put(UnitType.SHIP_DESTROYER, "DMG 6  DFN 5  SPD 5  VIS 4\nFast and very powerful\nStrong vs other Ships");
+        put(UnitType.SHIP_DESTROYER, "DMG 6  DFN 5  SPD 5  VIS 4\nFast and very powerful\nStrong vs other Ships\nStrong vs Aircraft");
         put(UnitType.SHIP_BATTLESHIP, "DMG 7  DFN 7  SPD 3  VIS 3\nSuper powerful\nCan fire over 4 tiles,\nout-ranging other ships and striking at Land Units");
         put(UnitType.SHIP_CARRIER, "DMG 0  DFN 5  SPD 3  VIS 3\nCarries and launches aircraft\nWeak vs other Ships");
 
-        put(UnitType.PLANE_PROPELLER, "DMG 4  DFN 2  SPD 7  VIS 5\nAircraft");
-        put(UnitType.PLANE_JET, "DMG 4  DFN 2  SPD 7  VIS 5\nAircraft");
-        put(UnitType.HELICOPTER_CHINOOK, "DMG 4  DFN 2  SPD 7  VIS 5\nAircraft");
-        put(UnitType.HELICOPTER_APACHE, "DMG 4  DFN 2  SPD 7  VIS 5\nAircraft");
+        put(UnitType.PLANE_PROPELLER, "DMG 4  DFN 2  SPD 7  VIS 5\nVery fast and a good Scout\nEffective vs Land Units");
+        put(UnitType.PLANE_JET, "DMG 9  DFN 4  SPD 8  VIS 5\nCan only attack other aircraft\nExtremely Strong vs other Aircraft");
+        put(UnitType.HELICOPTER_CHINOOK, "DMG 0  DFN 3  SPD 6  VIS 4\nTransports Infantry\nHolds up to 2 Infantry Units");
+        put(UnitType.HELICOPTER_APACHE, "DMG 5  DFN 2  SPD 5  VIS 4\nFast and very powerful\nExtremely Strong vs Land Units");
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
         put(BuildingType.CITY, "City");
@@ -447,12 +447,15 @@ public class Codex {
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_VEHICLE;
         } else if(transporter.getUnitType() == UnitType.SHIP_CARRIER){
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER;
+        } else if(transporter.getUnitType() == UnitType.HELICOPTER_CHINOOK){
+            return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY;
         } else {
             return false;
         }
     }
     public static int getTransportCapacity(Unit unit){
         switch (unit.getUnitType()){
+            case HELICOPTER_CHINOOK:
             case SHIP_LANDER:
             case SHIP_CARRIER:
                 return 2;
