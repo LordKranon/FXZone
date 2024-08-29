@@ -41,8 +41,8 @@ public class LobbyLocalUiController extends LobbyUiController{
         Add 2 players for debug
         TODO Remove these 2 lines
          */
-        localPlayerList.add(new Player("Alpha", Color.web("#ff0000"), runningPlayerIdNumber++));
-        localPlayerList.add(new Player("Bravo", Color.web("#0000ff"), runningPlayerIdNumber++));
+        //localPlayerList.add(new Player("Alpha", Color.web("#ff0000"), runningPlayerIdNumber++));
+        //localPlayerList.add(new Player("Bravo", Color.web("#0000ff"), runningPlayerIdNumber++));
 
         updatePlayerList(localPlayerList);
     }

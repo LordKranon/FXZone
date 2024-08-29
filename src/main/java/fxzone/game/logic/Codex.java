@@ -170,6 +170,15 @@ public class Codex {
             250
         ));
 
+        put(UnitType.INFANTRY_AA, new UnitProfile(
+            0, "AA Infantry",
+            3, 3, 100, 5, 0, 1, 1,
+            .5, 1.7, 1,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_INFANTRY,
+            UnitSuperType.LAND_INFANTRY,
+            100
+        ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
         put(UnitType.INFANTRY, "DMG 3  DFN 0  SPD 3  VIS 3\nStrong vs Infantry\nWeak vs Vehicles");
@@ -188,9 +197,12 @@ public class Codex {
         put(UnitType.SHIP_CARRIER, "DMG 0  DFN 5  SPD 3  VIS 3\nCarries and launches aircraft\nWeak vs other Ships");
 
         put(UnitType.PLANE_PROPELLER, "DMG 4  DFN 2  SPD 7  VIS 5\nVery fast and a good Scout\nEffective vs Land Units");
-        put(UnitType.PLANE_JET, "DMG 9  DFN 4  SPD 8  VIS 5\nCan only attack other aircraft\nExtremely Strong vs other Aircraft");
+        put(UnitType.PLANE_JET, "DMG 9  DFN 4  SPD 8  VIS 5\nCan only attack other Aircraft\nExtremely Strong vs other Aircraft");
         put(UnitType.HELICOPTER_CHINOOK, "DMG 0  DFN 3  SPD 6  VIS 4\nTransports Infantry\nHolds up to 2 Infantry Units");
         put(UnitType.HELICOPTER_APACHE, "DMG 5  DFN 2  SPD 5  VIS 4\nFast and very powerful\nExtremely Strong vs Land Units");
+
+        put(UnitType.INFANTRY_AA, "DMG 5  DFN 0  SPD 3  VIS 3\nCan only attack Aircraft\nStrong vs Aircraft");
+
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
         put(BuildingType.CITY, "City");
@@ -224,6 +236,8 @@ public class Codex {
         put(UnitType.PLANE_JET, "plane_jet");
         put(UnitType.HELICOPTER_CHINOOK, "helicopter_chinook");
         put(UnitType.HELICOPTER_APACHE, "helicopter_apache");
+
+        put(UnitType.INFANTRY_AA, "infantry_aa");
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
@@ -235,6 +249,9 @@ public class Codex {
     public static final List<UnitType> BUILDABLE_UNIT_TYPES_FACTORY = Arrays.asList(
         UnitType.INFANTRY,
         UnitType.INFANTRY_RPG,
+
+        UnitType.INFANTRY_AA,
+
         UnitType.CAR_HUMVEE,
         //UnitType.TRUCK_TRANSPORT,
         UnitType.TANK_HUNTER,
@@ -336,6 +353,8 @@ public class Codex {
         PLANE_JET,
         HELICOPTER_CHINOOK,
         HELICOPTER_APACHE,
+
+        INFANTRY_AA,
 /*
         INFANTRY_GUERRILLA,
         CAR_PICKUP,
@@ -468,14 +487,14 @@ public class Codex {
         UnitSuperType atk = getUnitProfile(offender).SUPERTYPE;
         UnitSuperType def = getUnitProfile(defender).SUPERTYPE;
         if(def == UnitSuperType.AIRCRAFT_PLANE || def == UnitSuperType.AIRCRAFT_HELICOPTER){
-            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER;
+            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER || offender.getUnitType() == UnitType.INFANTRY_AA;
         }
         else {
-            return offender.getUnitType() != UnitType.PLANE_JET;
+            return offender.getUnitType() != UnitType.PLANE_JET && offender.getUnitType() != UnitType.INFANTRY_AA;
         }
     }
     public static boolean canCapture(Unit unit){
         UnitSuperType superType = getUnitProfile(unit).SUPERTYPE;
-        return !(superType == UnitSuperType.AIRCRAFT_PLANE);
+        return !(superType == UnitSuperType.AIRCRAFT_PLANE || superType == UnitSuperType.AIRCRAFT_HELICOPTER);
     }
 }
