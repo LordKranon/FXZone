@@ -888,6 +888,8 @@ public class InGameUiController extends AbstractUiController {
                     if(unit.getOwnerId() == thisPlayer.getId()){
                         map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION));
                     }
+                    // On vision update, update hovered tile
+                    setHoveredTileInfoLabel(tileHovered);
 
                     if(nextState == UnitState.ATTACKING){
                         onAttackAddFightingUnits(unit);
@@ -1353,6 +1355,7 @@ public class InGameUiController extends AbstractUiController {
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
             onAttackAddFightingUnits(unit);
         }
+        setHoveredTileInfoLabel(tileHovered);
     }
     private void onAttackAddFightingUnits(Unit unit){
         unitsAttacking.put(unit, 0.);
@@ -1467,6 +1470,8 @@ public class InGameUiController extends AbstractUiController {
         if(unitSerializable.ownerId == thisPlayer.getId()){
             map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unitSerializable.x, unitSerializable.y, Codex.getUnitProfile(unitSerializable.unitType).VISION));
         }
+        // On vision update, update hovered tile info
+        setHoveredTileInfoLabel(tileHovered);
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
         if((statPurchasingPrice != 0) && (unitSerializable.ownerId != 0)){
