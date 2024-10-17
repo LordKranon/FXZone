@@ -190,6 +190,11 @@ public class Unit extends TileSpaceObject{
                 finalPosition = new Point(path.peekLast());
                 directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
                 setFacingDirection(directionNextPointOnMovePath);
+
+                //If unit is moved away from tile with building, reset that buildings capture progress
+                if(game.getMap().getTiles()[x][y].hasBuildingOnTile()){
+                    game.getMap().getTiles()[x][y].getBuildingOnTile().setStatCaptureProgress(0);
+                }
             }
 
             if(!enterTransport){
