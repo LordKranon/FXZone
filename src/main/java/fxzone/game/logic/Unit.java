@@ -5,6 +5,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.engine.utils.ZoneMediaPlayer;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitSuperType;
@@ -84,8 +85,8 @@ public class Unit extends TileSpaceObject{
     /*
     SOUND
      */
-    private MediaPlayer mediaPlayerMovement;
-    private MediaPlayer mediaPlayerGunshot;
+    private ZoneMediaPlayer mediaPlayerMovement;
+    private ZoneMediaPlayer mediaPlayerGunshot;
 
     /*
     DEBUG
@@ -134,10 +135,10 @@ public class Unit extends TileSpaceObject{
     }
     private void initializeMediaPlayer(){
         //TODO Improve very rudimentary sound system
-        this.mediaPlayerMovement = new MediaPlayer(AssetHandler.getSound(unitType));
+        this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSound(unitType));
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
 
-        this.mediaPlayerGunshot = new MediaPlayer(AssetHandler.getSound("/sounds/zone_gunshots_3.mp3"));
+        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/zone_gunshots_3.mp3"));
     }
 
     public UnitType getUnitType(){
