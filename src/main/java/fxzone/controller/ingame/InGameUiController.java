@@ -30,6 +30,8 @@ import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
 import fxzone.game.render.GameObjectUnit;
+import fxzone.game.render.particle.Particle;
+import fxzone.game.render.particle.ParticleHandler;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -206,6 +208,9 @@ public class InGameUiController extends AbstractUiController {
     public static final double TOTAL_UNIT_ATTACK_INTERVAL = Config.getDouble("GAME_SPEED_UNIT_ATTACK_INTERVAL");
     private static final double MAP_SCROLL_SPEED = Config.getDouble("MAP_SCROLL_SPEED");
 
+
+    private ParticleHandler particleHandler;
+
     /*
     DEBUG
     * */
@@ -250,6 +255,8 @@ public class InGameUiController extends AbstractUiController {
 
         createTileSelector();
         createFXSceneUI();
+
+        this.particleHandler = new ParticleHandler(root2D);
     }
 
     @Override
@@ -268,6 +275,8 @@ public class InGameUiController extends AbstractUiController {
         updateSelectedUnit(delta);
         handleAttackingUnits(delta);
         moveMovingUnits(delta);
+
+        handleParticleEffects(delta);
     }
 
     class InGameUiControllerFxml{
@@ -1472,6 +1481,11 @@ public class InGameUiController extends AbstractUiController {
         }
         // On vision update, update hovered tile info
         setHoveredTileInfoLabel(tileHovered);
+
+        //TODO Remove
+        // Test particle
+        particleHandler.newParticle();
+
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
         if((statPurchasingPrice != 0) && (unitSerializable.ownerId != 0)){
@@ -1670,5 +1684,9 @@ public class InGameUiController extends AbstractUiController {
                 }
             }
         }
+    }
+
+    private void handleParticleEffects(double delta){
+        particleHandler.updateParticles(delta);
     }
 }

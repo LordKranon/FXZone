@@ -11,6 +11,8 @@ public class ViewOrder {
     public static final int GAME_UNIT = -6;
     public static final int UI_UNIT_HEALTH = -7;
 
+    public static final int PARTICLE = -8;
+
     public static final int UI_IN_GAME_VIEW = -10;
 
     public static final int UI_IN_GAME_ANNOUNCEMENT = -11;
