@@ -30,7 +30,6 @@ import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
 import fxzone.game.render.GameObjectUnit;
-import fxzone.game.render.particle.Particle;
 import fxzone.game.render.particle.ParticleHandler;
 import java.awt.Point;
 import java.io.IOException;
@@ -1485,7 +1484,7 @@ public class InGameUiController extends AbstractUiController {
         //TODO Remove
         // Test particle
         double[] graphicalPosition = map.getGraphicalPosition(unitSerializable.x, unitSerializable.y);
-        particleHandler.newParticle(graphicalPosition[0], graphicalPosition[1], map.getTileRenderSize());
+        particleHandler.newParticleExplosion(graphicalPosition[0], graphicalPosition[1], map.getTileRenderSize());
 
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
