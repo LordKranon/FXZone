@@ -1484,7 +1484,8 @@ public class InGameUiController extends AbstractUiController {
 
         //TODO Remove
         // Test particle
-        particleHandler.newParticle(map.getGraphicalPosition(unitSerializable.x, unitSerializable.y), map.getTileRenderSize());
+        double[] graphicalPosition = map.getGraphicalPosition(unitSerializable.x, unitSerializable.y);
+        particleHandler.newParticle(graphicalPosition[0], graphicalPosition[1], map.getTileRenderSize());
 
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){

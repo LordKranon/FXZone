@@ -80,14 +80,7 @@ public class GeometryUtils {
         return pointsInRange;
     }
 
-    public static class DoublePoint{
-        public double x, y;
-        public DoublePoint(double x, double y){
-            this.x = x;
-            this.y = y;
-        }
-    }
-    public static DoublePoint getVectorFromAngle(double angle){
-        return new DoublePoint(Math.cos(angle), Math.sin(angle));
+    public static double[] getVectorFromAngle(double angle){
+        return new double[]{Math.cos(angle), Math.sin(angle)};
     }
 }

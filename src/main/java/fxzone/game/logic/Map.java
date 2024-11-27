@@ -1,7 +1,6 @@
 package fxzone.game.logic;
 
 import fxzone.engine.utils.GeometryUtils;
-import fxzone.engine.utils.GeometryUtils.DoublePoint;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.TileSuperType;
@@ -220,10 +219,10 @@ public class Map {
         int tileY = (int)Math.floor((graphicalY - offsetY) / tileRenderSize);
         return new Point(tileX, tileY);
     }
-    public DoublePoint getGraphicalPosition(int tileX, int tileY){
+    public double[] getGraphicalPosition(int tileX, int tileY){
         double graphicalX = (tileX * tileRenderSize + offsetX);
         double graphicalY = (tileY * tileRenderSize + offsetY);
-        return new DoublePoint(graphicalX, graphicalY);
+        return new double[]{graphicalX, graphicalY};
     }
 
     /**
