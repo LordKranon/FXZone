@@ -917,8 +917,16 @@ public class InGameUiController extends AbstractUiController {
             if(cumulativeDelta > TOTAL_UNIT_ATTACK_INTERVAL){
                 boolean attackedUnitSurvived = unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
+
+                Unit attackedUnit = unit.getLastAttackedUnit();
+
+                //Explosion
+                double[] graphicalPositionExplosion = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
+                particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize());
+
+                //Removed attacked unit if it died
                 if(!attackedUnitSurvived){
-                    map.removeUnit(unit.getLastAttackedUnit());
+                    map.removeUnit(attackedUnit);
                 }
                 return;
             } else {
@@ -1483,8 +1491,10 @@ public class InGameUiController extends AbstractUiController {
 
         //TODO Remove
         // Test particle
+        /*
         double[] graphicalPosition = map.getGraphicalPosition(unitSerializable.x, unitSerializable.y);
         particleHandler.newParticleExplosion(graphicalPosition[0], graphicalPosition[1], map.getTileRenderSize());
+        */
 
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){

@@ -18,8 +18,8 @@ public class ParticleHandler {
     }
 
     public void newParticleExplosion(double x, double y, double tileRenderSize){
-        int total = (int)(Math.random() * 20) + 20;
-        for(int i = 0; i < 20; i++){
+        int total = (int)(Math.random() * 10) + 20;
+        for(int i = 0; i < total; i++){
 
             Particle p = new Particle(x, y, tileRenderSize, subGroupParticles);
             liveParticles.add(p);
