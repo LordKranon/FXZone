@@ -1,6 +1,8 @@
 package fxzone.game.render.particle;
 
+import fxzone.engine.utils.GeometryUtils.DoublePoint;
 import fxzone.engine.utils.ViewOrder;
+import java.awt.Point;
 import java.util.ArrayList;
 import javafx.scene.Group;
 
@@ -16,9 +18,12 @@ public class ParticleHandler {
         root.getChildren().add(subGroupParticles);
     }
 
-    public void newParticle(){
-        Particle p = new Particle(subGroupParticles);
-        liveParticles.add(p);
+    public void newParticle(DoublePoint position, double tileRenderSize){
+        for(int i = 0; i < 10; i++){
+
+            Particle p = new Particle(position.x, position.y, tileRenderSize, subGroupParticles);
+            liveParticles.add(p);
+        }
     }
     public void updateParticles(double delta){
         for (int i = 0; i < liveParticles.size(); i++){
