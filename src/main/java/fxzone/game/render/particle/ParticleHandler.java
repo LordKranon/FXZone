@@ -17,8 +17,8 @@ public class ParticleHandler {
         root.getChildren().add(subGroupParticles);
     }
 
-    public void newParticleExplosion(double x, double y, double tileRenderSize){
-        int total = (int)(Math.random() * 10) + 20;
+    public void newParticleExplosion(double x, double y, double tileRenderSize, int explosionIntensity){
+        int total = (int)(Math.random() * (explosionIntensity/2)) + explosionIntensity;
         for(int i = 0; i < total; i++){
 
             Particle p = new Particle(x, y, tileRenderSize, subGroupParticles);

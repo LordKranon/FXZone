@@ -915,6 +915,7 @@ public class InGameUiController extends AbstractUiController {
             double cumulativeDelta = unitsAttacking.get(unit);
             cumulativeDelta += delta;
             if(cumulativeDelta > TOTAL_UNIT_ATTACK_INTERVAL){
+                boolean wasCounterAttack = unit.getUnitState() == UnitState.COUNTERATTACKING;
                 boolean attackedUnitSurvived = unit.performFinishAttack(map);
                 unitsAttacking.remove(unit);
 
@@ -922,7 +923,11 @@ public class InGameUiController extends AbstractUiController {
 
                 //Explosion
                 double[] graphicalPositionExplosion = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
-                particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize());
+                if(!attackedUnitSurvived){
+                    particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 20);
+                } else if(!wasCounterAttack){
+                    particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 8);
+                }
 
                 //Removed attacked unit if it died
                 if(!attackedUnitSurvived){
