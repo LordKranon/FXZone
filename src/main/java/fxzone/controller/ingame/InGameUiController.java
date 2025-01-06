@@ -11,6 +11,7 @@ import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
+import fxzone.engine.utils.ZoneMediaPlayer;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.Codex.UnitAttackType;
@@ -921,12 +922,17 @@ public class InGameUiController extends AbstractUiController {
 
                 Unit attackedUnit = unit.getLastAttackedUnit();
 
-                //Explosion
+                //Explosion particles
                 double[] graphicalPositionExplosion = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
                 if(!attackedUnitSurvived){
                     particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 20);
                 } else if(!wasCounterAttack){
                     particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 8);
+                }
+                //Explosion sound
+                if(!attackedUnitSurvived && !wasCounterAttack){
+                    ZoneMediaPlayer mediaPlayerExplosion = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/explodemini.mp3"));
+                    mediaPlayerExplosion.play();
                 }
 
                 //Removed attacked unit if it died

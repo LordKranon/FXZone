@@ -87,6 +87,7 @@ public class Unit extends TileSpaceObject{
      */
     private ZoneMediaPlayer mediaPlayerMovement;
     private ZoneMediaPlayer mediaPlayerGunshot;
+    private ZoneMediaPlayer mediaPlayerOnSelect;
 
     /*
     DEBUG
