@@ -100,7 +100,8 @@
                   onAction="#play" >
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="TUTORIAL">
+                  prefWidth="400.0" text="TEST"
+                  onAction="#test">
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="EDITOR"

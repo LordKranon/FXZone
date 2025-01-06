@@ -1,6 +1,8 @@
 package fxzone.controller.menu;
 
+import fxzone.config.Config;
 import fxzone.controller.ingame.InGameEditorUiController;
+import fxzone.controller.ingame.InGameLocalUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
@@ -8,6 +10,7 @@ import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.save.Save;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
@@ -86,6 +89,24 @@ public class MainMenuUiController extends AbstractUiController {
         @FXML
         public void play(){
             gameController.setActiveUiController(new PlayMenuUiController(gameController));
+        }
+
+        @FXML
+        public void test(){
+
+            ArrayList<Player> playerList = new ArrayList<>();
+            playerList.add(new Player("Alpha", Color.RED, 1));
+            playerList.add(new Player("Bravo", Color.BLUE, 2));
+
+            MapSerializable loadedMap = Save.loadMap(Config.getString("LAST_USED_MAP_LOCAL"));
+            if(loadedMap == null){
+                System.err.println("[MAIN-MENU-UI-CONTROLLER] [test] ERROR Could not load map on game start");
+                return;
+            }
+
+            GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList);
+
+            gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
         }
 
         @FXML
