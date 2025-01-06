@@ -6,19 +6,16 @@ import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ZoneMediaPlayer;
-import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectUiUnitHealth;
 import fxzone.game.render.GameObjectUnit;
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import javafx.scene.Group;
-import javafx.scene.media.MediaPlayer;
 
 public class Unit extends TileSpaceObject{
 
@@ -136,10 +133,12 @@ public class Unit extends TileSpaceObject{
     }
     private void initializeMediaPlayer(){
         //TODO Improve very rudimentary sound system
-        this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSound(unitType));
+        this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSoundMovement(unitType));
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
 
         this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/zone_gunshots_3.mp3"));
+
+        this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType));
     }
 
     public UnitType getUnitType(){
@@ -540,6 +539,7 @@ public class Unit extends TileSpaceObject{
     }
     private void cleanUpMovingState(Map map){
         gameObjectUnit.setTileCenterOffset(0, 0, x, y, map);
+        mediaPlayerOnSelect.stop();
         mediaPlayerMovement.stop();
     }
 
@@ -618,7 +618,13 @@ public class Unit extends TileSpaceObject{
         }
     }
 
+    public void onSelect(){
+        setStance(UnitStance.MOVE_1);
+
+        mediaPlayerOnSelect.play();
+    }
     public void onDeselect(){
+        mediaPlayerOnSelect.stop();
         if(unitState == UnitState.MOVING && waitForAttackAfterMoving){
             waitForAttackAfterMoving = false;
             return;

@@ -540,12 +540,19 @@ public class AssetHandler {
         sounds.put(path, new Media(AssetHandler.class.getResource(path).toExternalForm()));
     }
 
-    public static Media getSound(UnitType unitType){
+    public static Media getSoundMovement(UnitType unitType){
         switch (Codex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_INFANTRY: return getSound("/sounds/mixkit-footsteps-through-the-wastelands-540.mp3");
             case AIRCRAFT_HELICOPTER: return getSound("/sounds/mixkit-helicopter-propellers-in-the-sky-2704.mp3");
             case AIRCRAFT_PLANE: return unitType == UnitType.PLANE_PROPELLER?getSound("/sounds/mixkit-helicopter-propellers-in-the-sky-2704.mp3"):getSound("/sounds/mixkit-engine-whoosh-flying-2701.mp3");
             default: return getSound("/sounds/mixkit-truck-driving-steady-1621.mp3");
+        }
+    }
+    public static Media getSoundOnSelect(UnitType unitType){
+        switch (Codex.getUnitProfile(unitType).SUPERTYPE){
+            case LAND_INFANTRY: return getSound("/sounds/zone_gun_pump_long.mp3");
+            case LAND_VEHICLE: return getSound("/sounds/zone_engine_startup_1.mp3");
+            default: return getSound("/sounds/zone_gun_pump.mp3");
         }
     }
 }

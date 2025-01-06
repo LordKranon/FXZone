@@ -1231,7 +1231,7 @@ public class InGameUiController extends AbstractUiController {
         }
 
         // To make the unit graphically move - rotating its tracks or walking in place
-        selectedUnit.setStance(UnitStance.MOVE_1);
+        selectedUnit.onSelect();
 
         turnState = TurnState.UNIT_SELECTED;
         if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
