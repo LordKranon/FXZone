@@ -6,12 +6,18 @@ import javafx.scene.media.MediaPlayer;
 
 public class ZoneMediaPlayer {
 
+    private static final boolean verbose = true;
+
     private MediaPlayer mediaPlayer;
 
     public ZoneMediaPlayer(Media media) {
         try{
             this.mediaPlayer = new MediaPlayer(media);
-        } catch (MediaException e){
+        }
+        catch (NullPointerException e){
+            if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] Media initialized with null");
+        }
+        catch (MediaException e){
             System.err.println("[ZONE-MEDIA-PLAYER] ERROR on media player initialization");
         }
     }
@@ -20,7 +26,7 @@ public class ZoneMediaPlayer {
         if(this.mediaPlayer != null){
             this.mediaPlayer.play();
         } else {
-            System.err.println("[ZONE-MEDIA-PLAYER] [play] ERROR");
+            if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] [play] ERROR");
         }
     }
 
@@ -28,7 +34,7 @@ public class ZoneMediaPlayer {
         if(this.mediaPlayer != null){
             this.mediaPlayer.stop();
         } else{
-            System.err.println("[ZONE-MEDIA-PLAYER] [stop] ERROR");
+            if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] [stop] ERROR");
         }
     }
 
@@ -36,7 +42,7 @@ public class ZoneMediaPlayer {
         if(this.mediaPlayer != null){
             this.mediaPlayer.setRate(rate);
         } else{
-            System.err.println("[ZONE-MEDIA-PLAYER] [setRate] ERROR");
+            if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] [setRate] ERROR");
         }
     }
 }

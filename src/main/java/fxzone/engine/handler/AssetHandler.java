@@ -552,16 +552,32 @@ public class AssetHandler {
         switch (Codex.getUnitProfile(unitType).SUPERTYPE){
             case LAND_INFANTRY: return getSound("/sounds/zone_gun_pump_long.mp3");
             case LAND_VEHICLE: return (unitType == UnitType.ARTILLERY || unitType == UnitType.ARTILLERY_ROCKET)? getSound("/sounds/zone_gun_pump_hard.mp3") : getSound("/sounds/zone_engine_startup_1.mp3");
+            case SHIP_LARGE:
+            case SHIP_SMALL: return getSound("/sounds/zone_ship_horn.mp3");
+            case AIRCRAFT_HELICOPTER:
+            case AIRCRAFT_PLANE: return getSound("/sounds/zone_air_whoosh.mp3");
             default: return getSound("/sounds/zone_gun_pump.mp3");
         }
     }
     public static Media getSoundGunshot(UnitType unitType){
         switch (unitType){
             case TANK_HUNTER:
+            case TANK_BATTLE: return getSound("/sounds/zone_tank_shot_1.mp3");
+            case ARTILLERY: return getSound("/sounds/zone_tank_shot_2.mp3");
+            case INFANTRY_RPG:
+            case INFANTRY_AA:
+            case ARTILLERY_ROCKET: return getSound("/sounds/zone_rpg_launch_1.mp3");
+            case CAR_HUMVEE: return getSound("/sounds/zone_mg_fire_short.mp3");
+            default: return getSound("/sounds/zone_gunshots_3.mp3");
+        }
+    }
+    public static Media getSoundExplosion(UnitType unitType){
+        switch (unitType){
+            case TANK_HUNTER:
             case TANK_BATTLE:
             case ARTILLERY_ROCKET:
-            case ARTILLERY: return getSound("/sounds/mixkit-war-explosions-2773.mp3");
-            default: return getSound("/sounds/zone_gunshots_3.mp3");
+            case ARTILLERY: return getSound("/sounds/zone_tank_shot_impact_1.mp3");
+            default: return getSound("/sounds/explodemini.mp3");
         }
     }
 }

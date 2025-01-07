@@ -930,9 +930,13 @@ public class InGameUiController extends AbstractUiController {
                     particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 8);
                 }
                 //Explosion sound
-                if(!attackedUnitSurvived && !wasCounterAttack){
-                    ZoneMediaPlayer mediaPlayerExplosion = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/explodemini.mp3"));
+                if(!wasCounterAttack){
+                    ZoneMediaPlayer mediaPlayerExplosion = new ZoneMediaPlayer(AssetHandler.getSoundExplosion(unit.getUnitType()));
                     mediaPlayerExplosion.play();
+                    if(!attackedUnitSurvived){
+                        ZoneMediaPlayer mediaPlayerKill = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/battlefeild-1-kill-sound-effect-made-with-Voicemod.mp3"));
+                        mediaPlayerKill.play();
+                    }
                 }
 
                 //Removed attacked unit if it died
