@@ -20,9 +20,11 @@ import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.save.Save;
+import java.util.ArrayList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -33,11 +35,45 @@ public class InGameEditorUiController extends InGameUiController{
      */
     private static final boolean verbose = true;
 
+    private int editorTileTypePlacedCurrentIndex;
     private TileType editorTileTypePlaced;
+    private final TileType[] editorTileTypesPlaceable = {
+        TileType.PLAINS,
+        TileType.BEACH,
+        TileType.WATER,
+        TileType.FOREST,
+    };
 
+    private int editorBuildingTypePlacedCurrentIndex;
     private BuildingType editorBuildingTypePlaced;
+    private final BuildingType[] editorBuildingTypesPlaceable = {
+        BuildingType.CITY,
+        BuildingType.FACTORY,
+        BuildingType.PORT,
+        BuildingType.AIRPORT,
+    };
 
+    private int editorUnitTypePlacedCurrentIndex;
     private UnitType editorUnitTypePlaced;
+    private final UnitType[] editorUnitTypesPlaceable = {
+        UnitType.INFANTRY,
+        UnitType.INFANTRY_RPG,
+        UnitType.INFANTRY_AA,
+        UnitType.CAR_HUMVEE,
+        UnitType.TANK_HUNTER,
+        UnitType.ARTILLERY,
+        UnitType.TANK_BATTLE,
+        UnitType.ARTILLERY_ROCKET,
+        UnitType.SHIP_LANDER,
+        UnitType.SHIP_GUNBOAT,
+        UnitType.SHIP_DESTROYER,
+        UnitType.SHIP_BATTLESHIP,
+        UnitType.SHIP_CARRIER,
+        UnitType.HELICOPTER_CHINOOK,
+        UnitType.HELICOPTER_APACHE,
+        UnitType.PLANE_PROPELLER,
+        UnitType.PLANE_JET,
+    };
 
     private int editorOwnerIdPlaced;
 
@@ -98,21 +134,19 @@ public class InGameEditorUiController extends InGameUiController{
         tileTypeButton.setOnMouseClicked(mouseEvent -> {
             if(tileTypeButton == selectedPlacingButton) {
 
-                switch (editorTileTypePlaced){
-                    case PLAINS:
-                        editorTileTypePlaced = TileType.BEACH;
-                        break;
-                    case BEACH:
-                        editorTileTypePlaced = TileType.WATER;
-                        break;
-                    case WATER:
-                        editorTileTypePlaced = TileType.FOREST;
-                        break;
-                    case FOREST:
-                    default:
-                        editorTileTypePlaced = TileType.PLAINS;
-                        break;
+                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                    editorTileTypePlacedCurrentIndex--;
+                    if(editorTileTypePlacedCurrentIndex < 0){
+                        editorTileTypePlacedCurrentIndex = editorTileTypesPlaceable.length - 1;
+                    }
+                } else {
+                    editorTileTypePlacedCurrentIndex++;
+                    if(editorTileTypePlacedCurrentIndex >= editorTileTypesPlaceable.length){
+                        editorTileTypePlacedCurrentIndex = 0;
+                    }
                 }
+                editorTileTypePlaced = editorTileTypesPlaceable[editorTileTypePlacedCurrentIndex];
+
                 tileTypeButton.setText("" + editorTileTypePlaced);
                 tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));
             } else {
@@ -128,21 +162,19 @@ public class InGameEditorUiController extends InGameUiController{
         Button ownerIdButton = initializeEditorMenuButton(150, 400);
         ownerIdButton.setText("NONE");
         ownerIdButton.setOnMouseClicked(mouseEvent -> {
-            switch (editorOwnerIdPlaced) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    editorOwnerIdPlaced++;
-                    break;
-                case 4:
+
+            if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                editorOwnerIdPlaced--;
+                if(editorOwnerIdPlaced < 0){
+                    editorOwnerIdPlaced = 4;
+                }
+            } else {
+                editorOwnerIdPlaced++;
+                if(editorOwnerIdPlaced > 4){
                     editorOwnerIdPlaced = 0;
-                    break;
-                default:
-                    System.err.println("[EDITOR] Editor menu error");
-                    editorOwnerIdPlaced = 0;
-                    break;
+                }
             }
+
             if (editorOwnerIdPlaced != 0) {
                 ownerIdButton.setText(game.getPlayer(editorOwnerIdPlaced).getName());
                 ownerIdIcon.setImage(AssetHandler.getImageUnit(
@@ -164,24 +196,19 @@ public class InGameEditorUiController extends InGameUiController{
         buildingTypeButton.setOnMouseClicked(mouseEvent -> {
             if(buildingTypeButton == selectedPlacingButton) {
 
-                switch (editorBuildingTypePlaced) {
-                    case CITY:
-                        editorBuildingTypePlaced = BuildingType.FACTORY;
-                        break;
-                    case FACTORY:
-                        editorBuildingTypePlaced = BuildingType.AIRPORT;
-                        break;
-                    case AIRPORT:
-                        editorBuildingTypePlaced = BuildingType.PORT;
-                        break;
-                    case PORT:
-                        editorBuildingTypePlaced = BuildingType.CITY;
-                        break;
-                    default:
-                        System.err.println("[EDITOR] Editor menu error");
-                        editorBuildingTypePlaced = BuildingType.CITY;
-                        break;
+                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                    editorBuildingTypePlacedCurrentIndex--;
+                    if(editorBuildingTypePlacedCurrentIndex < 0){
+                        editorBuildingTypePlacedCurrentIndex = editorBuildingTypesPlaceable.length - 1;
+                    }
+                } else {
+                    editorBuildingTypePlacedCurrentIndex++;
+                    if(editorBuildingTypePlacedCurrentIndex >= editorBuildingTypesPlaceable.length){
+                        editorBuildingTypePlacedCurrentIndex = 0;
+                    }
                 }
+                editorBuildingTypePlaced = editorBuildingTypesPlaceable[editorBuildingTypePlacedCurrentIndex];
+
                 buildingTypeButton.setText("" + editorBuildingTypePlaced);
                 buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
             }
@@ -200,36 +227,20 @@ public class InGameEditorUiController extends InGameUiController{
         unitTypeButton.setText(""+editorUnitTypePlaced);
         unitTypeButton.setOnMouseClicked(mouseEvent -> {
             if(unitTypeButton == selectedPlacingButton) {
-                switch (editorUnitTypePlaced) {
-                    case INFANTRY:
-                        editorUnitTypePlaced = UnitType.INFANTRY_RPG;
-                        break;
-                    case INFANTRY_RPG:
-                        editorUnitTypePlaced = UnitType.CAR_HUMVEE;
-                        break;
-                    case CAR_HUMVEE:
-                        editorUnitTypePlaced = UnitType.TRUCK_TRANSPORT;
-                        break;
-                    case TRUCK_TRANSPORT:
-                        editorUnitTypePlaced = UnitType.TANK_HUNTER;
-                        break;
-                    case TANK_HUNTER:
-                        editorUnitTypePlaced = UnitType.ARTILLERY;
-                        break;
-                    case ARTILLERY:
-                        editorUnitTypePlaced = UnitType.TANK_BATTLE;
-                        break;
-                    case TANK_BATTLE:
-                        editorUnitTypePlaced = UnitType.ARTILLERY_ROCKET;
-                        break;
-                    case ARTILLERY_ROCKET:
-                        editorUnitTypePlaced = UnitType.INFANTRY;
-                        break;
-                    default:
-                        printErr();
-                        editorUnitTypePlaced = UnitType.INFANTRY;
-                        break;
+
+                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                    editorUnitTypePlacedCurrentIndex--;
+                    if(editorUnitTypePlacedCurrentIndex < 0){
+                        editorUnitTypePlacedCurrentIndex = editorUnitTypesPlaceable.length - 1;
+                    }
+                } else {
+                    editorUnitTypePlacedCurrentIndex++;
+                    if(editorUnitTypePlacedCurrentIndex >= editorUnitTypesPlaceable.length){
+                        editorUnitTypePlacedCurrentIndex = 0;
+                    }
                 }
+                editorUnitTypePlaced = editorUnitTypesPlaceable[editorUnitTypePlacedCurrentIndex];
+
                 unitTypeButton.setText("" + editorUnitTypePlaced);
                 unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
             } else {
