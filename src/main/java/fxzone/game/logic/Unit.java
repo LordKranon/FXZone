@@ -136,7 +136,7 @@ public class Unit extends TileSpaceObject{
         this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSoundMovement(unitType));
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
 
-        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/zone_gunshots_3.mp3"));
+        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unitType));
 
         this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType));
     }
