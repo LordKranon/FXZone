@@ -303,16 +303,16 @@ public class InGameUiController extends AbstractUiController {
         HBox hBoxInner = (HBox) vBox.getChildren().get(2);
 
 
-        textFlowsBottomUiBar = new TextFlow[3][3];
+        textFlowsBottomUiBar = new TextFlow[4][3];
 
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 4; i++){
             VBox vBoxInner = (VBox) hBoxInner.lookup("#vBox0"+(i+1));
 
             for(int j = 0; j < 3; j++){
                 textFlowsBottomUiBar[i][j] = (TextFlow) vBoxInner.lookup("#tf0"+(i+1)+"0"+(j+1));
             }
         }
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 4; i++){
             textFlowsBottomUiBar[i][1].setStyle("-fx-background-color: #202020;");
             textFlowsBottomUiBar[i][1].setTextAlignment(TextAlignment.CENTER);
         }
@@ -1024,6 +1024,8 @@ public class InGameUiController extends AbstractUiController {
         textFlowsBottomUiBar[1][1].getChildren().clear();
         textFlowsBottomUiBar[2][0].getChildren().clear();
         textFlowsBottomUiBar[2][1].getChildren().clear();
+        textFlowsBottomUiBar[3][0].getChildren().clear();
+        textFlowsBottomUiBar[3][1].getChildren().clear();
 
         if(unit != null && thisPlayerFowVision[hoveredPoint.x][hoveredPoint.y]){
 
@@ -1035,6 +1037,7 @@ public class InGameUiController extends AbstractUiController {
             textFlowsBottomUiBar[1][1].getChildren().add(textUnitHealth);
             textUnitHealth.setStyle("-fx-fill: white");
 
+            boolean buildingCapTextVisible = false;
 
             if(game.playerExists(unit.getOwnerId())){
                 textUnitName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
@@ -1043,6 +1046,8 @@ public class InGameUiController extends AbstractUiController {
                 textUnitName.setStyle("-fx-fill: white");
             }
             if(building != null && building.getOwnerId() != unit.getOwnerId() && Codex.canCapture(unit)){
+
+                buildingCapTextVisible = true;
 
                 String unitColor = ""+(!game.playerExists(unit.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(unit.getOwnerId()).getTextColor()));
                 String buildingColor = ""+(!game.playerExists(building.getOwnerId())?"white":FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
@@ -1082,24 +1087,24 @@ public class InGameUiController extends AbstractUiController {
                 }
 
             }
-            else if(!unit.getTransportLoadedUnits().isEmpty()) {
+            if(!unit.getTransportLoadedUnits().isEmpty()) {
                 Text textTransportedUnits = new Text("\n");
                 for(Unit transported : unit.getTransportLoadedUnits()){
                     textTransportedUnits.setText(textTransportedUnits.getText()+Codex.UNIT_PROFILE_VALUES.get(transported.getUnitType()).NAME+"   ");
                     ImageView imgTransportedUnit = new ImageView(AssetHandler.getImageUnit(new KeyUnit(transported.getUnitType(), 0, FxUtils.toAwtColor(game.getPlayer(transported.getOwnerId()).getColor()))));
                     imgTransportedUnit.setFitWidth(96);
                     imgTransportedUnit.setFitHeight(96);
-                    textFlowsBottomUiBar[2][1].getChildren().add(imgTransportedUnit);
+                    textFlowsBottomUiBar[buildingCapTextVisible?3:2][1].getChildren().add(imgTransportedUnit);
                 }
                 textTransportedUnits.setFont(fontBottomUiBarSmall);
                 textTransportedUnits.setStyle("-fx-fill: #a0a0a0");
-                textFlowsBottomUiBar[2][0].getChildren().add(textTransportedUnits);
+                textFlowsBottomUiBar[buildingCapTextVisible?3:2][0].getChildren().add(textTransportedUnits);
             }
             else {
                 Text textUnitDescription = new Text("\n"+Codex.UNIT_DESCRIPTIONS.get(unit.getUnitType()));
                 textUnitDescription.setFont(fontBottomUiBarSmall);
                 textUnitDescription.setStyle("-fx-fill: #a0a0a0");
-                textFlowsBottomUiBar[2][0].getChildren().add(textUnitDescription);
+                textFlowsBottomUiBar[buildingCapTextVisible?3:2][0].getChildren().add(textUnitDescription);
             }
         }
         else if(building != null){

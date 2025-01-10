@@ -67,6 +67,18 @@
         </TextFlow>
       </VBox>
 
+      <VBox fx:id="vBox04">
+        <TextFlow fx:id="tf0401"
+        >
+        </TextFlow>
+        <TextFlow fx:id="tf0402"
+          prefWidth="350.0">
+        </TextFlow>
+        <TextFlow fx:id="tf0403"
+          prefWidth="350.0">
+        </TextFlow>
+      </VBox>
+
     </HBox>
   </VBox>
 
