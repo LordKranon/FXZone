@@ -45,4 +45,8 @@ public class ZoneMediaPlayer {
             if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] [setRate] ERROR");
         }
     }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
 }

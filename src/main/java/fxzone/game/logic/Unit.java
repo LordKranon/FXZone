@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import javafx.scene.Group;
+import javafx.util.Duration;
 
 public class Unit extends TileSpaceObject{
 
@@ -137,6 +138,15 @@ public class Unit extends TileSpaceObject{
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
 
         this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unitType));
+
+        if(mediaPlayerGunshot.getMediaPlayer() != null){
+            mediaPlayerGunshot.getMediaPlayer().setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayerGunshot.stop();
+                }
+            });
+        }
 
         this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType));
     }
@@ -482,7 +492,6 @@ public class Unit extends TileSpaceObject{
         } else {
             System.err.println(this + " could not find enemy to attack");
         }
-        mediaPlayerGunshot.stop();
         setStance(UnitStance.NORMAL);
         if(actionableThisTurn){
             unitStateToNeutral();

@@ -561,13 +561,18 @@ public class AssetHandler {
     }
     public static Media getSoundGunshot(UnitType unitType){
         switch (unitType){
+            case SHIP_DESTROYER:
             case TANK_HUNTER:
             case TANK_BATTLE: return getSound("/sounds/zone_tank_shot_1.mp3");
+            case SHIP_BATTLESHIP:
             case ARTILLERY: return getSound("/sounds/zone_tank_shot_2.mp3");
             case INFANTRY_RPG:
             case INFANTRY_AA:
+            case PLANE_JET:
             case ARTILLERY_ROCKET: return getSound("/sounds/zone_rpg_launch_1.mp3");
-            case CAR_HUMVEE: return getSound("/sounds/zone_mg_fire_short.mp3");
+            case SHIP_GUNBOAT:
+            case PLANE_PROPELLER:
+            case CAR_HUMVEE: return getSound("/sounds/zone_mg_fire_very_short.mp3");
             default: return getSound("/sounds/zone_gunshots_3.mp3");
         }
     }
@@ -576,6 +581,7 @@ public class AssetHandler {
             case TANK_HUNTER:
             case TANK_BATTLE:
             case ARTILLERY_ROCKET:
+            case SHIP_BATTLESHIP:
             case ARTILLERY: return getSound("/sounds/zone_tank_shot_impact_1.mp3");
             default: return getSound("/sounds/explodemini.mp3");
         }
