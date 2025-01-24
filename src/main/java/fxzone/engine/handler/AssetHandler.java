@@ -569,6 +569,7 @@ public class AssetHandler {
             case INFANTRY_RPG:
             case INFANTRY_AA:
             case PLANE_JET:
+            case HELICOPTER_APACHE:
             case ARTILLERY_ROCKET: return getSound("/sounds/zone_rpg_launch_1.mp3");
             case SHIP_GUNBOAT:
             case PLANE_PROPELLER:
