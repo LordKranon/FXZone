@@ -21,7 +21,7 @@ public class ParticleHandler {
         int total = (int)(Math.random() * (explosionIntensity/2)) + explosionIntensity;
         for(int i = 0; i < total; i++){
 
-            Particle p = new Particle(x, y, tileRenderSize, subGroupParticles);
+            Particle p = new ParticleExplosion(x, y, tileRenderSize, subGroupParticles);
             liveParticles.add(p);
         }
     }

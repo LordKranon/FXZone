@@ -1,31 +1,25 @@
 package fxzone.game.render.particle;
 
 import fxzone.config.Config;
-import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.render.AbstractGameObject;
 import fxzone.engine.utils.GeometryUtils;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 
-public class Particle extends AbstractGameObject{
-
+public abstract class Particle extends AbstractGameObject{
 
     private double lifetime = 0;
-    private final double maxLifeTime = Math.random() * 0.5;
+    double maxLifeTime;
 
     private final double initialX, initialY;
-    private final double speedX, speedY;
+    double speedX, speedY;
 
-    public Particle(double x, double y, double tileRenderSize, Group group){
-        super(AssetHandler.getImage("/images/misc/zone_particle_test_2.png"), x, y, tileRenderSize, tileRenderSize, group);
+    public Particle(Image image, double x, double y, double tileRenderSize, Group group){
+        super(image, x, y, tileRenderSize, tileRenderSize, group);
 
         this.initialX = x;
         this.initialY = y;
 
-        double[] speed = GeometryUtils.getVectorFromAngle((Math.random() * 2. - 1) * Math.PI);
-
-        double speedMultiplier = tileRenderSize * Config.getDouble("PARTICLE_SPEED") * (Math.random() + 0.5);
-        this.speedX = speed[0] * speedMultiplier;
-        this.speedY = speed[1] * speedMultiplier;
     }
 
     public boolean update(double delta){
