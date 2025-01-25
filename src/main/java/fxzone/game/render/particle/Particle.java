@@ -1,8 +1,6 @@
 package fxzone.game.render.particle;
 
-import fxzone.config.Config;
 import fxzone.engine.render.AbstractGameObject;
-import fxzone.engine.utils.GeometryUtils;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 

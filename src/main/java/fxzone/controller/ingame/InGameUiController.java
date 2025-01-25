@@ -22,7 +22,7 @@ import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.Unit;
-import fxzone.game.logic.Unit.UnitStance;
+import fxzone.game.logic.Unit.AttackResult;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
@@ -917,7 +917,8 @@ public class InGameUiController extends AbstractUiController {
             cumulativeDelta += delta;
             if(cumulativeDelta > TOTAL_UNIT_ATTACK_INTERVAL){
                 boolean wasCounterAttack = unit.getUnitState() == UnitState.COUNTERATTACKING;
-                boolean attackedUnitSurvived = unit.performFinishAttack(map);
+                AttackResult attackResult = unit.performFinishAttack(map);
+                boolean attackedUnitSurvived = attackResult.attackedUnitSurvived;
                 unitsAttacking.remove(unit);
 
                 Unit attackedUnit = unit.getLastAttackedUnit();
@@ -938,6 +939,8 @@ public class InGameUiController extends AbstractUiController {
                         mediaPlayerKill.play();
                     }
                 }
+                //Hit (HP change) particle
+                particleHandler.newParticleHit(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), attackResult.hpChange);
 
                 //Removed attacked unit if it died
                 if(!attackedUnitSurvived){
@@ -1508,13 +1511,6 @@ public class InGameUiController extends AbstractUiController {
         }
         // On vision update, update hovered tile info
         setHoveredTileInfoLabel(tileHovered);
-
-        //TODO Remove
-        // Test particle
-        /*
-        double[] graphicalPosition = map.getGraphicalPosition(unitSerializable.x, unitSerializable.y);
-        particleHandler.newParticleExplosion(graphicalPosition[0], graphicalPosition[1], map.getTileRenderSize());
-        */
 
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){

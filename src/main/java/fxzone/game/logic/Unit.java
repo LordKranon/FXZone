@@ -16,7 +16,6 @@ import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import javafx.scene.Group;
-import javafx.util.Duration;
 
 public class Unit extends TileSpaceObject{
 
@@ -348,16 +347,22 @@ public class Unit extends TileSpaceObject{
         }
         return this.unitState;
     }
-    public boolean performFinishAttack(Map map){
+    public AttackResult performFinishAttack(Map map){
         if(unitState == UnitState.ATTACKING || unitState == UnitState.COUNTERATTACKING){
             return onAttackEnd(map);
         } else {
             System.err.println("[UNIT "+unitType+"] [performFinishAttack] ERROR: Unit is not attacking");
-            return true;
+            return new AttackResult(true, 0);
         }
     }
-    private boolean onAttackHitBy(Unit attackingUnit){
-        return this.changeStatRemainingHealth(-Codex.calculateDamageOnAttack(attackingUnit, this));
+    private AttackResult onAttackHitBy(Unit attackingUnit){
+        int damage = Codex.calculateDamageOnAttack(attackingUnit, this);
+        int hpBeforeHit = Codex.getUnitHealthDigit(this);
+        boolean survivedTheAttack = this.changeStatRemainingHealth(-damage);
+        int hpAfterHit = Codex.getUnitHealthDigit(this);
+        int visualDamage = hpBeforeHit - hpAfterHit;
+        AttackResult attackResult = new AttackResult(survivedTheAttack, -visualDamage);
+        return attackResult;
     }
     public boolean changeStatRemainingHealth(int healthDelta){
         this.statRemainingHealth += healthDelta;
@@ -367,6 +372,15 @@ public class Unit extends TileSpaceObject{
         if(verbose) System.out.println(this+" now has "+statRemainingHealth+" HP remaining");
         gameObjectUiUnitHealth.updateUnitHealth((double) statRemainingHealth / (double) statMaxHealth);
         return statRemainingHealth > 0;
+    }
+
+    public class AttackResult {
+        public final boolean attackedUnitSurvived;
+        public final int hpChange;
+        AttackResult(boolean attackedUnitSurvived, int hpChange){
+            this.attackedUnitSurvived = attackedUnitSurvived;
+            this.hpChange = hpChange;
+        }
     }
 
     /**
@@ -482,12 +496,12 @@ public class Unit extends TileSpaceObject{
             }
         }
     }
-    private boolean onAttackEnd(Map map){
+    private AttackResult onAttackEnd(Map map){
         //TODO
         // This is a temporary and rudimentary attack script
-        boolean attackedUnitSurvived = true;
+        AttackResult attackResult = new AttackResult(true, 0);
         if(currentlyAttackedUnit != null){
-            attackedUnitSurvived = currentlyAttackedUnit.onAttackHitBy(this);
+            attackResult = currentlyAttackedUnit.onAttackHitBy(this);
             this.lastAttackedUnit = currentlyAttackedUnit;
         } else {
             System.err.println(this + " could not find enemy to attack");
@@ -499,7 +513,7 @@ public class Unit extends TileSpaceObject{
             unitStateToBlackedOut();
         }
 
-        return attackedUnitSurvived;
+        return attackResult;
     }
 
     /**
