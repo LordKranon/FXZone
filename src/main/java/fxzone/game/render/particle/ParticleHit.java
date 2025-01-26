@@ -10,9 +10,9 @@ public class ParticleHit extends Particle{
     public ParticleHit(double x, double y, double tileRenderSize, Group group, int hpChange) {
         super(hpChangeImage(hpChange), x, y, tileRenderSize, group);
 
-        this.maxLifeTime = 1;
+        this.maxLifeTime = (hpChange > 0) ? 1.5 :.75;
 
-        double speedMultiplier = tileRenderSize * Config.getDouble("PARTICLE_SPEED") * 0.25;
+        double speedMultiplier = tileRenderSize * Config.getDouble("PARTICLE_SPEED") * ((hpChange > 0) ? 0.125 : 0.25);
         this.speedX = 0;
         this.speedY = - speedMultiplier;
     }

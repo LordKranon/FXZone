@@ -209,7 +209,7 @@ public class InGameUiController extends AbstractUiController {
     private static final double MAP_SCROLL_SPEED = Config.getDouble("MAP_SCROLL_SPEED");
 
 
-    private ParticleHandler particleHandler;
+    ParticleHandler particleHandler;
 
     /*
     DEBUG
@@ -498,7 +498,7 @@ public class InGameUiController extends AbstractUiController {
             if(startOfTurnEffectFlag){
                 startOfTurnEffectFlag = false;
 
-                map.handleStartOfTurnEffects(game);
+                map.handleStartOfTurnEffects(game, particleHandler);
                 setLabelToPlayer(thisPlayer);
             }
         }
@@ -924,11 +924,11 @@ public class InGameUiController extends AbstractUiController {
                 Unit attackedUnit = unit.getLastAttackedUnit();
 
                 //Explosion particles
-                double[] graphicalPositionExplosion = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
+                double[] graphicalPositionOfParticles = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
                 if(!attackedUnitSurvived){
-                    particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 20);
+                    particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 20);
                 } else if(!wasCounterAttack){
-                    particleHandler.newParticleExplosion(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), 8);
+                    particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 8);
                 }
                 //Explosion sound
                 if(!wasCounterAttack){
@@ -940,7 +940,7 @@ public class InGameUiController extends AbstractUiController {
                     }
                 }
                 //Hit (HP change) particle
-                particleHandler.newParticleHit(graphicalPositionExplosion[0], graphicalPositionExplosion[1], map.getTileRenderSize(), attackResult.hpChange);
+                particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), attackResult.hpChange);
 
                 //Removed attacked unit if it died
                 if(!attackedUnitSurvived){

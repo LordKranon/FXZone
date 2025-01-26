@@ -10,6 +10,7 @@ import fxzone.game.logic.serializable.BuildingSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
+import fxzone.game.render.particle.ParticleHandler;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -533,7 +534,7 @@ public class Map {
         }
         return playersEliminated;
     }
-    public void handleStartOfTurnEffects(Game game){
+    public void handleStartOfTurnEffects(Game game, ParticleHandler particleHandler){
         Player playerWithStartedTurn = game.getPlayers().get(game.whoseTurn());
 
         for(Building building: buildings){
@@ -547,6 +548,7 @@ public class Map {
                     //Cities heal units, except aircraft
                     if(unitOnBuilding.isDamaged() && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_HELICOPTER && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_PLANE){
                         unitOnBuilding.changeStatRemainingHealth(20);
+                        healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
                     && building.getBuildingType() == BuildingType.PORT){
@@ -557,6 +559,7 @@ public class Map {
                     )
                     ){
                         unitOnBuilding.changeStatRemainingHealth(20);
+                        healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
                     && building.getBuildingType() == BuildingType.AIRPORT){
@@ -567,6 +570,7 @@ public class Map {
                     )
                     ){
                         unitOnBuilding.changeStatRemainingHealth(20);
+                        healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 }
                 if (building.getBuildingType() == BuildingType.CITY) {
@@ -575,5 +579,10 @@ public class Map {
                 }
             }
         }
+    }
+    private void healingParticles(ParticleHandler particleHandler, Unit unit, int hpChange){
+
+        double[] graphicalPositionOfParticles = getGraphicalPosition(unit.getX(), unit.getY());
+        particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], getTileRenderSize(), hpChange);
     }
 }

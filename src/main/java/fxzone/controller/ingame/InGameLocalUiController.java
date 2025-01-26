@@ -46,7 +46,7 @@ public class InGameLocalUiController extends InGameUiController{
 
     @Override
     protected void beginTurn(){
-        map.handleStartOfTurnEffects(game);
+        map.handleStartOfTurnEffects(game, particleHandler);
         setLabelToPlayer(thisPlayer);
         map.setVisible(true);
         thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
