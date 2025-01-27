@@ -547,7 +547,7 @@ public class Map {
                     && building.getBuildingType() == BuildingType.CITY) {
                     //Cities heal units, except aircraft
                     if(unitOnBuilding.isDamaged() && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_HELICOPTER && Codex.getUnitProfile(unitOnBuilding).SUPERTYPE != UnitSuperType.AIRCRAFT_PLANE){
-                        unitOnBuilding.changeStatRemainingHealth(20);
+                        unitOnBuilding.changeStatRemainingHealth(Codex.BUILDING_HEALING_TOTAL);
                         healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
@@ -558,7 +558,7 @@ public class Map {
                         Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.SHIP_LARGE
                     )
                     ){
-                        unitOnBuilding.changeStatRemainingHealth(20);
+                        unitOnBuilding.changeStatRemainingHealth(Codex.BUILDING_HEALING_TOTAL);
                         healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 } else if(unitOnBuilding != null && unitOnBuilding.getOwnerId() == building.getOwnerId()
@@ -569,13 +569,13 @@ public class Map {
                             Codex.UNIT_PROFILE_VALUES.get(unitOnBuilding.getUnitType()).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER
                     )
                     ){
-                        unitOnBuilding.changeStatRemainingHealth(20);
+                        unitOnBuilding.changeStatRemainingHealth(Codex.BUILDING_HEALING_TOTAL);
                         healingParticles(particleHandler, unitOnBuilding, 2);
                     }
                 }
                 if (building.getBuildingType() == BuildingType.CITY) {
                     //Cities generate money
-                    playerWithStartedTurn.setStatResourceCash(playerWithStartedTurn.getStatResourceCash() + 10);
+                    playerWithStartedTurn.setStatResourceCash(playerWithStartedTurn.getStatResourceCash() + Codex.CITY_CASH_GENERATION);
                 }
             }
         }

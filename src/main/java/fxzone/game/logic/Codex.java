@@ -12,7 +12,11 @@ public class Codex {
 
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
-    public static final int PLAYER_STARTING_CASH = 200;
+    public static final int BUILDING_HEALING_TOTAL = 20;
+
+    public static final int CITY_CASH_GENERATION = 50;
+
+    public static final int PLAYER_STARTING_CASH = 100;
 
     public static final HashMap<UnitType, UnitProfile> UNIT_PROFILE_VALUES = new HashMap<UnitType, UnitProfile>() {{
         put(UnitType.INFANTRY, new UnitProfile(
@@ -76,7 +80,7 @@ public class Codex {
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.LAND_VEHICLE,
-            360
+            390
         ));
         put(UnitType.ARTILLERY_ROCKET, new UnitProfile(
             7, "Rocket Artillery",
@@ -85,7 +89,7 @@ public class Codex {
             UnitAttackType.RANGED,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE,
-            300
+            280
         ));
         put(UnitType.SHIP_LANDER, new UnitProfile(
             8, "Landing Craft",
@@ -121,7 +125,7 @@ public class Codex {
             UnitAttackType.RANGERMELEE,
             UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
             UnitSuperType.SHIP_LARGE,
-            400
+            450
         ));
         put(UnitType.SHIP_CARRIER, new UnitProfile(
             12, "Aircraft Carrier",
