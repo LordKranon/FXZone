@@ -754,14 +754,13 @@ public class InGameUiController extends AbstractUiController {
     }
 
     void tileClicked(int x, int y, boolean rightClick){
-        if(rightClick && verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Right Click!");
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [tileClicked] during your turn with turn-state neutral");
             Tile tileClicked = map.getTiles()[x][y];
             Unit unitOnTileClicked = tileClicked.getUnitOnTile();
             Building buildingOnTileClicked = tileClicked.getBuildingOnTile();
             if(unitOnTileClicked != null){
-                trySelectUnit(unitOnTileClicked);
+                trySelectUnit(unitOnTileClicked, rightClick);
             } else if(buildingOnTileClicked != null){
                 selectBuilding(buildingOnTileClicked);
             }
@@ -1189,14 +1188,30 @@ public class InGameUiController extends AbstractUiController {
      *
      * @param unit unit being selected
      */
-    protected void trySelectUnit(Unit unit){
+    protected void trySelectUnit(Unit unit, boolean rightClick){
         if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [trySelectUnit]");
         if(
+            rightClick &&
+                turnState == TurnState.NEUTRAL &&
+                (unit.getUnitState() == UnitState.NEUTRAL || unit.getUnitState() == UnitState.BLACKED_OUT) &&
+                thisPlayer != null &&
+                (thisPlayer.getId() == unit.getOwnerId()) &&
+                Codex.getTransportCapacity(unit) > 0 &&
+                !unit.getTransportLoadedUnits().isEmpty()
+        ){
+            // Right click transporter unit to select transported units inside
+            Unit transportedByClickedUnit = unit.getTransportLoadedUnits().get(0);
+            if(transportedByClickedUnit.getUnitState() == UnitState.IN_TRANSPORT && map.checkTileForMoveThroughByUnitFinal(unit.getX(), unit.getY(), transportedByClickedUnit)){
+                selectUnit(transportedByClickedUnit);
+            }
+        }
+        else if(
             turnState == TurnState.NEUTRAL &&
             unit.getUnitState() == UnitState.NEUTRAL &&
             thisPlayer != null &&
             (thisPlayer.getId() == unit.getOwnerId())
         ){
+            // Normal selection
             selectUnit(unit);
         }
         else if(
@@ -1207,6 +1222,7 @@ public class InGameUiController extends AbstractUiController {
                 Codex.getTransportCapacity(unit) > 0 &&
                 !unit.getTransportLoadedUnits().isEmpty()
         ){
+            // Click blacked out transporter unit to select transported units inside
             Unit transportedByClickedUnit = unit.getTransportLoadedUnits().get(0);
             if(transportedByClickedUnit.getUnitState() == UnitState.IN_TRANSPORT && map.checkTileForMoveThroughByUnitFinal(unit.getX(), unit.getY(), transportedByClickedUnit)){
                 selectUnit(transportedByClickedUnit);
