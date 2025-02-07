@@ -511,7 +511,12 @@ public class InGameUiController extends AbstractUiController {
             Point2D pointClicked = gameController.getInputHandler().getLastMousePrimaryButtonPressedPosition();
 
             if(mousePointerInBounds){
-                tileClicked(tileHoveredX, tileHoveredY);
+                tileClicked(tileHoveredX, tileHoveredY, false);
+            }
+        } else if(gameController.getInputHandler().wasMouseSecondaryButtonPressed()){
+            Point2D pointClicked = gameController.getInputHandler().getLastMouseSecondaryButtonPressedPosition();
+            if(mousePointerInBounds){
+                tileClicked(tileHoveredX, tileHoveredY, true);
             }
         }
     }
@@ -748,7 +753,8 @@ public class InGameUiController extends AbstractUiController {
         }
     }
 
-    void tileClicked(int x, int y){
+    void tileClicked(int x, int y, boolean rightClick){
+        if(rightClick && verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Right Click!");
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [tileClicked] during your turn with turn-state neutral");
             Tile tileClicked = map.getTiles()[x][y];

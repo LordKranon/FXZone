@@ -335,7 +335,7 @@ public class InGameEditorUiController extends InGameUiController{
     }
 
     @Override
-    void tileClicked(int x, int y){
+    void tileClicked(int x, int y, boolean rightClick){
         if(turnState == TurnState.EDITOR && !escapeMenu.isVisible()){
             if (verbose) System.out.println("[EDITOR] [tileClicked] during editor");
             switch (placingMode){

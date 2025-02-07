@@ -23,6 +23,9 @@ public class InputHandler {
     private Point2D lastMousePrimaryButtonPressedPosition;
     private boolean mousePrimaryButtonPressProcessed = true;
 
+    private Point2D lastMouseSecondaryButtonPressedPosition;
+    private boolean mouseSecondaryButtonPressProcessed = true;
+
     private double cumulativeScrollDelta;
 
 
@@ -52,6 +55,9 @@ public class InputHandler {
             if(mouseEvent.getButton() == MouseButton.PRIMARY){
                 lastMousePrimaryButtonPressedPosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
                 mousePrimaryButtonPressProcessed = false;
+            } else if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                lastMouseSecondaryButtonPressedPosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                mouseSecondaryButtonPressProcessed = false;
             }
         });
         scene.setOnMouseReleased(mouseEvent -> {
@@ -87,5 +93,12 @@ public class InputHandler {
     public Point2D getLastMousePrimaryButtonPressedPosition(){
         mousePrimaryButtonPressProcessed = true;
         return new Point2D(lastMousePrimaryButtonPressedPosition.getX(), lastMousePrimaryButtonPressedPosition.getY());
+    }
+    public boolean wasMouseSecondaryButtonPressed(){
+        return !mouseSecondaryButtonPressProcessed;
+    }
+    public Point2D getLastMouseSecondaryButtonPressedPosition(){
+        mouseSecondaryButtonPressProcessed = true;
+        return new Point2D(lastMouseSecondaryButtonPressedPosition.getX(), lastMouseSecondaryButtonPressedPosition.getY());
     }
 }
