@@ -95,7 +95,7 @@ public class InGameUiController extends AbstractUiController {
      * Game logical tile of the map that the mouse pointer is hovering over.
      */
     private int tileHoveredX = 0, tileHoveredY = 0;
-    private Point tileHovered;
+    protected Point tileHovered;
 
     /**
      * Indicates that the mouse pointer is in bounds of the map.
@@ -1023,7 +1023,7 @@ public class InGameUiController extends AbstractUiController {
         this.mousePointerInBounds = mousePointerInBounds;
         tileSelector.setVisible(mousePointerInBounds);
     }
-    private void setHoveredTileInfoLabel(Point hoveredPoint){
+    protected void setHoveredTileInfoLabel(Point hoveredPoint){
         Tile tile = map.getTiles()[hoveredPoint.x][hoveredPoint.y];
         Unit unit = tile.getUnitOnTile();
         Building building = tile.getBuildingOnTile();
@@ -1416,7 +1416,7 @@ public class InGameUiController extends AbstractUiController {
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
             onAttackAddFightingUnits(unit);
         }
-        setHoveredTileInfoLabel(tileHovered);
+
     }
     private void onAttackAddFightingUnits(Unit unit){
         unitsAttacking.put(unit, 0.);

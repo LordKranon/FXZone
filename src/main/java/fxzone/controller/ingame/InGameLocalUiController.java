@@ -3,7 +3,10 @@ package fxzone.controller.ingame;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
+import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class InGameLocalUiController extends InGameUiController{
@@ -56,5 +59,11 @@ public class InGameLocalUiController extends InGameUiController{
         globalMessageTextFlow.setVisible(false);
 
         endTurnButton.setText("End Turn");
+    }
+
+    @Override
+    protected void commandUnitToMove(Unit unit, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack, boolean enterTransport){
+        super.commandUnitToMove(unit, path, pointToAttack, waitForAttack, enterTransport);
+        setHoveredTileInfoLabel(tileHovered);
     }
 }
