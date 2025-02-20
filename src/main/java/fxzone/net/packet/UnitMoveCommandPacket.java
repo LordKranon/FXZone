@@ -6,6 +6,7 @@ import java.util.Queue;
 
 public class UnitMoveCommandPacket extends GameActionPacket{
 
+    private final int unitId;
     private final Point unitPosition;
     private final ArrayDeque<Point> path;
     private final Point pointToAttack;
@@ -13,8 +14,10 @@ public class UnitMoveCommandPacket extends GameActionPacket{
     private final boolean waitForAttack;
     private final boolean enterTransport;
 
-    public UnitMoveCommandPacket(Point unitPosition, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack, boolean enterTransport) {
+    public UnitMoveCommandPacket(int unitId, Point unitPosition, ArrayDeque<Point> path, Point pointToAttack, boolean waitForAttack, boolean enterTransport) {
         super(PacketType.UNIT_MOVE_COMMAND);
+
+        this.unitId = unitId;
         this.unitPosition = unitPosition;
         this.path = path;
         this.pointToAttack = pointToAttack;
@@ -37,5 +40,9 @@ public class UnitMoveCommandPacket extends GameActionPacket{
     }
     public boolean getEnterTransport(){
         return enterTransport;
+    }
+
+    public int getUnitId(){
+        return unitId;
     }
 }

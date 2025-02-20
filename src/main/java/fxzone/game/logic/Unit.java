@@ -87,6 +87,11 @@ public class Unit extends TileSpaceObject{
     private ZoneMediaPlayer mediaPlayerOnSelect;
 
     /*
+    NET
+     */
+    private final int unitId;
+
+    /*
     DEBUG
      */
     static final boolean verbose = true;
@@ -97,15 +102,17 @@ public class Unit extends TileSpaceObject{
      * @param x              game logical tile position in the map
      * @param y              game logical tile position in the map
      */
-    public Unit(UnitType unitType, int x, int y) {
+    public Unit(UnitType unitType, int x, int y, int unitId) {
         super(x, y);
         this.unitType = unitType;
+        this.unitId = unitId;
     }
     public Unit(UnitSerializable unitSerializable, double tileRenderSize, Group group, Game game){
         super(unitSerializable);
         this.unitType = unitSerializable.unitType;
         this.ownerId = unitSerializable.ownerId;
 
+        this.unitId = unitSerializable.unitId;
 
         java.awt.Color playerColor = null;
         try {
@@ -622,7 +629,7 @@ public class Unit extends TileSpaceObject{
 
     @Override
     public String toString(){
-        return "[UNIT "+unitType+"]";
+        return "[UNIT "+unitType+" "+unitId+"]";
     }
 
     /**
@@ -675,5 +682,9 @@ public class Unit extends TileSpaceObject{
     }
     public ArrayList<Unit> getTransportLoadedUnits(){
         return transportLoadedUnits;
+    }
+
+    public int getUnitId(){
+        return unitId;
     }
 }

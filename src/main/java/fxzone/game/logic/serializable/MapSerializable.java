@@ -15,9 +15,11 @@ public class MapSerializable implements Serializable {
 
     public List<BuildingSerializable> buildings;
 
+    public int runningUnitId;
+
     private static final long serialVersionUID = 1L;
 
-    public MapSerializable(Map map){
+    public MapSerializable(Map map, int runningUnitId){
         int width = map.getWidth();
         int height = map.getHeight();
         this.tiles = new TileSerializable[width][height];
@@ -34,5 +36,6 @@ public class MapSerializable implements Serializable {
         for(Building building : map.getBuildings()){
             this.buildings.add(new BuildingSerializable(building));
         }
+        this.runningUnitId = runningUnitId;
     }
 }

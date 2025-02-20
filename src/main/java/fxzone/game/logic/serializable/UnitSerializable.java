@@ -9,9 +9,12 @@ public class UnitSerializable extends TileSpaceObjectSerializable{
 
     public int ownerId;
 
+    public int unitId;
+
     public UnitSerializable(Unit unit) {
         super(unit);
         this.unitType = unit.getUnitType();
         this.ownerId = unit.getOwnerId();
+        this.unitId = unit.getUnitId();
     }
 }

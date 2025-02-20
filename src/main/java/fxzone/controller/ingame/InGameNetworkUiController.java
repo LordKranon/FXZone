@@ -28,7 +28,17 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         Point unitPosition = unitMoveCommandPacket.getUnitPosition();
         if(verbose) System.out.println("[IN-GAME-NETWORK-UI-CONTROLLER] Received unit move command for unit at X="+unitPosition.x+" Y="+unitPosition.y);
         ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
-        Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
+        //Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
+        Unit unit = null;
+        for(Unit u : map.getUnits()){
+            if(u.getUnitId() == unitMoveCommandPacket.getUnitId()){
+                unit = u;
+            }
+        }
+        if(unit == null){
+            System.err.println("[IN-GAME-NETWORK-UI-CONTROLLER] ERROR onNetworkPlayerUnitMoveCommandReceived No Unit with such ID found");
+            return;
+        }
         //TODO Rework unit identification
 
         /*
@@ -56,6 +66,9 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
          */
         // Since unit graphics can't be created outside of FX application thread, listen in FX app thread for new units created
         unitsToBeCreated.put(unitCreatedPacket.getUnitSerializable(), unitCreatedPacket.getStatPurchasingPrice());
+        if(unitCreatedPacket.getUnitSerializable().unitId != runningUnitId++){
+            System.err.println("[IN-GAME-NETWORK-UI-CONTROLLER] ERROR Unit ID desync");
+        }
         offThreadGraphicsNeedHandling = true;
     }
 

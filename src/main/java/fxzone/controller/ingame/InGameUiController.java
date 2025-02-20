@@ -212,6 +212,11 @@ public class InGameUiController extends AbstractUiController {
     ParticleHandler particleHandler;
 
     /*
+    NET
+     */
+    protected int runningUnitId = 1;
+
+    /*
     DEBUG
     * */
     static final boolean verbose = true;
@@ -427,6 +432,7 @@ public class InGameUiController extends AbstractUiController {
     void initializeGame(GameSerializable initialGame){
         game = new Game(initialGame, root2D);
         map = game.getMap();
+        runningUnitId = initialGame.map.runningUnitId;
     }
 
     protected void toggleEscapeMenu(){
@@ -1314,7 +1320,7 @@ public class InGameUiController extends AbstractUiController {
             return;
         }
 
-        Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY());
+        Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY(), runningUnitId++);
         createdUnit.setOwnerId(thisPlayer.getId());
         UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
         onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST);

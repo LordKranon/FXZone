@@ -330,7 +330,7 @@ public class InGameEditorUiController extends InGameUiController{
             return;
         }
         if(verbose) System.out.println("[EDITOR] [saveMap] saving...");
-        Save.saveMap(new MapSerializable(map), mapName);
+        Save.saveMap(new MapSerializable(map, runningUnitId), mapName);
         if(verbose) System.out.println("[EDITOR] [saveMap] saved");
     }
 
@@ -351,7 +351,7 @@ public class InGameEditorUiController extends InGameUiController{
                     map.switchBuilding(buildingSerializable, game);
                     break;
                 case UNIT:
-                    Unit unit = new Unit(editorUnitTypePlaced, x, y);
+                    Unit unit = new Unit(editorUnitTypePlaced, x, y, runningUnitId++);
                     unit.setOwnerId(editorOwnerIdPlaced);
                     UnitSerializable unitSerializable = new UnitSerializable(unit);
                     map.switchUnit(unitSerializable, game);

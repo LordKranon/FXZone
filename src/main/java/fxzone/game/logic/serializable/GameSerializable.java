@@ -14,10 +14,10 @@ public class GameSerializable implements Serializable {
 
     public MapSerializable map;
 
-    public GameSerializable(Game game){
-        serializePlayerList(game.getPlayers());
-        this.map = new MapSerializable(game.getMap());
-    }
+//    public GameSerializable(Game game){
+//        serializePlayerList(game.getPlayers());
+//        this.map = new MapSerializable(game.getMap());
+//    }
     public GameSerializable(MapSerializable mapSerializable, ArrayList<Player> players){
         serializePlayerList(players);
         this.map = mapSerializable;

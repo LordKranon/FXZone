@@ -90,7 +90,7 @@ public class EditorMenuUiController extends AbstractUiController {
                 return;
             }
             Map map = new Map(w, h, null);
-            MapSerializable mapSerializable = new MapSerializable(map);
+            MapSerializable mapSerializable = new MapSerializable(map, 1);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
             gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList)));
         }
