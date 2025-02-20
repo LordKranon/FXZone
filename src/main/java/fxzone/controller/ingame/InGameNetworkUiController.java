@@ -28,7 +28,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
         Point unitPosition = unitMoveCommandPacket.getUnitPosition();
         if(verbose) System.out.println("[IN-GAME-NETWORK-UI-CONTROLLER] Received unit move command for unit at X="+unitPosition.x+" Y="+unitPosition.y);
         ArrayDeque<Point> path = unitMoveCommandPacket.getPath();
-        //Unit unit = map.getTiles()[unitPosition.x][unitPosition.y].getUnitOnTile();
+
         Unit unit = null;
         for(Unit u : map.getUnits()){
             if(u.getUnitId() == unitMoveCommandPacket.getUnitId()){
@@ -39,7 +39,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
             System.err.println("[IN-GAME-NETWORK-UI-CONTROLLER] ERROR onNetworkPlayerUnitMoveCommandReceived No Unit with such ID found");
             return;
         }
-        //TODO Rework unit identification
+
 
         /*
         Also implement wait-for-attack for network games

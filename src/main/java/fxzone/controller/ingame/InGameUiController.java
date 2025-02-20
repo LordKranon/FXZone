@@ -907,6 +907,11 @@ public class InGameUiController extends AbstractUiController {
                     // Add more vision
                     if(unit.getOwnerId() == thisPlayer.getId()){
                         map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION));
+                    } else {
+                        // Enemy unit moved - check whether to disappear
+                        if(!thisPlayerFowVision[unit.getX()][unit.getY()]){
+                            unit.setInVision(false);
+                        }
                     }
                     // On vision update, update hovered tile
                     setHoveredTileInfoLabel(tileHovered);
@@ -1419,6 +1424,12 @@ public class InGameUiController extends AbstractUiController {
         UnitState unitStateAfterCommand = unit.moveCommand(path, game, pointToAttack, waitForAttack, enterTransport);
         if(unitStateAfterCommand == UnitState.MOVING){
             unitsMoving.put(unit, 0.);
+
+            //Check if unit appears out of fog
+            if(thisPlayerFowVision[unit.getX()][unit.getY()]){
+                unit.setInVision(true);
+            }
+
         } else if(unitStateAfterCommand == UnitState.ATTACKING){
             onAttackAddFightingUnits(unit);
         }
