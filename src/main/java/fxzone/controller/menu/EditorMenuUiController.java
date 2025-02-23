@@ -2,14 +2,17 @@ package fxzone.controller.menu;
 
 import fxzone.config.Config;
 import fxzone.controller.ingame.InGameEditorUiController;
+import fxzone.controller.ingame.InGameLocalUiController;
 import fxzone.controller.lobby.LobbyJoinedUiController;
 import fxzone.controller.menu.JoinMenuUiController.JoinMenuUiControllerFxml;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
+import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
+import fxzone.save.Save;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
@@ -64,6 +67,9 @@ public class EditorMenuUiController extends AbstractUiController {
         TextField mapHeight;
 
         @FXML
+        TextField mapName;
+
+        @FXML
         public void initialize(){
             resize(anchorPane, gameController.getStage());
             mapWidth.setText("20");
@@ -92,7 +98,28 @@ public class EditorMenuUiController extends AbstractUiController {
             Map map = new Map(w, h, null);
             MapSerializable mapSerializable = new MapSerializable(map, 1);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
+            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1));
+            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
+            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
+            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
             gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList)));
+        }
+
+        @FXML
+        public void load(){
+            MapSerializable loadedMap = Save.loadMap(mapName.getText());
+            if(loadedMap == null){
+                System.err.println("[EDITOR-MENU-UI-CONTROLLER] [load] ERROR Could not load map");
+                return;
+            }
+
+            ArrayList<Player> editorPlayerList = new ArrayList<>();
+            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1));
+            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
+            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
+            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
+            GameSerializable gameSerializable = new GameSerializable(loadedMap, editorPlayerList);
+            gameController.setActiveUiController(new InGameEditorUiController(gameController, gameSerializable));
         }
     }
 }

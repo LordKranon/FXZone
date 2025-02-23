@@ -94,6 +94,28 @@
                   prefWidth="400.0" text="CREATE"
                   onAction="#create" >
                 </Button>
+
+                <VBox alignment="CENTER" spacing="5.0">
+                  <children>
+                    <Label text="Map Name" textFill="WHITE">
+                      <font>
+                        <Font size="20.0"/>
+                      </font>
+                    </Label>
+                    <TextField fx:id="mapName" maxWidth="350.0">
+                      <font>
+                        <Font size="20.0"/>
+                      </font>
+                    </TextField>
+                  </children>
+                </VBox>
+
+
+                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                  prefWidth="400.0" text="LOAD"
+                  onAction="#load" >
+                </Button>
+
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >

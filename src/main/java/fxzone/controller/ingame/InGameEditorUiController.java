@@ -295,10 +295,12 @@ public class InGameEditorUiController extends InGameUiController{
     @Override
     void initializeGame(GameSerializable initialGame){
         super.initializeGame(initialGame);
+        /*
         game.addPlayer(new Player("Alpha", FxUtils.toColor("ff0000"), 1));
         game.addPlayer(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
         game.addPlayer(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
         game.addPlayer(new Player("Delta", FxUtils.toColor("ffff00"), 4));
+        */
     }
 
     private ImageView initializeEditorMenuIcon(int x, int y){
