@@ -301,7 +301,7 @@ public class Map {
         propagateGraphicalOffsetToTileSpaceObject(building);
         propagateTileRenderSizeToTileSpaceObject(building);
     }
-    private void removeBuilding(Building building){
+    public void removeBuilding(Building building){
         boolean successfullyRemoved = buildings.remove(building);
         if(!successfullyRemoved){
             System.err.println("[MAP] [removeBuilding] Building not in this maps list of buildings");

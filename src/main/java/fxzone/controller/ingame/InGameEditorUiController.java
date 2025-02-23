@@ -347,16 +347,28 @@ public class InGameEditorUiController extends InGameUiController{
                     map.switchTile(tileSerializable);
                     break;
                 case BUILDING:
-                    Building building = new Building(editorBuildingTypePlaced, x, y);
-                    building.setOwnerId(editorOwnerIdPlaced);
-                    BuildingSerializable buildingSerializable = new BuildingSerializable(building);
-                    map.switchBuilding(buildingSerializable, game);
+                    if(rightClick && map.isInBounds(x, y) && map.getTiles()[x][y].hasBuildingOnTile()){
+                        map.removeBuilding(map.getTiles()[x][y].getBuildingOnTile());
+                        break;
+                    } else if(!rightClick){
+                        Building building = new Building(editorBuildingTypePlaced, x, y);
+                        building.setOwnerId(editorOwnerIdPlaced);
+                        BuildingSerializable buildingSerializable = new BuildingSerializable(building);
+                        map.switchBuilding(buildingSerializable, game);
+                        break;
+                    }
                     break;
                 case UNIT:
-                    Unit unit = new Unit(editorUnitTypePlaced, x, y, runningUnitId++);
-                    unit.setOwnerId(editorOwnerIdPlaced);
-                    UnitSerializable unitSerializable = new UnitSerializable(unit);
-                    map.switchUnit(unitSerializable, game);
+                    if(rightClick && map.isInBounds(x, y) && map.getTiles()[x][y].hasUnitOnTile()){
+                        map.removeUnit(map.getTiles()[x][y].getUnitOnTile());
+                        break;
+                    } else if(!rightClick){
+                        Unit unit = new Unit(editorUnitTypePlaced, x, y, runningUnitId++);
+                        unit.setOwnerId(editorOwnerIdPlaced);
+                        UnitSerializable unitSerializable = new UnitSerializable(unit);
+                        map.switchUnit(unitSerializable, game);
+                        break;
+                    }
                     break;
                 default:
                     printErr();
