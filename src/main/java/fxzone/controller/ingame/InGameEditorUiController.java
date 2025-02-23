@@ -342,7 +342,7 @@ public class InGameEditorUiController extends InGameUiController{
             if (verbose) System.out.println("[EDITOR] [tileClicked] during editor");
             switch (placingMode){
                 case TILE:
-                    Tile tile = new Tile(x, y, editorTileTypePlaced);
+                    Tile tile = new Tile(x, y, rightClick ? ((editorTileTypePlaced == TileType.WATER || editorTileTypePlaced == TileType.FOREST) ? TileType.PLAINS : TileType.WATER) : editorTileTypePlaced);
                     TileSerializable tileSerializable = new TileSerializable(tile);
                     map.switchTile(tileSerializable);
                     break;
