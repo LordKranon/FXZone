@@ -1551,6 +1551,10 @@ public class InGameUiController extends AbstractUiController {
         // On vision update, update hovered tile info
         setHoveredTileInfoLabel(tileHovered);
 
+        // Play sound on unit creation
+        ZoneMediaPlayer mediaPlayerCreated = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitSerializable.unitType));
+        mediaPlayerCreated.play();
+
     }
     protected void payUnitPurchasingPrice(UnitSerializable unitSerializable, int statPurchasingPrice){
         if((statPurchasingPrice != 0) && (unitSerializable.ownerId != 0)){
