@@ -528,7 +528,8 @@ public class Map {
             if(unitOnBuilding == null || unitOnBuilding.getOwnerId() == building.getOwnerId()){
                 building.setStatCaptureProgress(0);
             }
-            if(building.hasOwner()){
+            if(building.hasOwner() && building.isSelectable() && (unitOnBuilding == null || unitOnBuilding.getOwnerId() == building
+                .getOwnerId())){
                 playersEliminated.put(game.getPlayer(building.getOwnerId()), false);
             }
         }
