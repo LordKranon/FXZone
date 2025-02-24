@@ -1292,7 +1292,7 @@ public class InGameUiController extends AbstractUiController {
             selectedBuilding = building;
 
             // Show the building UI
-            selectedBuildingUI = selectedBuilding.getConstructionMenu();
+            selectedBuildingUI = selectedBuilding.getConstructionMenuPane();
             adjustSelectedBuildingUI();
             root2D.getChildren().add(selectedBuildingUI);
 

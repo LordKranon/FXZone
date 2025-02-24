@@ -27,9 +27,7 @@ public class Building extends TileSpaceObject{
 
     private int ownerId;
 
-    private Pane constructionMenu;
-
-    private ArrayList<ButtonBuildingBuyUnit> constructionMenuButtons;
+    private ConstructionMenu constructionMenu;
 
     private List<UnitType> buildableUnitTypes;
     private boolean selectable;
@@ -82,72 +80,21 @@ public class Building extends TileSpaceObject{
                 this.selectable = true;
                 break;
         }
-        initializeConstructionMenuUI(playerColor);
+        initializeConstructionMenuUI(buildableUnitTypes, playerColor);
     }
 
-    private void initializeConstructionMenuUI(Color color){
+    private void initializeConstructionMenuUI(List<UnitType> buildableUnitTypes, Color color){
         if(!this.selectable){
             return;
         }
-        constructionMenuButtons = new ArrayList<>();
-        constructionMenu = new Pane();
-        int UI_SIZE = Config.getInt("UI_SIZE_IN_GAME");
-        int FONT_SIZE = 36 * UI_SIZE / 128;
-        constructionMenu.setPrefWidth(4* UI_SIZE);
-        constructionMenu.setPrefHeight(this.buildableUnitTypes.size()* UI_SIZE);
-        constructionMenu.setVisible(true);
-        constructionMenu.setStyle("-fx-background-color: #282828;");
-        constructionMenu.setViewOrder(ViewOrder.GAME_BUILDING_UI_BACKGROUND);
-
-        int i = 0;
-        for(UnitType unitType : (this.buildableUnitTypes)){
-            ImageView unitIcon = new ImageView();
-            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, color)));
-            unitIcon.setFitWidth(UI_SIZE);
-            unitIcon.setFitHeight(UI_SIZE);
-            unitIcon.setTranslateX(0);
-            unitIcon.setTranslateY(UI_SIZE*i);
-            unitIcon.setVisible(true);
-            unitIcon.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
-            constructionMenu.getChildren().add(unitIcon);
-
-
-            Label unitCostLabel = new Label();
-            unitCostLabel.setText(""+Codex.getUnitProfile(unitType).COST);
-            unitCostLabel.setPrefWidth(UI_SIZE);
-            unitCostLabel.setPrefHeight(UI_SIZE);
-            unitCostLabel.setTranslateX(UI_SIZE);
-            unitCostLabel.setTranslateY(UI_SIZE*i);
-            unitCostLabel.setVisible(true);
-            unitCostLabel.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
-            unitCostLabel.setStyle("-fx-text-fill: white; -fx-font-size:36; ");
-            unitCostLabel.setTextAlignment(TextAlignment.RIGHT);
-            constructionMenu.getChildren().add(unitCostLabel);
-
-
-            ButtonBuildingBuyUnit unitPurchaseButton = new ButtonBuildingBuyUnit(unitType);
-            unitPurchaseButton.setPrefWidth(2* UI_SIZE);
-            unitPurchaseButton.setPrefHeight(UI_SIZE);
-            unitPurchaseButton.setTranslateX(UI_SIZE*2);
-            unitPurchaseButton.setTranslateY(UI_SIZE*i);
-            unitPurchaseButton.setVisible(true);
-            unitPurchaseButton.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
-            unitPurchaseButton.setText(Codex.getUnitProfile(unitType).NAME);
-            unitPurchaseButton.setStyle(unitPurchaseButton.getStyle()+ " ;-fx-font-size:"+FONT_SIZE+";");
-            constructionMenu.getChildren().add(unitPurchaseButton);
-
-            constructionMenuButtons.add(unitPurchaseButton);
-
-            i++;
-        }
-
+        this.constructionMenu = new ConstructionMenu(buildableUnitTypes, color);
 
     }
-    public Pane getConstructionMenu(){
-        return constructionMenu;
+    public Pane getConstructionMenuPane(){
+        return constructionMenu.getConstructionMenuPane();
     }
     public ArrayList<ButtonBuildingBuyUnit> getConstructionMenuButtons(){
-        return constructionMenuButtons;
+        return constructionMenu.getConstructionMenuButtons();
     }
 
     public BuildingType getBuildingType(){
@@ -195,7 +142,7 @@ public class Building extends TileSpaceObject{
             System.err.println(this+" [ownerChanged] No color on owner change");
         }
         this.gameObjectBuilding.setImageToNewOwner(this.buildingType, playerColorNew);
-        initializeConstructionMenuUI(playerColorNew);
+        initializeConstructionMenuUI(buildableUnitTypes, playerColorNew);
     }
 
     @Override
