@@ -127,7 +127,7 @@ public class Map {
         }
         this.units = new ArrayList<Unit>();
         for(UnitSerializable unitSerializable : mapSerializable.units){
-            addUnit(new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game));
+            addUnit(new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game), game, false);
         }
         this.buildings = new ArrayList<Building>();
         for(BuildingSerializable buildingSerializable : mapSerializable.buildings){
@@ -257,6 +257,12 @@ public class Map {
         Unit unit = new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game);
         unit.setActionableThisTurn(false);
 
+        addUnit(unit, game, inTransport);
+    }
+    /**
+     * Add a unit fully and graphically to a finished map in a started or running game.
+     */
+    private void addUnit(Unit unit, Game game, boolean inTransport){
         // Add construction menu for units like Aircraft Carrier
         if(Codex.hasConstructionMode(unit) && unit.getOwnerId() != 0 && game.getPlayer(unit.getOwnerId())!= null){
             unit.setConstructionMenu(new ConstructionMenu(Codex.BUILDABLE_UNIT_TYPES_CARRIER, FxUtils.toAwtColor(game.getPlayer(unit.getOwnerId()).getColor())));
@@ -265,13 +271,10 @@ public class Map {
         if(inTransport){
             addUnitInTransport(unit);
         } else {
-            addUnit(unit);
+            addUnitNotInTransport(unit);
         }
     }
-    /**
-     * Add a unit fully and graphically to a finished map in a started or running game.
-     */
-    private void addUnit(Unit unit){
+    private void addUnitNotInTransport(Unit unit){
         units.add(unit);
         try{
             tiles[unit.x][unit.y].setUnitOnTile(unit);
@@ -444,7 +447,7 @@ public class Map {
             removeUnit(oldUnit);
         }
         Unit newUnit = new Unit(newUnitSerializable, tileRenderSize, subGroupMapUnits, game);
-        addUnit(newUnit);
+        addUnitNotInTransport(newUnit);
     }
 
     /**
