@@ -161,7 +161,7 @@ public class InGameUiController extends AbstractUiController {
 
     protected Unit selectedUnit;
     protected Building selectedBuilding;
-    private Pane selectedBuildingUI;
+    private Pane selectedConstructionUI;
 
 
     /**
@@ -174,6 +174,7 @@ public class InGameUiController extends AbstractUiController {
         NEUTRAL,
         UNIT_SELECTED,
         UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE,
+        UNIT_SELECTED_IN_CONSTRUCTION_MODE,
         BUILDING_SELECTED,
         GAME_OVER,
 
@@ -475,20 +476,22 @@ public class InGameUiController extends AbstractUiController {
             globalMessageTextFlow.setTranslateX((subScene2D.getWidth() - globalMessageTextFlow.getWidth()) / 2);
             globalMessageTextFlow.setTranslateY((subScene2D.getHeight() - globalMessageTextFlow.getHeight()) / 2);
         } else if(turnState == TurnState.BUILDING_SELECTED){
-            adjustSelectedBuildingUI();
+            adjustSelectedConstructionUI(selectedBuilding.getX(), selectedBuilding.getY());
+        } else if(turnState == TurnState.UNIT_SELECTED_IN_CONSTRUCTION_MODE){
+            adjustSelectedConstructionUI(selectedUnit.getX(), selectedUnit.getY());
         }
     }
-    private void adjustSelectedBuildingUI(){
-        double buildingUIX = (double)(selectedBuilding.getX()+1)*map.getTileRenderSize() + map.getOffsetX();
-        double buildingUIY = (double)(selectedBuilding.getY())*map.getTileRenderSize() + map.getOffsetY();
+    private void adjustSelectedConstructionUI(int x, int y){
+        double buildingUIX = (double)(x+1)*map.getTileRenderSize() + map.getOffsetX();
+        double buildingUIY = (double)(y)*map.getTileRenderSize() + map.getOffsetY();
         if(buildingUIY < 0){
             buildingUIY = 0;
-        } else if(buildingUIY + selectedBuildingUI.getHeight() > subScene2D.getHeight() - 26 - 220){
-            buildingUIY = subScene2D.getHeight() - selectedBuildingUI.getHeight() - 26 - 220;
+        } else if(buildingUIY + selectedConstructionUI.getHeight() > subScene2D.getHeight() - 26 - 220){
+            buildingUIY = subScene2D.getHeight() - selectedConstructionUI.getHeight() - 26 - 220;
         }
 
-        selectedBuildingUI.setTranslateX(buildingUIX);
-        selectedBuildingUI.setTranslateY(buildingUIY);
+        selectedConstructionUI.setTranslateX(buildingUIX);
+        selectedConstructionUI.setTranslateY(buildingUIY);
     }
 
     private void handleOffThreadGraphics(){
@@ -496,7 +499,8 @@ public class InGameUiController extends AbstractUiController {
             offThreadGraphicsNeedHandling = false;
             if(!unitsToBeCreated.isEmpty()) {
                 for(UnitSerializable unitSerializable : unitsToBeCreated.keySet()){
-                    createUnit(unitSerializable, unitsToBeCreated.get(unitSerializable));
+                    // TODO handle unit creation in transport over net
+                    createUnit(unitSerializable, unitsToBeCreated.get(unitSerializable), false);
                 }
                 unitsToBeCreated.clear();
             }
@@ -833,6 +837,12 @@ public class InGameUiController extends AbstractUiController {
             if(selectedBuilding.getX() == x && selectedBuilding.getY() == y){
                 // Deselect building
                 deselectBuilding();
+            }
+        }
+        else if(turnState == TurnState.UNIT_SELECTED_IN_CONSTRUCTION_MODE){
+            if(selectedUnit.getX() == x && selectedUnit.getY() == y){
+                // Deselect unit in construction mode
+                deselectUnitInConstructionMode();
             }
         }
     }
@@ -1217,6 +1227,19 @@ public class InGameUiController extends AbstractUiController {
             }
         }
         else if(
+            rightClick &&
+                turnState == TurnState.NEUTRAL &&
+                (unit.getUnitState() == UnitState.NEUTRAL || unit.getUnitState() == UnitState.BLACKED_OUT) &&
+                thisPlayer != null &&
+                (thisPlayer.getId() == unit.getOwnerId()) &&
+                Codex.getTransportCapacity(unit) > 0 &&
+                Codex.hasConstructionMode(unit) &&
+                unit.getTransportLoadedUnits().isEmpty()
+        ){
+            // Right click an empty transporter (that has a construction mode, e.g. Carrier) to open construction menu (like with a factory building)
+            selectUnitInConstructionMode(unit);
+        }
+        else if(
             turnState == TurnState.NEUTRAL &&
             unit.getUnitState() == UnitState.NEUTRAL &&
             thisPlayer != null &&
@@ -1292,14 +1315,14 @@ public class InGameUiController extends AbstractUiController {
             selectedBuilding = building;
 
             // Show the building UI
-            selectedBuildingUI = selectedBuilding.getConstructionMenuPane();
-            adjustSelectedBuildingUI();
-            root2D.getChildren().add(selectedBuildingUI);
+            selectedConstructionUI = selectedBuilding.getConstructionMenuPane();
+            adjustSelectedConstructionUI(selectedBuilding.getX(), selectedBuilding.getY());
+            root2D.getChildren().add(selectedConstructionUI);
 
             // Configure construction menu buttons
             for (ButtonBuildingBuyUnit button : building.getConstructionMenuButtons()){
                 button.setOnMouseClicked(mouseEvent -> {
-                    if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Building button clicked, buy unit "+button.getUnitType());
+                    if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Building construction menu button clicked, buy unit "+button.getUnitType());
                     buyUnitButtonClicked(button.getUnitType());
                 });
             }
@@ -1312,9 +1335,31 @@ public class InGameUiController extends AbstractUiController {
     protected void deselectBuilding(){
         turnStateToNeutral();
     }
+    protected void deselectUnitInConstructionMode(){
+        turnStateToNeutral();
+    }
     protected void deselectUnit(){
         selectedUnit.onDeselect();
         turnStateToNeutral();
+    }
+    protected void selectUnitInConstructionMode(Unit unit){
+        selectedUnit = unit;
+
+        // Show the construction UI
+        selectedConstructionUI = selectedUnit.getConstructionMenu().getConstructionMenuPane();
+        adjustSelectedConstructionUI(selectedUnit.getX(), selectedUnit.getY());
+        root2D.getChildren().add(selectedConstructionUI);
+
+        // Configure construction menu buttons
+        for (ButtonBuildingBuyUnit button : selectedUnit.getConstructionMenu().getConstructionMenuButtons()){
+            button.setOnMouseClicked(mouseEvent -> {
+                if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] Unit construction menu button clicked, buy unit "+button.getUnitType());
+                buyUnitButtonClickedInUnitSelectedConstructionMode(button.getUnitType());
+            });
+        }
+
+        turnState = TurnState.UNIT_SELECTED_IN_CONSTRUCTION_MODE;
+        if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnitInConstructionMode] unit selected in construction mode");
     }
 
     private void buyUnitButtonClicked(UnitType unitType){
@@ -1328,8 +1373,20 @@ public class InGameUiController extends AbstractUiController {
         Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY(), runningUnitId++);
         createdUnit.setOwnerId(thisPlayer.getId());
         UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
-        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST);
+        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, false);
         deselectBuilding();
+    }
+    private void buyUnitButtonClickedInUnitSelectedConstructionMode(UnitType unitType){
+        // Check if sufficient cash and creation tile empty
+        if(turnState != TurnState.UNIT_SELECTED_IN_CONSTRUCTION_MODE || thisPlayer.getStatResourceCash() < Codex.getUnitProfile(unitType).COST || Codex.getTransportCapacity(selectedUnit) <= 0 || !selectedUnit.getTransportLoadedUnits().isEmpty()){
+            if(verbose) System.err.println("[IN-GAME-UI-CONTROLLER] [buyUnitButtonClickedInUnitSelectedConstructionMode] Cannot buy unit");
+            return;
+        }
+        Unit createdUnit = new Unit(unitType, selectedUnit.getX(), selectedUnit.getY(), runningUnitId++);
+        createdUnit.setOwnerId(thisPlayer.getId());
+        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
+        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, true);
+        deselectUnitInConstructionMode();
     }
 
     private void onSelectUnitCalculateMoveCommandGrid(){
@@ -1537,11 +1594,11 @@ public class InGameUiController extends AbstractUiController {
         return waitForAttack;
     }
 
-    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
-        createUnit(unitSerializable, statPurchasingPrice);
+    protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice, boolean inTransport){
+        createUnit(unitSerializable, statPurchasingPrice, inTransport);
     }
-    protected void createUnit(UnitSerializable unitSerializable, int statPurchasingPrice){
-        map.createNewUnit(unitSerializable, game);
+    protected void createUnit(UnitSerializable unitSerializable, int statPurchasingPrice, boolean inTransport){
+        map.createNewUnit(unitSerializable, game, inTransport);
         payUnitPurchasingPrice(unitSerializable, statPurchasingPrice);
 
         // Add more vision
@@ -1659,9 +1716,9 @@ public class InGameUiController extends AbstractUiController {
                 gridTile.removeSelfFromRoot(root2D);
             }
         }
-        if(selectedBuildingUI != null){
-            root2D.getChildren().remove(selectedBuildingUI);
-            selectedBuildingUI = null;
+        if(selectedConstructionUI != null){
+            root2D.getChildren().remove(selectedConstructionUI);
+            selectedConstructionUI = null;
         }
         turnState = TurnState.NEUTRAL;
     }

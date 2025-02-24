@@ -66,9 +66,17 @@ public class Unit extends TileSpaceObject{
     private Unit lastAttackedUnit;
     private boolean waitForAttackAfterMoving;
 
+    /*
+    TRANSPORT
+     */
     private ArrayList<Unit> transportLoadedUnits;
     private boolean disappearIntoTransportAfterMoving;
     private Unit transportedBy;
+
+    /*
+    CONSTRUCTION (AIRCRAFT CARRIER
+     */
+    private ConstructionMenu constructionMenu;
 
     private int ownerId;
 
@@ -686,5 +694,20 @@ public class Unit extends TileSpaceObject{
 
     public int getUnitId(){
         return unitId;
+    }
+
+    public ConstructionMenu getConstructionMenu(){
+        if(constructionMenu == null) System.err.println(this+" [getConstructionMenu] ERROR Unit has no construction menu");
+        return constructionMenu;
+    }
+    public void setConstructionMenu(ConstructionMenu constructionMenu){
+        this.constructionMenu = constructionMenu;
+    }
+
+    public void setTransportedBy(Unit transporter){
+        this.transportedBy = transporter;
+        if(this.transportedBy != null){
+            unitStateToInTransport();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package fxzone.game.logic;
 
+import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex.BuildingType;
@@ -252,10 +253,20 @@ public class Map {
         tileSpaceObject.changeTileRenderSize(this);
     }
 
-    public void createNewUnit(UnitSerializable unitSerializable, Game game){
+    public void createNewUnit(UnitSerializable unitSerializable, Game game, boolean inTransport){
         Unit unit = new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game);
         unit.setActionableThisTurn(false);
-        addUnit(unit);
+
+        // Add construction menu for units like Aircraft Carrier
+        if(Codex.hasConstructionMode(unit) && unit.getOwnerId() != 0 && game.getPlayer(unit.getOwnerId())!= null){
+            unit.setConstructionMenu(new ConstructionMenu(Codex.BUILDABLE_UNIT_TYPES_CARRIER, FxUtils.toAwtColor(game.getPlayer(unit.getOwnerId()).getColor())));
+        }
+
+        if(inTransport){
+            addUnitInTransport(unit);
+        } else {
+            addUnit(unit);
+        }
     }
     /**
      * Add a unit fully and graphically to a finished map in a started or running game.
@@ -269,6 +280,18 @@ public class Map {
         }
         propagateGraphicalOffsetToTileSpaceObject(unit);
         propagateTileRenderSizeToTileSpaceObject(unit);
+    }
+    private void addUnitInTransport(Unit unit){
+        units.add(unit);
+        if(!isInBounds(unit.x, unit.y)){
+            System.err.println("[MAP] ERROR Unit to be added in transport is not in bounds of map");
+            return;
+        }
+        if(!tiles[unit.x][unit.y].hasUnitOnTile()){
+            System.err.println("[MAP] ERROR Can not find transporter for unit to be added in transport");
+        }
+        tiles[unit.x][unit.y].getUnitOnTile().loadToTransport(unit);
+        unit.setTransportedBy(tiles[unit.x][unit.y].getUnitOnTile());
     }
     public void removeUnit(Unit unit){
         boolean successfullyRemoved = units.remove(unit);

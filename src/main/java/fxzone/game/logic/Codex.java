@@ -276,6 +276,10 @@ public class Codex {
         UnitType.PLANE_PROPELLER,
         UnitType.PLANE_JET
     );
+    public static final List<UnitType> BUILDABLE_UNIT_TYPES_CARRIER = Arrays.asList(
+        UnitType.PLANE_PROPELLER,
+        UnitType.PLANE_JET
+    );
 
     public static class UnitProfile{
         public String NAME;
@@ -500,5 +504,9 @@ public class Codex {
     public static boolean canCapture(Unit unit){
         UnitSuperType superType = getUnitProfile(unit).SUPERTYPE;
         return !(superType == UnitSuperType.AIRCRAFT_PLANE || superType == UnitSuperType.AIRCRAFT_HELICOPTER);
+    }
+
+    public static boolean hasConstructionMode(Unit unit){
+        return unit.getUnitType() == UnitType.SHIP_CARRIER;
     }
 }
