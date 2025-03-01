@@ -4,6 +4,7 @@ import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyTile;
 import fxzone.game.logic.Codex.TileSuperType;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.Tile.TileType;
 import javafx.scene.Group;
@@ -22,17 +23,17 @@ public class GameObjectTile extends GameObjectInTileSpace{
     private static double cumulativeDeltaOnImageTicks;
     private static final double totalImageTickDelay = Config.getDouble("GAME_SPEED_TILE_PULSATION_INTERVAL");
 
-    public GameObjectTile(TileType tileType, TileType[] tileTypesOfNeighbors, int x, int y, double tileRenderSize, Group group) {
+    public GameObjectTile(TileType tileType, TileType[] tileTypesOfNeighbors, int x, int y, double tileRenderSize, Group group, Biome biome) {
         super(null, x, y, tileRenderSize, group);
-        this.imageBase = AssetHandler.getImageTile(new KeyTile(tileType, false));
-        this.imageAlternate = AssetHandler.getImageTile(new KeyTile(tileType, true));
+        this.imageBase = AssetHandler.getImageTile(new KeyTile(tileType, false, biome));
+        this.imageAlternate = AssetHandler.getImageTile(new KeyTile(tileType, true, biome));
         this.setImage(imageBase);
 
     }
 
-    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileSuperType[] tileTypesOfNeighbors){
-        Image imageAdjusted = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, false));
-        Image imageAdjustedAlternate = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, true));
+    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileSuperType[] tileTypesOfNeighbors, Biome biome){
+        Image imageAdjusted = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, false, biome));
+        Image imageAdjustedAlternate = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, true, biome));
         this.imageBase = imageAdjusted;
         this.imageAlternate = imageAdjustedAlternate;
         this.setImage(imageBase);

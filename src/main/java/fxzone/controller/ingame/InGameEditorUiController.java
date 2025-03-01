@@ -10,6 +10,7 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
 import fxzone.game.logic.Tile.TileType;
@@ -124,7 +125,7 @@ public class InGameEditorUiController extends InGameUiController{
         this.editorOwnerIdPlaced = 0;
 
         ImageView tileIcon = initializeEditorMenuIcon(50, 200);
-        tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));
+        tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false, Biome.SAND)));
 
         this.tileTypeButton = initializeEditorMenuButton(150, 200);
         tileTypeButton.setText(""+editorTileTypePlaced);
@@ -148,7 +149,7 @@ public class InGameEditorUiController extends InGameUiController{
                 editorTileTypePlaced = editorTileTypesPlaceable[editorTileTypePlacedCurrentIndex];
 
                 tileTypeButton.setText("" + editorTileTypePlaced);
-                tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false)));
+                tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false, Biome.SAND)));
             } else {
                 selectPlacingMode(EditorPlacingMode.TILE);
             }

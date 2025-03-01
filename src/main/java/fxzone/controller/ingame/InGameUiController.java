@@ -200,6 +200,7 @@ public class InGameUiController extends AbstractUiController {
      * Used in case of unit creation info coming in over network,
      * which needs to be transferred to the FX app thread for graphics.
      */
+    //TODO Include whether or not unit is created in transport
     protected final HashMap<UnitSerializable, Integer> unitsToBeCreated = new HashMap<>();
 
     /*

@@ -9,6 +9,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -67,6 +68,9 @@ public class EditorMenuUiController extends AbstractUiController {
         TextField mapHeight;
 
         @FXML
+        TextField mapBiome;
+
+        @FXML
         TextField mapName;
 
         @FXML
@@ -74,6 +78,7 @@ public class EditorMenuUiController extends AbstractUiController {
             resize(anchorPane, gameController.getStage());
             mapWidth.setText("20");
             mapHeight.setText("20");
+            mapBiome.setText("SAND");
         }
 
         @FXML
@@ -84,6 +89,7 @@ public class EditorMenuUiController extends AbstractUiController {
         @FXML
         public void create(){
             int w, h;
+            Biome biome;
             try{
                 w = Integer.parseInt(mapWidth.getText());
                 h = Integer.parseInt(mapHeight.getText());
@@ -95,7 +101,14 @@ public class EditorMenuUiController extends AbstractUiController {
                 System.err.println("[EDITOR-MENU-UI-CONTROLLER] ERROR Bad map dimensions");
                 return;
             }
+            try{
+                biome = Biome.valueOf(mapBiome.getText());
+            } catch (Exception e){
+                System.err.println("[EDITOR-MENU-UI-CONTROLLER] ERROR Could not parse map biome");
+                return;
+            }
             Map map = new Map(w, h, null);
+            map.setBiome(biome);
             MapSerializable mapSerializable = new MapSerializable(map, 1);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
             editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1));

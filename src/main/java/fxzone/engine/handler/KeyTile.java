@@ -2,9 +2,12 @@ package fxzone.engine.handler;
 
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.TileSuperType;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Tile.TileType;
 
 public class KeyTile {
+
+    public Biome keyBiome;
 
     public TileType keyTileType;
 
@@ -12,19 +15,21 @@ public class KeyTile {
 
     public boolean keyTileStance;
 
-    public KeyTile(TileType keyTileType, boolean keyTileStance){
+    public KeyTile(TileType keyTileType, boolean keyTileStance, Biome keyBiome){
         this.keyTileType = keyTileType;
         this.keyTileStance = keyTileStance;
+        this.keyBiome = keyBiome;
 
         this.keyTileTypesOfNeighbors = new TileSuperType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int i = 0; i < keyTileTypesOfNeighbors.length; i++){
             this.keyTileTypesOfNeighbors[i] = TileSuperType.TS_LAND;
         }
     }
-    public KeyTile(TileType keyTileType, TileSuperType[] keyTileTypesOfNeighbors, boolean keyTileStance){
+    public KeyTile(TileType keyTileType, TileSuperType[] keyTileTypesOfNeighbors, boolean keyTileStance, Biome keyBiome){
         this.keyTileType = keyTileType;
         this.keyTileStance = keyTileStance;
         this.keyTileTypesOfNeighbors = keyTileTypesOfNeighbors;
+        this.keyBiome = keyBiome;
     }
 
     @Override
@@ -36,6 +41,9 @@ public class KeyTile {
             return false;
         }
         if(ref.keyTileStance != this.keyTileStance){
+            return false;
+        }
+        if(ref.keyBiome != this.keyBiome){
             return false;
         }
         for(int i = 0; i < this.keyTileTypesOfNeighbors.length; i++){

@@ -52,6 +52,12 @@ public class Map {
      */
     private double offsetX, offsetY;
 
+    public enum Biome{
+        SAND,
+        GRASS,
+    }
+    private Biome biome;
+
     /**
      * Constructor.
      * Not ready for gameplay.
@@ -114,10 +120,13 @@ public class Map {
         int height = mapSerializable.tiles[0].length;
         this.tiles = new Tile[width][height];
         this.fogOfWar = new FogOfWarTile[width][height];
+
+        this.biome = mapSerializable.biome;
+
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 // Initialize tile
-                this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, subGroupMapTiles);
+                this.tiles[i][j] = new Tile(mapSerializable.tiles[i][j], tileRenderSize, subGroupMapTiles, biome);
                 // Set neighbor tileType info
                 setNeighborTileTypeInfoForTile(i, j, mapSerializable.tiles);
 
@@ -149,7 +158,7 @@ public class Map {
                 tileTypesOfNeighbors[k] = TileSuperType.TS_LAND;
             }
         }
-        this.tiles[x][y].updateTileTypesOfNeighbors(tileTypesOfNeighbors);
+        this.tiles[x][y].updateTileTypesOfNeighbors(tileTypesOfNeighbors, biome);
     }
 
     /**
@@ -418,7 +427,7 @@ public class Map {
     public void switchTile(TileSerializable newTileSerializable){
         Tile oldTile = tiles[newTileSerializable.x][newTileSerializable.y];
         oldTile.onRemoval(subGroupMapTiles);
-        Tile newTile = new Tile(newTileSerializable, tileRenderSize, subGroupMapTiles);
+        Tile newTile = new Tile(newTileSerializable, tileRenderSize, subGroupMapTiles, biome);
         tiles[newTileSerializable.x][newTileSerializable.y] = newTile;
         newTile.setBuildingOnTile(oldTile.getBuildingOnTile());
         newTile.setUnitOnTile(oldTile.getUnitOnTile());
@@ -611,5 +620,12 @@ public class Map {
 
         double[] graphicalPositionOfParticles = getGraphicalPosition(unit.getX(), unit.getY());
         particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], getTileRenderSize(), hpChange);
+    }
+
+    public Biome getBiome(){
+        return biome;
+    }
+    public void setBiome(Biome biome){
+        this.biome = biome;
     }
 }

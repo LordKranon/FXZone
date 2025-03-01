@@ -2,6 +2,7 @@ package fxzone.game.logic;
 
 import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitSuperType;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.TileSerializable;
 import fxzone.game.render.GameObjectTile;
@@ -38,12 +39,12 @@ public class Tile extends TileSpaceObject{
         super(x, y);
         this.tileType = tileType;
     }
-    public Tile(TileSerializable tileSerializable, double tileRenderSize, Group group){
+    public Tile(TileSerializable tileSerializable, double tileRenderSize, Group group, Biome biome){
         super(tileSerializable);
         this.tileType = tileSerializable.tileType;
         this.gameObjectTile = new GameObjectTile(
             this.tileType, new TileType[4],
-            x, y, tileRenderSize, group);
+            x, y, tileRenderSize, group, biome);
         this.gameObjectInTileSpace = this.gameObjectTile;
     }
 
@@ -127,8 +128,8 @@ public class Tile extends TileSpaceObject{
     /**
      * Change graphical image displayed of this tile depending on neighboring tile types.
      */
-    public void updateTileTypesOfNeighbors(TileSuperType[] tileTypesOfNeighbors){
-        gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors);
+    public void updateTileTypesOfNeighbors(TileSuperType[] tileTypesOfNeighbors, Biome biome){
+        gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors, biome);
     }
 
     public GameObjectTile getGameObjectTile(){

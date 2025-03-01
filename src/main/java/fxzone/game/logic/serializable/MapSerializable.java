@@ -2,12 +2,15 @@ package fxzone.game.logic.serializable;
 
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Map;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Unit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapSerializable implements Serializable {
+
+    public Biome biome;
 
     public TileSerializable[][] tiles;
 
@@ -20,6 +23,7 @@ public class MapSerializable implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public MapSerializable(Map map, int runningUnitId){
+        this.biome = map.getBiome();
         int width = map.getWidth();
         int height = map.getHeight();
         this.tiles = new TileSerializable[width][height];

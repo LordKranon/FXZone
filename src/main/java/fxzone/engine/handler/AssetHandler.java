@@ -4,6 +4,7 @@ import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Codex;
+import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Tile.TileType;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -141,8 +142,8 @@ public class AssetHandler {
                 BufferedImage tilesetBeach = getBufferedImageColorApplied(pathToTileSetBeach, Color.white);
 
                 if(keyTile.keyTileType == TileType.PLAINS || keyTile.keyTileType == TileType.FOREST){
-                    String pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
-                    String pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
+                    String pathToBaseImg = "/images/terrain/tiles/tile_"+(keyTile.keyBiome== Biome.SAND?"plains":"grass")+".png";
+                    String pathToEdgesImg = "/images/terrain.tilesets/tileset_"+(keyTile.keyBiome== Biome.SAND?"plains":"grass")+"_edges.png";
 
                     BufferedImage base = getBufferedImage(pathToBaseImg);
                     BufferedImage edgesSet = getBufferedImage(pathToEdgesImg);
