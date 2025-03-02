@@ -1,5 +1,6 @@
 package fxzone.engine.handler;
 
+import fxzone.engine.utils.FxUtils;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Codex.UnitType;
@@ -138,12 +139,28 @@ public class AssetHandler {
                 imagesTiles.put(keyTile, img);
             } else {
 
-                String pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png";
-                BufferedImage tilesetBeach = getBufferedImageColorApplied(pathToTileSetBeach, Color.white);
+                String pathToTileSetBeach;
+                switch (keyTile.keyBiome){
+                    case GRASS: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png"; break;
+                    case SAND:
+                    default: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_lighter.png"; break;
+                }
+                BufferedImage tilesetBeach = getBufferedImage(pathToTileSetBeach);
 
                 if(keyTile.keyTileType == TileType.PLAINS || keyTile.keyTileType == TileType.FOREST){
-                    String pathToBaseImg = "/images/terrain/tiles/tile_"+(keyTile.keyBiome== Biome.SAND?"plains":"grass")+".png";
-                    String pathToEdgesImg = "/images/terrain.tilesets/tileset_"+(keyTile.keyBiome== Biome.SAND?"plains":"grass")+"_edges.png";
+
+                    String pathToBaseImg, pathToEdgesImg;
+                    switch (keyTile.keyBiome){
+                        case GRASS:
+                            pathToBaseImg = "/images/terrain/tiles/tile_grass.png";
+                            pathToEdgesImg = "/images/terrain.tilesets/tileset_grass_edges.png";
+                            break;
+                        case SAND:
+                        default:
+                            pathToBaseImg = "/images/terrain/tiles/tile_plains.png";
+                            pathToEdgesImg = "/images/terrain.tilesets/tileset_plains_edges.png";
+                            break;
+                    }
 
                     BufferedImage base = getBufferedImage(pathToBaseImg);
                     BufferedImage edgesSet = getBufferedImage(pathToEdgesImg);
@@ -276,7 +293,14 @@ public class AssetHandler {
 
                     // Add terrain feature if needed
                     if(keyTile.keyTileType == TileType.FOREST){
-                        String pathToForestImg = "/images/terrain/tiles/tile_forest_0.png";
+
+                        String pathToForestImg;
+                        switch (keyTile.keyBiome){
+                            case GRASS: pathToForestImg = "/images/terrain/tiles/tile_forest_1.png"; break;
+                            case SAND:
+                            default: pathToForestImg = "/images/terrain/tiles/tile_forest_0.png"; break;
+                        }
+
                         BufferedImage forest = getBufferedImage(pathToForestImg);
                         gTerrain.drawImage(forest, 0, 0, 24, 24, 0, 0, 24, 24, null);
                     }

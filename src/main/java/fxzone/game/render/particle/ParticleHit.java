@@ -18,9 +18,9 @@ public class ParticleHit extends Particle{
     }
 
     private static Image hpChangeImage(int hpChange){
-        if(hpChange < -9 || hpChange > 9){
-            System.err.println("[PARTICLE-HIT] ERROR! HP changed by over 9 at once");
-            hpChange = -9;
+        if(hpChange < -10 || hpChange > 10){
+            System.err.println("[PARTICLE-HIT] ERROR! HP changed by over 10 at once");
+            hpChange = -10;
         }
         return AssetHandler.getImage("/images/misc/hpchange/zone_hp_"+(hpChange <= 0 ? "-" : "+")+""+Math.abs(hpChange)+".png");
     }
