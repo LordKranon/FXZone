@@ -131,7 +131,12 @@ public class AssetHandler {
     public static Image getImageTile(KeyTile keyTile){
         if(!imagesTiles.containsKey(keyTile)){
 
-            String pathToWaterImg = "/images/terrain/tiles/tile_water_"+(keyTile.keyTileStance?"1":"0")+".png";
+            String pathToWaterImg;
+            switch (keyTile.keyBiome){
+                case ASH: pathToWaterImg = "/images/terrain/tiles/tile_water_ash_"+(keyTile.keyTileStance?"1":"0")+".png"; break;
+                case RED: pathToWaterImg = "/images/terrain/tiles/tile_water_yellow_"+(keyTile.keyTileStance?"1":"0")+".png"; break;
+                default: pathToWaterImg = "/images/terrain/tiles/tile_water_"+(keyTile.keyTileStance?"1":"0")+".png";
+            }
 
             if(keyTile.keyTileType == TileType.WATER){
                 // No further handling needed for water
@@ -141,8 +146,9 @@ public class AssetHandler {
 
                 String pathToTileSetBeach;
                 switch (keyTile.keyBiome){
-                    case ASH: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_darker.png"; break;
+                    case ASH: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_ash.png"; break;
                     case GRASS: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png"; break;
+                    case RED: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_red.png"; break;
                     case SAND:
                     default: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_lighter.png"; break;
                 }
@@ -152,6 +158,10 @@ public class AssetHandler {
 
                     String pathToBaseImg, pathToEdgesImg;
                     switch (keyTile.keyBiome){
+                        case RED:
+                            pathToBaseImg = "/images/terrain/tiles/tile_grass_red.png";
+                            pathToEdgesImg = "/images/terrain.tilesets/tileset_grass_red_edges.png";
+                            break;
                         case ASH:
                             pathToBaseImg = "/images/terrain/tiles/tile_ash.png";
                             pathToEdgesImg = "/images/terrain.tilesets/tileset_ash_edges.png";
@@ -301,6 +311,8 @@ public class AssetHandler {
 
                         String pathToForestImg;
                         switch (keyTile.keyBiome){
+                            case RED: pathToForestImg = "/images/terrain/tiles/tile_forest_red.png"; break;
+                            case ASH: pathToForestImg = "/images/terrain/tiles/tile_forest_ash.png"; break;
                             case GRASS: pathToForestImg = "/images/terrain/tiles/tile_forest_1.png"; break;
                             case SAND:
                             default: pathToForestImg = "/images/terrain/tiles/tile_forest_0.png"; break;

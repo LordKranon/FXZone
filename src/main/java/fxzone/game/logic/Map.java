@@ -56,6 +56,7 @@ public class Map {
         SAND,
         GRASS,
         ASH,
+        RED,
     }
     private Biome biome;
 
