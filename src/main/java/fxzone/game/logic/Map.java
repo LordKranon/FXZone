@@ -55,6 +55,7 @@ public class Map {
     public enum Biome{
         SAND,
         GRASS,
+        ASH,
     }
     private Biome biome;
 

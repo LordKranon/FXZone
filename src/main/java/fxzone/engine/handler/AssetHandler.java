@@ -141,6 +141,7 @@ public class AssetHandler {
 
                 String pathToTileSetBeach;
                 switch (keyTile.keyBiome){
+                    case ASH: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_darker.png"; break;
                     case GRASS: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach.png"; break;
                     case SAND:
                     default: pathToTileSetBeach = "/images/terrain.tilesets/tileset_beach_lighter.png"; break;
@@ -151,6 +152,10 @@ public class AssetHandler {
 
                     String pathToBaseImg, pathToEdgesImg;
                     switch (keyTile.keyBiome){
+                        case ASH:
+                            pathToBaseImg = "/images/terrain/tiles/tile_ash.png";
+                            pathToEdgesImg = "/images/terrain.tilesets/tileset_ash_edges.png";
+                            break;
                         case GRASS:
                             pathToBaseImg = "/images/terrain/tiles/tile_grass.png";
                             pathToEdgesImg = "/images/terrain.tilesets/tileset_grass_edges.png";
