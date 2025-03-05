@@ -176,7 +176,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
             switch (aaTankStance){
                 case MOVE_1:
                     aaTankStance = UnitStance.BONUS_1;
-                    totalAATankImageTickDelay = 2;
+                    totalAATankImageTickDelay = 5;
                     break;
                 case BONUS_1:
                     aaTankStance = UnitStance.MOVE_2;
@@ -184,7 +184,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
                     break;
                 case MOVE_2:
                     aaTankStance = UnitStance.BONUS_2;
-                    totalAATankImageTickDelay = 2;
+                    totalAATankImageTickDelay = 5;
                     break;
                 case BONUS_2:
                     aaTankStance = UnitStance.MOVE_1;

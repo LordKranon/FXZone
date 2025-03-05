@@ -190,7 +190,7 @@ public class Codex {
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE,
-            210
+            190
         ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
@@ -215,7 +215,7 @@ public class Codex {
         put(UnitType.HELICOPTER_APACHE, "DMG 5  DFN 2  SPD 5  VIS 4\nFast and very powerful\nExtremely Strong vs Land Units");
 
         put(UnitType.INFANTRY_AA, "DMG 5  DFN 0  SPD 3  VIS 3\nCan only attack Aircraft\nStrong vs Aircraft");
-        put(UnitType.TANK_AA, "DMG 6  DFN 3  SPD 5  VIS 4\nExtremely Strong vs Aircraft\nStrong vs Infantry\nReduced damage vs Land Units");
+        put(UnitType.TANK_AA, "DMG 6  DFN 3  SPD 5  VIS 4\nExtremely Strong vs Aircraft\nReduced damage vs Land Units");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
@@ -434,7 +434,7 @@ public class Codex {
         // Anti-Air bonus
         if(getUnitProfile(defender).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER || getUnitProfile(defender).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE){
             if(offender.getUnitType() == UnitType.TANK_AA){
-                rawDamage = 9;
+                rawDamage = 10;
             }
         }
 
