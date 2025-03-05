@@ -78,7 +78,7 @@ public class InGameUiController extends AbstractUiController {
 
     Pane escapeMenu;
 
-    private static final int UI_SIZE_IN_GAME_MENUS = Config.getInt("UI_SIZE_IN_GAME_MENUS");
+    static final int UI_SIZE_IN_GAME_MENUS = Config.getInt("UI_SIZE_IN_GAME_MENUS");
 
     /**
      * Announce GAME OVER at game end.

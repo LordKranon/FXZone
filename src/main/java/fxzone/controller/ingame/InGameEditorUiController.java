@@ -124,10 +124,10 @@ public class InGameEditorUiController extends InGameUiController{
         this.editorUnitTypePlaced = UnitType.INFANTRY;
         this.editorOwnerIdPlaced = 0;
 
-        ImageView tileIcon = initializeEditorMenuIcon(50, 200);
+        ImageView tileIcon = initializeEditorMenuIcon(50 * UI_SIZE_IN_GAME_MENUS / 100, 2 * UI_SIZE_IN_GAME_MENUS);
         tileIcon.setImage(AssetHandler.getImageTile(new KeyTile(editorTileTypePlaced, false, Biome.SAND)));
 
-        this.tileTypeButton = initializeEditorMenuButton(150, 200);
+        this.tileTypeButton = initializeEditorMenuButton(150 * UI_SIZE_IN_GAME_MENUS / 100, 2 * UI_SIZE_IN_GAME_MENUS);
         tileTypeButton.setText(""+editorTileTypePlaced);
 
         selectPlacingMode(EditorPlacingMode.TILE);
@@ -157,10 +157,10 @@ public class InGameEditorUiController extends InGameUiController{
 
 
 
-        ImageView ownerIdIcon = initializeEditorMenuIcon(50, 400);
+        ImageView ownerIdIcon = initializeEditorMenuIcon(50 * UI_SIZE_IN_GAME_MENUS / 100, 4*UI_SIZE_IN_GAME_MENUS);
         ownerIdIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 1, null)));
 
-        Button ownerIdButton = initializeEditorMenuButton(150, 400);
+        Button ownerIdButton = initializeEditorMenuButton(150 * UI_SIZE_IN_GAME_MENUS / 100, 4*UI_SIZE_IN_GAME_MENUS);
         ownerIdButton.setText("NONE");
         ownerIdButton.setOnMouseClicked(mouseEvent -> {
 
@@ -189,10 +189,10 @@ public class InGameEditorUiController extends InGameUiController{
 
 
 
-        ImageView buildingIcon = initializeEditorMenuIcon(50, 500);
+        ImageView buildingIcon = initializeEditorMenuIcon(50 * UI_SIZE_IN_GAME_MENUS / 100, 5*UI_SIZE_IN_GAME_MENUS);
         buildingIcon.setImage(AssetHandler.getImageBuilding(new KeyBuilding(editorBuildingTypePlaced, null)));
 
-        this.buildingTypeButton = initializeEditorMenuButton(150, 500);
+        this.buildingTypeButton = initializeEditorMenuButton(150 * UI_SIZE_IN_GAME_MENUS / 100, 5*UI_SIZE_IN_GAME_MENUS);
         buildingTypeButton.setText(""+editorBuildingTypePlaced);
         buildingTypeButton.setOnMouseClicked(mouseEvent -> {
             if(buildingTypeButton == selectedPlacingButton) {
@@ -221,10 +221,10 @@ public class InGameEditorUiController extends InGameUiController{
 
 
 
-        ImageView unitIcon = initializeEditorMenuIcon(40, 600);
+        ImageView unitIcon = initializeEditorMenuIcon(40 * UI_SIZE_IN_GAME_MENUS / 100, 6*UI_SIZE_IN_GAME_MENUS);
         unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(editorUnitTypePlaced, 0, null)));
 
-        this.unitTypeButton = initializeEditorMenuButton(150, 600);
+        this.unitTypeButton = initializeEditorMenuButton(150 * UI_SIZE_IN_GAME_MENUS / 100, 6*UI_SIZE_IN_GAME_MENUS);
         unitTypeButton.setText(""+editorUnitTypePlaced);
         unitTypeButton.setOnMouseClicked(mouseEvent -> {
             if(unitTypeButton == selectedPlacingButton) {
@@ -250,19 +250,19 @@ public class InGameEditorUiController extends InGameUiController{
         });
 
 
-        Button saveMapButton = initializeEditorMenuButton(100, 800);
+        Button saveMapButton = initializeEditorMenuButton(UI_SIZE_IN_GAME_MENUS, 8*UI_SIZE_IN_GAME_MENUS);
         saveMapButton.setText("Save Map");
         saveMapButton.setOnMouseClicked(mouseEvent -> {
             saveMap();
         });
 
         nameMapTextField = new TextField();
-        nameMapTextField.setTranslateX(100);
-        nameMapTextField.setTranslateY(700);
-        nameMapTextField.setPrefWidth(400);
+        nameMapTextField.setTranslateX(UI_SIZE_IN_GAME_MENUS);
+        nameMapTextField.setTranslateY(7*UI_SIZE_IN_GAME_MENUS);
+        nameMapTextField.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
         nameMapTextField.setViewOrder(ViewOrder.UI_BUTTON);
         nameMapTextField.setVisible(true);
-        nameMapTextField.setFont(new Font(30));
+        nameMapTextField.setFont(new Font(30 * UI_SIZE_IN_GAME_MENUS / 100.));
         nameMapTextField.setPromptText("Name map");
         escapeMenu.getChildren().add(nameMapTextField);
     }
@@ -279,9 +279,9 @@ public class InGameEditorUiController extends InGameUiController{
         }
         if(selectedPlacingButton != button){
             if(selectedPlacingButton != null){
-                selectedPlacingButton.setStyle(null);
+                selectedPlacingButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
             }
-            button.setStyle("-fx-border-width: 5; -fx-border-color: eeeeee;");
+            button.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100+";-fx-border-width: "+5*UI_SIZE_IN_GAME_MENUS/100+"; -fx-border-color: eeeeee;");
             selectedPlacingButton = button;
         } else {
             printErr();
@@ -306,8 +306,8 @@ public class InGameEditorUiController extends InGameUiController{
 
     private ImageView initializeEditorMenuIcon(int x, int y){
         ImageView icon = new ImageView();
-        icon.setFitWidth(75);
-        icon.setFitHeight(75);
+        icon.setFitWidth(75 * UI_SIZE_IN_GAME_MENUS / 100.);
+        icon.setFitHeight(75 * UI_SIZE_IN_GAME_MENUS / 100.);
         icon.setTranslateX(x);
         icon.setTranslateY(y);
         icon.setVisible(true);
@@ -317,7 +317,8 @@ public class InGameEditorUiController extends InGameUiController{
     }
     private Button initializeEditorMenuButton(int x, int y){
         Button button = new Button();
-        button.setPrefWidth(400);
+        button.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        button.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
         button.setTranslateX(x);
         button.setTranslateY(y);
         button.setViewOrder(ViewOrder.UI_BUTTON);
