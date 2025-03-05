@@ -27,7 +27,8 @@ public class DefaultConfig {
         {"GAME_SPEED_TILE_PULSATION_INTERVAL", ".5"},
         {"GAME_SPEED_AIRCRAFT_PULSATION_INTERVAL", ".15"},
 
-        {"UI_SIZE_IN_GAME", "128"},
+        {"UI_SIZE_IN_GAME", "64"},
+        {"UI_SIZE_IN_GAME_MENUS", "100"},
         {"UI_TIlE_SELECTOR_TICK_INTERVAL", ".5"},
 
         {"GAME_SOUND_MUSIC_ENABLED", "false"},

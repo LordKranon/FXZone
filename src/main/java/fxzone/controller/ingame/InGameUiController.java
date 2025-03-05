@@ -72,11 +72,13 @@ public class InGameUiController extends AbstractUiController {
     private Button escapeMenuButton;
     protected Button endTurnButton;
 
-    private final Font fontBottomUiBar = new Font(50);
-    private final Font fontBottomUiBarSmall = new Font(25);
+    private final Font fontBottomUiBar = new Font(UI_SIZE_IN_GAME_MENUS / 2.);
+    private final Font fontBottomUiBarSmall = new Font(UI_SIZE_IN_GAME_MENUS / 4.);
     private TextFlow[][] textFlowsBottomUiBar;
 
     Pane escapeMenu;
+
+    private static final int UI_SIZE_IN_GAME_MENUS = Config.getInt("UI_SIZE_IN_GAME_MENUS");
 
     /**
      * Announce GAME OVER at game end.
@@ -317,6 +319,7 @@ public class InGameUiController extends AbstractUiController {
 
             for(int j = 0; j < 3; j++){
                 textFlowsBottomUiBar[i][j] = (TextFlow) vBoxInner.lookup("#tf0"+(i+1)+"0"+(j+1));
+                textFlowsBottomUiBar[i][j].setPrefWidth(3.5*(double) UI_SIZE_IN_GAME_MENUS);
             }
         }
         for(int i = 0; i < 4; i++){
@@ -366,7 +369,8 @@ public class InGameUiController extends AbstractUiController {
         }
 
         escapeMenuButton = new Button("Menu");
-        escapeMenuButton.setPrefWidth(400);
+        escapeMenuButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        escapeMenuButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
         escapeMenuButton.setViewOrder(ViewOrder.UI_BUTTON);
         escapeMenuButton.setVisible(true);
         escapeMenuButton.setOnMouseClicked(mouseEvent -> {
@@ -375,7 +379,8 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(escapeMenuButton);
 
         endTurnButton = new Button("End Turn");
-        endTurnButton.setPrefWidth(400);
+        endTurnButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        endTurnButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
         endTurnButton.setViewOrder(ViewOrder.UI_BUTTON);
         endTurnButton.setVisible(true);
         endTurnButton.setOnMouseClicked(mouseEvent -> {
@@ -386,17 +391,18 @@ public class InGameUiController extends AbstractUiController {
 
 
         escapeMenu = new Pane();
-        escapeMenu.setPrefWidth(600);
-        escapeMenu.setPrefHeight(1000);
+        escapeMenu.setPrefWidth(6*UI_SIZE_IN_GAME_MENUS);
+        escapeMenu.setPrefHeight(10*UI_SIZE_IN_GAME_MENUS);
         escapeMenu.setVisible(false);
         escapeMenu.setStyle("-fx-background-color: #282828;");
         escapeMenu.setViewOrder(ViewOrder.UI_BUTTON);
         root2D.getChildren().add(escapeMenu);
 
         Button quitConfirmButton = new Button("Quit");
-        quitConfirmButton.setPrefWidth(400);
-        quitConfirmButton.setTranslateX(100);
-        quitConfirmButton.setTranslateY(900);
+        quitConfirmButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        quitConfirmButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        quitConfirmButton.setTranslateX(UI_SIZE_IN_GAME_MENUS);
+        quitConfirmButton.setTranslateY(9*UI_SIZE_IN_GAME_MENUS);
         quitConfirmButton.setViewOrder(ViewOrder.UI_BUTTON);
         quitConfirmButton.setVisible(true);
         quitConfirmButton.setOnMouseClicked(mouseEvent -> {

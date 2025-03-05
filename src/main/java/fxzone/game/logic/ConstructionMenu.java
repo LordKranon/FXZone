@@ -54,7 +54,7 @@ public class ConstructionMenu {
             unitCostLabel.setTranslateY(UI_SIZE*i);
             unitCostLabel.setVisible(true);
             unitCostLabel.setViewOrder(ViewOrder.GAME_BUILDING_UI_BUTTON);
-            unitCostLabel.setStyle("-fx-text-fill: white; -fx-font-size:36; ");
+            unitCostLabel.setStyle("-fx-text-fill: white; -fx-font-size:"+FONT_SIZE*2+"; ");
             unitCostLabel.setTextAlignment(TextAlignment.RIGHT);
             constructionMenuPane.getChildren().add(unitCostLabel);
 
