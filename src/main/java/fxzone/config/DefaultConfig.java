@@ -35,8 +35,14 @@ public class DefaultConfig {
 
         {"LAST_USED_MAP_ONLINE", ""},
         {"LAST_USED_MAP_LOCAL", ""},
-        {"LAST_USED_PLAYER_NAME_LOCAL", "Alpha"},
-        {"LAST_USED_PLAYER_COLOR_LOCAL", "#ff0000"},
+        {"LAST_USED_PLAYER_NAME_LOCAL_1", "Alpha"},
+        {"LAST_USED_PLAYER_COLOR_LOCAL_1", "#ff0000"},
+        {"LAST_USED_PLAYER_NAME_LOCAL_2", "Bravo"},
+        {"LAST_USED_PLAYER_COLOR_LOCAL_2", "#0000ff"},
+        {"LAST_USED_PLAYER_NAME_LOCAL_3", "Charlie"},
+        {"LAST_USED_PLAYER_COLOR_LOCAL_3", "#00ff00"},
+        {"LAST_USED_PLAYER_NAME_LOCAL_4", "Delta"},
+        {"LAST_USED_PLAYER_COLOR_LOCAL_4", "#ffff00"},
 
         {"PARTICLE_SPEED", "4"},
     };

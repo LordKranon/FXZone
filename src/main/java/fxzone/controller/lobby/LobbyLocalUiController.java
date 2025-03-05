@@ -54,11 +54,11 @@ public class LobbyLocalUiController extends LobbyUiController{
 
         textFieldPlayerName = (TextField) vBoxButtons.getChildren().get(3);
         textFieldPlayerName.setVisible(true);
-        textFieldPlayerName.setText(Config.getString("LAST_USED_PLAYER_NAME_LOCAL"));
+        textFieldPlayerName.setText(Config.getString("LAST_USED_PLAYER_NAME_LOCAL_1"));
 
         textFieldPlayerColor = (TextField) vBoxButtons.getChildren().get(2);
         textFieldPlayerColor.setVisible(true);
-        textFieldPlayerColor.setText(Config.getString("LAST_USED_PLAYER_COLOR_LOCAL"));
+        textFieldPlayerColor.setText(Config.getString("LAST_USED_PLAYER_COLOR_LOCAL_1"));
 
         vBoxButtons.getChildren().get(4).setVisible(true);
     }
@@ -98,10 +98,22 @@ public class LobbyLocalUiController extends LobbyUiController{
             return;
         }
 
-        Config.set("LAST_USED_PLAYER_NAME_LOCAL", playerName);
-        Config.set("LAST_USED_PLAYER_COLOR_LOCAL", playerColor);
+        if(runningPlayerIdNumber <= 4){
+            Config.set("LAST_USED_PLAYER_NAME_LOCAL_"+runningPlayerIdNumber, playerName);
+            Config.set("LAST_USED_PLAYER_COLOR_LOCAL_"+runningPlayerIdNumber, playerColor);
+        }
 
         localPlayerList.add(new Player(playerName, color, runningPlayerIdNumber++));
+
+        try{
+            textFieldPlayerName.setText(Config.getString("LAST_USED_PLAYER_NAME_LOCAL_"+runningPlayerIdNumber));
+            textFieldPlayerColor.setText(Config.getString("LAST_USED_PLAYER_COLOR_LOCAL_"+runningPlayerIdNumber));
+        } catch (IllegalArgumentException e){
+            System.err.println("[LOBBY-LOCAL-UI-CONTROLLER] [addPlayer] ERROR Can't fetch next LAST_USED_PLAYER_NAME/COLOR");
+            textFieldPlayerName.setText("");
+            textFieldPlayerColor.setText("");
+        }
+
         updatePlayerList(localPlayerList);
     }
 
