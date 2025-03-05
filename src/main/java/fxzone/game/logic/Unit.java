@@ -181,7 +181,9 @@ public class Unit extends TileSpaceObject{
         NORMAL,
         MOVE_1,
         MOVE_2,
-        ATTACK
+        ATTACK,
+        BONUS_1,
+        BONUS_2,
     }
 
     /**
@@ -214,6 +216,7 @@ public class Unit extends TileSpaceObject{
                 finalPosition = new Point(path.peekLast());
                 directionNextPointOnMovePath = GeometryUtils.getPointToPointDirection(oldPosition, path.peek());
                 setFacingDirection(directionNextPointOnMovePath);
+                setStance(UnitStance.MOVE_1);
 
                 //If unit is moved away from tile with building, reset that buildings capture progress
                 if(game.getMap().getTiles()[x][y].hasBuildingOnTile()){
@@ -276,6 +279,7 @@ public class Unit extends TileSpaceObject{
         }
         else if(unitState == UnitState.IN_TRANSPORT && pointToAttack == null && !waitForAttack && !enterTransport && !path.isEmpty()){
             // Exit transport normal (limited)
+            setStance(UnitStance.MOVE_1);
             transportedBy.getTransportLoadedUnits().remove(this);
             unitStateToNeutral();
             this.movePath = path;
@@ -303,6 +307,7 @@ public class Unit extends TileSpaceObject{
         }
         else if(unitState == UnitState.IN_TRANSPORT && !enterTransport && !path.isEmpty() && Codex.getUnitProfile(this).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE){
             // Exit transport plane (unlimited)
+            setStance(UnitStance.MOVE_1);
             transportedBy.getTransportLoadedUnits().remove(this);
             unitStateToNeutral();
             this.movePath = path;

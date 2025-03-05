@@ -183,6 +183,15 @@ public class Codex {
             UnitSuperType.LAND_INFANTRY,
             100
         ));
+        put(UnitType.TANK_AA, new UnitProfile(
+            0, "Anti-Air Tank",
+            5, 4, 100, 5, 2, 1, 1,
+            1, 1.5, 1,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_ARMORED,
+            UnitSuperType.LAND_VEHICLE,
+            10
+        ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
         put(UnitType.INFANTRY, "DMG 3  DFN 0  SPD 3  VIS 3\nStrong vs Infantry\nWeak vs Vehicles");
@@ -206,6 +215,7 @@ public class Codex {
         put(UnitType.HELICOPTER_APACHE, "DMG 5  DFN 2  SPD 5  VIS 4\nFast and very powerful\nExtremely Strong vs Land Units");
 
         put(UnitType.INFANTRY_AA, "DMG 5  DFN 0  SPD 3  VIS 3\nCan only attack Aircraft\nStrong vs Aircraft");
+        put(UnitType.TANK_AA, "DMG 5  DFN 2  SPD 5  VIS 4\nCan only attack Aircraft\nStrong vs Aircraft");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
@@ -242,6 +252,7 @@ public class Codex {
         put(UnitType.HELICOPTER_APACHE, "helicopter_apache");
 
         put(UnitType.INFANTRY_AA, "infantry_aa");
+        put(UnitType.TANK_AA, "aa_tank");
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
@@ -254,7 +265,8 @@ public class Codex {
         UnitType.INFANTRY,
         UnitType.INFANTRY_RPG,
 
-        UnitType.INFANTRY_AA,
+        //UnitType.INFANTRY_AA,
+        UnitType.TANK_AA,
 
         UnitType.CAR_HUMVEE,
         //UnitType.TRUCK_TRANSPORT,
@@ -363,6 +375,7 @@ public class Codex {
         HELICOPTER_APACHE,
 
         INFANTRY_AA,
+        TANK_AA,
 /*
         INFANTRY_GUERRILLA,
         CAR_PICKUP,
@@ -495,7 +508,7 @@ public class Codex {
         UnitSuperType atk = getUnitProfile(offender).SUPERTYPE;
         UnitSuperType def = getUnitProfile(defender).SUPERTYPE;
         if(def == UnitSuperType.AIRCRAFT_PLANE || def == UnitSuperType.AIRCRAFT_HELICOPTER){
-            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER || offender.getUnitType() == UnitType.INFANTRY_AA;
+            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER || offender.getUnitType() == UnitType.INFANTRY_AA || offender.getUnitType() == UnitType.TANK_AA;
         }
         else {
             return offender.getUnitType() != UnitType.PLANE_JET && offender.getUnitType() != UnitType.INFANTRY_AA;
