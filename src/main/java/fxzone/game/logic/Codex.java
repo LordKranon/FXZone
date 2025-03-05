@@ -185,12 +185,12 @@ public class Codex {
         ));
         put(UnitType.TANK_AA, new UnitProfile(
             0, "Anti-Air Tank",
-            5, 4, 100, 5, 2, 1, 1,
-            1, 1.5, 1,
+            5, 4, 100, 3, 3, 1, 1,
+            1.5, 1, 1,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE,
-            10
+            210
         ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
@@ -215,7 +215,7 @@ public class Codex {
         put(UnitType.HELICOPTER_APACHE, "DMG 5  DFN 2  SPD 5  VIS 4\nFast and very powerful\nExtremely Strong vs Land Units");
 
         put(UnitType.INFANTRY_AA, "DMG 5  DFN 0  SPD 3  VIS 3\nCan only attack Aircraft\nStrong vs Aircraft");
-        put(UnitType.TANK_AA, "DMG 5  DFN 2  SPD 5  VIS 4\nCan only attack Aircraft\nStrong vs Aircraft");
+        put(UnitType.TANK_AA, "DMG 6  DFN 3  SPD 5  VIS 4\nExtremely Strong vs Aircraft\nStrong vs Infantry\nReduced damage vs Land Units");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
@@ -265,13 +265,13 @@ public class Codex {
         UnitType.INFANTRY,
         UnitType.INFANTRY_RPG,
 
-        //UnitType.INFANTRY_AA,
-        UnitType.TANK_AA,
+        UnitType.INFANTRY_AA,
 
         UnitType.CAR_HUMVEE,
         //UnitType.TRUCK_TRANSPORT,
         UnitType.TANK_HUNTER,
         UnitType.ARTILLERY,
+        UnitType.TANK_AA,
         UnitType.TANK_BATTLE,
         UnitType.ARTILLERY_ROCKET
     );
@@ -430,6 +430,15 @@ public class Codex {
 
         int rawDamage = getUnitProfile(offender.getUnitType()).DAMAGE;
 
+        // Add special damage bonus
+        // Anti-Air bonus
+        if(getUnitProfile(defender).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER || getUnitProfile(defender).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE){
+            if(offender.getUnitType() == UnitType.TANK_AA){
+                rawDamage = 9;
+            }
+        }
+
+        // Defender does half damage
         if(offender.getUnitState() == UnitState.COUNTERATTACKING){
             rawDamage /= 2;
         }

@@ -36,7 +36,7 @@ public class ConstructionMenu {
         int i = 0;
         for(UnitType unitType : (this.buildableUnitTypes)){
             ImageView unitIcon = new ImageView();
-            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, 0, color)));
+            unitIcon.setImage(AssetHandler.getImageUnit(new KeyUnit(unitType, getDisplayedUnitStanceInConstructionMenu(unitType), color)));
             unitIcon.setFitWidth(UI_SIZE);
             unitIcon.setFitHeight(UI_SIZE);
             unitIcon.setTranslateX(0);
@@ -81,5 +81,9 @@ public class ConstructionMenu {
     }
     public ArrayList<ButtonBuildingBuyUnit> getConstructionMenuButtons(){
         return constructionMenuButtons;
+    }
+
+    private static int getDisplayedUnitStanceInConstructionMenu(UnitType unitType){
+        return unitType == UnitType.TANK_AA ? 2 : 0;
     }
 }
