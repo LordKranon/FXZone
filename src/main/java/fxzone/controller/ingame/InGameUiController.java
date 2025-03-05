@@ -319,7 +319,7 @@ public class InGameUiController extends AbstractUiController {
 
             for(int j = 0; j < 3; j++){
                 textFlowsBottomUiBar[i][j] = (TextFlow) vBoxInner.lookup("#tf0"+(i+1)+"0"+(j+1));
-                textFlowsBottomUiBar[i][j].setPrefWidth(3.5*(double) UI_SIZE_IN_GAME_MENUS);
+                textFlowsBottomUiBar[i][j].setPrefWidth(4*(double) UI_SIZE_IN_GAME_MENUS);
             }
         }
         for(int i = 0; i < 4; i++){
