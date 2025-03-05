@@ -176,7 +176,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
             switch (aaTankStance){
                 case MOVE_1:
                     aaTankStance = UnitStance.BONUS_1;
-                    totalAATankImageTickDelay = 1;
+                    totalAATankImageTickDelay = 2;
                     break;
                 case BONUS_1:
                     aaTankStance = UnitStance.MOVE_2;
@@ -184,7 +184,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
                     break;
                 case MOVE_2:
                     aaTankStance = UnitStance.BONUS_2;
-                    totalAATankImageTickDelay = 1;
+                    totalAATankImageTickDelay = 2;
                     break;
                 case BONUS_2:
                     aaTankStance = UnitStance.MOVE_1;
@@ -192,7 +192,7 @@ public class GameObjectUnit extends GameObjectInTileSpace{
                     break;
             }
             for(Unit unit : units){
-                if(unit.getUnitType() == UnitType.TANK_AA && unit.getUnitState() == UnitState.NEUTRAL){
+                if(unit.getUnitType() == UnitType.TANK_AA && (unit.getUnitState() == UnitState.NEUTRAL || unit.getUnitState() == UnitState.BLACKED_OUT) && !unit.isCurrentlySelected()){
                     unit.setStance((aaTankStance == UnitStance.MOVE_1 || aaTankStance == UnitStance.MOVE_2)?UnitStance.NORMAL : aaTankStance);
                 }
             }

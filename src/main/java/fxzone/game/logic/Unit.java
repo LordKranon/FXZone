@@ -48,6 +48,11 @@ public class Unit extends TileSpaceObject{
     private UnitState unitState = UnitState.NEUTRAL;
 
     /**
+     * Used only for graphics. Graphical unit stances may be affected by whether or not the unit is currently selected.
+     */
+    boolean isCurrentlySelected = false;
+
+    /**
      * Whether this unit can be selected for commands or if its blacked out.
      * Closely related to UnitStates NEUTRAL & BLACKED_OUT
      */
@@ -206,6 +211,10 @@ public class Unit extends TileSpaceObject{
      * @param path the path of tiles this unit will take
      */
     public UnitState moveCommand(ArrayDeque<Point> path, Game game, Point pointToAttack, boolean waitForAttack, boolean enterTransport){
+
+        // isCurrentlySelected is set to false. This boolean does not include a potential "selected" state for attack command after moving.
+        isCurrentlySelected = false;
+
         /* TODO Remove second condition, it is temporary for testing */
         if(unitState == UnitState.NEUTRAL && path.size() <= Codex.getUnitProfile(this.unitType).SPEED){
             this.movePath = path;
@@ -662,11 +671,13 @@ public class Unit extends TileSpaceObject{
     }
 
     public void onSelect(){
+        isCurrentlySelected = true;
         setStance(UnitStance.MOVE_1);
 
         mediaPlayerOnSelect.play();
     }
     public void onDeselect(){
+        isCurrentlySelected = false;
         mediaPlayerOnSelect.stop();
         if(unitState == UnitState.MOVING && waitForAttackAfterMoving){
             waitForAttackAfterMoving = false;
@@ -680,6 +691,9 @@ public class Unit extends TileSpaceObject{
                 unitStateToBlackedOut();
             }
         }
+    }
+    public boolean isCurrentlySelected(){
+        return isCurrentlySelected;
     }
 
     public boolean canTransportLoad(Unit unit){
