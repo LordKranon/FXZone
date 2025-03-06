@@ -385,7 +385,7 @@ public class InGameEditorUiController extends InGameUiController{
     @Override
     boolean handleHoveredTile(){
         boolean hoveredTileChanged = super.handleHoveredTile();
-        if(hoveredTileChanged && gameController.getInputHandler().isMouseButtonPressed(MouseButton.PRIMARY) && !gameController.getInputHandler().wasMousePrimaryButtonPressed() && placingMode == EditorPlacingMode.TILE){
+        if(mousePointerInBounds && hoveredTileChanged && gameController.getInputHandler().isMouseButtonPressed(MouseButton.PRIMARY) && !gameController.getInputHandler().wasMousePrimaryButtonPressed() && placingMode == EditorPlacingMode.TILE){
             tileClicked(tileHoveredX, tileHoveredY, false);
         }
         return hoveredTileChanged;

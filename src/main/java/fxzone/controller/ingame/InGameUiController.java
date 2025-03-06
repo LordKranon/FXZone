@@ -102,7 +102,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Indicates that the mouse pointer is in bounds of the map.
      */
-    private boolean mousePointerInBounds;
+    boolean mousePointerInBounds;
 
     /**
      * Small indicator that marks the tile that the mouse pointer is hovering over.
