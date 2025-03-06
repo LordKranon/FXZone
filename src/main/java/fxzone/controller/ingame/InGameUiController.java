@@ -61,7 +61,7 @@ public class InGameUiController extends AbstractUiController {
      */
     private Group root2D;
 
-    private final AbstractGameController gameController;
+    final AbstractGameController gameController;
 
     protected boolean offThreadGraphicsNeedHandling;
     protected boolean startOfTurnEffectFlag;
@@ -96,7 +96,7 @@ public class InGameUiController extends AbstractUiController {
     /**
      * Game logical tile of the map that the mouse pointer is hovering over.
      */
-    private int tileHoveredX = 0, tileHoveredY = 0;
+    int tileHoveredX = 0, tileHoveredY = 0;
     protected Point tileHovered;
 
     /**
@@ -1022,8 +1022,10 @@ public class InGameUiController extends AbstractUiController {
 
     /**
      * Determine the game logical tile of the map that the mouse is hovering over.
+     *
+     * @return whether hovered tile changed
      */
-    private void handleHoveredTile(){
+    boolean handleHoveredTile(){
         Point2D pointHovered = gameController.getInputHandler().getLastMousePosition();
         Point pointHoveredInTileSpace = map.getPointAt(pointHovered.getX(), pointHovered.getY());
 
@@ -1045,6 +1047,7 @@ public class InGameUiController extends AbstractUiController {
         } else {
             setMousePointerInBounds(false);
         }
+        return hoveredTileChanged;
     }
 
     private void setMousePointerInBounds(boolean mousePointerInBounds){

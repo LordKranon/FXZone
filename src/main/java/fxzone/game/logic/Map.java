@@ -443,6 +443,7 @@ public class Map {
             }
         }
         setNeighborTileTypeInfoForTile(newTileSerializable.x, newTileSerializable.y, null);
+        propagateGraphicalOffsetToTileSpaceObject(newTile);
     }
     public void switchBuilding(BuildingSerializable newBuildingSerializable, Game game){
         Building oldBuilding = tiles[newBuildingSerializable.x][newBuildingSerializable.y].getBuildingOnTile();

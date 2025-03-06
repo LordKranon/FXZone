@@ -379,6 +379,18 @@ public class InGameEditorUiController extends InGameUiController{
         }
     }
 
+    /**
+     * Also handle dragging to place tiles quickly
+     */
+    @Override
+    boolean handleHoveredTile(){
+        boolean hoveredTileChanged = super.handleHoveredTile();
+        if(hoveredTileChanged && gameController.getInputHandler().isMouseButtonPressed(MouseButton.PRIMARY) && !gameController.getInputHandler().wasMousePrimaryButtonPressed() && placingMode == EditorPlacingMode.TILE){
+            tileClicked(tileHoveredX, tileHoveredY, false);
+        }
+        return hoveredTileChanged;
+    }
+
     private void printErr(){
         System.err.println("[EDITOR] Editor menu error");
     }

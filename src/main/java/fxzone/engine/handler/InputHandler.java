@@ -67,6 +67,9 @@ public class InputHandler {
         scene.setOnMouseMoved(mouseEvent -> {
             lastMousePosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
         });
+        scene.setOnMouseDragged(mouseEvent -> {
+            lastMousePosition = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+        });
 
         scene.setOnScroll(scrollEvent -> {
             cumulativeScrollDelta += scrollEvent.getDeltaY();
