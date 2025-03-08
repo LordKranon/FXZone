@@ -134,8 +134,8 @@ public class InGameUiController extends AbstractUiController {
 
     private boolean[][] moveCommandPathFinderMarks;
 
-    private boolean[][] moveCommandGridMovableSquares;
-    private boolean[][] moveCommandGridAttackableSquares;
+    boolean[][] moveCommandGridMovableSquares;
+    boolean[][] moveCommandGridAttackableSquares;
     private ArrayList<GameObjectUiMoveCommandGridTile> moveCommandGridTiles;
 
     private ArrayList<GameObjectUiMoveCommandGridTile> rangeCheckGridTiles;
@@ -198,7 +198,7 @@ public class InGameUiController extends AbstractUiController {
     final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
     final HashMap<Unit, Double> unitsAttacking = new HashMap<Unit, Double>();
 
-    private ArrayDeque<Point> selectedUnitQueuedPath;
+    ArrayDeque<Point> selectedUnitQueuedPath;
 
     /**
      * Used in case of unit creation info coming in over network,
@@ -546,79 +546,87 @@ public class InGameUiController extends AbstractUiController {
             if(!hoveredPoint.equals(lastTileHoveredForUnitPathQueue)){
                 lastTileHoveredForUnitPathQueue = hoveredPoint;
 
-                if(
-                    GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
-                        selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
-                        moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
-                        !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
-                ){
-                    // Player manually adds another tile to pathing arrow
-                    addPointToSelectedUnitPathQueue(hoveredPoint);
-                } else if(
-                    moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
-                    !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
-                ){
-                    // Player hovers any green tile and arrow is either too long already or arrowhead is not neighboring
-                    // Redo the pathing arrow with automatic pathfinding
-                    autoFindNewSelectedUnitPathQueue(hoveredPoint);
-                } else if (moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]){
-                    // Attackable square hovered
-                    // Do nothing if path already allows the attack, else find a path that allows the attack
-                    // Or, in case of RANGED units, remove path
-                    if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
-                        clearSelectedUnitPathQueue();
-                        addPathQueueArrowBase();
-                    } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
+                handleSelectedUnitPathQueueNewPoint(hoveredPoint);
+
+            }
+        }
+    }
+    private void handleSelectedUnitPathQueueNewPoint(Point hoveredPoint){
+        if(
+            GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
+                selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
+                moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
+                !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
+        ){
+            // Player manually adds another tile to pathing arrow
+            addPointToSelectedUnitPathQueue(hoveredPoint);
+        } else if(
+            moveCommandGridMovableSquares[hoveredPoint.x][hoveredPoint.y] &&
+                !moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
+        ){
+            // Player hovers any green tile and arrow is either too long already or arrowhead is not neighboring
+            // Redo the pathing arrow with automatic pathfinding
+            autoFindNewSelectedUnitPathQueue(hoveredPoint);
+        } else if (moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]){
+            // Attackable square hovered
+            handleSelectedUnitPathQueueNewPointToAttack(hoveredPoint);
+        }
+    }
+    void handleSelectedUnitPathQueueNewPointToAttack(Point hoveredPoint){
+        // Attackable square hovered
+        // Do nothing if path already allows the attack, else find a path that allows the attack
+        // Or, in case of RANGED units, remove path
+        if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
+            clearSelectedUnitPathQueue();
+            addPathQueueArrowBase();
+        } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
+            if(
+                (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
+                    map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision, false)) ||
+                    (selectedUnitQueuedPath.isEmpty() &&
+                        GeometryUtils.getPointToPointDistance(new Point(selectedUnit.getX(), selectedUnit.getY()), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE)
+            ){
+                // Move & Attack command is valid as is, do nothing
+                return;
+            }
+            else {
+                // Move & Attack command is not valid as is, find a move path which allows attack of hovered point
+
+                // First, check if a move is necessary at all
+                // Then, if it is:
+                // From all movable squares, find ones that are in range of proposed attack, and check for moveTo
+                // From all candidates that fulfill requirements, pick closest one to unit and auto-find path to there
+
+                Point selectedUnitPosition = new Point(selectedUnit.getX(), selectedUnit.getY());
+                if(GeometryUtils.getPointToPointDistance(selectedUnitPosition, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE){
+                    clearSelectedUnitPathQueue();
+                    addPathQueueArrowBase();
+                    return;
+                }
+
+                ArrayList<Point> movableTilesInRange = new ArrayList<>();
+                for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
+                    for(int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
                         if(
-                            (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                            map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision, false)) ||
-                            (selectedUnitQueuedPath.isEmpty() &&
-                            GeometryUtils.getPointToPointDistance(new Point(selectedUnit.getX(), selectedUnit.getY()), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE)
+                            moveCommandGridMovableSquares[i][j] &&
+                                GeometryUtils.getPointToPointDistance(new Point(i, j), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
+                                map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision, false)
                         ){
-                            // Move & Attack command is valid as is, do nothing
-                            return;
-                        }
-                        else {
-                            // Move & Attack command is not valid as is, find a move path which allows attack of hovered point
-
-                            // First, check if a move is necessary at all
-                            // Then, if it is:
-                            // From all movable squares, find ones that are in range of proposed attack, and check for moveTo
-                            // From all candidates that fulfill requirements, pick closest one to unit and auto-find path to there
-
-                            Point selectedUnitPosition = new Point(selectedUnit.getX(), selectedUnit.getY());
-                            if(GeometryUtils.getPointToPointDistance(selectedUnitPosition, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE){
-                                clearSelectedUnitPathQueue();
-                                addPathQueueArrowBase();
-                                return;
-                            }
-
-                            ArrayList<Point> movableTilesInRange = new ArrayList<>();
-                            for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
-                                for(int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
-                                    if(
-                                        moveCommandGridMovableSquares[i][j] &&
-                                        GeometryUtils.getPointToPointDistance(new Point(i, j), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                                            map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision, false)
-                                    ){
-                                        movableTilesInRange.add(new Point(i, j));
-                                    }
-                                }
-                            }
-                            if(movableTilesInRange.isEmpty()){
-                                System.err.println("[IN-GAME-UI-CONTROLLER] FATAL ERROR on pathfinding");
-                            } else {
-                                Point closest = movableTilesInRange.get(0);
-
-                                for(Point p : movableTilesInRange){
-                                    if(GeometryUtils.getPointToPointDistance(p, selectedUnitPosition) < GeometryUtils.getPointToPointDistance(closest, selectedUnitPosition)){
-                                        closest = p;
-                                    }
-                                }
-                                autoFindNewSelectedUnitPathQueue(closest);
-                            }
+                            movableTilesInRange.add(new Point(i, j));
                         }
                     }
+                }
+                if(movableTilesInRange.isEmpty()){
+                    System.err.println("[IN-GAME-UI-CONTROLLER] FATAL ERROR on pathfinding");
+                } else {
+                    Point closest = movableTilesInRange.get(0);
+
+                    for(Point p : movableTilesInRange){
+                        if(GeometryUtils.getPointToPointDistance(p, selectedUnitPosition) < GeometryUtils.getPointToPointDistance(closest, selectedUnitPosition)){
+                            closest = p;
+                        }
+                    }
+                    autoFindNewSelectedUnitPathQueue(closest);
                 }
             }
         }
@@ -639,10 +647,12 @@ public class InGameUiController extends AbstractUiController {
         lastTileAddedToPathQueue = point;
 
         // This new arrow tile gets the earlier calculated direction as its predecessor direction
-        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
-            point.x, point.y, map, root2D, directionOfThisAsSuccessor
-        );
-        moveCommandArrowTiles.add(arrowTile);
+        if(turnState == TurnState.UNIT_SELECTED){
+            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
+                point.x, point.y, map, root2D, directionOfThisAsSuccessor
+            );
+            moveCommandArrowTiles.add(arrowTile);
+        }
     }
     private void autoFindNewSelectedUnitPathQueue(Point point){
         if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Finding path");
@@ -753,10 +763,12 @@ public class InGameUiController extends AbstractUiController {
         }
     }
     private void addPathQueueArrowBase(){
-        GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
-            selectedUnit.getX(), selectedUnit.getY(), map, root2D, Direction.NONE
-        );
-        moveCommandArrowTiles.add(arrowTile);
+        if(turnState == TurnState.UNIT_SELECTED){
+            GameObjectUiMoveCommandArrowTile arrowTile = new GameObjectUiMoveCommandArrowTile(
+                selectedUnit.getX(), selectedUnit.getY(), map, root2D, Direction.NONE
+            );
+            moveCommandArrowTiles.add(arrowTile);
+        }
 
         lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
     }
@@ -924,6 +936,7 @@ public class InGameUiController extends AbstractUiController {
                     unitsMoving.remove(unit);
 
                     // Add more vision
+                    // TODO In vs AI games, add vision to AI players on unit move
                     if(unit.getOwnerId() == thisPlayer.getId()){
                         map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION));
                     } else {
@@ -1288,7 +1301,7 @@ public class InGameUiController extends AbstractUiController {
         addPathQueueArrowBase();
 
         // Calculate the move command grid
-        onSelectUnitCalculateMoveCommandGrid();
+        onSelectUnitCalculateMoveCommandGrid(thisPlayerFowVision);
 
         // Initialize move command grid graphics
         moveCommandGridTiles = new ArrayList<>();
@@ -1401,7 +1414,7 @@ public class InGameUiController extends AbstractUiController {
         deselectUnitInConstructionMode();
     }
 
-    private void onSelectUnitCalculateMoveCommandGrid(){
+    void onSelectUnitCalculateMoveCommandGrid(boolean[][] vision){
         // Initialize move command grid logic
         moveCommandGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
         moveCommandGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
@@ -1415,67 +1428,67 @@ public class InGameUiController extends AbstractUiController {
         ){
             onSelectUnitCalculateMoveCommandGridRecursive(
                 selectedUnit.getX(), selectedUnit.getY(), 1, selectedUnit,
-                moveCommandGridMovableSquares, new boolean[map.getWidth()][map.getHeight()], false
+                moveCommandGridMovableSquares, new boolean[map.getWidth()][map.getHeight()], false, vision
             );
             return;
         }
 
         onSelectUnitCalculateMoveCommandGridRecursive(
             selectedUnit.getX(), selectedUnit.getY(), Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED, selectedUnit,
-            moveCommandGridMovableSquares, moveCommandGridAttackableSquares, false
+            moveCommandGridMovableSquares, moveCommandGridAttackableSquares, false, vision
         );
 
         // Add attacks that are possible from start square without moving
         if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
-            onSelectUnitCalculateRangedAttackGrid(selectedUnit, moveCommandGridAttackableSquares, false);
+            onSelectUnitCalculateRangedAttackGrid(selectedUnit, moveCommandGridAttackableSquares, false, vision);
         }
         else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE ||
         Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
-            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY(), selectedUnit, moveCommandGridAttackableSquares, false);
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY(), selectedUnit, moveCommandGridAttackableSquares, false, vision);
         }
     }
 
-    private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps, Unit unit, boolean[][] refArrayMove, boolean[][] refArrayAttack, boolean addAllInRange){
+    private void onSelectUnitCalculateMoveCommandGridRecursive(int x, int y, int remainingSteps, Unit unit, boolean[][] refArrayMove, boolean[][] refArrayAttack, boolean addAllInRange, boolean[][] vision){
         if(
             (Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.MELEE ||
                 Codex.getUnitProfile(unit).ATTACKTYPE == UnitAttackType.RANGERMELEE) &&
-                map.checkTileForMoveToByUnitPerceived(x, y, unit, thisPlayerFowVision, false)
+                map.checkTileForMoveToByUnitPerceived(x, y, unit, vision, false)
         ){
-            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y, unit, refArrayAttack, addAllInRange);
+            onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(x, y, unit, refArrayAttack, addAllInRange, vision);
         }
         if(remainingSteps > 0){
-            if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, unit, thisPlayerFowVision)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y-1, unit, vision)){
                 refArrayMove[x][y-1] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y-1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange, vision);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x-1, y, unit, thisPlayerFowVision)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x-1, y, unit, vision)){
                 refArrayMove[x-1][y] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
+                onSelectUnitCalculateMoveCommandGridRecursive(x-1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange, vision);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x, y+1, unit, thisPlayerFowVision)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x, y+1, unit, vision)){
                 refArrayMove[x][y+1] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
+                onSelectUnitCalculateMoveCommandGridRecursive(x, y+1, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange, vision);
             }
-            if(map.checkTileForMoveThroughByUnitPerceived(x+1, y, unit, thisPlayerFowVision)){
+            if(map.checkTileForMoveThroughByUnitPerceived(x+1, y, unit, vision)){
                 refArrayMove[x+1][y] = true;
-                onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange);
+                onSelectUnitCalculateMoveCommandGridRecursive(x+1, y, remainingSteps-1, unit, refArrayMove, refArrayAttack, addAllInRange, vision);
             }
         }
     }
-    private void onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(int x, int y, Unit unit, boolean[][] refArray, boolean addAllInRange){
+    private void onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(int x, int y, Unit unit, boolean[][] refArray, boolean addAllInRange, boolean[][] vision){
         for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).MAXRANGE)){
             if(
-                map.checkTileForAttackByUnit(x+p.x, y+p.y, unit, thisPlayerFowVision) ||
+                map.checkTileForAttackByUnit(x+p.x, y+p.y, unit, vision) ||
                     (addAllInRange && map.isInBounds(x+p.x, y+p.y))
             ){
                 refArray[x+p.x][y+p.y] = true;
             }
         }
     }
-    private void onSelectUnitCalculateRangedAttackGrid(Unit unit, boolean[][] refArray, boolean addAllInRange){
+    private void onSelectUnitCalculateRangedAttackGrid(Unit unit, boolean[][] refArray, boolean addAllInRange, boolean[][] vision){
         for(Point p : GeometryUtils.getPointsInRange(Codex.getUnitProfile(unit).MAXRANGE)){
             if(
-                map.checkTileForAttackByUnit(unit.getX()+p.x, unit.getY()+p.y, unit, thisPlayerFowVision) ||
+                map.checkTileForAttackByUnit(unit.getX()+p.x, unit.getY()+p.y, unit, vision) ||
                 (addAllInRange && map.isInBounds(unit.getX()+p.x, unit.getY()+p.y))
             ){
                 refArray[unit.getX()+p.x][unit.getY()+p.y] = true;
@@ -1795,10 +1808,10 @@ public class InGameUiController extends AbstractUiController {
             boolean[][] rangeCheckGridAttackableSquares = new boolean[map.getWidth()][map.getHeight()];
 
             if(Codex.getUnitProfile(rangeCheckedUnit).ATTACKTYPE == UnitAttackType.RANGED){
-                onSelectUnitCalculateRangedAttackGrid(rangeCheckedUnit, rangeCheckGridAttackableSquares, true);
+                onSelectUnitCalculateRangedAttackGrid(rangeCheckedUnit, rangeCheckGridAttackableSquares, true, thisPlayerFowVision);
             } else{
                 onSelectUnitCalculateMoveCommandGridRecursive(rangeCheckedUnit.getX(), rangeCheckedUnit.getY(), Codex.getUnitProfile(rangeCheckedUnit.getUnitType()).SPEED, rangeCheckedUnit,
-                    rangeCheckGridMovableSquares, rangeCheckGridAttackableSquares, true);
+                    rangeCheckGridMovableSquares, rangeCheckGridAttackableSquares, true, thisPlayerFowVision);
             }
 
 
