@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx/16"
   xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="fxzone.controller.menu.PlayMenuUiController$PlayMenuUiControllerFxml"
+  fx:controller="fxzone.controller.menu.CampaignMenuUiController$CampaignMenuUiControllerFxml"
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -24,7 +24,7 @@
         </Pane>
 
 
-        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="PLAY" textFill="WHITE"
+        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="CAMPAIGN" textFill="WHITE"
           GridPane.halignment="CENTER" GridPane.valignment="CENTER">
           <font>
             <Font size="50.0"/>
@@ -57,20 +57,8 @@
             <VBox alignment="CENTER" spacing="40.0">
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="CAMPAIGN" style="-fx-text-fill: yellow;"
-                  onAction="#campaign">
-                </Button>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="LOCAL GAME"
-                  onAction="#localGame">
-                </Button>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="HOST ONLINE GAME"
-                  onAction="#host">
-                </Button>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="JOIN ONLINE GAME"
-                  onAction="#join">
+                  prefWidth="400.0" text="MISSION 1"
+                  onAction="#mission1">
                 </Button>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"

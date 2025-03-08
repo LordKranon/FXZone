@@ -51,6 +51,11 @@ public class PlayMenuUiController extends AbstractUiController {
         }
 
         @FXML
+        public void campaign(){
+            gameController.setActiveUiController(new CampaignMenuUiController(gameController));
+        }
+
+        @FXML
         public void host(){
             gameController.setActiveUiController(new LobbyHostUiController(gameController, handleHostGame()));
         }
