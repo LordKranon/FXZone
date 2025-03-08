@@ -180,6 +180,8 @@ public class InGameUiController extends AbstractUiController {
         BUILDING_SELECTED,
         GAME_OVER,
 
+        AI_TURN,
+
         /**
          * Only for network syncing purposes
          */
@@ -193,8 +195,8 @@ public class InGameUiController extends AbstractUiController {
     }
     protected TurnState turnState = TurnState.GAME_STARTING;
 
-    private final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
-    private final HashMap<Unit, Double> unitsAttacking = new HashMap<Unit, Double>();
+    final HashMap<Unit, Double> unitsMoving = new HashMap<Unit, Double>();
+    final HashMap<Unit, Double> unitsAttacking = new HashMap<Unit, Double>();
 
     private ArrayDeque<Point> selectedUnitQueuedPath;
 

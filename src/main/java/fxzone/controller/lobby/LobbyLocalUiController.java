@@ -2,6 +2,7 @@ package fxzone.controller.lobby;
 
 import fxzone.config.Config;
 import fxzone.controller.ingame.InGameLocalUiController;
+import fxzone.controller.ingame.InGameVsAiUiController;
 import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Building;
@@ -81,7 +82,8 @@ public class LobbyLocalUiController extends LobbyUiController{
 
         GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList);
 
-        gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
+        //gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
+        gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable));
     }
 
     @Override
