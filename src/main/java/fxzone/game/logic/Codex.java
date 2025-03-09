@@ -10,6 +10,8 @@ import java.util.List;
 
 public class Codex {
 
+    public static final int TOTAL_CAMPAIGN_MISSIONS = 3;
+
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
     public static final int BUILDING_HEALING_TOTAL = 20;

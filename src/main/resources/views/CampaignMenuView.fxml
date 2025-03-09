@@ -57,10 +57,6 @@
             <VBox alignment="CENTER" spacing="40.0">
               <children>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
-                  prefWidth="400.0" text="MISSION 1"
-                  onAction="#mission1">
-                </Button>
-                <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >
                 </Button>
