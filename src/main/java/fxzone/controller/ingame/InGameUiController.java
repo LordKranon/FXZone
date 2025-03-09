@@ -938,7 +938,7 @@ public class InGameUiController extends AbstractUiController {
                     unitsMoving.remove(unit);
 
                     // Add more vision
-                    // TODO In vs AI games, add vision to AI players on unit move
+                    addVisionForNotThisPlayer(unit);
                     if(unit.getOwnerId() == thisPlayer.getId()){
                         map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION));
                     } else {
@@ -1002,6 +1002,14 @@ public class InGameUiController extends AbstractUiController {
             }
             unitsAttacking.put(unit, cumulativeDelta);
         }
+    }
+    /**
+     * Used in VS AI games to give the AI more vision when it moves its units.
+     *
+     * @param unit the unit that just moved and potentially gained more vision.
+     */
+    void addVisionForNotThisPlayer(Unit unit){
+
     }
 
     /**

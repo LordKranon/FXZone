@@ -3,6 +3,7 @@ package fxzone.controller.ingame;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Building;
+import fxzone.game.logic.Codex;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
@@ -147,7 +148,12 @@ public class InGameVsAiUiController extends InGameUiController{
 
     }
 
-
+    @Override
+    void addVisionForNotThisPlayer(Unit unit){
+        if(turnState == TurnState.AI_TURN && unit.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
+            map.addVisionOnUnitMove(currentAiPlayerFowVision, unit.getX(), unit.getY(), Codex.getUnitProfile(unit).VISION);
+        }
+    }
 
     @Override
     protected void endTurn(){
