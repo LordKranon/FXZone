@@ -548,9 +548,11 @@ public class Map {
         Player playerWithTurn = game.getPlayers().get(game.whoseTurn());
 
         HashMap<Player, Boolean> playersEliminated = new HashMap<>();
+        HashMap<Integer, Boolean> playersWithUnitsRemaining = new HashMap<>();
 
         for(Player player : game.getPlayers()){
             playersEliminated.put(player, true);
+            playersWithUnitsRemaining.put(player.getId(), false);
         }
 
         for(Unit unit : units){
@@ -558,7 +560,7 @@ public class Map {
                 unit.doCaptureAtEndOfTurn(game);
             }
             if(unit.hasOwner()){
-                playersEliminated.put(game.getPlayer(unit.getOwnerId()), false);
+                playersWithUnitsRemaining.put(unit.getOwnerId(), true);
             }
         }
         for(Building building: buildings){
@@ -568,6 +570,11 @@ public class Map {
             }
             if(building.hasOwner() && building.isSelectable() && (unitOnBuilding == null || unitOnBuilding.getOwnerId() == building
                 .getOwnerId())){
+                //Players with an unblocked production building are not eliminated
+                playersEliminated.put(game.getPlayer(building.getOwnerId()), false);
+            }
+            else if(building.hasOwner() && playersWithUnitsRemaining.get(building.getOwnerId())){
+                //Players with any buildings are not eliminated IF they have at least one unit
                 playersEliminated.put(game.getPlayer(building.getOwnerId()), false);
             }
         }
