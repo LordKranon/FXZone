@@ -181,17 +181,24 @@ public class InGameVsAiUiController extends InGameUiController{
     }
     private void handleAiUsageOfBuilding(Building building){
         buildingsToHandle.remove(building);
-        waitTime = 1;
 
         if(map.getTiles()[building.getX()][building.getY()].hasUnitOnTile()){
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make building "+building+" wait this turn out as it is blocked.");
             return;
         }
-        if(game.getPlayers().get(game.whoseTurn()).getStatResourceCash() >= Codex.UNIT_PROFILE_VALUES.get(UnitType.INFANTRY).COST){
+        // Select random unit the building can build and build it if AI player has enough cash
+        List<UnitType> buildableUnitTypes = Codex.getBuildableUnitTypes(building.getBuildingType());
+        if(buildableUnitTypes == null || buildableUnitTypes.isEmpty()){
+            System.err.println("[IN-GAME-VS-AI-CONTROLLER] [handleAiTurn] ERROR on retrieving buildable unit types of building.");
+            return;
+        }
+        UnitType unitTypeToBuild = buildableUnitTypes.get((int)(Math.random()*buildableUnitTypes.size()));
+        if(game.getPlayers().get(game.whoseTurn()).getStatResourceCash() >= Codex.UNIT_PROFILE_VALUES.get(unitTypeToBuild).COST){
 
-            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI uses building "+building+" to build infantry.");
+            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI uses building "+building+".");
 
-            onBuyUnitCreateUnit(UnitType.INFANTRY, building.getX(), building.getY(), game.getPlayers().get(game.whoseTurn()).getId(), false);
+            waitTime = 1;
+            onBuyUnitCreateUnit(unitTypeToBuild, building.getX(), building.getY(), game.getPlayers().get(game.whoseTurn()).getId(), false);
             return;
         }
 

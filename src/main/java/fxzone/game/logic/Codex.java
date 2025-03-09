@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Codex {
 
-    public static final int TOTAL_CAMPAIGN_MISSIONS = 3;
+    public static final int TOTAL_CAMPAIGN_MISSIONS = 4;
 
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
@@ -532,5 +532,20 @@ public class Codex {
 
     public static boolean hasConstructionMode(Unit unit){
         return unit.getUnitType() == UnitType.SHIP_CARRIER;
+    }
+
+    public static List<UnitType> getBuildableUnitTypes(BuildingType buildingType){
+        switch (buildingType){
+            case FACTORY:
+                return BUILDABLE_UNIT_TYPES_FACTORY;
+            case PORT:
+                return BUILDABLE_UNIT_TYPES_PORT;
+            case AIRPORT:
+                return BUILDABLE_UNIT_TYPES_AIRPORT;
+            case CITY:
+            default:
+                System.err.println("[CODEX] [getBuildableUnitTypes] ERROR Could not retrieve buildable unit types");
+                return null;
+        }
     }
 }
