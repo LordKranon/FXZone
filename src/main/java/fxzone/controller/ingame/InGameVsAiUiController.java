@@ -138,9 +138,13 @@ public class InGameVsAiUiController extends InGameUiController{
                     }
 
                     //Find point closest to closest enemy building and move there
+                    //From equally close points, pick one that is diagonally/visually the closest
                     bestPointToMoveTo = movablePoints.get(0);
                     for(Point p : movablePoints){
-                        if(GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding)){
+                        if(
+                            GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) <= GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding) &&
+                                Math.max(Math.abs(p.x-closestEnemyBuilding.x), Math.abs(p.y-closestEnemyBuilding.y)) < Math.max(Math.abs(bestPointToMoveTo.x-closestEnemyBuilding.x), Math.abs(bestPointToMoveTo.y-closestEnemyBuilding.y))
+                        ){
                             bestPointToMoveTo = p;
                         }
                     }
