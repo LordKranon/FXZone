@@ -1300,6 +1300,7 @@ public class InGameUiController extends AbstractUiController {
     }
     private void selectUnit(Unit unit){
         selectedUnit = unit;
+        turnState = TurnState.UNIT_SELECTED;
 
         // Initialize unit path queue
         clearSelectedUnitPathQueue();
@@ -1336,7 +1337,6 @@ public class InGameUiController extends AbstractUiController {
         // To make the unit graphically move - rotating its tracks or walking in place
         selectedUnit.onSelect();
 
-        turnState = TurnState.UNIT_SELECTED;
         if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [selectUnit] unit selected");
     }
     protected void selectBuilding(Building building){
