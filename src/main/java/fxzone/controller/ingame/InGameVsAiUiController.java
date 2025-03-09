@@ -1,6 +1,8 @@
 package fxzone.controller.ingame;
 
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.engine.utils.GeometryUtils;
+import fxzone.game.logic.Building;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
@@ -61,6 +63,7 @@ public class InGameVsAiUiController extends InGameUiController{
 
     private void handleAiCommandToUnit(Unit unit){
         selectedUnit = unit;
+        clearSelectedUnitPathQueue();
         unitsToHandle.remove(unit);
 
         //Calculate options
@@ -79,17 +82,68 @@ public class InGameVsAiUiController extends InGameUiController{
 
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move&attack command.");
 
-            Point pointToAttack = attackablePoints.get(0);
+            Point pointToAttack = attackablePoints.get((int)(Math.random()*attackablePoints.size()));
             handleSelectedUnitPathQueueNewPointToAttack(pointToAttack);
 
             boolean wasStoppedOnFow = verifyPathOnMoveCommand(selectedUnitQueuedPath);
-            //boolean enterTransport = checkEnterTransportOnMoveCommand(selectedUnitQueuedPath);
-            //boolean waitForAttack = checkWaitForAttackOnMoveCommand(selectedUnitQueuedPath, pointToAttack, wasStoppedOnFow, enterTransport);
             commandUnitToMove(selectedUnit, selectedUnitQueuedPath, wasStoppedOnFow?null:pointToAttack, false, false);
-        } else {
 
-            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make unit "+unit+" wait this turn out.");
+            return;
         }
+
+        //If a move towards enemy structures is possible, do it
+        ArrayList<Point> movablePoints = new ArrayList<>();
+        for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
+            for (int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
+                if(moveCommandGridMovableSquares[i][j] && map.checkTileForMoveToByUnitPerceived(i, j, unit, currentAiPlayerFowVision, false)){
+                    movablePoints.add(new Point(i, j));
+                }
+            }
+        }
+        if(!movablePoints.isEmpty()){
+
+            ArrayList<Point> enemyBuildingLocations = new ArrayList<>();
+            for(Building b : map.getBuildings()){
+                if(b.hasOwner() && b.getOwnerId() != unit.getOwnerId()){
+                    enemyBuildingLocations.add(new Point(b.getX(), b.getY()));
+                }
+            }
+
+            //If enemy buildings can be moved to and this unit is not currently standing on an enemy building or unclaimed building
+            if(!enemyBuildingLocations.isEmpty() && !(map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile() && map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getOwnerId() != unit.getOwnerId())){
+
+                if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move command.");
+
+                //Find point closest to closest enemy buildings and move there
+                Point closestEnemyBuilding = enemyBuildingLocations.get(0);
+                Point unitPosition = new Point(unit.getX(), unit.getY());
+                for(Point p: enemyBuildingLocations){
+                    if(GeometryUtils.getPointToPointDistance(p, unitPosition) < GeometryUtils.getPointToPointDistance(closestEnemyBuilding, unitPosition)){
+                        closestEnemyBuilding = p;
+                    }
+                }
+
+                Point bestPointToMoveTo = movablePoints.get(0);
+                for(Point p : movablePoints){
+                    if(GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding)){
+                        bestPointToMoveTo = p;
+                    }
+                }
+
+                autoFindNewSelectedUnitPathQueue(bestPointToMoveTo);
+
+                boolean wasStoppedOnFow = verifyPathOnMoveCommand(selectedUnitQueuedPath);
+                boolean enterTransport = checkEnterTransportOnMoveCommand(selectedUnitQueuedPath);
+                commandUnitToMove(selectedUnit, selectedUnitQueuedPath, null, enterTransport, false);
+
+                return;
+
+            }
+
+        }
+
+        if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make unit "+unit+" wait this turn out.");
+
 
     }
 

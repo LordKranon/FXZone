@@ -639,9 +639,11 @@ public class InGameUiController extends AbstractUiController {
         Direction directionOfThisAsSuccessor = GeometryUtils.getPointToPointDirection(lastTileAddedToPathQueue, point);
 
         // Set successor direction of preceding arrow tile
-        if(!moveCommandArrowTiles.isEmpty()){
-            GameObjectUiMoveCommandArrowTile predecessorArrowTile = moveCommandArrowTiles.get(moveCommandArrowTiles.size()-1);
-            predecessorArrowTile.setDirectionOfSuccessor(directionOfThisAsSuccessor);
+        if(turnState == TurnState.UNIT_SELECTED){
+            if(!moveCommandArrowTiles.isEmpty()){
+                GameObjectUiMoveCommandArrowTile predecessorArrowTile = moveCommandArrowTiles.get(moveCommandArrowTiles.size()-1);
+                predecessorArrowTile.setDirectionOfSuccessor(directionOfThisAsSuccessor);
+            }
         }
 
         lastTileAddedToPathQueue = point;
@@ -654,7 +656,7 @@ public class InGameUiController extends AbstractUiController {
             moveCommandArrowTiles.add(arrowTile);
         }
     }
-    private void autoFindNewSelectedUnitPathQueue(Point point){
+    void autoFindNewSelectedUnitPathQueue(Point point){
         if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [PATH-FINDER] Finding path");
 
         // Clear old path (geometric part and graphical part)
@@ -772,7 +774,7 @@ public class InGameUiController extends AbstractUiController {
 
         lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
     }
-    private void clearSelectedUnitPathQueue(){
+    void clearSelectedUnitPathQueue(){
 
         selectedUnitQueuedPath = new ArrayDeque<>();
         lastTileAddedToPathQueue = new Point(selectedUnit.getX(), selectedUnit.getY());
