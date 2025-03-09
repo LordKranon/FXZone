@@ -1636,7 +1636,7 @@ public class InGameUiController extends AbstractUiController {
         createUnit(unitSerializable, statPurchasingPrice, inTransport);
     }
     protected void createUnit(UnitSerializable unitSerializable, int statPurchasingPrice, boolean inTransport){
-        map.createNewUnit(unitSerializable, game, inTransport);
+        map.createNewUnit(unitSerializable, game, thisPlayerFowVision[unitSerializable.x][unitSerializable.y], inTransport);
         payUnitPurchasingPrice(unitSerializable, statPurchasingPrice);
 
         // Add more vision

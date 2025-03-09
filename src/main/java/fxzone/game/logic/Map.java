@@ -264,9 +264,10 @@ public class Map {
         tileSpaceObject.changeTileRenderSize(this);
     }
 
-    public void createNewUnit(UnitSerializable unitSerializable, Game game, boolean inTransport){
+    public void createNewUnit(UnitSerializable unitSerializable, Game game, boolean isInVision, boolean inTransport){
         Unit unit = new Unit(unitSerializable, tileRenderSize, subGroupMapUnits, game);
         unit.setActionableThisTurn(false);
+        unit.setInVision(isInVision);
 
         addUnit(unit, game, inTransport);
     }

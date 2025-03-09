@@ -181,7 +181,7 @@ public class InGameVsAiUiController extends InGameUiController{
     }
     private void handleAiUsageOfBuilding(Building building){
         buildingsToHandle.remove(building);
-        waitTime = 5;
+        waitTime = 1;
 
         if(map.getTiles()[building.getX()][building.getY()].hasUnitOnTile()){
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make building "+building+" wait this turn out as it is blocked.");
