@@ -94,10 +94,16 @@ public class InGameVsAiUiController extends InGameUiController{
 
         //If a move towards enemy structures is possible, do it
         ArrayList<Point> movablePoints = new ArrayList<>();
+        ArrayList<Point> enemyBuildingsToCaptureImmediately = new ArrayList<>();
         for(int i = 0; i < moveCommandGridMovableSquares.length; i++){
             for (int j = 0; j < moveCommandGridMovableSquares[i].length; j++){
                 if(moveCommandGridMovableSquares[i][j] && map.checkTileForMoveToByUnitPerceived(i, j, unit, currentAiPlayerFowVision, false)){
                     movablePoints.add(new Point(i, j));
+
+                    // Find enemy-controlled buildings that this unit can move to (and capture) this turn
+                    if(map.getTiles()[i][j].hasBuildingOnTile() && map.getTiles()[i][j].getBuildingOnTile().hasOwner() && map.getTiles()[i][j].getBuildingOnTile().getOwnerId() != unit.getOwnerId()){
+                        enemyBuildingsToCaptureImmediately.add(new Point(i, j));
+                    }
                 }
             }
         }
@@ -110,26 +116,36 @@ public class InGameVsAiUiController extends InGameUiController{
                 }
             }
 
-            //If enemy buildings can be moved to and this unit is not currently standing on an enemy building or unclaimed building
+            //If enemy buildings exist and this unit is not currently standing on an enemy building or unclaimed building
             if(!enemyBuildingLocations.isEmpty() && !(map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile() && map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getOwnerId() != unit.getOwnerId())){
 
                 if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move command.");
 
-                //Find point closest to closest enemy buildings and move there
-                Point closestEnemyBuilding = enemyBuildingLocations.get(0);
-                Point unitPosition = new Point(unit.getX(), unit.getY());
-                for(Point p: enemyBuildingLocations){
-                    if(GeometryUtils.getPointToPointDistance(p, unitPosition) < GeometryUtils.getPointToPointDistance(closestEnemyBuilding, unitPosition)){
-                        closestEnemyBuilding = p;
+                Point bestPointToMoveTo;
+
+                //Find enemy buildings this unit can move onto (and capture), then pick one at random and move onto it
+                if(!enemyBuildingsToCaptureImmediately.isEmpty()){
+                    bestPointToMoveTo = enemyBuildingsToCaptureImmediately.get((int)(Math.random()*enemyBuildingsToCaptureImmediately.size()));
+
+                } else {
+                    //Find closest enemy building
+                    Point closestEnemyBuilding = enemyBuildingLocations.get(0);
+                    Point unitPosition = new Point(unit.getX(), unit.getY());
+                    for(Point p: enemyBuildingLocations){
+                        if(GeometryUtils.getPointToPointDistance(p, unitPosition) < GeometryUtils.getPointToPointDistance(closestEnemyBuilding, unitPosition)){
+                            closestEnemyBuilding = p;
+                        }
+                    }
+
+                    //Find point closest to closest enemy building and move there
+                    bestPointToMoveTo = movablePoints.get(0);
+                    for(Point p : movablePoints){
+                        if(GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding)){
+                            bestPointToMoveTo = p;
+                        }
                     }
                 }
 
-                Point bestPointToMoveTo = movablePoints.get(0);
-                for(Point p : movablePoints){
-                    if(GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding)){
-                        bestPointToMoveTo = p;
-                    }
-                }
 
                 autoFindNewSelectedUnitPathQueue(bestPointToMoveTo);
 
