@@ -1405,10 +1405,8 @@ public class InGameUiController extends AbstractUiController {
             return;
         }
 
-        Unit createdUnit = new Unit(unitType, selectedBuilding.getX(), selectedBuilding.getY(), runningUnitId++);
-        createdUnit.setOwnerId(thisPlayer.getId());
-        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
-        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, false);
+        onBuyUnitCreateUnit(unitType, selectedBuilding.getX(), selectedBuilding.getY(), thisPlayer.getId(), false);
+
         deselectBuilding();
     }
     private void buyUnitButtonClickedInUnitSelectedConstructionMode(UnitType unitType){
@@ -1417,11 +1415,16 @@ public class InGameUiController extends AbstractUiController {
             if(verbose) System.err.println("[IN-GAME-UI-CONTROLLER] [buyUnitButtonClickedInUnitSelectedConstructionMode] Cannot buy unit");
             return;
         }
-        Unit createdUnit = new Unit(unitType, selectedUnit.getX(), selectedUnit.getY(), runningUnitId++);
-        createdUnit.setOwnerId(thisPlayer.getId());
-        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
-        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, true);
+
+        onBuyUnitCreateUnit(unitType, selectedUnit.getX(), selectedUnit.getY(), thisPlayer.getId(), true);
+
         deselectUnitInConstructionMode();
+    }
+    void onBuyUnitCreateUnit(UnitType unitType, int x, int y, int ownerId, boolean inTransport){
+        Unit createdUnit = new Unit(unitType, x, y, runningUnitId++);
+        createdUnit.setOwnerId(ownerId);
+        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
+        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, inTransport);
     }
 
     void onSelectUnitCalculateMoveCommandGrid(boolean[][] vision){

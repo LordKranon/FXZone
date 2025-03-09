@@ -4,6 +4,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Unit;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
@@ -25,6 +26,10 @@ public class InGameVsAiUiController extends InGameUiController{
      */
     private ArrayList<Unit> unitsToHandle = new ArrayList<>();
 
+    private ArrayList<Building> buildingsToHandle = new ArrayList<>();
+
+    private double waitTime;
+
     //temporary test
     private boolean aiCommandGivenThisTurn = false;
 
@@ -43,17 +48,26 @@ public class InGameVsAiUiController extends InGameUiController{
         super.update(gameController, delta);
 
         if(turnState == TurnState.AI_TURN){
-            handleAiTurn();
+            handleAiTurn(delta);
         }
 
     }
-    private void handleAiTurn(){
+    private void handleAiTurn(double delta){
+        if(waitTime > 0){
+            waitTime -= delta;
+            return;
+        }
         if(unitsMoving.isEmpty() && unitsAttacking.isEmpty()){
 
             // Find actionable unit
             if(!unitsToHandle.isEmpty()){
                 Unit u = unitsToHandle.get(0);
                 handleAiCommandToUnit(u);
+                return;
+            }
+            if(!buildingsToHandle.isEmpty()){
+                Building b = buildingsToHandle.get(0);
+                handleAiUsageOfBuilding(b);
                 return;
             }
 
@@ -164,8 +178,24 @@ public class InGameVsAiUiController extends InGameUiController{
         }
 
         if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make unit "+unit+" wait this turn out.");
+    }
+    private void handleAiUsageOfBuilding(Building building){
+        buildingsToHandle.remove(building);
+        waitTime = 5;
 
+        if(map.getTiles()[building.getX()][building.getY()].hasUnitOnTile()){
+            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make building "+building+" wait this turn out as it is blocked.");
+            return;
+        }
+        if(game.getPlayers().get(game.whoseTurn()).getStatResourceCash() >= Codex.UNIT_PROFILE_VALUES.get(UnitType.INFANTRY).COST){
 
+            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI uses building "+building+" to build infantry.");
+
+            onBuyUnitCreateUnit(UnitType.INFANTRY, building.getX(), building.getY(), game.getPlayers().get(game.whoseTurn()).getId(), false);
+            return;
+        }
+
+        if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make building "+building+" wait this turn out as it can't afford units.");
     }
 
     @Override
@@ -205,6 +235,11 @@ public class InGameVsAiUiController extends InGameUiController{
             for(Unit u: map.getUnits()){
                 if(u.getUnitState() == UnitState.NEUTRAL && u.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
                     unitsToHandle.add(u);
+                }
+            }
+            for(Building b: map.getBuildings()){
+                if(b.hasOwner() && b.isSelectable() && b.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
+                    buildingsToHandle.add(b);
                 }
             }
 
