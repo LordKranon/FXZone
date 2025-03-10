@@ -416,6 +416,18 @@ public class InGameUiController extends AbstractUiController {
         });
         escapeMenu.getChildren().add(quitConfirmButton);
 
+        Button centerMapButton = new Button("Center Map");
+        centerMapButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        centerMapButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        centerMapButton.setTranslateX(UI_SIZE_IN_GAME_MENUS);
+        centerMapButton.setTranslateY(8*UI_SIZE_IN_GAME_MENUS);
+        centerMapButton.setViewOrder(ViewOrder.UI_BUTTON);
+        centerMapButton.setVisible(true);
+        centerMapButton.setOnMouseClicked(mouseEvent -> {
+            initialZoom();
+        });
+        escapeMenu.getChildren().add(centerMapButton);
+
 
         globalMessageTextFlow = new TextFlow();
         globalMessageTextFlow.setVisible(false);
