@@ -132,7 +132,9 @@ public class EditorMenuUiController extends AbstractUiController {
             editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
             editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
             GameSerializable gameSerializable = new GameSerializable(loadedMap, editorPlayerList);
-            gameController.setActiveUiController(new InGameEditorUiController(gameController, gameSerializable));
+            InGameEditorUiController inGameEditorUiController = new InGameEditorUiController(gameController, gameSerializable);
+            gameController.setActiveUiController(inGameEditorUiController);
+            inGameEditorUiController.setNameMapTextFieldText(mapName.getText());
         }
     }
 }

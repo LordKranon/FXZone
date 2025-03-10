@@ -394,4 +394,8 @@ public class InGameEditorUiController extends InGameUiController{
     private void printErr(){
         System.err.println("[EDITOR] Editor menu error");
     }
+
+    public void setNameMapTextFieldText(String mapName){
+        nameMapTextField.setText(mapName);
+    }
 }
