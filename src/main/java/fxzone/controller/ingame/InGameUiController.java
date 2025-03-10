@@ -75,6 +75,7 @@ public class InGameUiController extends AbstractUiController {
     private final Font fontBottomUiBar = new Font(UI_SIZE_IN_GAME_MENUS / 2.);
     private final Font fontBottomUiBarSmall = new Font(UI_SIZE_IN_GAME_MENUS / 4.);
     private TextFlow[][] textFlowsBottomUiBar;
+    private HBox hBoxBottomUiBar;
 
     Pane escapeMenu;
 
@@ -248,6 +249,8 @@ public class InGameUiController extends AbstractUiController {
             }
         });
         if(GAME_SOUND_MUSIC_ENABLED) mediaPlayer.play();
+
+        initialZoom();
     }
 
     @Override
@@ -268,6 +271,7 @@ public class InGameUiController extends AbstractUiController {
         createFXSceneUI();
 
         this.particleHandler = new ParticleHandler(root2D);
+
     }
 
     @Override
@@ -311,13 +315,13 @@ public class InGameUiController extends AbstractUiController {
 
         root2D.getChildren().add(hBox);
         VBox vBox = (VBox) hBox.getChildren().get(0);
-        HBox hBoxInner = (HBox) vBox.getChildren().get(2);
+        hBoxBottomUiBar = (HBox) vBox.getChildren().get(2);
 
 
         textFlowsBottomUiBar = new TextFlow[4][3];
 
         for(int i = 0; i < 4; i++){
-            VBox vBoxInner = (VBox) hBoxInner.lookup("#vBox0"+(i+1));
+            VBox vBoxInner = (VBox) hBoxBottomUiBar.lookup("#vBox0"+(i+1));
 
             for(int j = 0; j < 3; j++){
                 textFlowsBottomUiBar[i][j] = (TextFlow) vBoxInner.lookup("#tf0"+(i+1)+"0"+(j+1));
@@ -1225,6 +1229,15 @@ public class InGameUiController extends AbstractUiController {
                 map.setGraphicalOffset(drawOffsetX, drawOffsetY);
             }
         }
+    }
+    private void initialZoom(){
+        double bottomBarHeight = Math.max(fontBottomUiBar.getSize()*4+24, 220+24);
+        System.out.println(bottomBarHeight);
+        double newTileRenderSize = (subScene2D.getHeight() - bottomBarHeight) / (double) map.getHeight();
+        double drawOffsetX = (subScene2D.getWidth() - newTileRenderSize*map.getWidth())/2., drawOffsetY = 0;
+        map.setTileRenderSize(newTileRenderSize);
+        map.setGraphicalOffset(drawOffsetX, drawOffsetY);
+        adjustUiElementsInTileSpaceOnZoom();
     }
 
     private void adjustUiElementsInTileSpaceOnZoom(){
