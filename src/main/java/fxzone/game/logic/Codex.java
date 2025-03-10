@@ -194,6 +194,15 @@ public class Codex {
             UnitSuperType.LAND_VEHICLE,
             190
         ));
+        put(UnitType.CAR_PICKUP, new UnitProfile(
+            2, "Pick-Up",
+            6, 4, 100, 3, 2, 1, 1,
+            1.5, 1, 1.25,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_ARMORED,
+            UnitSuperType.LAND_VEHICLE,
+            150
+        ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
         put(UnitType.INFANTRY, "DMG 3  DFN 0  SPD 3  VIS 3\nStrong vs Infantry\nWeak vs Vehicles");
@@ -218,6 +227,8 @@ public class Codex {
 
         put(UnitType.INFANTRY_AA, "DMG 5  DFN 0  SPD 3  VIS 3\nCan only attack Aircraft\nStrong vs Aircraft");
         put(UnitType.TANK_AA, "DMG 6  DFN 3  SPD 5  VIS 4\nExtremely Strong vs Aircraft\nReduced damage vs Land Units");
+
+        put(UnitType.CAR_PICKUP, "DMG 3  DFN 2  SPD 6  VIS 4\nTransports Infantry\nStrong vs Infantry\nWeak vs Tanks");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
@@ -255,6 +266,8 @@ public class Codex {
 
         put(UnitType.INFANTRY_AA, "infantry_aa");
         put(UnitType.TANK_AA, "aa_tank");
+
+        put(UnitType.CAR_PICKUP, "car_pickup");
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
@@ -378,9 +391,10 @@ public class Codex {
 
         INFANTRY_AA,
         TANK_AA,
+
+        CAR_PICKUP,
 /*
         INFANTRY_GUERRILLA,
-        CAR_PICKUP,
  */
     }
     public enum UnitSuperType{
@@ -498,7 +512,7 @@ public class Codex {
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_VEHICLE;
         } else if(transporter.getUnitType() == UnitType.SHIP_CARRIER){
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER;
-        } else if(transporter.getUnitType() == UnitType.HELICOPTER_CHINOOK){
+        } else if(transporter.getUnitType() == UnitType.HELICOPTER_CHINOOK || transporter.getUnitType() == UnitType.CAR_PICKUP){
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY;
         } else {
             return false;
@@ -509,6 +523,7 @@ public class Codex {
             case HELICOPTER_CHINOOK:
             case SHIP_LANDER:
             case SHIP_CARRIER:
+            case CAR_PICKUP:
                 return 2;
             default:
                 return 0;

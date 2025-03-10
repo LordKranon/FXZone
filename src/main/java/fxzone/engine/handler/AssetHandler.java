@@ -616,6 +616,7 @@ public class AssetHandler {
             case TANK_AA:
             case SHIP_GUNBOAT:
             case PLANE_PROPELLER:
+            case CAR_PICKUP:
             case CAR_HUMVEE: return getSound("/sounds/zone_mg_fire_very_short.mp3");
             default: return getSound("/sounds/zone_gunshots_3.mp3");
         }

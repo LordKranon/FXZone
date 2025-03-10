@@ -416,6 +416,7 @@ public class InGameUiController extends AbstractUiController {
         });
         escapeMenu.getChildren().add(quitConfirmButton);
 
+        //TODO This button is overwritten in Editor menu. May or may not require a fix.
         Button centerMapButton = new Button("Center Map");
         centerMapButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
         centerMapButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
