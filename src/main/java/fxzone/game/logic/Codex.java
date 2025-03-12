@@ -10,7 +10,8 @@ import java.util.List;
 
 public class Codex {
 
-    public static final int TOTAL_CAMPAIGN_MISSIONS = 4;
+    public static final int TOTAL_CAMPAIGN_COLUMNS = 4;
+    public static final int TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN = 5;
 
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
@@ -242,6 +243,7 @@ public class Codex {
         put(TileType.WATER, "Water");
         put(TileType.BEACH, "Beach");
         put(TileType.FOREST, "Forest");
+        put(TileType.MOUNTAIN, "Mountain");
     }};
 
     public static final HashMap<UnitType, String> UNIT_RESOURCE_NAMES = new HashMap<UnitType, String>(){{

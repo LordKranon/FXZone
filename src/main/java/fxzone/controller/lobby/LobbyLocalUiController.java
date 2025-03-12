@@ -8,6 +8,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Game;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
@@ -80,7 +81,7 @@ public class LobbyLocalUiController extends LobbyUiController{
 
         Config.set("LAST_USED_MAP_LOCAL", mapName);
 
-        GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList);
+        GameSerializable gameSerializable = new GameSerializable(loadedMap, localPlayerList, GameMode.NORMAL);
 
         gameController.setActiveUiController(new InGameLocalUiController(gameController, gameSerializable));
     }

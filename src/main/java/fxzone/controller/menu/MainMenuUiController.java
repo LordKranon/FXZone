@@ -7,6 +7,7 @@ import fxzone.controller.ingame.InGameVsAiUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
@@ -105,7 +106,7 @@ public class MainMenuUiController extends AbstractUiController {
                 return;
             }
 
-            GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList);
+            GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList, GameMode.NORMAL);
 
             gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable));
         }

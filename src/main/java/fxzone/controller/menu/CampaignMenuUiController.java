@@ -10,6 +10,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.MapSerializable;
@@ -22,6 +23,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -51,16 +53,22 @@ public class CampaignMenuUiController extends AbstractUiController {
         GridPane gridPaneOuter = (GridPane) anchorPane.getChildren().get(0);
         GridPane gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
         VBox vBox = (VBox) gridPaneInner.getChildren().get(1);
+        HBox hBox = (HBox) vBox.getChildren().get(0);
 
-        for(int i = 0; i < Codex.TOTAL_CAMPAIGN_MISSIONS; i++){
-            Button button = new Button("MISSION "+i);
-            button.setPrefWidth(400);
-            button.setVisible(true);
-            int finalI = i;
-            button.setOnMouseClicked(mouseEvent -> {
-                missionClicked(finalI);
-            });
-            vBox.getChildren().add(i, button);
+
+        for(int h = 0; h < Codex.TOTAL_CAMPAIGN_COLUMNS; h++) {
+            VBox vBoxInner = (VBox) hBox.getChildren().get(h);
+            for (int i = 0; i < Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN; i++) {
+                int missionNumber = i + h * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN + 1;
+                Button button = new Button("MISSION " + missionNumber);
+                button.setPrefWidth(400);
+                button.setVisible(true);
+
+                button.setOnMouseClicked(mouseEvent -> {
+                    missionClicked(missionNumber);
+                });
+                vBoxInner.getChildren().add(i, button);
+            }
         }
     }
 
@@ -97,7 +105,7 @@ public class CampaignMenuUiController extends AbstractUiController {
             return;
         }
 
-        GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList);
+        GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList, GameMode.CAMPAIGN);
 
         gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable));
     }

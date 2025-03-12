@@ -1,6 +1,7 @@
 package fxzone.game.logic.serializable;
 
 import fxzone.game.logic.Game;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Player;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,13 +15,13 @@ public class GameSerializable implements Serializable {
 
     public MapSerializable map;
 
-//    public GameSerializable(Game game){
-//        serializePlayerList(game.getPlayers());
-//        this.map = new MapSerializable(game.getMap());
-//    }
-    public GameSerializable(MapSerializable mapSerializable, ArrayList<Player> players){
+    public GameMode gameMode;
+
+
+    public GameSerializable(MapSerializable mapSerializable, ArrayList<Player> players, GameMode gameMode){
         serializePlayerList(players);
         this.map = mapSerializable;
+        this.gameMode = gameMode;
     }
 
     private void serializePlayerList(ArrayList<Player> playerList){

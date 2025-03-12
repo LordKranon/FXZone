@@ -8,6 +8,7 @@ import fxzone.controller.menu.JoinMenuUiController.JoinMenuUiControllerFxml;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.utils.FxUtils;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Player;
@@ -115,7 +116,7 @@ public class EditorMenuUiController extends AbstractUiController {
             editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
             editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
             editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
-            gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList)));
+            gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList, GameMode.EDITOR)));
         }
 
         @FXML
@@ -131,7 +132,7 @@ public class EditorMenuUiController extends AbstractUiController {
             editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
             editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
             editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
-            GameSerializable gameSerializable = new GameSerializable(loadedMap, editorPlayerList);
+            GameSerializable gameSerializable = new GameSerializable(loadedMap, editorPlayerList, GameMode.EDITOR);
             InGameEditorUiController inGameEditorUiController = new InGameEditorUiController(gameController, gameSerializable);
             gameController.setActiveUiController(inGameEditorUiController);
             inGameEditorUiController.setNameMapTextFieldText(mapName.getText());

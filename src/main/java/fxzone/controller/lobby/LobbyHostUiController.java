@@ -8,6 +8,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Game;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Unit;
@@ -80,7 +81,7 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         playerList.addAll(server.getPlayers());
 
 
-        GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList);
+        GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList, GameMode.NORMAL);
 
 
         InGameHostUiController inGameHostUiController = new InGameHostUiController(gameController, server, gameSerializable);

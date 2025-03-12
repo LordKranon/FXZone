@@ -56,12 +56,34 @@
             </GridPane>
             <VBox alignment="CENTER" spacing="40.0">
               <children>
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <VBox alignment="CENTER" spacing="10.0">
+                      <children>
+                      </children>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="10.0">
+                      <children>
+                      </children>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="10.0">
+                      <children>
+                      </children>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="10.0">
+                      <children>
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >
                 </Button>
               </children>
             </VBox>
+
+
           </children>
         </GridPane>
 

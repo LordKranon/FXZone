@@ -21,12 +21,20 @@ public class Game {
 
     private final Map map;
 
+    public enum GameMode{
+        NORMAL,
+        CAMPAIGN,
+        EDITOR,
+    }
+    private final GameMode gameMode;
+
     /*
      * DEBUG
      */
     static final boolean verbose = true;
 
-    public Game(List<Player> players, Map map){
+    public Game(List<Player> players, Map map, GameMode gameMode){
+        this.gameMode = gameMode;
         this.players = new ArrayList<>();
         for(Player player : players){
             addPlayer(player);
@@ -35,6 +43,7 @@ public class Game {
     }
 
     public Game(GameSerializable gameSerializable, Group group){
+        this.gameMode = gameSerializable.gameMode;
         this.players = new ArrayList<>();
         this.pendingEliminatedPlayers = new ArrayList<>();
         for(PlayerSerializable playerSerializable : gameSerializable.players){
