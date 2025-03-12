@@ -502,7 +502,7 @@ public class Codex {
         TileSuperType tileSuperType = getTileSuperType(tileType);
         return
             (unitSuperType == UnitSuperType.LAND_INFANTRY && tileSuperType != TileSuperType.TS_WATER) ||
-                (unitSuperType == UnitSuperType.LAND_VEHICLE && (tileSuperType == TileSuperType.TS_LAND || tileSuperType == TileSuperType.TS_BEACH)) ||
+                (unitSuperType == UnitSuperType.LAND_VEHICLE && (tileSuperType == TileSuperType.TS_LAND || tileSuperType == TileSuperType.TS_BEACH) && tileType != TileType.MOUNTAIN) ||
                 (unitSuperType == UnitSuperType.SHIP_SMALL && (tileSuperType == TileSuperType.TS_WATER || tileSuperType == TileSuperType.TS_BEACH || (tile.hasBuildingOnTile() && tile.getBuildingOnTile().getBuildingType()==BuildingType.PORT))) ||
                 (unitSuperType == UnitSuperType.SHIP_LARGE && (tileSuperType == TileSuperType.TS_WATER || (tile.hasBuildingOnTile() && tile.getBuildingOnTile().getBuildingType()==BuildingType.PORT))) ||
                 (unitSuperType == UnitSuperType.AIRCRAFT_HELICOPTER || unitSuperType == UnitSuperType.AIRCRAFT_PLANE);
