@@ -139,23 +139,20 @@ public class AssetHandler {
             }
 
             if(keyTile.keyTileType == TileType.WATER){
-
-
-                //Image img = new Image(AssetHandler.class.getResourceAsStream(pathToWaterImg), 256, 256, true, false);
                 BufferedImage baseWater = getBufferedImage(pathToWaterImg);
 
                 BufferedImage waterWithAddedTerrain = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
                 Graphics gAddedTerrain = waterWithAddedTerrain.createGraphics();
                 gAddedTerrain.drawImage(baseWater, 0, 0, null);
 
+                // Add mountain tip if needed
+                if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
+                    String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
+                    BufferedImage mountain = getBufferedImage(pathToMountainImg);
+                    gAddedTerrain.drawImage(mountain, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                }
 
-                BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-                Graphics gUpscaled = upscaled.createGraphics();
-                java.awt.Image awtImg = waterWithAddedTerrain.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-                gUpscaled.drawImage(awtImg, 0, 0, null);
-                gUpscaled.dispose();
-
-                Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+                Image imageFinished = upscaleAndFinishTerrainImg(waterWithAddedTerrain);
 
                 imagesTiles.put(keyTile, imageFinished);
             } else {
@@ -351,13 +348,8 @@ public class AssetHandler {
 
                     gTerrain.dispose();
 
-                    BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-                    Graphics gUpscaled = upscaled.createGraphics();
-                    java.awt.Image awtImgCorrectCorners = terrained.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-                    gUpscaled.drawImage(awtImgCorrectCorners, 0, 0, null);
-                    gUpscaled.dispose();
 
-                    Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+                    Image imageFinished = upscaleAndFinishTerrainImg(terrained);
 
                     if(verbose) System.out.println("[ASSET-HANDLER] [getImageTile] Loaded terrain variation: "+keyTile.keyTileType+" alternate: "+keyTile.keyTileStance+" "+keyTile);
                     imagesTiles.put(keyTile, imageFinished);
@@ -449,20 +441,32 @@ public class AssetHandler {
                             break;
                     }
 
+                    // Add mountain tip if needed
+                    if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
+                        String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
+                        BufferedImage mountain = getBufferedImage(pathToMountainImg);
+                        gBase.drawImage(mountain, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                    }
+
                     gBase.dispose();
 
-                    BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-                    Graphics gUpscaled = upscaled.createGraphics();
-                    java.awt.Image awtImgCorrectCorners = base.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
-                    gUpscaled.drawImage(awtImgCorrectCorners, 0, 0, null);
-                    gUpscaled.dispose();
+                    Image imageFinished = upscaleAndFinishTerrainImg(base);
 
-                    Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
                     imagesTiles.put(keyTile, imageFinished);
                 }
             }
         }
         return imagesTiles.get(keyTile);
+    }
+    private static Image upscaleAndFinishTerrainImg(BufferedImage bufferedImage){
+        BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+        Graphics gUpscaled = upscaled.createGraphics();
+        java.awt.Image awtImg = bufferedImage.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+        gUpscaled.drawImage(awtImg, 0, 0, null);
+        gUpscaled.dispose();
+
+        Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+        return imageFinished;
     }
     public static Image getImageUnit(KeyUnit keyUnit){
         if(!imagesUnits.containsKey(keyUnit)){
