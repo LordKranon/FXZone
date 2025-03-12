@@ -31,7 +31,7 @@ public class GameObjectTile extends GameObjectInTileSpace{
 
     }
 
-    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileSuperType[] tileTypesOfNeighbors, Biome biome){
+    public void adjustToTileTypesOfNeighbors(TileType thisTileType, TileType[] tileTypesOfNeighbors, Biome biome){
         Image imageAdjusted = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, false, biome));
         Image imageAdjustedAlternate = AssetHandler.getImageTile(new KeyTile(thisTileType, tileTypesOfNeighbors, true, biome));
         this.imageBase = imageAdjusted;

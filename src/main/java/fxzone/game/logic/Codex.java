@@ -426,6 +426,7 @@ public class Codex {
         switch (tileType){
             case PLAINS:
             case FOREST:
+            case MOUNTAIN:
                 return TileSuperType.TS_LAND;
             case BEACH:
                 return TileSuperType.TS_BEACH;

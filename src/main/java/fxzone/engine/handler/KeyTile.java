@@ -1,6 +1,7 @@
 package fxzone.engine.handler;
 
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.game.logic.Codex;
 import fxzone.game.logic.Codex.TileSuperType;
 import fxzone.game.logic.Map.Biome;
 import fxzone.game.logic.Tile.TileType;
@@ -11,7 +12,7 @@ public class KeyTile {
 
     public TileType keyTileType;
 
-    public TileSuperType[] keyTileTypesOfNeighbors;
+    public TileType[] keyTileTypesOfNeighbors;
 
     public boolean keyTileStance;
 
@@ -20,12 +21,12 @@ public class KeyTile {
         this.keyTileStance = keyTileStance;
         this.keyBiome = keyBiome;
 
-        this.keyTileTypesOfNeighbors = new TileSuperType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
+        this.keyTileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int i = 0; i < keyTileTypesOfNeighbors.length; i++){
-            this.keyTileTypesOfNeighbors[i] = TileSuperType.TS_LAND;
+            this.keyTileTypesOfNeighbors[i] = TileType.PLAINS;
         }
     }
-    public KeyTile(TileType keyTileType, TileSuperType[] keyTileTypesOfNeighbors, boolean keyTileStance, Biome keyBiome){
+    public KeyTile(TileType keyTileType, TileType[] keyTileTypesOfNeighbors, boolean keyTileStance, Biome keyBiome){
         this.keyTileType = keyTileType;
         this.keyTileStance = keyTileStance;
         this.keyTileTypesOfNeighbors = keyTileTypesOfNeighbors;
@@ -64,12 +65,12 @@ public class KeyTile {
         StringBuilder s = new StringBuilder("");
 
 
-        s.append("\n "+ ((keyTileTypesOfNeighbors[GeometryUtils.NORTH] == TileSuperType.TS_LAND) ? "P" : "-") +" ");
+        s.append("\n "+ ((Codex.getTileSuperType(keyTileTypesOfNeighbors[GeometryUtils.NORTH]) == TileSuperType.TS_LAND) ? "P" : "-") +" ");
         s.append("\n");
-        s.append((keyTileTypesOfNeighbors[GeometryUtils.WEST] == TileSuperType.TS_LAND) ? "P" : "-");
+        s.append((Codex.getTileSuperType(keyTileTypesOfNeighbors[GeometryUtils.WEST]) == TileSuperType.TS_LAND) ? "P" : "-");
         s.append((keyTileType == TileType.PLAINS) ? "P" : "-");
-        s.append((keyTileTypesOfNeighbors[GeometryUtils.EAST] == TileSuperType.TS_LAND) ? "P" : "-");
-        s.append("\n "+ ((keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileSuperType.TS_LAND) ? "P" : "-") +" ");
+        s.append((Codex.getTileSuperType(keyTileTypesOfNeighbors[GeometryUtils.EAST]) == TileSuperType.TS_LAND) ? "P" : "-");
+        s.append("\n "+ ((Codex.getTileSuperType(keyTileTypesOfNeighbors[GeometryUtils.SOUTH]) == TileSuperType.TS_LAND) ? "P" : "-") +" ");
 
         return s.toString();
     }

@@ -14,7 +14,8 @@ public class Tile extends TileSpaceObject{
         PLAINS,
         WATER,
         BEACH,
-        FOREST
+        FOREST,
+        MOUNTAIN,
     }
     private final TileType tileType;
 
@@ -128,7 +129,7 @@ public class Tile extends TileSpaceObject{
     /**
      * Change graphical image displayed of this tile depending on neighboring tile types.
      */
-    public void updateTileTypesOfNeighbors(TileSuperType[] tileTypesOfNeighbors, Biome biome){
+    public void updateTileTypesOfNeighbors(TileType[] tileTypesOfNeighbors, Biome biome){
         gameObjectTile.adjustToTileTypesOfNeighbors(this.tileType, tileTypesOfNeighbors, biome);
     }
 

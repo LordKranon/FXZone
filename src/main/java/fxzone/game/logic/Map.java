@@ -147,17 +147,17 @@ public class Map {
     }
 
     private void setNeighborTileTypeInfoForTile(int x, int y, TileSerializable[][] tilesSerializable) throws ArrayIndexOutOfBoundsException{
-        TileSuperType[] tileTypesOfNeighbors = new TileSuperType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
+        TileType[] tileTypesOfNeighbors = new TileType[GeometryUtils.TOTAL_AMOUNT_NEIGHBOR_DIRECTIONS];
         for(int k = 0; k < tileTypesOfNeighbors.length; k++) {
             try {
                 Point neighborsPosition = GeometryUtils.getNeighborsPosition(x, y, k);
                 if(tilesSerializable != null){
-                    tileTypesOfNeighbors[k] = Codex.getTileSuperType(tilesSerializable[neighborsPosition.x][neighborsPosition.y].tileType);
+                    tileTypesOfNeighbors[k] = tilesSerializable[neighborsPosition.x][neighborsPosition.y].tileType;
                 } else {
-                    tileTypesOfNeighbors[k] = this.tiles[neighborsPosition.x][neighborsPosition.y].getTileSuperType();
+                    tileTypesOfNeighbors[k] = this.tiles[neighborsPosition.x][neighborsPosition.y].getTileType();
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                tileTypesOfNeighbors[k] = TileSuperType.TS_LAND;
+                tileTypesOfNeighbors[k] = TileType.PLAINS;
             }
         }
         this.tiles[x][y].updateTileTypesOfNeighbors(tileTypesOfNeighbors, biome);

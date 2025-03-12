@@ -43,6 +43,7 @@ public class InGameEditorUiController extends InGameUiController{
         TileType.BEACH,
         TileType.WATER,
         TileType.FOREST,
+        TileType.MOUNTAIN,
     };
 
     private int editorBuildingTypePlacedCurrentIndex;
