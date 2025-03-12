@@ -147,9 +147,7 @@ public class AssetHandler {
 
                 // Add mountain tip if needed
                 if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
-                    String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
-                    BufferedImage mountain = getBufferedImage(pathToMountainImg);
-                    gAddedTerrain.drawImage(mountain, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                    addMountainTip(keyTile, gAddedTerrain);
                 }
 
                 Image imageFinished = upscaleAndFinishTerrainImg(waterWithAddedTerrain);
@@ -335,7 +333,7 @@ public class AssetHandler {
                         gTerrain.drawImage(forest, 0, 0, 24, 24, 0, 0, 24, 24, null);
                     }
                     if(keyTile.keyTileType == TileType.MOUNTAIN || keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
-                        String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
+                        String pathToMountainImg = getPathToMountainImg(keyTile);
                         BufferedImage mountain = getBufferedImage(pathToMountainImg);
 
                         if(keyTile.keyTileType == TileType.MOUNTAIN){
@@ -443,9 +441,7 @@ public class AssetHandler {
 
                     // Add mountain tip if needed
                     if(keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
-                        String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
-                        BufferedImage mountain = getBufferedImage(pathToMountainImg);
-                        gBase.drawImage(mountain, 0, 0, 24, 24, 0, 0, 24, 24, null);
+                        addMountainTip(keyTile, gBase);
                     }
 
                     gBase.dispose();
@@ -467,6 +463,23 @@ public class AssetHandler {
 
         Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
         return imageFinished;
+    }
+    private static String getPathToMountainImg(KeyTile keyTile){
+        String pathToMountainImg;
+        switch (keyTile.keyBiome){
+            case RED: pathToMountainImg = "/images/terrain/tiles/tile_mountain_red.png"; break;
+            case ASH: pathToMountainImg = "/images/terrain/tiles/tile_mountain_ash.png"; break;
+            case SAND: pathToMountainImg = "/images/terrain/tiles/tile_mountain_lighter.png"; break;
+            case GRASS:
+            default:
+                pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png"; break;
+        }
+        return pathToMountainImg;
+    }
+    private static void addMountainTip(KeyTile keyTile, Graphics g){
+        String pathToMountainImg = getPathToMountainImg(keyTile);
+        BufferedImage mountain = getBufferedImage(pathToMountainImg);
+        g.drawImage(mountain, 0, 0, 24, 24, 0, 0, 24, 24, null);
     }
     public static Image getImageUnit(KeyUnit keyUnit){
         if(!imagesUnits.containsKey(keyUnit)){
