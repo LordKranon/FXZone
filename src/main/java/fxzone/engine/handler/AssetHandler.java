@@ -139,9 +139,25 @@ public class AssetHandler {
             }
 
             if(keyTile.keyTileType == TileType.WATER){
-                // No further handling needed for water
-                Image img = new Image(AssetHandler.class.getResourceAsStream(pathToWaterImg), 256, 256, true, false);
-                imagesTiles.put(keyTile, img);
+
+
+                //Image img = new Image(AssetHandler.class.getResourceAsStream(pathToWaterImg), 256, 256, true, false);
+                BufferedImage baseWater = getBufferedImage(pathToWaterImg);
+
+                BufferedImage waterWithAddedTerrain = new BufferedImage(24, 24, BUFFERED_IMAGE_TYPE);
+                Graphics gAddedTerrain = waterWithAddedTerrain.createGraphics();
+                gAddedTerrain.drawImage(baseWater, 0, 0, null);
+
+
+                BufferedImage upscaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+                Graphics gUpscaled = upscaled.createGraphics();
+                java.awt.Image awtImg = waterWithAddedTerrain.getScaledInstance(256, 256, java.awt.Image.SCALE_DEFAULT);
+                gUpscaled.drawImage(awtImg, 0, 0, null);
+                gUpscaled.dispose();
+
+                Image imageFinished = SwingFXUtils.toFXImage(upscaled, null);
+
+                imagesTiles.put(keyTile, imageFinished);
             } else {
 
                 String pathToTileSetBeach;
@@ -320,7 +336,8 @@ public class AssetHandler {
 
                         BufferedImage forest = getBufferedImage(pathToForestImg);
                         gTerrain.drawImage(forest, 0, 0, 24, 24, 0, 0, 24, 24, null);
-                    } else if(keyTile.keyTileType == TileType.MOUNTAIN || keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
+                    }
+                    if(keyTile.keyTileType == TileType.MOUNTAIN || keyTile.keyTileTypesOfNeighbors[GeometryUtils.SOUTH] == TileType.MOUNTAIN){
                         String pathToMountainImg = "/images/terrain/tiles/tile_mountain_0.png";
                         BufferedImage mountain = getBufferedImage(pathToMountainImg);
 
