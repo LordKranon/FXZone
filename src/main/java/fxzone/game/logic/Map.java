@@ -622,7 +622,7 @@ public class Map {
                 }
                 if (building.getBuildingType() == BuildingType.CITY) {
                     //Cities generate money
-                    playerWithStartedTurn.setStatResourceCash(playerWithStartedTurn.getStatResourceCash() + Codex.CITY_CASH_GENERATION);
+                    playerWithStartedTurn.setStatResourceCash(playerWithStartedTurn.getStatResourceCash() + game.getCustomGameRules().getCityCashGeneration());
                 }
             }
         }

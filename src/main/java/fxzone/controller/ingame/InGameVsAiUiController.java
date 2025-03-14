@@ -156,8 +156,10 @@ public class InGameVsAiUiController extends InGameUiController{
                     bestPointToMoveTo = movablePoints.get(0);
                     for(Point p : movablePoints){
                         if(
-                            GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) <= GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding) &&
-                                Math.max(Math.abs(p.x-closestEnemyBuilding.x), Math.abs(p.y-closestEnemyBuilding.y)) < Math.max(Math.abs(bestPointToMoveTo.x-closestEnemyBuilding.x), Math.abs(bestPointToMoveTo.y-closestEnemyBuilding.y))
+                            (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) <= GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding) &&
+                                Math.max(Math.abs(p.x-closestEnemyBuilding.x), Math.abs(p.y-closestEnemyBuilding.y)) < Math.max(Math.abs(bestPointToMoveTo.x-closestEnemyBuilding.x), Math.abs(bestPointToMoveTo.y-closestEnemyBuilding.y)))
+                            ||
+                                (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding))
                         ){
                             bestPointToMoveTo = p;
                         }

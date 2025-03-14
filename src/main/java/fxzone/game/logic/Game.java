@@ -1,7 +1,10 @@
 package fxzone.game.logic;
 
+import fxzone.game.logic.Codex.BuildingType;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.PlayerSerializable;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,33 @@ public class Game {
         EDITOR,
     }
     private final GameMode gameMode;
+    public static class CustomGameRules implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private int cityCashGeneration;
+        private List<UnitType> buildableUnitTypesFactory;
+        private List<UnitType> buildableUnitTypesPort;
+        private List<UnitType> buildableUnitTypesAirport;
+        public CustomGameRules(int cityCashGeneration, List<UnitType> buildableUnitTypesFactory, List<UnitType> buildableUnitTypesPort, List<UnitType> buildableUnitTypesAirport){
+            this.cityCashGeneration = cityCashGeneration;
+            this.buildableUnitTypesFactory = buildableUnitTypesFactory;
+            this.buildableUnitTypesPort = buildableUnitTypesPort;
+            this.buildableUnitTypesAirport = buildableUnitTypesAirport;
+
+        }
+        public int getCityCashGeneration(){
+            return cityCashGeneration;
+        }
+        public List<UnitType> getBuildableUnitTypesFactory(){
+            return buildableUnitTypesFactory;
+        }
+        public List<UnitType> getBuildableUnitTypesPort(){
+            return buildableUnitTypesPort;
+        }
+        public List<UnitType> getBuildableUnitTypesAirport(){
+            return buildableUnitTypesAirport;
+        }
+    }
+    private CustomGameRules customGameRules;
 
     /*
      * DEBUG
@@ -35,6 +65,7 @@ public class Game {
 
     public Game(List<Player> players, Map map, GameMode gameMode){
         this.gameMode = gameMode;
+        initCustomGameRules();
         this.players = new ArrayList<>();
         for(Player player : players){
             addPlayer(player);
@@ -44,12 +75,29 @@ public class Game {
 
     public Game(GameSerializable gameSerializable, Group group){
         this.gameMode = gameSerializable.gameMode;
+        if(gameSerializable.customGameRules!=null){
+            this.customGameRules = gameSerializable.customGameRules;
+        } else {
+            initCustomGameRules();
+        }
         this.players = new ArrayList<>();
         this.pendingEliminatedPlayers = new ArrayList<>();
         for(PlayerSerializable playerSerializable : gameSerializable.players){
             addPlayer(new Player(playerSerializable));
         }
         this.map = new Map(gameSerializable.map, group, this);
+    }
+
+    private void initCustomGameRules(){
+        this.customGameRules = new CustomGameRules(Codex.CITY_CASH_GENERATION, Codex.BUILDABLE_UNIT_TYPES_FACTORY, Codex.BUILDABLE_UNIT_TYPES_PORT, Codex.BUILDABLE_UNIT_TYPES_AIRPORT);
+    }
+    /*
+    public void setCustomGameRules(CustomGameRules customGameRules){
+        this.customGameRules = customGameRules;
+    }
+     */
+    public CustomGameRules getCustomGameRules(){
+        return customGameRules;
     }
 
     public void addPlayer(Player player){

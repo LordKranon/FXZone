@@ -68,15 +68,15 @@ public class Building extends TileSpaceObject{
 
         switch (this.buildingType){
             case FACTORY:
-                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_FACTORY;
+                this.buildableUnitTypes = game.getCustomGameRules().getBuildableUnitTypesFactory();
                 this.selectable = true;
                 break;
             case PORT:
-                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_PORT;
+                this.buildableUnitTypes = game.getCustomGameRules().getBuildableUnitTypesPort();
                 this.selectable = true;
                 break;
             case AIRPORT:
-                this.buildableUnitTypes = Codex.BUILDABLE_UNIT_TYPES_AIRPORT;
+                this.buildableUnitTypes = game.getCustomGameRules().getBuildableUnitTypesAirport();
                 this.selectable = true;
                 break;
         }

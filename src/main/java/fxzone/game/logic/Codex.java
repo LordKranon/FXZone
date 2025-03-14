@@ -1,6 +1,8 @@
 package fxzone.game.logic;
 
 import fxzone.engine.handler.AssetHandler;
+import fxzone.game.logic.Game.CustomGameRules;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.Unit.UnitState;
 import java.util.ArrayList;
@@ -310,6 +312,8 @@ public class Codex {
         UnitType.PLANE_JET
     );
 
+
+
     public static class UnitProfile{
         public String NAME;
         public int ID, SPEED, VISION, HEALTH, DAMAGE, DEFENSE, MINRANGE, MAXRANGE;
@@ -564,6 +568,24 @@ public class Codex {
             default:
                 System.err.println("[CODEX] [getBuildableUnitTypes] ERROR Could not retrieve buildable unit types");
                 return null;
+        }
+    }
+
+    public static CustomGameRules getCustomGameRulesOfCampaign(int mission) {
+        if(mission >= 0 && mission <= 5){
+            return new CustomGameRules(
+                10,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.PLANE_PROPELLER)
+            );
+        } else {
+            return new CustomGameRules(
+                CITY_CASH_GENERATION,
+                BUILDABLE_UNIT_TYPES_FACTORY,
+                BUILDABLE_UNIT_TYPES_PORT,
+                BUILDABLE_UNIT_TYPES_AIRPORT
+            );
         }
     }
 }
