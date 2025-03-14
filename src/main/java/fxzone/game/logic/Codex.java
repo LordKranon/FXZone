@@ -570,6 +570,20 @@ public class Codex {
                 return null;
         }
     }
+    public static List<UnitType> getCustomBuildableUnitTypesOfCampaign(BuildingType buildingType, CustomGameRules customGameRules){
+        switch (buildingType){
+            case FACTORY:
+                return customGameRules.getBuildableUnitTypesFactory();
+            case PORT:
+                return customGameRules.getBuildableUnitTypesPort();
+            case AIRPORT:
+                return customGameRules.getBuildableUnitTypesAirport();
+            case CITY:
+            default:
+                System.err.println("[CODEX] [getCustomBuildableUnitTypesOfCampaign] ERROR Could not retrieve buildable unit types");
+                return null;
+        }
+    }
 
     public static CustomGameRules getCustomGameRulesOfCampaign(int mission) {
         if(mission >= 0 && mission <= 3){

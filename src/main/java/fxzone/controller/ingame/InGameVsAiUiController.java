@@ -16,6 +16,8 @@ public class InGameVsAiUiController extends InGameUiController{
 
     final static boolean verbose = true;
 
+    final int campaignMission;
+
     protected boolean[][] currentAiPlayerFowVision;
 
     /*
@@ -33,8 +35,9 @@ public class InGameVsAiUiController extends InGameUiController{
     //temporary test
     private boolean aiCommandGivenThisTurn = false;
 
-    public InGameVsAiUiController(AbstractGameController gameController, GameSerializable initialGame) {
+    public InGameVsAiUiController(AbstractGameController gameController, GameSerializable initialGame, int campaignMission) {
         super(gameController, initialGame, 1);
+        this.campaignMission = campaignMission;
     }
 
     @Override
@@ -189,7 +192,7 @@ public class InGameVsAiUiController extends InGameUiController{
             return;
         }
         // Select random unit the building can build and build it if AI player has enough cash
-        List<UnitType> buildableUnitTypes = Codex.getBuildableUnitTypes(building.getBuildingType());
+        List<UnitType> buildableUnitTypes = Codex.getCustomBuildableUnitTypesOfCampaign(building.getBuildingType(), game.getCustomGameRules());
         if(buildableUnitTypes == null || buildableUnitTypes.isEmpty()){
             System.err.println("[IN-GAME-VS-AI-CONTROLLER] [handleAiTurn] ERROR on retrieving buildable unit types of building.");
             return;

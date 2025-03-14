@@ -108,7 +108,7 @@ public class MainMenuUiController extends AbstractUiController {
 
             GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList, GameMode.NORMAL);
 
-            gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable));
+            gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable, 0));
         }
 
         @FXML

@@ -107,7 +107,7 @@ public class CampaignMenuUiController extends AbstractUiController {
 
         GameSerializable gameSerializable = new GameSerializable(loadedMap, playerList, GameMode.CAMPAIGN, Codex.getCustomGameRulesOfCampaign(mission));
 
-        gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable));
+        gameController.setActiveUiController(new InGameVsAiUiController(gameController, gameSerializable, mission));
     }
 
     @Override
