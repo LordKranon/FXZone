@@ -572,10 +572,17 @@ public class Codex {
     }
 
     public static CustomGameRules getCustomGameRulesOfCampaign(int mission) {
-        if(mission >= 0 && mission <= 5){
+        if(mission >= 0 && mission <= 3){
             return new CustomGameRules(
-                10,
+                50,
                 Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.PLANE_PROPELLER)
+            );
+        } else if(mission >= 4 && mission <= 20){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY),
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
                 Arrays.asList(UnitType.PLANE_PROPELLER)
             );
