@@ -1,11 +1,8 @@
 package fxzone.game.logic;
 
-import fxzone.engine.handler.AssetHandler;
 import fxzone.game.logic.Game.CustomGameRules;
-import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.Unit.UnitState;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -593,12 +590,33 @@ public class Codex {
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
                 Arrays.asList(UnitType.PLANE_PROPELLER)
             );
-        } else if(mission >= 4 && mission <= 20){
+        } else if(mission >= 4 && mission <= 10){
             return new CustomGameRules(
                 50,
                 Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY),
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
                 Arrays.asList(UnitType.PLANE_PROPELLER)
+            );
+        } else if(mission >= 11 && mission <= 15){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_AA),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
+            );
+        } else if(mission >= 16 && mission <= 19){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_AA),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.PLANE_PROPELLER)
+            );
+        } else if(mission == 20){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_AA, UnitType.TANK_BATTLE, UnitType.ARTILLERY_ROCKET),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.HELICOPTER_APACHE, UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
             );
         } else {
             return new CustomGameRules(
