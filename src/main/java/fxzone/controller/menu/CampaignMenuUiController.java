@@ -64,6 +64,12 @@ public class CampaignMenuUiController extends AbstractUiController {
                 button.setPrefWidth(400);
                 button.setVisible(true);
 
+                if(missionNumber > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
+                    button.setStyle("-fx-text-fill: #505050;");
+                } else if(missionNumber <= Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN")){
+                    button.setStyle("-fx-text-fill: #386538");
+                }
+
                 button.setOnMouseClicked(mouseEvent -> {
                     missionClicked(missionNumber);
                 });

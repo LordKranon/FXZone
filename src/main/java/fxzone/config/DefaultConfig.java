@@ -45,5 +45,7 @@ public class DefaultConfig {
         {"LAST_USED_PLAYER_COLOR_LOCAL_4", "#ffff00"},
 
         {"PARTICLE_SPEED", "4"},
+
+        {"GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN", "0"},
     };
 }

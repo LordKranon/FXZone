@@ -1,5 +1,6 @@
 package fxzone.controller.ingame;
 
+import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.utils.GeometryUtils;
 import fxzone.game.logic.Building;
@@ -256,6 +257,15 @@ public class InGameVsAiUiController extends InGameUiController{
             }
 
             turnState = TurnState.AI_TURN;
+        }
+    }
+
+    @Override
+    protected void turnStateToGameOver(boolean victory, int playerDisplayed){
+        super.turnStateToGameOver(victory, playerDisplayed);
+        if(victory && Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") < campaignMission){
+            Config.set("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN", campaignMission+"");
+            Config.saveConfig();
         }
     }
 }
