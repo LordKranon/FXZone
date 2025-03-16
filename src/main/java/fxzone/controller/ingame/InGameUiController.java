@@ -1750,6 +1750,10 @@ public class InGameUiController extends AbstractUiController {
         }
         game.goNextTurn();
         beginTurn();
+
+        if(!game.itsMyTurn(thisPlayer)){
+            endTurnButton.setVisible(false);
+        }
     }
     protected void beginTurn(){
         if(!(turnState == TurnState.NO_TURN || turnState == TurnState.BEGINNING_TURN || turnState == TurnState.GAME_STARTING || turnState == TurnState.GAME_OVER)){
@@ -1763,6 +1767,10 @@ public class InGameUiController extends AbstractUiController {
         thisPlayerFowVision = map.getVisionOfPlayer(thisPlayer.getId());
         map.setFogOfWarToVision(thisPlayerFowVision);
         turnStateToNeutral();
+
+        if(game.itsMyTurn(thisPlayer)){
+            endTurnButton.setVisible(true);
+        }
     }
 
     /**
