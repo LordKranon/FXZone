@@ -64,12 +64,12 @@ public class InGameVsAiUiController extends InGameUiController{
 
             // Find actionable unit
             if(!unitsToHandle.isEmpty()){
-                Unit u = unitsToHandle.get(0);
+                Unit u = unitsToHandle.get((int)(Math.random()*unitsToHandle.size()));
                 handleAiCommandToUnit(u);
                 return;
             }
             if(!buildingsToHandle.isEmpty()){
-                Building b = buildingsToHandle.get(0);
+                Building b = buildingsToHandle.get((int)(Math.random()*buildingsToHandle.size()));
                 handleAiUsageOfBuilding(b);
                 return;
             }
