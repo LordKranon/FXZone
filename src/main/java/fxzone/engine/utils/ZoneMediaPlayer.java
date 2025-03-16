@@ -1,5 +1,6 @@
 package fxzone.engine.utils;
 
+import fxzone.engine.handler.AssetHandler;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
@@ -11,6 +12,12 @@ public class ZoneMediaPlayer {
     private MediaPlayer mediaPlayer;
 
     public ZoneMediaPlayer(Media media) {
+        init(media);
+    }
+    public ZoneMediaPlayer(String path){
+        init(AssetHandler.getSound(path));
+    }
+    private void init(Media media){
         try{
             this.mediaPlayer = new MediaPlayer(media);
         }

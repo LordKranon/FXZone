@@ -1805,8 +1805,12 @@ public class InGameUiController extends AbstractUiController {
         globalMessageTextFlow.setVisible(true);
         if(victory){
             globalMessageText.setText("VICTORY");
+            MediaPlayer mediaPlayerVictory = new MediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_victory.mp3"));
+            mediaPlayerVictory.play();
         } else {
             globalMessageText.setText("DEFEAT");
+            MediaPlayer mediaPlayerDefeat = new MediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_defeat.mp3"));
+            mediaPlayerDefeat.play();
         }
         if(playerDisplayed == 0){
             globalMessageName.setVisible(false);
