@@ -105,8 +105,8 @@ public class CampaignMenuUiController extends AbstractUiController {
 
     private void missionClicked(int mission){
         ArrayList<Player> playerList = new ArrayList<>();
-        playerList.add(new Player("Alpha", Color.RED, 1));
-        playerList.add(new Player("Bravo", Color.BLUE, 2));
+        playerList.add(new Player("You", Color.RED, 1));
+        playerList.add(Codex.getEnemyPlayerOfCampaignMission(mission));
 
         MapSerializable loadedMap = Save.loadMap("campaign_"+mission);
         if(loadedMap == null){

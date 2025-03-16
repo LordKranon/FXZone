@@ -6,6 +6,7 @@ import fxzone.game.logic.Unit.UnitState;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import javafx.scene.paint.Color;
 
 public class Codex {
 
@@ -625,6 +626,19 @@ public class Codex {
                 BUILDABLE_UNIT_TYPES_PORT,
                 BUILDABLE_UNIT_TYPES_AIRPORT
             );
+        }
+    }
+    public static Player getEnemyPlayerOfCampaignMission(int mission){
+        if(mission >= 0 && mission <= 5){
+            return new Player("Enemy", Color.web("#a08000"), 2);
+        } else if(mission >= 6 && mission <= 10){
+            return new Player("Enemy", Color.web("#0080a0"), 2);
+        } else if(mission >= 11 && mission <= 15){
+            return new Player("Enemy", Color.web("#40a040"), 2);
+        } else if(mission == 20){
+            return new Player("Stoll", Color.web("#0000ff"), 2);
+        } else {
+            return new Player("Enemy", Color.web("#000000"), 2);
         }
     }
 }
