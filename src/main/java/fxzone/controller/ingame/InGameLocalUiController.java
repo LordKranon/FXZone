@@ -13,7 +13,7 @@ public class InGameLocalUiController extends InGameUiController{
 
     public InGameLocalUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
-
+        endTurnButton.setVisible(true);
     }
 
     @Override

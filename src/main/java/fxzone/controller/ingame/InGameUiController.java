@@ -388,7 +388,7 @@ public class InGameUiController extends AbstractUiController {
         endTurnButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
         endTurnButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
         endTurnButton.setViewOrder(ViewOrder.UI_BUTTON);
-        endTurnButton.setVisible(true);
+        endTurnButton.setVisible(false);
         endTurnButton.setOnMouseClicked(mouseEvent -> {
             endTurnButtonClicked();
         });
