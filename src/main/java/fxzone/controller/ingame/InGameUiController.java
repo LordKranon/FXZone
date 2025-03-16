@@ -1116,6 +1116,8 @@ public class InGameUiController extends AbstractUiController {
             Text textUnitHealth = new Text(Codex.getUnitHealthDigit(unit) + " HP");
             textUnitHealth.setFont(fontBottomUiBar);
             textFlowsBottomUiBar[1][1].getChildren().add(textUnitHealth);
+            textFlowsBottomUiBar[1][1].setStyle("-fx-background-color: #202020;");
+            textFlowsBottomUiBar[1][1].setTextAlignment(TextAlignment.CENTER);
             textUnitHealth.setStyle("-fx-fill: white");
 
             boolean buildingCapTextVisible = false;
@@ -1194,11 +1196,26 @@ public class InGameUiController extends AbstractUiController {
             textBuildingName.setFont(fontBottomUiBar);
             textFlowsBottomUiBar[1][0].getChildren().add(textBuildingName);
 
+            Text textBuildingOwnerInfo = new Text("Unclaimed");
+            textBuildingOwnerInfo.setFont(fontBottomUiBarSmall);
+            textFlowsBottomUiBar[1][1].getChildren().add(textBuildingOwnerInfo);
+            textFlowsBottomUiBar[1][1].setStyle("");
+            textFlowsBottomUiBar[1][1].setTextAlignment(TextAlignment.LEFT);
 
             if(game.playerExists(building.getOwnerId())){
                 textBuildingName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
+
+                textBuildingOwnerInfo.setText("Controlled by ");
+                textBuildingOwnerInfo.setStyle("-fx-fill: #a0a0a0");
+
+                Text textBuildingOwnerName = new Text(game.getPlayer(building.getOwnerId()).getName());
+                textBuildingOwnerName.setFont(fontBottomUiBarSmall);
+                textBuildingOwnerName.setStyle("-fx-fill: "+FxUtils.toRGBCode(game.getPlayer(building.getOwnerId()).getTextColor()));
+                textFlowsBottomUiBar[1][1].getChildren().add(textBuildingOwnerName);
             } else {
                 textBuildingName.setStyle("-fx-fill: white");
+
+                textBuildingOwnerInfo.setStyle("-fx-fill: #a0a0a0");
             }
 
         }
