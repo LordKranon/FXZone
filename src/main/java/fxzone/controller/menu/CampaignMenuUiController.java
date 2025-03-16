@@ -68,6 +68,9 @@ public class CampaignMenuUiController extends AbstractUiController {
                     button.setStyle("-fx-text-fill: #505050;");
                 } else if(missionNumber <= Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN")){
                     button.setStyle("-fx-text-fill: #386538");
+                } else if(missionNumber == Codex.TOTAL_CAMPAIGN_COLUMNS * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN){
+                    button.setStyle("-fx-text-fill: #ff4040");
+                    button.setText("FINAL MISSION");
                 }
 
                 button.setOnMouseClicked(mouseEvent -> {
