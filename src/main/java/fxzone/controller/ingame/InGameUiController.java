@@ -1893,7 +1893,7 @@ public class InGameUiController extends AbstractUiController {
         }
     }
     private void showRangeKeyChanged(boolean pressed){
-        if(pressed && turnState == TurnState.NEUTRAL && map.getTiles()[tileHoveredX][tileHoveredY].hasUnitOnTile()){
+        if(pressed && (turnState == TurnState.NEUTRAL || turnState == TurnState.AI_TURN) && map.getTiles()[tileHoveredX][tileHoveredY].hasUnitOnTile() && thisPlayerFowVision[tileHoveredX][tileHoveredY]){
             Unit rangeCheckedUnit = map.getTiles()[tileHoveredX][tileHoveredY].getUnitOnTile();
 
             boolean[][] rangeCheckGridMovableSquares = new boolean[map.getWidth()][map.getHeight()];
