@@ -46,6 +46,6 @@ public class DefaultConfig {
 
         {"PARTICLE_SPEED", "4"},
 
-        {"GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN", "0"},
+        {"GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN", "-1"},
     };
 }

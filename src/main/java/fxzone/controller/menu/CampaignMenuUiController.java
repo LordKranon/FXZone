@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -59,30 +60,35 @@ public class CampaignMenuUiController extends AbstractUiController {
         double uiSizeInGameMenus = Config.getDouble("UI_SIZE_IN_GAME_MENUS");
         double fontSize = ((uiSizeInGameMenus) / 2.5);
 
-
+        putButton(vBox, 0, 4*uiSizeInGameMenus, fontSize, 0);
         for(int h = 0; h < Codex.TOTAL_CAMPAIGN_COLUMNS; h++) {
             VBox vBoxInner = (VBox) hBox.getChildren().get(h);
             for (int i = 0; i < Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN; i++) {
                 int missionNumber = i + h * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN + 1;
-                Button button = new Button("MISSION " + missionNumber);
-                button.setPrefWidth(4*uiSizeInGameMenus);
-                button.setVisible(true);
-
-                if(missionNumber > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
-                    button.setStyle("-fx-text-fill: #505050; -fx-font-size:"+fontSize);
-                } else if(missionNumber <= Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN")){
-                    button.setStyle("-fx-text-fill: #386538; -fx-font-size:"+fontSize);
-                } else if(missionNumber == Codex.TOTAL_CAMPAIGN_COLUMNS * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN){
-                    button.setStyle("-fx-text-fill: #ff4040; -fx-font-size:"+fontSize);
-                    button.setText("FINAL MISSION");
-                }
-
-                button.setOnMouseClicked(mouseEvent -> {
-                    missionClicked(missionNumber);
-                });
-                vBoxInner.getChildren().add(i, button);
+                putButton(vBoxInner, i,4*uiSizeInGameMenus, fontSize, missionNumber);
             }
         }
+    }
+    private void putButton(Pane container, int position, double prefWidth, double fontSize, int missionNumber){
+        Button button = new Button("MISSION " + missionNumber);
+        button.setPrefWidth(prefWidth);
+        button.setVisible(true);
+
+        if(missionNumber > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
+            button.setStyle("-fx-text-fill: #505050; -fx-font-size:"+fontSize);
+        } else if(missionNumber <= Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN")){
+            button.setStyle("-fx-text-fill: #386538; -fx-font-size:"+fontSize);
+        } else if(missionNumber == Codex.TOTAL_CAMPAIGN_COLUMNS * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN){
+            button.setStyle("-fx-text-fill: #ff4040; -fx-font-size:"+fontSize);
+            button.setText("FINAL MISSION");
+        } else {
+            button.setStyle("-fx-font-size:"+fontSize);
+        }
+
+        button.setOnMouseClicked(mouseEvent -> {
+            missionClicked(missionNumber);
+        });
+        container.getChildren().add(position, button);
     }
 
     class CampaignMenuUiControllerFxml{
