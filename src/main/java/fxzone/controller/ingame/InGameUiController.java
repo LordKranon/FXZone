@@ -606,10 +606,10 @@ public class InGameUiController extends AbstractUiController {
             autoFindNewSelectedUnitPathQueue(hoveredPoint);
         } else if (moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]){
             // Attackable square hovered
-            handleSelectedUnitPathQueueNewPointToAttack(hoveredPoint);
+            handleSelectedUnitPathQueueNewPointToAttack(hoveredPoint, thisPlayerFowVision);
         }
     }
-    void handleSelectedUnitPathQueueNewPointToAttack(Point hoveredPoint){
+    void handleSelectedUnitPathQueueNewPointToAttack(Point hoveredPoint, boolean[][] vision){
         // Attackable square hovered
         // Do nothing if path already allows the attack, else find a path that allows the attack
         // Or, in case of RANGED units, remove path
@@ -619,7 +619,7 @@ public class InGameUiController extends AbstractUiController {
         } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
             if(
                 (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                    map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, thisPlayerFowVision, false)) ||
+                    map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, vision, false)) ||
                     (selectedUnitQueuedPath.isEmpty() &&
                         GeometryUtils.getPointToPointDistance(new Point(selectedUnit.getX(), selectedUnit.getY()), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE)
             ){
@@ -647,7 +647,7 @@ public class InGameUiController extends AbstractUiController {
                         if(
                             moveCommandGridMovableSquares[i][j] &&
                                 GeometryUtils.getPointToPointDistance(new Point(i, j), hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
-                                map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, thisPlayerFowVision, false)
+                                map.checkTileForMoveToByUnitPerceived(i, j, selectedUnit, vision, false)
                         ){
                             movableTilesInRange.add(new Point(i, j));
                         }

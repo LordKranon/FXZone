@@ -112,7 +112,7 @@ public class InGameVsAiUiController extends InGameUiController{
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move&attack command.");
 
             Point pointToAttack = attackablePoints.get((int)(Math.random()*attackablePoints.size()));
-            handleSelectedUnitPathQueueNewPointToAttack(pointToAttack);
+            handleSelectedUnitPathQueueNewPointToAttack(pointToAttack, currentAiPlayerFowVision);
 
             boolean wasStoppedOnFow = verifyPathOnMoveCommand(selectedUnitQueuedPath);
             commandUnitToMove(selectedUnit, selectedUnitQueuedPath, wasStoppedOnFow?null:pointToAttack, false, false);
