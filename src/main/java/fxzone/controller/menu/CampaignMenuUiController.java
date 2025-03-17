@@ -114,6 +114,10 @@ public class CampaignMenuUiController extends AbstractUiController {
     }
 
     private void missionClicked(int mission){
+        if(mission > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
+            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Mission not unlocked yet");
+            return;
+        }
         ArrayList<Player> playerList = new ArrayList<>();
         playerList.add(new Player("You", Color.RED, 1));
         playerList.add(Codex.getEnemyPlayerOfCampaignMission(mission));
