@@ -2,6 +2,7 @@ package fxzone.controller.ingame;
 
 import fxzone.config.Config;
 import fxzone.controller.menu.MainMenuUiController;
+import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
@@ -59,7 +60,7 @@ public class InGameUiController extends AbstractUiController {
     /*
     ENGINE ELEMENTS
      */
-    private Group root2D;
+    Group root2D;
 
     final AbstractGameController gameController;
 
@@ -71,6 +72,8 @@ public class InGameUiController extends AbstractUiController {
      */
     private Button escapeMenuButton;
     protected Button endTurnButton;
+
+    Button returnToMenuButton;
 
     private final Font fontBottomUiBar = new Font(UI_SIZE_IN_GAME_MENUS / 2.);
     private final Font fontBottomUiBarSmall = new Font(UI_SIZE_IN_GAME_MENUS / 4.);
@@ -394,6 +397,16 @@ public class InGameUiController extends AbstractUiController {
         });
         root2D.getChildren().add(endTurnButton);
 
+        returnToMenuButton = new Button("Return");
+        returnToMenuButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100+"; -fx-background-color: #282828");
+        returnToMenuButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        returnToMenuButton.setViewOrder(ViewOrder.UI_BUTTON);
+        returnToMenuButton.setVisible(false);
+        returnToMenuButton.setOnMouseClicked(mouseEvent -> {
+            mediaPlayer.stop();
+            returnToMenuButtonClicked();
+        });
+        root2D.getChildren().add(returnToMenuButton);
 
 
         escapeMenu = new Pane();
@@ -498,6 +511,9 @@ public class InGameUiController extends AbstractUiController {
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
 
+        if(turnState == TurnState.GAME_OVER){
+            adjustGameOverScreenButtons();
+        }
         if(turnState == TurnState.GAME_OVER || turnState == TurnState.NO_TURN){
             globalMessageTextFlow.setTranslateX((subScene2D.getWidth() - globalMessageTextFlow.getWidth()) / 2);
             globalMessageTextFlow.setTranslateY((subScene2D.getHeight() - globalMessageTextFlow.getHeight()) / 2);
@@ -518,6 +534,10 @@ public class InGameUiController extends AbstractUiController {
 
         selectedConstructionUI.setTranslateX(buildingUIX);
         selectedConstructionUI.setTranslateY(buildingUIY);
+    }
+    void adjustGameOverScreenButtons(){
+        returnToMenuButton.setTranslateX((subScene2D.getWidth() - returnToMenuButton.getWidth())/2);
+        returnToMenuButton.setTranslateY((subScene2D.getHeight() - returnToMenuButton.getHeight())/2  + globalMessageTextFlow.getHeight());
     }
 
     private void handleOffThreadGraphics(){
@@ -1706,6 +1726,9 @@ public class InGameUiController extends AbstractUiController {
         }
     }
 
+    void returnToMenuButtonClicked(){
+        gameController.setActiveUiController(new PlayMenuUiController(gameController));
+    }
 
     /**
      * The player has clicked the "end turn" button.
@@ -1836,6 +1859,7 @@ public class InGameUiController extends AbstractUiController {
             globalMessageName.setText("\n"+victorDisplayed.getName());
             globalMessageName.setStyle("-fx-fill: "+FxUtils.toRGBCode(victorDisplayed.getTextColor()));
         }
+        returnToMenuButton.setVisible(true);
         turnState = TurnState.GAME_OVER;
     }
 

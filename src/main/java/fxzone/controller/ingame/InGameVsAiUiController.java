@@ -1,8 +1,11 @@
 package fxzone.controller.ingame;
 
 import fxzone.config.Config;
+import fxzone.controller.menu.CampaignMenuUiController;
+import fxzone.controller.menu.PlayMenuUiController;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.utils.GeometryUtils;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.Codex.UnitType;
@@ -12,6 +15,7 @@ import fxzone.game.logic.serializable.GameSerializable;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Button;
 
 public class InGameVsAiUiController extends InGameUiController{
 
@@ -20,6 +24,12 @@ public class InGameVsAiUiController extends InGameUiController{
     final int campaignMission;
 
     protected boolean[][] currentAiPlayerFowVision;
+
+    /*
+    UI
+     */
+    Button retryButton;
+
 
     /*
     AI COMMAND
@@ -267,5 +277,36 @@ public class InGameVsAiUiController extends InGameUiController{
             Config.set("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN", campaignMission+"");
             Config.saveConfig();
         }
+        //retryButton.setVisible(true);
+    }
+
+    @Override
+    void createFXSceneUI(){
+        super.createFXSceneUI();
+        retryButton = new Button("Retry");
+        retryButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100+"; -fx-background-color: #282828");
+        retryButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        retryButton.setViewOrder(ViewOrder.UI_BUTTON);
+        retryButton.setVisible(false);
+        retryButton.setOnMouseClicked(mouseEvent -> {
+            mediaPlayer.stop();
+            retryButtonClicked();
+        });
+        root2D.getChildren().add(retryButton);
+    }
+    @Override
+    void adjustGameOverScreenButtons(){
+        super.adjustGameOverScreenButtons();
+        retryButton.setTranslateX(returnToMenuButton.getTranslateX());
+        retryButton.setTranslateY(returnToMenuButton.getTranslateY() - returnToMenuButton.getHeight() - 10);
+    }
+
+    private void retryButtonClicked(){
+        //TODO
+    }
+
+    @Override
+    void returnToMenuButtonClicked(){
+        gameController.setActiveUiController(new CampaignMenuUiController(gameController));
     }
 }
