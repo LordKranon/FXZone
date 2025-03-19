@@ -2,7 +2,10 @@ package fxzone.controller.ingame;
 
 import fxzone.controller.ClientJoinedController;
 import fxzone.engine.controller.AbstractGameController;
+import fxzone.game.logic.Codex;
+import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Player;
+import fxzone.game.logic.Unit;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.net.client.Client;
@@ -80,6 +83,16 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
     @Override
     protected void onPlayerCreatesUnit(UnitSerializable unitSerializable, int statPurchasingPrice, boolean inTransport){
         client.sendPacket(new UnitCreatedPacket(unitSerializable, statPurchasingPrice));
+    }
+
+    @Override
+    void onBuyUnitCreateUnit(UnitType unitType, int x, int y, int ownerId, boolean inTransport){
+        // The only difference here is that runningUnitId is not raised, because it will be raised when unit creation packet is
+        // received here. Otherwise when a client creates a unit the runningUnitId is raised twice.
+        Unit createdUnit = new Unit(unitType, x, y, runningUnitId);
+        createdUnit.setOwnerId(ownerId);
+        UnitSerializable createdUnitSerializable = new UnitSerializable(createdUnit);
+        onPlayerCreatesUnit(createdUnitSerializable, Codex.getUnitProfile(unitType).COST, inTransport);
     }
 
     @Override
