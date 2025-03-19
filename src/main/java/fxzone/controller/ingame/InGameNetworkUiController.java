@@ -87,4 +87,9 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
             default: break;
         }
     }
+
+    @Override
+    void returnToMenuButtonClicked(){
+        quitGame();
+    }
 }

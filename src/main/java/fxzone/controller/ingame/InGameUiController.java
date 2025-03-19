@@ -1117,6 +1117,10 @@ public class InGameUiController extends AbstractUiController {
         tileSelector.setVisible(mousePointerInBounds);
     }
     protected void setHoveredTileInfoLabel(Point hoveredPoint){
+        if(hoveredPoint == null){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [setHoveredTileInfoLabel] ERROR Hovered point is null");
+            return;
+        }
         Tile tile = map.getTiles()[hoveredPoint.x][hoveredPoint.y];
         Unit unit = tile.getUnitOnTile();
         Building building = tile.getBuildingOnTile();
