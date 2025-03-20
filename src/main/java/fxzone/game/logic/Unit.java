@@ -552,7 +552,7 @@ public class Unit extends TileSpaceObject{
     public boolean onAttacked(Unit attackingUnit){
         if(
             Codex.getUnitProfile(attackingUnit).ATTACKTYPE == UnitAttackType.RANGED ||
-            Codex.getUnitProfile(this).ATTACKTYPE == UnitAttackType.RANGED ||
+            !Codex.canCounterAttack(this) ||
             (GeometryUtils.getPointToPointDistance(new Point(attackingUnit.getX(), attackingUnit.getY()), new Point(this.getX(), this.getY())) > Codex.getUnitProfile(this).MAXRANGE) ||
             !Codex.canHit(this, attackingUnit)
         ){

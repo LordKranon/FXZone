@@ -64,6 +64,7 @@ public class InGameEditorUiController extends InGameUiController{
         UnitType.CAR_HUMVEE,
         UnitType.CAR_PICKUP,
         UnitType.TANK_HUNTER,
+        UnitType.TANK_IFV,
         UnitType.ARTILLERY,
         UnitType.TANK_AA,
         UnitType.TANK_BATTLE,
@@ -77,6 +78,7 @@ public class InGameEditorUiController extends InGameUiController{
         UnitType.HELICOPTER_APACHE,
         UnitType.PLANE_PROPELLER,
         UnitType.PLANE_JET,
+        UnitType.PLANE_BOMBER,
     };
 
     private int editorOwnerIdPlaced;

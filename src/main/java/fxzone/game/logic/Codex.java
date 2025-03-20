@@ -150,7 +150,7 @@ public class Codex {
             240
         ));
         put(UnitType.PLANE_JET, new UnitProfile(
-            13, "Fighter Jet",
+            14, "Fighter Jet",
             8, 5, 100, 9, 4, 1, 1,
             1, 1, 1,
             UnitAttackType.MELEE,
@@ -159,7 +159,7 @@ public class Codex {
             300
         ));
         put(UnitType.HELICOPTER_CHINOOK, new UnitProfile(
-            13, "Transport Heli",
+            15, "Transport Heli",
             6, 4, 100, 0, 3, 1, 1,
             1, 1, 1,
             UnitAttackType.PACIFIST,
@@ -168,7 +168,7 @@ public class Codex {
             100
         ));
         put(UnitType.HELICOPTER_APACHE, new UnitProfile(
-            13, "Attack Heli",
+            16, "Attack Heli",
             5, 4, 100, 5, 2, 1, 1,
             1, 1.25, 1,
             UnitAttackType.MELEE,
@@ -178,7 +178,7 @@ public class Codex {
         ));
 
         put(UnitType.INFANTRY_AA, new UnitProfile(
-            0, "AA Infantry",
+            17, "AA Infantry",
             3, 3, 100, 5, 0, 1, 1,
             .5, 1.7, 1,
             UnitAttackType.MELEE,
@@ -187,7 +187,7 @@ public class Codex {
             100
         ));
         put(UnitType.TANK_AA, new UnitProfile(
-            0, "Anti-Air Tank",
+            18, "Anti-Air Tank",
             5, 4, 100, 3, 3, 1, 1,
             1.5, 1, 1,
             UnitAttackType.MELEE,
@@ -196,13 +196,31 @@ public class Codex {
             190
         ));
         put(UnitType.CAR_PICKUP, new UnitProfile(
-            2, "Pick-Up",
+            19, "Pick-Up",
             6, 4, 100, 3, 2, 1, 1,
             1.5, 1, 1.25,
             UnitAttackType.MELEE,
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.LAND_VEHICLE,
             150
+        ));
+        put(UnitType.TANK_IFV, new UnitProfile(
+            20, "BMP", //oder: Marder, Schützenpanzer, Bradley
+            5, 3, 100, 5, 4, 1, 1,
+            1.2, 1, 1.2,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_HEAVY_ARMOR,
+            UnitSuperType.LAND_VEHICLE,
+            220
+        ));
+        put(UnitType.PLANE_BOMBER, new UnitProfile(
+            21, "Bomber",
+            7, 4, 100, 9, 3, 1, 1,
+            1, 1.2, 1.2,
+            UnitAttackType.MELEE,
+            UnitArmorClass.ARMORCLASS_ARMORED,
+            UnitSuperType.AIRCRAFT_PLANE,
+            300
         ));
     }};
     public static final HashMap<UnitType, String> UNIT_DESCRIPTIONS =  new HashMap<>(){{
@@ -230,6 +248,8 @@ public class Codex {
         put(UnitType.TANK_AA, "DMG 6  DFN 3  SPD 5  VIS 4\nExtremely Strong vs Aircraft\nReduced damage vs Land Units");
 
         put(UnitType.CAR_PICKUP, "DMG 3  DFN 2  SPD 6  VIS 4\nTransports Infantry\nStrong vs Infantry\nWeak vs Tanks");
+        put(UnitType.TANK_IFV, "DMG 5  DFN 4  SPD 5  VIS 3\nTransports Infantry\nVery Strong vs Infantry\nStrong vs Light Vehicles");
+        put(UnitType.PLANE_BOMBER, "DMG 9  DFN 3  SPD 7  VIS 4\nDevastatingly Strong vs Land Units and Ships\nWeak vs other Aircraft and Anti-Air");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
@@ -270,6 +290,8 @@ public class Codex {
         put(UnitType.TANK_AA, "aa_tank");
 
         put(UnitType.CAR_PICKUP, "car_pickup");
+        put(UnitType.TANK_IFV, "bmp");
+        put(UnitType.PLANE_BOMBER, "bomber");
     }};
     public static final HashMap<BuildingType, String> BUILDING_RESOURCE_NAMES = new HashMap<BuildingType, String>(){{
         put(BuildingType.CITY, "city");
@@ -303,7 +325,8 @@ public class Codex {
         UnitType.HELICOPTER_CHINOOK,
         UnitType.HELICOPTER_APACHE,
         UnitType.PLANE_PROPELLER,
-        UnitType.PLANE_JET
+        UnitType.PLANE_JET,
+        UnitType.PLANE_BOMBER
     );
     public static final List<UnitType> BUILDABLE_UNIT_TYPES_CARRIER = Arrays.asList(
         UnitType.PLANE_PROPELLER,
@@ -397,8 +420,13 @@ public class Codex {
         TANK_AA,
 
         CAR_PICKUP,
+        TANK_IFV,
+        PLANE_BOMBER,
 /*
         INFANTRY_GUERRILLA,
+
+        //Бронетранспорт
+        //Боевая Машина Пехоты
  */
     }
     public enum UnitSuperType{
@@ -517,7 +545,7 @@ public class Codex {
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_VEHICLE;
         } else if(transporter.getUnitType() == UnitType.SHIP_CARRIER){
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_PLANE || getUnitProfile(loaded).SUPERTYPE == UnitSuperType.AIRCRAFT_HELICOPTER;
-        } else if(transporter.getUnitType() == UnitType.HELICOPTER_CHINOOK || transporter.getUnitType() == UnitType.CAR_PICKUP){
+        } else if(transporter.getUnitType() == UnitType.HELICOPTER_CHINOOK || transporter.getUnitType() == UnitType.CAR_PICKUP || transporter.getUnitType() == UnitType.TANK_IFV){
             return getUnitProfile(loaded).SUPERTYPE == UnitSuperType.LAND_INFANTRY;
         } else {
             return false;
@@ -529,6 +557,7 @@ public class Codex {
             case SHIP_LANDER:
             case SHIP_CARRIER:
             case CAR_PICKUP:
+            case TANK_IFV:
                 return 2;
             default:
                 return 0;
@@ -539,10 +568,18 @@ public class Codex {
         UnitSuperType atk = getUnitProfile(offender).SUPERTYPE;
         UnitSuperType def = getUnitProfile(defender).SUPERTYPE;
         if(def == UnitSuperType.AIRCRAFT_PLANE || def == UnitSuperType.AIRCRAFT_HELICOPTER){
-            return atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER || offender.getUnitType() == UnitType.INFANTRY_AA || offender.getUnitType() == UnitType.TANK_AA;
+            return (offender.getUnitType() != UnitType.PLANE_BOMBER) && (atk == UnitSuperType.AIRCRAFT_PLANE || atk == UnitSuperType.AIRCRAFT_HELICOPTER || offender.getUnitType() == UnitType.SHIP_DESTROYER || offender.getUnitType() == UnitType.INFANTRY_AA || offender.getUnitType() == UnitType.TANK_AA);
         }
         else {
             return offender.getUnitType() != UnitType.PLANE_JET && offender.getUnitType() != UnitType.INFANTRY_AA;
+        }
+    }
+    public static boolean canCounterAttack(Unit unit){
+        UnitAttackType attackType = getUnitProfile(unit).ATTACKTYPE;
+        if(attackType == UnitAttackType.RANGED || attackType == UnitAttackType.PACIFIST || unit.getUnitType() == UnitType.PLANE_BOMBER){
+            return false;
+        } else {
+            return true;
         }
     }
     public static boolean canCapture(Unit unit){
