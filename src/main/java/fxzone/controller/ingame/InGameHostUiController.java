@@ -49,6 +49,10 @@ public class InGameHostUiController extends InGameNetworkUiController implements
 
     @Override
     protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
+        if(!isPlayerUnitMoveCommandAllowed()){
+            System.err.println("[IN-GAME-JOINED-UI-CONTROLLER] ERROR Cannot give a command in network game while another unit is already in action.");
+            return false;
+        }
         turnStateToNeutral();
         boolean wasStoppedOnFow = verifyPathOnMoveCommand(path);
         boolean enterTransport = checkEnterTransportOnMoveCommand(path);

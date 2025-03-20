@@ -23,6 +23,11 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     private boolean exitFlag;
 
+    /**
+     * Upon issuing a move command to the server, block any other move commands until a move command is received back from the server.
+     */
+    private boolean awaitingUnitCommandFlag;
+
     public InGameJoinedUiController(AbstractGameController gameController, Client client, GameSerializable gameSerializable, int thisPlayerId) {
         super(gameController, gameSerializable, thisPlayerId);
         this.client = client;
@@ -72,11 +77,16 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
 
     @Override
     protected boolean onPlayerUnitMoveCommand(ArrayDeque<Point> path, Point pointToAttack){
+        if(!isPlayerUnitMoveCommandAllowed()){
+            System.err.println("[IN-GAME-JOINED-UI-CONTROLLER] ERROR Cannot give a command in network game while another unit is already in action.");
+            return false;
+        }
         turnStateToNeutral();
         boolean stoppedOnFow = verifyPathOnMoveCommand(path);
         boolean enterTransport = checkEnterTransportOnMoveCommand(path);
         boolean waitForAttack = checkWaitForAttackOnMoveCommand(path, pointToAttack, stoppedOnFow, enterTransport);
         client.sendPacket(new UnitMoveCommandPacket(selectedUnit.getUnitId(), new Point(selectedUnit.getX(), selectedUnit.getY()), path, stoppedOnFow?null:pointToAttack, waitForAttack, enterTransport));
+        awaitingUnitCommandFlag = true;
         return stoppedOnFow;
     }
 
@@ -115,5 +125,16 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
         }
         this.thisPlayer = thisPlayerToBe;
         super.initializeGameSpecifics();
+    }
+
+    @Override
+    boolean isPlayerUnitMoveCommandAllowed(){
+        return super.isPlayerUnitMoveCommandAllowed() && !awaitingUnitCommandFlag;
+    }
+
+    @Override
+    void onNetworkPlayerUnitMoveCommandReceived(UnitMoveCommandPacket unitMoveCommandPacket){
+        awaitingUnitCommandFlag = false;
+        super.onNetworkPlayerUnitMoveCommandReceived(unitMoveCommandPacket);
     }
 }

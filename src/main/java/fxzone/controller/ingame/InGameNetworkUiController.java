@@ -19,7 +19,7 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     /**
      * Upon receiving info about a move command over the network.
      */
-    private void onNetworkPlayerUnitMoveCommandReceived(UnitMoveCommandPacket unitMoveCommandPacket){
+    void onNetworkPlayerUnitMoveCommandReceived(UnitMoveCommandPacket unitMoveCommandPacket){
         //TODO Handle desync
         /*
         There may be a conflict about unit positions. Some clients might not have received some
@@ -91,5 +91,9 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     @Override
     void returnToMenuButtonClicked(){
         quitGame();
+    }
+
+    boolean isPlayerUnitMoveCommandAllowed(){
+        return unitsMoving.isEmpty() && unitsAttacking.isEmpty();
     }
 }
