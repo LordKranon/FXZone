@@ -520,7 +520,7 @@ public class Map {
             }
         }
         for(Unit unit : units){
-            unit.setInVision(tileVisible[unit.getX()][unit.getY()]);
+            unit.setInVision(tileVisible[unit.getVisualTileX()][unit.getVisualTileY()]);
         }
     }
 

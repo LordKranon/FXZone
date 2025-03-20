@@ -1008,6 +1008,12 @@ public class InGameUiController extends AbstractUiController {
                         onAttackAddFightingUnits(unit);
                     }
                     return;
+                } else {
+                    // Add more vision (every time the unit passes a full tile)
+                    // This only happens for units of thisPlayer
+                    if(unit.getOwnerId() == thisPlayer.getId()){
+                        map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getVisualTileX(), unit.getVisualTileY(), Codex.getUnitProfile(unit).VISION));
+                    }
                 }
             } else {
                 unit.performInBetweenTileMove(cumulativeDelta / TOTAL_UNIT_MOVEMENT_INTERVAL, map);

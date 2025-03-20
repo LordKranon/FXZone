@@ -140,6 +140,8 @@ public class Unit extends TileSpaceObject{
             unitType, x, y, tileRenderSize, group, playerColor
         );
         this.gameObjectInTileSpace = this.gameObjectUnit;
+        this.visualTileX = x;
+        this.visualTileY = y;
 
         this.gameObjectUiUnitHealth = new GameObjectUiUnitHealth(x, y, tileRenderSize, group);
 
