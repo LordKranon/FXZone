@@ -23,6 +23,15 @@ public class GeometryUtils {
             return Direction.NONE;
         }
     }
+    public static Direction getPointToPointDirectionOnlyLR(Point a, Point b){
+        if(a.x < b.x){
+            return Direction.RIGHT;
+        } else if(a.x > b.x){
+            return Direction.LEFT;
+        } else {
+            return Direction.NONE;
+        }
+    }
 
     public static boolean isPointNeighborOf(Point a, Point b){
         return getPointToPointDistance(a, b) == 1;

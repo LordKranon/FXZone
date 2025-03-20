@@ -499,7 +499,7 @@ public class Unit extends TileSpaceObject{
         if(hasAttackCommandAfterMoving){
             if(verbose) System.out.println(this+" on movement end, going into attack");
             setStance(UnitStance.ATTACK);
-            setFacingDirection(GeometryUtils.getPointToPointDirection(new Point(x, y), pointToAttackAfterMoving));
+            setFacingDirection(GeometryUtils.getPointToPointDirectionOnlyLR(new Point(x, y), pointToAttackAfterMoving));
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
             currentlyAttackedUnit = attackedUnit;
             statRemainingHealthOnAttack = statRemainingHealth;
