@@ -208,8 +208,26 @@ public class InGameUiController extends AbstractUiController {
      * Used in case of unit creation info coming in over network,
      * which needs to be transferred to the FX app thread for graphics.
      */
-    //TODO Include whether or not unit is created in transport
-    protected final HashMap<UnitSerializable, Integer> unitsToBeCreated = new HashMap<>();
+    protected final ArrayList<PendingUnitCreation> unitsToBeCreated = new ArrayList<>();
+    static class PendingUnitCreation{
+        private final UnitSerializable unitSerializable;
+        private final int cost;
+        private final boolean inTransport;
+        PendingUnitCreation(UnitSerializable unitSerializable, int cost, boolean inTransport){
+            this.unitSerializable = unitSerializable;
+            this.cost = cost;
+            this.inTransport = inTransport;
+        }
+        public UnitSerializable getUnitSerializable(){
+            return unitSerializable;
+        }
+        public int getCost(){
+            return cost;
+        }
+        public boolean getInTransport(){
+            return inTransport;
+        }
+    }
 
     /*
     GAME DECOR SETTINGS
@@ -544,9 +562,8 @@ public class InGameUiController extends AbstractUiController {
         if(offThreadGraphicsNeedHandling){
             offThreadGraphicsNeedHandling = false;
             if(!unitsToBeCreated.isEmpty()) {
-                for(UnitSerializable unitSerializable : unitsToBeCreated.keySet()){
-                    // TODO handle unit creation in transport over net
-                    createUnit(unitSerializable, unitsToBeCreated.get(unitSerializable), false);
+                for(PendingUnitCreation pendingUnitCreation : unitsToBeCreated){
+                    createUnit(pendingUnitCreation.getUnitSerializable(), pendingUnitCreation.getCost(), pendingUnitCreation.getInTransport());
                 }
                 unitsToBeCreated.clear();
             }
