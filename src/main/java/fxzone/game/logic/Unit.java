@@ -148,6 +148,11 @@ public class Unit extends TileSpaceObject{
         this.transportLoadedUnits = new ArrayList<>();
         initializeStats();
         initializeMediaPlayer();
+
+        /*
+        Initially, units of players 1, 3, 5.. etc face right and units of players 2, 4, 6.. etc face left
+         */
+        setFacingDirection(ownerId % 2 == 0 ? Direction.LEFT : Direction.RIGHT);
     }
     private void initializeStats(){
         this.statMaxHealth = Codex.getUnitProfile(unitType).HEALTH;
