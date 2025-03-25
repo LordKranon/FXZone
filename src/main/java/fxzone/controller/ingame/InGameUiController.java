@@ -85,6 +85,14 @@ public class InGameUiController extends AbstractUiController {
     static final int UI_SIZE_IN_GAME_MENUS = Config.getInt("UI_SIZE_IN_GAME_MENUS");
 
     /**
+     * Buildings that will be partially or completely captured at end of turn.
+     * During END_OF_TURN_GRAPHICAL_EFFECTS phase, an effect will play for each of these buildings.
+     */
+    ArrayList<Building> buildingsForEndOfTurnEffects = new ArrayList<>();
+    Building currentBuildingForGraphicalCaptureEffect;
+    double cumulativeDeltaForEndOfTurnEffects;
+
+    /**
      * Announce GAME OVER at game end.
      */
     TextFlow globalMessageTextFlow;
@@ -177,13 +185,21 @@ public class InGameUiController extends AbstractUiController {
 
         GAME_STARTING,
         NO_TURN,
+
         NEUTRAL,
+
         UNIT_SELECTED,
         UNIT_SELECTED_FOR_ATTACK_AFTER_MOVE,
         UNIT_SELECTED_IN_CONSTRUCTION_MODE,
         BUILDING_SELECTED,
+
         GAME_OVER,
 
+        END_OF_TURN_GRAPHICAL_EFFECTS,
+
+        /**
+         * Only in VS-AI-Games (Campaign)
+         */
         AI_TURN,
 
         /**
@@ -313,6 +329,7 @@ public class InGameUiController extends AbstractUiController {
         moveMovingUnits(delta);
 
         handleParticleEffects(delta);
+        handleEndOfTurnGraphicalEffects(delta);
     }
 
     class InGameUiControllerFxml{
@@ -1762,10 +1779,11 @@ public class InGameUiController extends AbstractUiController {
      * Now, depending on the turn state, the "end turn demand" may or may not be given.
      */
     private void endTurnButtonClicked(){
-        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [endTurnButtonClicked] trying");
+        if (verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [endTurnButtonClicked] trying.");
         if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NEUTRAL){
             turnState = TurnState.ENDING_TURN;
-            onPlayerEndTurn();
+            //onPlayerEndTurn();
+            goToEndOfTurnGraphicalEffects();
         } else if(game.itsMyTurn(thisPlayer) && turnState == TurnState.NO_TURN){
             turnState = TurnState.BEGINNING_TURN;
             onPlayerBeginTurn();
@@ -1788,6 +1806,44 @@ public class InGameUiController extends AbstractUiController {
         beginTurn();
     }
 
+    protected void goToEndOfTurnGraphicalEffects(){
+        if(!(turnState == TurnState.ENDING_TURN)){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [goToEndOfTurnGraphicalEffects] ERROR Bad turn state.");
+            return;
+        }
+        for(Building b : map.getBuildings()){
+            Unit unitOnBuilding = map.getTiles()[b.getX()][b.getY()].getUnitOnTile();
+            if(unitOnBuilding != null && unitOnBuilding.getOwnerId() != b.getOwnerId() && Codex.canCapture(unitOnBuilding)){
+                buildingsForEndOfTurnEffects.add(b);
+            }
+        }
+        if(!buildingsForEndOfTurnEffects.isEmpty()){
+            cumulativeDeltaForEndOfTurnEffects = 0;
+            currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
+            buildingsForEndOfTurnEffects.remove(0);
+            turnState = TurnState.END_OF_TURN_GRAPHICAL_EFFECTS;
+        } else {
+            onPlayerEndTurn();
+        }
+
+    }
+    private void handleEndOfTurnGraphicalEffects(double delta){
+        if(turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS){
+            cumulativeDeltaForEndOfTurnEffects += delta;
+            if(cumulativeDeltaForEndOfTurnEffects >= 1){
+                cumulativeDeltaForEndOfTurnEffects -= 1;
+                if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [handleEndOfTurnGraphicalEffects] "+currentBuildingForGraphicalCaptureEffect);
+
+                if(!buildingsForEndOfTurnEffects.isEmpty()){
+                    currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
+                    buildingsForEndOfTurnEffects.remove(0);
+                } else {
+                    onPlayerEndTurn();
+                }
+            }
+        }
+    }
+
     /**
      * End the turn.
      */
@@ -1797,8 +1853,8 @@ public class InGameUiController extends AbstractUiController {
         graphical elements as it is not on the FX thread. This should, in theory, never occur since you can't end your turn
         while still having a unit selected and with move command arrows being displayed.
         */
-        if(!(turnState == TurnState.ENDING_TURN || turnState == TurnState.NEUTRAL || turnState == TurnState.GAME_OVER)){
-            System.err.println("[IN-GAME-UI-CONTROLLER] [endTurn] Bad turn state");
+        if(!(turnState == TurnState.ENDING_TURN || turnState == TurnState.NEUTRAL || turnState == TurnState.GAME_OVER || turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS)){
+            System.err.println("[IN-GAME-UI-CONTROLLER] [endTurn] ERROR Bad turn state.");
             return;
         }
         if(turnState!=TurnState.GAME_OVER){

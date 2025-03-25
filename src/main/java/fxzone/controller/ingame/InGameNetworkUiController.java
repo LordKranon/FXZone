@@ -98,4 +98,12 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
     boolean isPlayerUnitMoveCommandAllowed(){
         return unitsMoving.isEmpty() && unitsAttacking.isEmpty();
     }
+
+    @Override
+    protected void goToEndOfTurnGraphicalEffects(){
+        /*
+        Skip this phase in network games.
+         */
+        onPlayerEndTurn();
+    }
 }

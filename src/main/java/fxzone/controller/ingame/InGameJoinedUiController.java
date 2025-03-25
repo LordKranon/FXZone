@@ -111,6 +111,7 @@ public class InGameJoinedUiController extends InGameNetworkUiController implemen
         The case that a client hits the end turn button multiple times, thus potentially ending the turn of the next player,
         is prevented via not
          */
+        turnState = TurnState.ENDING_TURN;
         client.sendPacket(new EndTurnPacket());
     }
 
