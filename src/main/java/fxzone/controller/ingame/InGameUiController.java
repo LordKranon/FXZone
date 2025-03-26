@@ -1350,6 +1350,9 @@ public class InGameUiController extends AbstractUiController {
                 gridTile.changeTileRenderSize(map);
             }
         }
+        if(turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS){
+            buildingCaptureBar.changeTileRenderSize(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
+        }
     }
 
     /**
@@ -1825,8 +1828,9 @@ public class InGameUiController extends AbstractUiController {
         }
         if(!buildingsForEndOfTurnEffects.isEmpty()){
             cumulativeDeltaForEndOfTurnEffects = 0;
-            currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
-            buildingsForEndOfTurnEffects.remove(0);
+
+            nextBuildingForGraphicalCaptureEffect();
+
             turnState = TurnState.END_OF_TURN_GRAPHICAL_EFFECTS;
         } else {
             onPlayerEndTurn();
@@ -1841,17 +1845,23 @@ public class InGameUiController extends AbstractUiController {
                 if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [handleEndOfTurnGraphicalEffects] "+currentBuildingForGraphicalCaptureEffect);
 
                 if(!buildingsForEndOfTurnEffects.isEmpty()){
-                    currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
-                    buildingsForEndOfTurnEffects.remove(0);
+
+                    nextBuildingForGraphicalCaptureEffect();
+
                 } else {
                     buildingCaptureBar.setVisible(false);
                     onPlayerEndTurn();
                 }
             } else {
-                buildingCaptureBar.setVisible(true);
                 buildingCaptureBar.setPositionInMap(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
             }
         }
+    }
+    private void nextBuildingForGraphicalCaptureEffect(){
+        currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
+        buildingsForEndOfTurnEffects.remove(0);
+        buildingCaptureBar.setVisible(true);
+        buildingCaptureBar.changeTileRenderSize(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
     }
 
     /**
