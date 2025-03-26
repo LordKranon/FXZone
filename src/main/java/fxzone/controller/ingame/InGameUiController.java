@@ -27,6 +27,7 @@ import fxzone.game.logic.Unit.AttackResult;
 import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
+import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectTile;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
@@ -91,6 +92,7 @@ public class InGameUiController extends AbstractUiController {
     ArrayList<Building> buildingsForEndOfTurnEffects = new ArrayList<>();
     Building currentBuildingForGraphicalCaptureEffect;
     double cumulativeDeltaForEndOfTurnEffects;
+    private GameObjectInTileSpace buildingCaptureBar;
 
     /**
      * Announce GAME OVER at game end.
@@ -304,7 +306,7 @@ public class InGameUiController extends AbstractUiController {
             e.printStackTrace();
         }
 
-        createTileSelector();
+        createTileSpaceObjectsUI();
         createFXSceneUI();
 
         this.particleHandler = new ParticleHandler(root2D);
@@ -400,8 +402,12 @@ public class InGameUiController extends AbstractUiController {
 
     }
 
-    private void createTileSelector(){
+    private void createTileSpaceObjectsUI(){
         tileSelector = new GameObjectTileSelector(0, 0, 128, root2D);
+
+        buildingCaptureBar = new GameObjectInTileSpace(AssetHandler.getImage("/images/misc/s_orange.png"), 0, 0, 128, root2D);
+        buildingCaptureBar.setVisible(false);
+        buildingCaptureBar.setViewOrder(ViewOrder.UI_SELECTOR);
     }
 
     void createFXSceneUI(){
@@ -1813,7 +1819,7 @@ public class InGameUiController extends AbstractUiController {
         }
         for(Building b : map.getBuildings()){
             Unit unitOnBuilding = map.getTiles()[b.getX()][b.getY()].getUnitOnTile();
-            if(unitOnBuilding != null && unitOnBuilding.getOwnerId() != b.getOwnerId() && Codex.canCapture(unitOnBuilding)){
+            if(unitOnBuilding != null && unitOnBuilding.getOwnerId() != b.getOwnerId() && Codex.canCapture(unitOnBuilding) && game.itsMyTurn(unitOnBuilding.getOwnerId())){
                 buildingsForEndOfTurnEffects.add(b);
             }
         }
@@ -1838,8 +1844,12 @@ public class InGameUiController extends AbstractUiController {
                     currentBuildingForGraphicalCaptureEffect = buildingsForEndOfTurnEffects.get(0);
                     buildingsForEndOfTurnEffects.remove(0);
                 } else {
+                    buildingCaptureBar.setVisible(false);
                     onPlayerEndTurn();
                 }
+            } else {
+                buildingCaptureBar.setVisible(true);
+                buildingCaptureBar.setPositionInMap(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
             }
         }
     }

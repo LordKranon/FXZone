@@ -166,6 +166,9 @@ public class Game {
 
         return playerWithTurn.equals(player);
     }
+    public boolean itsMyTurn(int playerID){
+        return playerID == players.get(whoseTurn).getId();
+    }
 
     public Map getMap(){
         return map;
