@@ -39,6 +39,8 @@ public class AssetHandler {
     private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
     private static final HashMap<KeyTile, Image> imagesTiles = new HashMap<>();
 
+    private static final HashMap<KeyCaptureBar, Image> imagesCaptureBar = new HashMap<>();
+
     private static final HashMap<String, BufferedImage> bufferedImages = new HashMap<>();
 
     private static final HashMap<String, Media> sounds = new HashMap<>();
@@ -533,6 +535,23 @@ public class AssetHandler {
 
         Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
         return imgFinished;
+    }
+
+    public static Image getImageCaptureBar(KeyCaptureBar keyCaptureBar){
+        if(!imagesCaptureBar.containsKey(keyCaptureBar)){
+            BufferedImage base = getBufferedImage("/images/misc/capture_bar/c_0.png");
+            BufferedImage colored = new BufferedImage(48, 48, BUFFERED_IMAGE_TYPE);
+            Graphics g = colored.createGraphics();
+            g.drawImage(base, 0, 0, null);
+            if(keyCaptureBar.keyColor != null){
+                g.setColor(keyCaptureBar.keyColor);
+            }
+            g.fillRect(4, 42, keyCaptureBar.captureProgress*2, 4);
+            g.dispose();
+            Image imageFinished = upscaleAndFinishTerrainImg(colored);
+            imagesCaptureBar.put(keyCaptureBar, imageFinished);
+        }
+        return imagesCaptureBar.get(keyCaptureBar);
     }
 
     /**
