@@ -26,6 +26,7 @@ public class DefaultConfig {
         {"GAME_SPEED_UNIT_ATTACK_INTERVAL", "1"},
         {"GAME_SPEED_TILE_PULSATION_INTERVAL", ".5"},
         {"GAME_SPEED_AIRCRAFT_PULSATION_INTERVAL", ".15"},
+        {"GAME_SPEED_CAPTURE_INTERVAL", "2"},
 
         {"UI_SIZE_IN_GAME", "64"},
         {"UI_SIZE_IN_GAME_MENUS", "100"},

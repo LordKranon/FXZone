@@ -96,6 +96,7 @@ public class InGameUiController extends AbstractUiController {
     Building currentBuildingForGraphicalCaptureEffect;
     Unit currentUnitForGraphicalCaptureEffect;
     double cumulativeDeltaForEndOfTurnEffects;
+    final double GAME_SPEED_CAPTURE_INTERVAL = Config.getDouble("GAME_SPEED_CAPTURE_INTERVAL");
     private GameObjectCaptureBar buildingCaptureBar;
     private ZoneMediaPlayer mediaPlayerCapture;
 
@@ -285,6 +286,7 @@ public class InGameUiController extends AbstractUiController {
 
         //Capture sound media player
         mediaPlayerCapture = new ZoneMediaPlayer("/sounds/zone_capture.mp3");
+        mediaPlayerCapture.setRate(2. / GAME_SPEED_CAPTURE_INTERVAL);
 
         //In-Game music
         mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/zone_jr_v1.2.mp3"));
@@ -1848,8 +1850,8 @@ public class InGameUiController extends AbstractUiController {
     private void handleEndOfTurnGraphicalEffects(double delta){
         if(turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS){
             cumulativeDeltaForEndOfTurnEffects += delta;
-            if(cumulativeDeltaForEndOfTurnEffects >= 2){
-                cumulativeDeltaForEndOfTurnEffects -= 2;
+            if(cumulativeDeltaForEndOfTurnEffects >= GAME_SPEED_CAPTURE_INTERVAL){
+                cumulativeDeltaForEndOfTurnEffects -= GAME_SPEED_CAPTURE_INTERVAL;
                 if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [handleEndOfTurnGraphicalEffects] "+currentBuildingForGraphicalCaptureEffect);
 
                 if(!buildingsForEndOfTurnEffects.isEmpty()){
@@ -1862,7 +1864,7 @@ public class InGameUiController extends AbstractUiController {
                     onPlayerEndTurn();
                 }
             } else {
-                buildingCaptureBar.setShownProgress(currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress() + (int) Math.round(Codex.getUnitHealthDigit(currentUnitForGraphicalCaptureEffect) * (cumulativeDeltaForEndOfTurnEffects / 2.)));
+                buildingCaptureBar.setShownProgress(currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress() + (int) Math.round(Codex.getUnitHealthDigit(currentUnitForGraphicalCaptureEffect) * (cumulativeDeltaForEndOfTurnEffects / GAME_SPEED_CAPTURE_INTERVAL)));
                 buildingCaptureBar.setPositionInMap(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
             }
         }
