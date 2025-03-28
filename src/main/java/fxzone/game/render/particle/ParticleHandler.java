@@ -38,4 +38,8 @@ public class ParticleHandler {
             }
         }
     }
+    public void newParticleText(double x, double y, double tileRenderSize, double lifetime){
+        Particle p = new ParticleText(x, y, tileRenderSize, subGroupParticles, lifetime);
+        liveParticles.add(p);
+    }
 }
