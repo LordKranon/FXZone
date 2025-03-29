@@ -92,7 +92,7 @@ public class InGameUiController extends AbstractUiController {
     ArrayList<Building> buildingsForEndOfTurnEffects = new ArrayList<>();
     Building currentBuildingForGraphicalCaptureEffect;
     Unit currentUnitForGraphicalCaptureEffect;
-    double cumulativeDeltaForEndOfTurnEffects;
+    private double cumulativeDeltaForEndOfTurnEffects;
     final double GAME_SPEED_CAPTURE_INTERVAL = Config.getDouble("GAME_SPEED_CAPTURE_INTERVAL");
     private GameObjectCaptureBar buildingCaptureBar;
     private ZoneMediaPlayer mediaPlayerCapture;
@@ -103,6 +103,10 @@ public class InGameUiController extends AbstractUiController {
         SUCCESS_TEXT,
         NONE,
     }
+
+    private boolean startOfTurnVisualEffectInProgress;
+    private double cumulativeDeltaForStartOfTurnEffects;
+    final double UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION = Config.getDouble("UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION");
 
     /**
      * Announce GAME OVER at game end.
@@ -348,6 +352,7 @@ public class InGameUiController extends AbstractUiController {
 
         handleParticleEffects(delta);
         handleEndOfTurnGraphicalEffects(delta);
+        handleStartOfTurnVisualEffects(delta);
     }
 
     class InGameUiControllerFxml{
@@ -571,7 +576,7 @@ public class InGameUiController extends AbstractUiController {
         if(turnState == TurnState.GAME_OVER){
             adjustGameOverScreenButtons();
         }
-        if(turnState == TurnState.GAME_OVER || turnState == TurnState.NO_TURN){
+        if(turnState == TurnState.GAME_OVER || turnState == TurnState.NO_TURN || startOfTurnVisualEffectInProgress){
             globalMessageTextFlow.setTranslateX((subScene2D.getWidth() - globalMessageTextFlow.getWidth()) / 2);
             globalMessageTextFlow.setTranslateY((subScene2D.getHeight() - globalMessageTextFlow.getHeight()) / 2);
         } else if(turnState == TurnState.BUILDING_SELECTED){
@@ -1912,6 +1917,29 @@ public class InGameUiController extends AbstractUiController {
         return true;
     }
 
+    private void handleStartOfTurnVisualEffects(double delta){
+        if(startOfTurnVisualEffectInProgress){
+            cumulativeDeltaForStartOfTurnEffects += delta;
+            if(cumulativeDeltaForStartOfTurnEffects >= UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION){
+                globalMessageTextFlow.setVisible(false);
+                startOfTurnVisualEffectInProgress = false;
+                cumulativeDeltaForStartOfTurnEffects = 0;
+            }
+        }
+    }
+    void onBeginTurnDoVisualEffect(){
+        globalMessageText.setText("TURN "+game.getTurnCount());
+        globalMessageText.setStyle("-fx-fill: #ffffff;");
+
+        globalMessageName.setText("\n"+game.getPlayers().get(game.whoseTurn()).getName());
+        globalMessageName.setStyle("-fx-fill: "+ FxUtils.toRGBCode(game.getPlayers().get(game.whoseTurn()).getTextColor()) + ";");
+
+        globalMessageTextFlow.setVisible(true);
+
+        cumulativeDeltaForStartOfTurnEffects = 0;
+        startOfTurnVisualEffectInProgress = true;
+    }
+
     /**
      * End the turn.
      */
@@ -1962,6 +1990,7 @@ public class InGameUiController extends AbstractUiController {
         if(game.itsMyTurn(thisPlayer)){
             endTurnButton.setVisible(true);
         }
+        onBeginTurnDoVisualEffect();
     }
 
     /**
@@ -1987,6 +2016,8 @@ public class InGameUiController extends AbstractUiController {
     }
     protected void turnStateToNoTurn(){
         map.setVisible(false);
+        startOfTurnVisualEffectInProgress = false;
+        globalMessageTextFlow.setVisible(false);
         turnState = TurnState.NO_TURN;
     }
     protected void turnStateToGameOver(boolean victory, int playerDisplayed){

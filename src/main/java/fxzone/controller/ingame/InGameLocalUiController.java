@@ -38,6 +38,7 @@ public class InGameLocalUiController extends InGameUiController{
 
 
         globalMessageText.setText("TURN "+game.getTurnCount());
+        globalMessageText.setStyle("-fx-fill: #ffffff");
 
         globalMessageName.setText("\n"+thisPlayer.getName());
         globalMessageName.setStyle("-fx-fill: "+ FxUtils.toRGBCode(thisPlayer.getTextColor()));
@@ -59,6 +60,7 @@ public class InGameLocalUiController extends InGameUiController{
         globalMessageTextFlow.setVisible(false);
 
         endTurnButton.setText("End Turn");
+        onBeginTurnDoVisualEffect();
     }
 
     @Override
