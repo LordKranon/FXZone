@@ -92,7 +92,7 @@ public class InGameUiController extends AbstractUiController {
     ArrayList<Building> buildingsForEndOfTurnEffects = new ArrayList<>();
     Building currentBuildingForGraphicalCaptureEffect;
     Unit currentUnitForGraphicalCaptureEffect;
-    private double cumulativeDeltaForEndOfTurnEffects;
+    private double waitTimeForEndOfTurnEffects;
     final double GAME_SPEED_CAPTURE_INTERVAL = Config.getDouble("GAME_SPEED_CAPTURE_INTERVAL");
     private GameObjectCaptureBar buildingCaptureBar;
     private ZoneMediaPlayer mediaPlayerCapture;
@@ -1852,7 +1852,7 @@ public class InGameUiController extends AbstractUiController {
             }
         }
         if(!buildingsForEndOfTurnEffects.isEmpty()){
-            cumulativeDeltaForEndOfTurnEffects = 0;
+            waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL;
 
             nextGraphicalCaptureEffect();
 
@@ -1864,9 +1864,8 @@ public class InGameUiController extends AbstractUiController {
     }
     private void handleEndOfTurnGraphicalEffects(double delta){
         if(turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS){
-            cumulativeDeltaForEndOfTurnEffects += delta;
-            if(cumulativeDeltaForEndOfTurnEffects >= GAME_SPEED_CAPTURE_INTERVAL){
-                cumulativeDeltaForEndOfTurnEffects -= GAME_SPEED_CAPTURE_INTERVAL;
+            waitTimeForEndOfTurnEffects -= delta;
+            if(waitTimeForEndOfTurnEffects <= 0){
                 if(verbose) System.out.println("[IN-GAME-UI-CONTROLLER] [handleEndOfTurnGraphicalEffects] "+currentBuildingForGraphicalCaptureEffect);
 
                 if(nextGraphicalCaptureEffect()){
@@ -1879,7 +1878,8 @@ public class InGameUiController extends AbstractUiController {
                 }
             } else {
                 if(currentEndOfTurnEffectType == EndOfTurnEffectType.CAPTURE_BAR){
-                    buildingCaptureBar.setShownProgress(currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress() + (int) Math.round(Codex.getUnitHealthDigit(currentUnitForGraphicalCaptureEffect) * (cumulativeDeltaForEndOfTurnEffects / GAME_SPEED_CAPTURE_INTERVAL)));
+                    buildingCaptureBar.setShownProgress(currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress() + (int) Math.round((double) Codex.getUnitHealthDigit(currentUnitForGraphicalCaptureEffect) * (
+                        (GAME_SPEED_CAPTURE_INTERVAL - waitTimeForEndOfTurnEffects) / GAME_SPEED_CAPTURE_INTERVAL)));
                 }
                 buildingCaptureBar.setPositionInMap(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
             }
@@ -1894,6 +1894,7 @@ public class InGameUiController extends AbstractUiController {
                 mediaPlayerCapture.stop();
                 mediaPlayerCaptureSuccess.play();
                 currentEndOfTurnEffectType = EndOfTurnEffectType.SUCCESS_TEXT;
+                waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL / 2;
                 return true;
             }
         }
@@ -1905,8 +1906,10 @@ public class InGameUiController extends AbstractUiController {
         if(buildingsForEndOfTurnEffects.isEmpty()){
             if(currentEndOfTurnEffectType != EndOfTurnEffectType.FINAL_WAIT) {
                 currentEndOfTurnEffectType = EndOfTurnEffectType.FINAL_WAIT;
+                waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL / 2;
                 return true;
             } else {
+                waitTimeForEndOfTurnEffects = 0;
                 return false;
             }
         }
@@ -1923,6 +1926,7 @@ public class InGameUiController extends AbstractUiController {
         //mediaPlayerCapture.stop();
         mediaPlayerCapture.play();
         currentEndOfTurnEffectType = EndOfTurnEffectType.CAPTURE_BAR;
+        waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL;
         return true;
     }
 

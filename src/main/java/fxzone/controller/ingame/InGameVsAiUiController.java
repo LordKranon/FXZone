@@ -44,7 +44,7 @@ public class InGameVsAiUiController extends InGameUiController{
     private double waitTime;
 
     private final double GAME_SPEED_AI_WAIT_TIME_TURN_START = 2;
-    private final double GAME_SPEED_AI_WAIT_TIME_TURN_END = 2;
+    private final double GAME_SPEED_AI_WAIT_TIME_TURN_END = 1;
     private boolean hasWaitedAfterTurn;
 
 
@@ -280,6 +280,7 @@ public class InGameVsAiUiController extends InGameUiController{
             }
 
             waitTime = GAME_SPEED_AI_WAIT_TIME_TURN_START;
+            hasWaitedAfterTurn = false;
             turnState = TurnState.AI_TURN;
         }
     }
