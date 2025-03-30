@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class ParticleText extends Particle{
 
     public ParticleText(double x, double y, double tileRenderSize, Group group, double lifetime) {
-        super(AssetHandler.getImage("/images/misc/capture_bar/captured_text.png"), x-tileRenderSize/2., y-tileRenderSize/2., 2*tileRenderSize, group);
+        super(AssetHandler.getImage("/images/misc/capture_bar/captured_text.png"), x-tileRenderSize/4., y-tileRenderSize/4., 1.5*tileRenderSize, group);
 
         this.maxLifeTime = lifetime;
 

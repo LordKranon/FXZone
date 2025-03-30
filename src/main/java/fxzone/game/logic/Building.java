@@ -144,6 +144,12 @@ public class Building extends TileSpaceObject{
         this.gameObjectBuilding.setImageToNewOwner(this.buildingType, playerColorNew);
         initializeConstructionMenuUI(buildableUnitTypes, playerColorNew);
     }
+    /**
+     * Temporarily change the color of this building when it is about to be captured at the end of turn.
+     */
+    public void setColorEffect(java.awt.Color color){
+        this.gameObjectBuilding.setImageToNewOwner(this.buildingType, color);
+    }
 
     @Override
     public String toString(){

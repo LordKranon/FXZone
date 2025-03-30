@@ -1888,6 +1888,8 @@ public class InGameUiController extends AbstractUiController {
 
                 currentEndOfTurnEffectType = EndOfTurnEffectType.SUCCESS_TEXT;
                 waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL / 2;
+
+                currentBuildingForGraphicalCaptureEffect.setColorEffect(FxUtils.toAwtColor(game.getPlayer(currentUnitForGraphicalCaptureEffect.getOwnerId()).getColor()));
                 return true;
             }
         }
