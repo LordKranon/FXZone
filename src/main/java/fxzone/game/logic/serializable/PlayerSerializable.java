@@ -12,10 +12,12 @@ public class PlayerSerializable implements Serializable {
     public String name;
     public String color;
     public int id;
+    public String pathStartOfTurnJingle;
 
     public PlayerSerializable(Player player){
         this.name = player.getName();
         this.color = FxUtils.toRGBCode(player.getColor());
         this.id = player.getId();
+        this.pathStartOfTurnJingle = player.getPathStartOfTurnJingle();
     }
 }

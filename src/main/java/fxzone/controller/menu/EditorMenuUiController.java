@@ -112,10 +112,10 @@ public class EditorMenuUiController extends AbstractUiController {
             map.setBiome(biome);
             MapSerializable mapSerializable = new MapSerializable(map, 1);
             ArrayList<Player> editorPlayerList = new ArrayList<>();
-            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1));
-            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
-            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
-            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
+            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1, null));
+            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2, null));
+            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3, null));
+            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4, null));
             gameController.setActiveUiController(new InGameEditorUiController(gameController, new GameSerializable(mapSerializable, editorPlayerList, GameMode.EDITOR)));
         }
 
@@ -128,10 +128,10 @@ public class EditorMenuUiController extends AbstractUiController {
             }
 
             ArrayList<Player> editorPlayerList = new ArrayList<>();
-            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1));
-            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2));
-            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3));
-            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4));
+            editorPlayerList.add(new Player("Alpha", FxUtils.toColor("ff0000"), 1, null));
+            editorPlayerList.add(new Player("Bravo", FxUtils.toColor("0000ff"), 2, null));
+            editorPlayerList.add(new Player("Charlie", FxUtils.toColor("00ff00"), 3, null));
+            editorPlayerList.add(new Player("Delta", FxUtils.toColor("ffff00"), 4, null));
             GameSerializable gameSerializable = new GameSerializable(loadedMap, editorPlayerList, GameMode.EDITOR);
             InGameEditorUiController inGameEditorUiController = new InGameEditorUiController(gameController, gameSerializable);
             gameController.setActiveUiController(inGameEditorUiController);

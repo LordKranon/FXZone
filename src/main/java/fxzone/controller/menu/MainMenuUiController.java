@@ -97,8 +97,8 @@ public class MainMenuUiController extends AbstractUiController {
         public void test(){
 
             ArrayList<Player> playerList = new ArrayList<>();
-            playerList.add(new Player("Alpha", Color.RED, 1));
-            playerList.add(new Player("Bravo", Color.BLUE, 2));
+            playerList.add(new Player("Alpha", Color.RED, 1, null));
+            playerList.add(new Player("Bravo", Color.BLUE, 2, null));
 
             MapSerializable loadedMap = Save.loadMap(Config.getString("LAST_USED_MAP_LOCAL"));
             if(loadedMap == null){

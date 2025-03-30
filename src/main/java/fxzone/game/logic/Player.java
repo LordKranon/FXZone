@@ -15,22 +15,26 @@ public class Player {
 
     private final int id;
 
+    private final String pathStartOfTurnJingle;
+
     /*
     GAMEPLAY
      */
     private int statResourceCash;
 
-    public Player(String name, Color color, int id){
+    public Player(String name, Color color, int id, String pathStartOfTurnJingle){
         this.name = name;
         this.color = color;
         this.textColor = FxUtils.easeColor(color);
         this.id = id;
+        this.pathStartOfTurnJingle = pathStartOfTurnJingle;
     }
     public Player(PlayerSerializable playerSerializable){
         this.name = playerSerializable.name;
         this.color = Color.web(playerSerializable.color);
         this.textColor = FxUtils.easeColor(this.color);
         this.id = playerSerializable.id;
+        this.pathStartOfTurnJingle = playerSerializable.pathStartOfTurnJingle;
         initializeStats();
     }
     private void initializeStats(){
@@ -71,5 +75,9 @@ public class Player {
     }
     public void setStatResourceCash(int cash){
         this.statResourceCash = cash;
+    }
+
+    public String getPathStartOfTurnJingle(){
+        return pathStartOfTurnJingle;
     }
 }

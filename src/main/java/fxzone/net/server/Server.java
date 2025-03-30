@@ -54,7 +54,7 @@ public class Server extends AbstractServer{
      * Then that client will be added as a player.
      */
     public void clientConnected(ServerProtocol serverProtocol, Player playerProposed){
-        Player playerAccepted = new Player(playerProposed.getName(), playerProposed.getColor(), playerIdDistributor++);
+        Player playerAccepted = new Player(playerProposed.getName(), playerProposed.getColor(), playerIdDistributor++, null);
         if(serverHostController.playerJoinedLobby(playerAccepted)){
             players.put(serverProtocol, playerAccepted);
         }

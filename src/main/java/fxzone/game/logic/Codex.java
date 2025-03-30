@@ -667,15 +667,15 @@ public class Codex {
     }
     public static Player getEnemyPlayerOfCampaignMission(int mission){
         if(mission >= 0 && mission <= 5){
-            return new Player("Enemy", Color.web("#a08000"), 2);
+            return new Player("Enemy", Color.web("#a08000"), 2, "horn_scary");
         } else if(mission >= 6 && mission <= 10){
-            return new Player("Enemy", Color.web("#0080a0"), 2);
+            return new Player("Enemy", Color.web("#0080a0"), 2, "horn_scary");
         } else if(mission >= 11 && mission <= 15){
-            return new Player("Enemy", Color.web("#40a040"), 2);
+            return new Player("Enemy", Color.web("#40a040"), 2, "horn_scary");
         } else if(mission == 20){
-            return new Player("Stoll", Color.web("#0000ff"), 2);
+            return new Player("Stoll", Color.web("#0000ff"), 2, "horn_scary");
         } else {
-            return new Player("Enemy", Color.web("#000000"), 2);
+            return new Player("Enemy", Color.web("#000000"), 2, "horn_scary");
         }
     }
 }

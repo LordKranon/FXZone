@@ -1931,16 +1931,23 @@ public class InGameUiController extends AbstractUiController {
         }
     }
     void onBeginTurnDoVisualEffect(){
+        Player playerWithTurn = game.getPlayers().get(game.whoseTurn());
         globalMessageText.setText("TURN "+game.getTurnCount());
         globalMessageText.setStyle("-fx-fill: #ffffff;");
 
-        globalMessageName.setText("\n"+game.getPlayers().get(game.whoseTurn()).getName());
-        globalMessageName.setStyle("-fx-fill: "+ FxUtils.toRGBCode(game.getPlayers().get(game.whoseTurn()).getTextColor()) + ";");
+        globalMessageName.setText("\n"+playerWithTurn.getName());
+        globalMessageName.setStyle("-fx-fill: "+ FxUtils.toRGBCode(playerWithTurn.getTextColor()) + ";");
 
         globalMessageTextFlow.setVisible(true);
 
         cumulativeDeltaForStartOfTurnEffects = 0;
         startOfTurnVisualEffectInProgress = true;
+
+        if(playerWithTurn.getPathStartOfTurnJingle() != null){
+            ZoneMediaPlayer mediaPlayerStartOfTurnJingle = new ZoneMediaPlayer("/sounds/effects_musical/jingle/zone_jingle_"+playerWithTurn.getPathStartOfTurnJingle()+".mp3");
+            mediaPlayerStartOfTurnJingle.play();
+        }
+
     }
 
     /**

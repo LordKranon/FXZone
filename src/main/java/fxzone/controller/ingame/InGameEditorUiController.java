@@ -100,7 +100,7 @@ public class InGameEditorUiController extends InGameUiController{
 
     @Override
     protected void initializeGameSpecifics(){
-        Player editorPlayer = new Player("Editor", Color.CYAN, 404);
+        Player editorPlayer = new Player("Editor", Color.CYAN, 404, null);
 
         this.thisPlayer = editorPlayer;
 

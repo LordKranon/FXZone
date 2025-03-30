@@ -105,7 +105,7 @@ public class LobbyLocalUiController extends LobbyUiController{
             Config.set("LAST_USED_PLAYER_COLOR_LOCAL_"+runningPlayerIdNumber, playerColor);
         }
 
-        localPlayerList.add(new Player(playerName, color, runningPlayerIdNumber++));
+        localPlayerList.add(new Player(playerName, color, runningPlayerIdNumber++, null));
 
         try{
             textFieldPlayerName.setText(Config.getString("LAST_USED_PLAYER_NAME_LOCAL_"+runningPlayerIdNumber));

@@ -119,7 +119,7 @@ public class CampaignMenuUiController extends AbstractUiController {
             return;
         }
         ArrayList<Player> playerList = new ArrayList<>();
-        playerList.add(new Player("You", Color.RED, 1));
+        playerList.add(new Player("You", Color.RED, 1, "arma"));
         playerList.add(Codex.getEnemyPlayerOfCampaignMission(mission));
 
         MapSerializable loadedMap = Save.loadMap("campaign_"+mission);
