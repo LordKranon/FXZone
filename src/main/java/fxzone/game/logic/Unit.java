@@ -96,7 +96,6 @@ public class Unit extends TileSpaceObject{
     SOUND
      */
     private ZoneMediaPlayer mediaPlayerMovement;
-    private ZoneMediaPlayer mediaPlayerGunshot;
     private ZoneMediaPlayer mediaPlayerOnSelect;
 
     /*
@@ -162,17 +161,6 @@ public class Unit extends TileSpaceObject{
         //TODO Improve very rudimentary sound system
         this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSoundMovement(unitType), false);
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
-
-        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unitType), false);
-
-        if(mediaPlayerGunshot.getMediaPlayer() != null){
-            mediaPlayerGunshot.getMediaPlayer().setOnEndOfMedia(new Runnable() {
-                @Override
-                public void run() {
-                    mediaPlayerGunshot.stop();
-                }
-            });
-        }
 
         this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType), false);
     }
@@ -510,7 +498,6 @@ public class Unit extends TileSpaceObject{
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
             currentlyAttackedUnit = attackedUnit;
             statRemainingHealthOnAttack = statRemainingHealth;
-            //mediaPlayerGunshot.play();
             unitStateToAttacking();
         }
         else if(disappearIntoTransportAfterMoving){
@@ -624,10 +611,8 @@ public class Unit extends TileSpaceObject{
         super.onRemoval(group);
         gameObjectUiUnitHealth.removeSelfFromRoot(group);
         this.mediaPlayerMovement.stop();
-        this.mediaPlayerGunshot.stop();
         this.mediaPlayerOnSelect.stop();
         this.mediaPlayerMovement.dispose();
-        this.mediaPlayerGunshot.dispose();
         this.mediaPlayerOnSelect.dispose();
     }
     @Override
