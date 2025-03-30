@@ -95,8 +95,6 @@ public class InGameUiController extends AbstractUiController {
     private double waitTimeForEndOfTurnEffects;
     final double GAME_SPEED_CAPTURE_INTERVAL = Config.getDouble("GAME_SPEED_CAPTURE_INTERVAL");
     private GameObjectCaptureBar buildingCaptureBar;
-    private ZoneMediaPlayer mediaPlayerCapture;
-    private ZoneMediaPlayer mediaPlayerCaptureSuccess;
     private EndOfTurnEffectType currentEndOfTurnEffectType;
     private enum EndOfTurnEffectType {
         CAPTURE_BAR,
@@ -292,12 +290,6 @@ public class InGameUiController extends AbstractUiController {
 
         //Begin the first turn
         beginTurn();
-
-        //Capture sound media player
-        mediaPlayerCapture = new ZoneMediaPlayer("/sounds/zone_capture.mp3", false);
-        mediaPlayerCapture.setRate(2. / GAME_SPEED_CAPTURE_INTERVAL);
-        mediaPlayerCaptureSuccess = new ZoneMediaPlayer("/sounds/zone_capture_success.mp3", false);
-        mediaPlayerCaptureSuccess.setRate(2./GAME_SPEED_CAPTURE_INTERVAL);
 
         //In-Game music
         mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/zone_jr_v1.2.mp3"));
@@ -1872,7 +1864,6 @@ public class InGameUiController extends AbstractUiController {
 
                 } else {
                     buildingCaptureBar.setVisible(false);
-                    mediaPlayerCapture.stop();
                     currentEndOfTurnEffectType = EndOfTurnEffectType.NONE;
                     onPlayerEndTurn();
                 }
@@ -1891,17 +1882,14 @@ public class InGameUiController extends AbstractUiController {
             if(currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress() + Codex.getUnitHealthDigit(currentUnitForGraphicalCaptureEffect) >= Codex.BUILDING_CAPTURE_TOTAL){
                 double[] graphicalPositionOfParticles = map.getGraphicalPosition(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY());
                 particleHandler.newParticleText(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), GAME_SPEED_CAPTURE_INTERVAL);
-                mediaPlayerCapture.stop();
+
+                ZoneMediaPlayer mediaPlayerCaptureSuccess = new ZoneMediaPlayer("/sounds/zone_capture_success.mp3");
                 mediaPlayerCaptureSuccess.play();
+
                 currentEndOfTurnEffectType = EndOfTurnEffectType.SUCCESS_TEXT;
                 waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL / 2;
                 return true;
             }
-        }
-        if(currentEndOfTurnEffectType == EndOfTurnEffectType.SUCCESS_TEXT){
-            mediaPlayerCaptureSuccess.stop();
-        } else {
-            mediaPlayerCapture.stop();
         }
         if(buildingsForEndOfTurnEffects.isEmpty()){
             if(currentEndOfTurnEffectType != EndOfTurnEffectType.FINAL_WAIT) {
@@ -1923,8 +1911,10 @@ public class InGameUiController extends AbstractUiController {
         buildingCaptureBar.initToPlayer(color, currentBuildingForGraphicalCaptureEffect.getStatCaptureProgress());
         buildingCaptureBar.setVisible(true);
         buildingCaptureBar.changeTileRenderSize(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
-        //mediaPlayerCapture.stop();
+
+        ZoneMediaPlayer mediaPlayerCapture = new ZoneMediaPlayer("/sounds/zone_capture.mp3");
         mediaPlayerCapture.play();
+
         currentEndOfTurnEffectType = EndOfTurnEffectType.CAPTURE_BAR;
         waitTimeForEndOfTurnEffects = GAME_SPEED_CAPTURE_INTERVAL;
         return true;

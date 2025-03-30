@@ -691,6 +691,7 @@ public class AssetHandler {
             case TANK_BATTLE:
             case ARTILLERY_ROCKET:
             case SHIP_BATTLESHIP:
+            case PLANE_BOMBER:
             case ARTILLERY: return getSound("/sounds/zone_tank_shot_impact_1.mp3");
             default: return getSound("/sounds/explodemini.mp3");
         }
