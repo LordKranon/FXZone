@@ -673,7 +673,7 @@ public class Codex {
         } else if(mission >= 11 && mission <= 15){
             return new Player("Enemy", Color.web("#40a040"), 2, "horn_scary");
         } else if(mission == 20){
-            return new Player("Stoll", Color.web("#0000ff"), 2, "horn_scary");
+            return new Player("Stoll", Color.web("#0000ff"), 2, "jr_1");
         } else {
             return new Player("Enemy", Color.web("#000000"), 2, "horn_scary");
         }

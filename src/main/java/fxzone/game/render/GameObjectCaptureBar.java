@@ -21,6 +21,9 @@ public class GameObjectCaptureBar extends GameObjectInTileSpace{
         setShownProgress(progress);
     }
     public void setShownProgress(int progress){
+        if(progress > Codex.BUILDING_CAPTURE_TOTAL){
+            progress = Codex.BUILDING_CAPTURE_TOTAL;
+        }
         setImage(progressImages[progress]);
     }
 }

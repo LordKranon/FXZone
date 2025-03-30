@@ -43,8 +43,10 @@ public class InGameVsAiUiController extends InGameUiController{
 
     private double waitTime;
 
-    //temporary test
-    private boolean aiCommandGivenThisTurn = false;
+    private final double GAME_SPEED_AI_WAIT_TIME_TURN_START = 2;
+    private final double GAME_SPEED_AI_WAIT_TIME_TURN_END = 2;
+    private boolean hasWaitedAfterTurn;
+
 
     public InGameVsAiUiController(AbstractGameController gameController, GameSerializable initialGame, int campaignMission) {
         super(gameController, initialGame, 1);
@@ -85,9 +87,19 @@ public class InGameVsAiUiController extends InGameUiController{
                 return;
             }
 
-            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to end turn.");
-            endTurn();
+            if(!hasWaitedAfterTurn){
+                if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI waits a short time before ending turn.");
+                waitTime = GAME_SPEED_AI_WAIT_TIME_TURN_END;
+                hasWaitedAfterTurn = true;
+            } else {
+                if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to end turn.");
+                onAiEndTurn();
+            }
         }
+    }
+    private void onAiEndTurn(){
+        turnState = TurnState.ENDING_TURN;
+        goToEndOfTurnGraphicalEffects();
     }
 
     private void handleAiCommandToUnit(Unit unit){
@@ -231,11 +243,13 @@ public class InGameVsAiUiController extends InGameUiController{
     @Override
     protected void endTurn(){
         if(turnState == TurnState.AI_TURN){
+            //TODO
+            //This can only be reached when after AI turn the end-of-turn-visual-effects are skipped.
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [endTurn] AI ended turn.");
             turnState = TurnState.ENDING_TURN;
             super.endTurn();
         } else {
-            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [endTurn] Player ended turn.");
+            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [endTurn]");
             super.endTurn();
         }
     }
@@ -254,7 +268,6 @@ public class InGameVsAiUiController extends InGameUiController{
             setLabelToPlayer(thisPlayer);
 
             currentAiPlayerFowVision = map.getVisionOfPlayer(game.getPlayers().get(game.whoseTurn()).getId());
-            aiCommandGivenThisTurn = false;
             for(Unit u: map.getUnits()){
                 if(u.getUnitState() == UnitState.NEUTRAL && u.getOwnerId() == game.getPlayers().get(game.whoseTurn()).getId()){
                     unitsToHandle.add(u);
@@ -266,6 +279,7 @@ public class InGameVsAiUiController extends InGameUiController{
                 }
             }
 
+            waitTime = GAME_SPEED_AI_WAIT_TIME_TURN_START;
             turnState = TurnState.AI_TURN;
         }
     }

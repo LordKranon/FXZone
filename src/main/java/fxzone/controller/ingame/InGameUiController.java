@@ -101,6 +101,7 @@ public class InGameUiController extends AbstractUiController {
     private enum EndOfTurnEffectType {
         CAPTURE_BAR,
         SUCCESS_TEXT,
+        FINAL_WAIT,
         NONE,
     }
 
@@ -1902,7 +1903,12 @@ public class InGameUiController extends AbstractUiController {
             mediaPlayerCapture.stop();
         }
         if(buildingsForEndOfTurnEffects.isEmpty()){
-            return false;
+            if(currentEndOfTurnEffectType != EndOfTurnEffectType.FINAL_WAIT) {
+                currentEndOfTurnEffectType = EndOfTurnEffectType.FINAL_WAIT;
+                return true;
+            } else {
+                return false;
+            }
         }
 
         // Next Building
