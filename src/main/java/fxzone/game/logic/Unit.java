@@ -160,10 +160,10 @@ public class Unit extends TileSpaceObject{
     }
     private void initializeMediaPlayer(){
         //TODO Improve very rudimentary sound system
-        this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSoundMovement(unitType));
+        this.mediaPlayerMovement = new ZoneMediaPlayer(AssetHandler.getSoundMovement(unitType), false);
         this.mediaPlayerMovement.setRate((1 / (2 * InGameUiController.TOTAL_UNIT_MOVEMENT_INTERVAL)) * 1);
 
-        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unitType));
+        this.mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unitType), false);
 
         if(mediaPlayerGunshot.getMediaPlayer() != null){
             mediaPlayerGunshot.getMediaPlayer().setOnEndOfMedia(new Runnable() {
@@ -174,7 +174,7 @@ public class Unit extends TileSpaceObject{
             });
         }
 
-        this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType));
+        this.mediaPlayerOnSelect = new ZoneMediaPlayer(AssetHandler.getSoundOnSelect(unitType), false);
     }
 
     public UnitType getUnitType(){
@@ -510,7 +510,7 @@ public class Unit extends TileSpaceObject{
             Unit attackedUnit = map.getTiles()[pointToAttackAfterMoving.x][pointToAttackAfterMoving.y].getUnitOnTile();
             currentlyAttackedUnit = attackedUnit;
             statRemainingHealthOnAttack = statRemainingHealth;
-            mediaPlayerGunshot.play();
+            //mediaPlayerGunshot.play();
             unitStateToAttacking();
         }
         else if(disappearIntoTransportAfterMoving){
@@ -623,6 +623,12 @@ public class Unit extends TileSpaceObject{
     public void onRemoval(Group group){
         super.onRemoval(group);
         gameObjectUiUnitHealth.removeSelfFromRoot(group);
+        this.mediaPlayerMovement.stop();
+        this.mediaPlayerGunshot.stop();
+        this.mediaPlayerOnSelect.stop();
+        this.mediaPlayerMovement.dispose();
+        this.mediaPlayerGunshot.dispose();
+        this.mediaPlayerOnSelect.dispose();
     }
     @Override
     public void setVisible(boolean visible){

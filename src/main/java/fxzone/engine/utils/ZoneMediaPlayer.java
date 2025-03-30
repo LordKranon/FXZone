@@ -11,15 +11,29 @@ public class ZoneMediaPlayer {
 
     private MediaPlayer mediaPlayer;
 
+    public ZoneMediaPlayer(String path, boolean disposeOnEndOfMedia){
+        init(AssetHandler.getSound(path), disposeOnEndOfMedia);
+    }
+    public ZoneMediaPlayer(Media media, boolean disposeOnEndOfMedia){
+        init(media, disposeOnEndOfMedia);
+    }
     public ZoneMediaPlayer(Media media) {
-        init(media);
+        init(media, false);
     }
     public ZoneMediaPlayer(String path){
-        init(AssetHandler.getSound(path));
+        init(AssetHandler.getSound(path), false);
     }
-    private void init(Media media){
+    private void init(Media media, boolean disposeOnEndOfMedia){
         try{
             this.mediaPlayer = new MediaPlayer(media);
+            if(disposeOnEndOfMedia){
+                this.mediaPlayer.setOnEndOfMedia(new Runnable() {
+                    @Override
+                    public void run() {
+                        mediaPlayer.dispose();
+                    }
+                });
+            }
         }
         catch (NullPointerException e){
             if(verbose) System.err.println("[ZONE-MEDIA-PLAYER] Media initialized with null");
@@ -55,5 +69,9 @@ public class ZoneMediaPlayer {
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public void dispose(){
+        this.mediaPlayer.dispose();
     }
 }

@@ -293,9 +293,9 @@ public class InGameUiController extends AbstractUiController {
         beginTurn();
 
         //Capture sound media player
-        mediaPlayerCapture = new ZoneMediaPlayer("/sounds/zone_capture.mp3");
+        mediaPlayerCapture = new ZoneMediaPlayer("/sounds/zone_capture.mp3", false);
         mediaPlayerCapture.setRate(2. / GAME_SPEED_CAPTURE_INTERVAL);
-        mediaPlayerCaptureSuccess = new ZoneMediaPlayer("/sounds/zone_capture_success.mp3");
+        mediaPlayerCaptureSuccess = new ZoneMediaPlayer("/sounds/zone_capture_success.mp3", false);
         mediaPlayerCaptureSuccess.setRate(2./GAME_SPEED_CAPTURE_INTERVAL);
 
         //In-Game music
@@ -1670,6 +1670,9 @@ public class InGameUiController extends AbstractUiController {
     private void onAttackAddFightingUnits(Unit unit){
         unitsAttacking.put(unit, 0.);
         Unit attackedUnit = unit.getCurrentlyAttackedUnit();
+        ZoneMediaPlayer mediaPlayerGunshot = new ZoneMediaPlayer(AssetHandler.getSoundGunshot(unit.getUnitType()));
+        mediaPlayerGunshot.play();
+
         if(attackedUnit.onAttacked(unit)){
             unitsAttacking.put(attackedUnit, 0.);
         }
@@ -2027,11 +2030,11 @@ public class InGameUiController extends AbstractUiController {
         globalMessageTextFlow.setVisible(true);
         if(victory){
             globalMessageText.setText("VICTORY");
-            MediaPlayer mediaPlayerVictory = new MediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_victory.mp3"));
+            ZoneMediaPlayer mediaPlayerVictory = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_victory.mp3"));
             mediaPlayerVictory.play();
         } else {
             globalMessageText.setText("DEFEAT");
-            MediaPlayer mediaPlayerDefeat = new MediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_defeat.mp3"));
+            ZoneMediaPlayer mediaPlayerDefeat = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/effects_musical/zone_defeat.mp3"));
             mediaPlayerDefeat.play();
         }
         if(playerDisplayed == 0){
