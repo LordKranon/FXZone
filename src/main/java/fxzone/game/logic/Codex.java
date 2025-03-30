@@ -217,7 +217,7 @@ public class Codex {
             21, "Bomber",
             7, 4, 100, 9, 3, 1, 1,
             1, 1.2, 1.2,
-            UnitAttackType.MELEE,
+            UnitAttackType.PACIFIST, // (Special)
             UnitArmorClass.ARMORCLASS_ARMORED,
             UnitSuperType.AIRCRAFT_PLANE,
             300

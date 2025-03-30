@@ -670,7 +670,27 @@ public class InGameUiController extends AbstractUiController {
         if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGED){
             clearSelectedUnitPathQueue();
             addPathQueueArrowBase();
-        } else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
+        }
+        else if(selectedUnit.getUnitType() == UnitType.PLANE_BOMBER){
+            // BOMBER special case
+            if(
+                GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
+                    selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
+                    moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
+            ){
+                // Player manually adds another tile to pathing arrow
+                // This temporarily creates an illegal path as final destination tile is an attackable square with another unit on it
+                addPointToSelectedUnitPathQueue(hoveredPoint);
+            } else if(
+                    moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
+            ){
+                // Player hovers any red tile and arrow is either too long already or arrowhead is not neighboring
+                // Redo the pathing arrow with automatic pathfinding
+                // This also results in a temporarily illegal path
+                autoFindNewSelectedUnitPathQueue(hoveredPoint);
+            }
+        }
+        else if(Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE || Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE){
             if(
                 (GeometryUtils.getPointToPointDistance(lastTileAddedToPathQueue, hoveredPoint) <= Codex.getUnitProfile(selectedUnit).MAXRANGE &&
                     map.checkTileForMoveToByUnitPerceived(lastTileAddedToPathQueue.x, lastTileAddedToPathQueue.y, selectedUnit, vision, false)) ||
@@ -1588,6 +1608,18 @@ public class InGameUiController extends AbstractUiController {
         else if (Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.RANGERMELEE ||
         Codex.getUnitProfile(selectedUnit).ATTACKTYPE == UnitAttackType.MELEE){
             onCalculateMoveCommandGridAddToAttackGridFromTileRangerMelee(selectedUnit.getX(), selectedUnit.getY(), selectedUnit, moveCommandGridAttackableSquares, false, vision);
+        }
+
+        // If selected unit is a BOMBER, switch movable squares with enemies on them to attackable squares
+        if(selectedUnit.getUnitType() == UnitType.PLANE_BOMBER){
+            for(int i_x = 0; i_x < moveCommandGridMovableSquares.length; i_x++){
+                for(int i_y = 0; i_y < moveCommandGridMovableSquares[i_x].length; i_y++){
+
+                    if(moveCommandGridMovableSquares[i_x][i_y] && map.checkTileForAttackByUnit(i_x, i_y, selectedUnit, vision)){
+                        moveCommandGridAttackableSquares[i_x][i_y] = true;
+                    }
+                }
+            }
         }
     }
 
