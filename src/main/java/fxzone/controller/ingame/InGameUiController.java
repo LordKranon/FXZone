@@ -1071,6 +1071,21 @@ public class InGameUiController extends AbstractUiController {
                     if(unit.getOwnerId() == thisPlayer.getId()){
                         map.setFogOfWarToVision(map.addVisionOnUnitMove(thisPlayerFowVision, unit.getVisualTileX(), unit.getVisualTileY(), Codex.getUnitProfile(unit).VISION));
                     }
+
+                    // BOMBER Hits passed units
+                    if(unit.getUnitType() == UnitType.PLANE_BOMBER){
+                        Unit passedOverUnit = map.getTiles()[unit.getVisualTileX()][unit.getVisualTileY()].getUnitOnTile();
+                        if(
+                            passedOverUnit!=null &&
+                                passedOverUnit.getOwnerId() != unit.getOwnerId() &&
+                                Codex.canHit(unit, passedOverUnit)
+                        ){
+                            AttackResult attackResult = unit.doSpecialAttackFinish(passedOverUnit);
+                            doFightVisualAndSoundEffect(unit, passedOverUnit, attackResult.attackedUnitSurvived, false, attackResult.hpChange);
+                            if(!attackResult.attackedUnitSurvived){
+                                map.removeUnit(passedOverUnit);
+                            }
+                        }}
                 }
             } else {
                 unit.performInBetweenTileMove(cumulativeDelta / TOTAL_UNIT_MOVEMENT_INTERVAL, map);
@@ -1090,24 +1105,8 @@ public class InGameUiController extends AbstractUiController {
 
                 Unit attackedUnit = unit.getLastAttackedUnit();
 
-                //Explosion particles
-                double[] graphicalPositionOfParticles = map.getGraphicalPosition(attackedUnit.getX(), attackedUnit.getY());
-                if(!attackedUnitSurvived){
-                    particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 20);
-                } else if(!wasCounterAttack){
-                    particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 8);
-                }
-                //Explosion sound
-                if(!wasCounterAttack){
-                    ZoneMediaPlayer mediaPlayerExplosion = new ZoneMediaPlayer(AssetHandler.getSoundExplosion(unit.getUnitType()));
-                    mediaPlayerExplosion.play();
-                    if(!attackedUnitSurvived){
-                        ZoneMediaPlayer mediaPlayerKill = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/battlefeild-1-kill-sound-effect-made-with-Voicemod.mp3"));
-                        mediaPlayerKill.play();
-                    }
-                }
-                //Hit (HP change) particle
-                particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), attackResult.hpChange);
+                // Explosion particles and sound
+                doFightVisualAndSoundEffect(unit, attackedUnit, attackedUnitSurvived, wasCounterAttack, attackResult.hpChange);
 
                 //Removed attacked unit if it died
                 if(!attackedUnitSurvived){
@@ -1119,6 +1118,26 @@ public class InGameUiController extends AbstractUiController {
             }
             unitsAttacking.put(unit, cumulativeDelta);
         }
+    }
+    private void doFightVisualAndSoundEffect(Unit attacker, Unit defender, boolean attackedUnitSurvived, boolean wasCounterAttack, int hpChange){
+        //Explosion particles
+        double[] graphicalPositionOfParticles = map.getGraphicalPosition(defender.getX(), defender.getY());
+        if(!attackedUnitSurvived){
+            particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 20);
+        } else if(!wasCounterAttack){
+            particleHandler.newParticleExplosion(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), 8);
+        }
+        //Explosion sound
+        if(!wasCounterAttack){
+            ZoneMediaPlayer mediaPlayerExplosion = new ZoneMediaPlayer(AssetHandler.getSoundExplosion(attacker.getUnitType()));
+            mediaPlayerExplosion.play();
+            if(!attackedUnitSurvived){
+                ZoneMediaPlayer mediaPlayerKill = new ZoneMediaPlayer(AssetHandler.getSound("/sounds/battlefeild-1-kill-sound-effect-made-with-Voicemod.mp3"));
+                mediaPlayerKill.play();
+            }
+        }
+        //Hit (HP change) particle
+        particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], map.getTileRenderSize(), hpChange);
     }
     /**
      * Used in VS AI games to give the AI more vision when it moves its units.

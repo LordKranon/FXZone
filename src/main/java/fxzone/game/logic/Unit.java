@@ -538,6 +538,15 @@ public class Unit extends TileSpaceObject{
 
         return attackResult;
     }
+    /**
+     * Make this unit do an attack without going through the regular motions of an attack. Used for BOMBER pass-over attacks.
+     */
+    public AttackResult doSpecialAttackFinish(Unit attackedUnit){
+        statRemainingHealthOnAttack = statRemainingHealth;
+        AttackResult attackResult = attackedUnit.onAttackHitBy(this);
+        //this.lastAttackedUnit = attackedUnit;
+        return attackResult;
+    }
 
     /**
      * This unit is attacked, presumably during not its turn.
