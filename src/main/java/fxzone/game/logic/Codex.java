@@ -215,7 +215,7 @@ public class Codex {
         ));
         put(UnitType.PLANE_BOMBER, new UnitProfile(
             21, "Bomber",
-            6, 4, 100, 9, 3, 1, 1,
+            6, 3, 100, 9, 3, 1, 1,
             1, 1.2, 1.2,
             UnitAttackType.PACIFIST, // (Special)
             UnitArmorClass.ARMORCLASS_ARMORED,
@@ -249,7 +249,7 @@ public class Codex {
 
         put(UnitType.CAR_PICKUP, "DMG 3  DFN 2  SPD 6  VIS 4\nTransports Infantry\nStrong vs Infantry\nWeak vs Tanks");
         put(UnitType.TANK_IFV, "DMG 5  DFN 4  SPD 5  VIS 3\nTransports Infantry\nVery Strong vs Infantry\nStrong vs Light Vehicles");
-        put(UnitType.PLANE_BOMBER, "DMG 9  DFN 3  SPD 6  VIS 4\nDevastatingly Strong vs Land Units and Ships\nWeak vs other Aircraft and Anti-Air");
+        put(UnitType.PLANE_BOMBER, "DMG 9  DFN 3  SPD 6  VIS 3\nDevastatingly Strong vs Land Units and Ships\nWeak vs other Aircraft and Anti-Air");
 
     }};
     public static final HashMap<BuildingType, String> BUILDING_NAMES = new HashMap<>(){{
