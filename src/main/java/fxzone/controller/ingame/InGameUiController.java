@@ -28,6 +28,7 @@ import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectCaptureBar;
+import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectTile;
 import fxzone.game.render.GameObjectTileSelector;
 import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
@@ -158,6 +159,7 @@ public class InGameUiController extends AbstractUiController {
      * Stores the graphical objects representing the current move command queue while issuing a path.
      */
     private ArrayList<GameObjectUiMoveCommandArrowTile> moveCommandArrowTiles;
+    private ArrayList<GameObjectTileSelector> moveCommandBonusElements;
 
     private boolean[][] moveCommandPathFinderMarks;
 
@@ -417,7 +419,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private void createTileSpaceObjectsUI(){
-        tileSelector = new GameObjectTileSelector(0, 0, 128, root2D);
+        tileSelector = new GameObjectTileSelector(0, 0, 128, root2D, "");
 
         buildingCaptureBar = new GameObjectCaptureBar(0, 0, 128, root2D);
         buildingCaptureBar.setVisible(false);
@@ -765,6 +767,15 @@ public class InGameUiController extends AbstractUiController {
                 point.x, point.y, map, root2D, directionOfThisAsSuccessor
             );
             moveCommandArrowTiles.add(arrowTile);
+
+            // For BOMBER bombing run planning, add attack markers on passed-over enemies
+            if(selectedUnit.getUnitType() == UnitType.PLANE_BOMBER){
+                if(moveCommandGridAttackableSquares[point.x][point.y]){
+                    GameObjectTileSelector attackerSelector = new GameObjectTileSelector(point.x, point.y, map.getTileRenderSize(), root2D, "_attacker");
+                    attackerSelector.setOffset(map);
+                    moveCommandBonusElements.add(attackerSelector);
+                }
+            }
         }
     }
     void autoFindNewSelectedUnitPathQueue(Point point){
@@ -893,6 +904,11 @@ public class InGameUiController extends AbstractUiController {
         if(moveCommandArrowTiles != null){
             for(GameObjectUiMoveCommandArrowTile arrowTile : moveCommandArrowTiles){
                 arrowTile.removeSelfFromRoot(root2D);
+            }
+        }
+        if(moveCommandBonusElements != null){
+            for(GameObjectInTileSpace gameObjectInTileSpace : moveCommandBonusElements){
+                gameObjectInTileSpace.removeSelfFromRoot(root2D);
             }
         }
     }
@@ -1162,7 +1178,15 @@ public class InGameUiController extends AbstractUiController {
      * @param delta time (in seconds) since last update
      */
     private void handlePulsatingElements(double delta){
-        tileSelector.updateTickingImage(delta);
+        if(GameObjectTileSelector.updateTickingImage(delta)){
+            GameObjectTileSelector.switchStance();
+            tileSelector.adaptStance();
+            if(turnState == TurnState.UNIT_SELECTED && moveCommandBonusElements != null){
+                for(GameObjectTileSelector ts : moveCommandBonusElements){
+                    ts.adaptStance();
+                }
+            }
+        }
         GameObjectTile.updatePulsatingTiles(delta, map.getTiles());
         GameObjectUnit.updatePulsatingAircraft(delta, map.getUnits());
     }
@@ -1177,6 +1201,9 @@ public class InGameUiController extends AbstractUiController {
             }
             for(GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
                 gridTile.setOffset(map);
+            }
+            for(GameObjectTileSelector ts : moveCommandBonusElements){
+                ts.setOffset(map);
             }
         }
     }
@@ -1402,6 +1429,9 @@ public class InGameUiController extends AbstractUiController {
             for (GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
                 gridTile.changeTileRenderSize(map);
             }
+            for(GameObjectTileSelector ts : moveCommandBonusElements){
+                ts.changeTileRenderSize(map);
+            }
         }
         if(turnState == TurnState.END_OF_TURN_GRAPHICAL_EFFECTS){
             buildingCaptureBar.changeTileRenderSize(currentBuildingForGraphicalCaptureEffect.getX(), currentBuildingForGraphicalCaptureEffect.getY(), map);
@@ -1476,6 +1506,7 @@ public class InGameUiController extends AbstractUiController {
 
         // Initialize move command arrow
         moveCommandArrowTiles = new ArrayList<>();
+        moveCommandBonusElements = new ArrayList<>();
 
         // Add the first part of the arrow, which is on the tile that the selected unit is standing on
         addPathQueueArrowBase();
@@ -2069,6 +2100,11 @@ public class InGameUiController extends AbstractUiController {
         if(moveCommandGridTiles != null){
             for(GameObjectUiMoveCommandGridTile gridTile : moveCommandGridTiles){
                 gridTile.removeSelfFromRoot(root2D);
+            }
+        }
+        if(moveCommandBonusElements != null){
+            for(GameObjectTileSelector ts : moveCommandBonusElements){
+                ts.removeSelfFromRoot(root2D);
             }
         }
         if(selectedConstructionUI != null){
