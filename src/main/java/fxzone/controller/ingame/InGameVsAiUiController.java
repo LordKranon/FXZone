@@ -159,48 +159,32 @@ public class InGameVsAiUiController extends InGameUiController{
             //If enemy buildings exist and this unit is not currently standing on an enemy building or unclaimed building
             if(!enemyBuildingLocations.isEmpty() && !(map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile() && map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getOwnerId() != unit.getOwnerId())){
 
-                if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move command.");
-
-                Point bestPointToMoveTo;
-
-                //Find enemy buildings this unit can move onto (and capture), then pick one at random and move onto it
-                if(!enemyBuildingsToCaptureImmediately.isEmpty()){
-                    bestPointToMoveTo = enemyBuildingsToCaptureImmediately.get((int)(Math.random()*enemyBuildingsToCaptureImmediately.size()));
-
-                } else {
-                    //Find closest enemy building
-                    Point closestEnemyBuilding = enemyBuildingLocations.get(0);
-                    Point unitPosition = new Point(unit.getX(), unit.getY());
-                    for(Point p: enemyBuildingLocations){
-                        if(GeometryUtils.getPointToPointDistance(p, unitPosition) < GeometryUtils.getPointToPointDistance(closestEnemyBuilding, unitPosition)){
-                            closestEnemyBuilding = p;
-                        }
-                    }
-
-                    //Find point closest to closest enemy building and move there
-                    //From equally close points, pick one that is diagonally/visually the closest
-                    bestPointToMoveTo = movablePoints.get(0);
-                    for(Point p : movablePoints){
-                        if(
-                            (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) <= GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding) &&
-                                Math.max(Math.abs(p.x-closestEnemyBuilding.x), Math.abs(p.y-closestEnemyBuilding.y)) < Math.max(Math.abs(bestPointToMoveTo.x-closestEnemyBuilding.x), Math.abs(bestPointToMoveTo.y-closestEnemyBuilding.y)))
-                            ||
-                                (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding))
-                        ){
-                            bestPointToMoveTo = p;
-                        }
-                    }
-                }
-
-
-                autoFindNewSelectedUnitPathQueue(bestPointToMoveTo);
-
-                boolean wasStoppedOnFow = verifyPathOnMoveCommand(selectedUnitQueuedPath);
-                boolean enterTransport = checkEnterTransportOnMoveCommand(selectedUnitQueuedPath);
-                commandUnitToMove(selectedUnit, selectedUnitQueuedPath, null, enterTransport, false);
+                aiCommandToUnitMoveToBestLocation(unit, movablePoints, enemyBuildingLocations, enemyBuildingsToCaptureImmediately);
 
                 return;
 
+            }
+            // If unit is standing on enemy / unclaimed building and is a bad capturer (aircraft or hp below 7)
+            else if(
+                map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile() &&
+                    map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getOwnerId() != unit.getOwnerId() &&
+                    (!Codex.canCapture(unit) || Codex.getUnitHealthDigit(unit) < 7)
+            ){
+                // If better capturer nearby
+                Unit betterCapturer = null;
+                for(Unit u : unitsToHandle){
+                    if(
+                        GeometryUtils.getPointToPointDistance(new Point(unit.getX(), unit.getY()), new Point(u.getX(), u.getY())) <= Codex.getUnitProfile(u).SPEED &&
+                            ((Codex.canCapture(u) && Codex.getUnitHealthDigit(u) >= 7) || Codex.canCapture(u) && !Codex.canCapture(unit))
+                    ){
+                        betterCapturer = u;
+                        break;
+                    }
+                }
+                if(betterCapturer != null){
+                    // move away if able
+                    aiCommandToUnitMoveToBestLocation(unit, movablePoints, enemyBuildingLocations, enemyBuildingsToCaptureImmediately);
+                }
             }
 
         }
@@ -232,6 +216,54 @@ public class InGameVsAiUiController extends InGameUiController{
 
         if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to make building "+building+" wait this turn out as it can't afford units.");
     }
+    private void aiCommandToUnitMoveToBestLocation(Unit unit, ArrayList<Point> movablePoints, ArrayList<Point> enemyBuildingLocations, ArrayList<Point> enemyBuildingsToCaptureImmediately){
+
+        if(movablePoints.isEmpty() || enemyBuildingLocations.isEmpty()){
+            if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI wanted to give a move command but unit has no movable points or enemy buildings to capture.");
+            return;
+        }
+
+        if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [handleAiTurn] AI decided to give a move command.");
+
+        Point bestPointToMoveTo;
+
+        //Find enemy buildings this unit can move onto (and capture), then pick one at random and move onto it
+        if(!enemyBuildingsToCaptureImmediately.isEmpty()){
+            bestPointToMoveTo = enemyBuildingsToCaptureImmediately.get((int)(Math.random()*enemyBuildingsToCaptureImmediately.size()));
+
+        } else {
+            //Find closest enemy building
+            Point closestEnemyBuilding = enemyBuildingLocations.get(0);
+            Point unitPosition = new Point(unit.getX(), unit.getY());
+            for(Point p: enemyBuildingLocations){
+                if(GeometryUtils.getPointToPointDistance(p, unitPosition) < GeometryUtils.getPointToPointDistance(closestEnemyBuilding, unitPosition)){
+                    closestEnemyBuilding = p;
+                }
+            }
+
+            //Find point closest to closest enemy building and move there
+            //From equally close points, pick one that is diagonally/visually the closest
+            bestPointToMoveTo = movablePoints.get(0);
+            for(Point p : movablePoints){
+                if(
+                    (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) <= GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding) &&
+                        Math.max(Math.abs(p.x-closestEnemyBuilding.x), Math.abs(p.y-closestEnemyBuilding.y)) < Math.max(Math.abs(bestPointToMoveTo.x-closestEnemyBuilding.x), Math.abs(bestPointToMoveTo.y-closestEnemyBuilding.y)))
+                        ||
+                        (GeometryUtils.getPointToPointDistance(p, closestEnemyBuilding) < GeometryUtils.getPointToPointDistance(bestPointToMoveTo, closestEnemyBuilding))
+                ){
+                    bestPointToMoveTo = p;
+                }
+            }
+        }
+
+
+        autoFindNewSelectedUnitPathQueue(bestPointToMoveTo);
+
+        boolean wasStoppedOnFow = verifyPathOnMoveCommand(selectedUnitQueuedPath);
+        boolean enterTransport = checkEnterTransportOnMoveCommand(selectedUnitQueuedPath);
+        commandUnitToMove(selectedUnit, selectedUnitQueuedPath, null, enterTransport, false);
+    }
+
 
     @Override
     void addVisionForNotThisPlayer(Unit unit){
