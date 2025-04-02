@@ -41,6 +41,7 @@ public class Map {
      * Fog of war
      */
     private FogOfWarTile[][] fogOfWar;
+    private boolean fogOfWarEnabled = true;
 
     /**
      * Graphical size of one tile
@@ -59,6 +60,7 @@ public class Map {
         RED,
     }
     private Biome biome;
+
 
     /**
      * Constructor.
@@ -470,6 +472,9 @@ public class Map {
      * @return boolean array of same size as map, with true = visible
      */
     public boolean[][] getVisionOfPlayer(int ownerId){
+        if(!fogOfWarEnabled){
+            return getVisionOfGod();
+        }
         boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
         for(Unit unit : units){
             if(unit.getOwnerId() == ownerId){

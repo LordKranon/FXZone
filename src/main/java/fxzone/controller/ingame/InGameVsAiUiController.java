@@ -164,18 +164,20 @@ public class InGameVsAiUiController extends InGameUiController{
                 return;
 
             }
-            // If unit is standing on enemy / unclaimed building and is a bad capturer (aircraft or hp below 7)
+            // If unit is standing on enemy / unclaimed building and is a bad capturer (aircraft or hp below 7 and wont get it this turn)
             else if(
                 map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile() &&
                     map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getOwnerId() != unit.getOwnerId() &&
-                    (!Codex.canCapture(unit) || Codex.getUnitHealthDigit(unit) < 7)
+                    (!Codex.canCapture(unit) || (Codex.getUnitHealthDigit(unit) < 7 && map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile().getStatCaptureProgress() + Codex.getUnitHealthDigit(unit) < Codex.BUILDING_CAPTURE_TOTAL))
             ){
                 // If better capturer nearby
+                // AND that capturer is not currently busy capturing something else
                 Unit betterCapturer = null;
                 for(Unit u : unitsToHandle){
                     if(
                         GeometryUtils.getPointToPointDistance(new Point(unit.getX(), unit.getY()), new Point(u.getX(), u.getY())) <= Codex.getUnitProfile(u).SPEED &&
-                            ((Codex.canCapture(u) && Codex.getUnitHealthDigit(u) >= 7) || Codex.canCapture(u) && !Codex.canCapture(unit))
+                            ((Codex.canCapture(u) && Codex.getUnitHealthDigit(u) >= 7) || Codex.canCapture(u) && !Codex.canCapture(unit)) &&
+                            (!map.getTiles()[u.getX()][u.getY()].hasBuildingOnTile() || map.getTiles()[u.getX()][u.getY()].getBuildingOnTile().getOwnerId() != u.getOwnerId())
                     ){
                         betterCapturer = u;
                         break;
