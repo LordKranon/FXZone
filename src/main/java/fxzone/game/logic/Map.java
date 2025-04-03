@@ -638,6 +638,30 @@ public class Map {
         particleHandler.newParticleHit(graphicalPositionOfParticles[0], graphicalPositionOfParticles[1], getTileRenderSize(), hpChange);
     }
 
+    public boolean checkIfPlayerStillAlive(Player player){
+        boolean hasUnits = false;
+        for(Unit unit : units){
+            if(unit.getOwnerId() == player.getId()){
+                hasUnits = true;
+                break;
+            }
+        }
+        for(Building building: buildings){
+            if(building.getOwnerId() == player.getId()){
+                if(hasUnits){
+                    return true;
+                }
+                Unit unitOnBuilding = tiles[building.getX()][building.getY()].getUnitOnTile();
+                if(building.isSelectable()){
+                    if (unitOnBuilding == null || unitOnBuilding.getOwnerId() == player.getId()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public Biome getBiome(){
         return biome;
     }

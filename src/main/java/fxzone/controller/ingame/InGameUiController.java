@@ -1080,6 +1080,14 @@ public class InGameUiController extends AbstractUiController {
                     if(nextState == UnitState.ATTACKING){
                         onAttackAddFightingUnits(unit);
                     }
+
+                    // If unit moved onto an enemy building, check if that enemy is eliminated.
+                    else if(map.getTiles()[unit.getX()][unit.getY()].hasBuildingOnTile()){
+                        Building buildingOnTile = map.getTiles()[unit.getX()][unit.getY()].getBuildingOnTile();
+                        if(buildingOnTile.hasOwner() && buildingOnTile.getOwnerId() != unit.getOwnerId()){
+                            checkIfPlayerStillAlive(buildingOnTile.getOwnerId());
+                        }
+                    }
                     return;
                 } else {
                     // Add more vision (every time the unit passes a full tile)
@@ -1127,6 +1135,7 @@ public class InGameUiController extends AbstractUiController {
                 //Removed attacked unit if it died
                 if(!attackedUnitSurvived){
                     map.removeUnit(attackedUnit);
+                    checkIfPlayerStillAlive(attackedUnit.getOwnerId());
                 }
                 return;
             } else {
@@ -2051,15 +2060,8 @@ public class InGameUiController extends AbstractUiController {
             turnStateToNoTurn();
         }
         game.handleEndOfTurnEffects();
-        if(game.eliminationCheckup()){
-            ArrayList<Player> playersEliminated = game.getPendingEliminatedPlayers();
-            if(playersEliminated.contains(thisPlayer)){
-                turnStateToGameOver(false, 0);
-                return;
-            } else if(game.getPlayers().size() < 2){
-                turnStateToGameOver(game.playerExists(thisPlayer.getId()), 0);
-                return;
-            }
+        if(eliminatePlayersAndCheckIfGameOver()){
+            return;
         }
         game.goNextTurn();
         beginTurn();
@@ -2085,6 +2087,24 @@ public class InGameUiController extends AbstractUiController {
             endTurnButton.setVisible(true);
         }
         onBeginTurnDoVisualEffect();
+    }
+    /**
+     * Check whether any players have been eliminated. Go to GAME_OVER if needed.
+     *
+     * @return true if game is over
+     */
+    private boolean eliminatePlayersAndCheckIfGameOver(){
+        if(game.eliminationCheckup()){
+            ArrayList<Player> playersEliminated = game.getPendingEliminatedPlayers();
+            if(playersEliminated.contains(thisPlayer)){
+                turnStateToGameOver(false, 0);
+                return true;
+            } else if(game.getPlayers().size() < 2){
+                turnStateToGameOver(game.playerExists(thisPlayer.getId()), 0);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -2219,5 +2239,12 @@ public class InGameUiController extends AbstractUiController {
 
     private void handleParticleEffects(double delta){
         particleHandler.updateParticles(delta);
+    }
+
+    private void checkIfPlayerStillAlive(int playerId){
+        if(playerId != 0 && !map.checkIfPlayerStillAlive(game.getPlayer(playerId))){
+            game.eliminatePlayer(game.getPlayer(playerId));
+            eliminatePlayersAndCheckIfGameOver();
+        }
     }
 }
