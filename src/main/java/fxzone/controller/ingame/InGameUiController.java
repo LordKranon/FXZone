@@ -2149,6 +2149,7 @@ public class InGameUiController extends AbstractUiController {
         switch (keyCode){
             case ESCAPE: escapeKeyPressed(); break;
             case K: showRangeKeyChanged(true); break;
+            case P: toggleXRayKeyPressed(); break;
             default: break;
         }
     }
@@ -2208,6 +2209,12 @@ public class InGameUiController extends AbstractUiController {
                 }
             }
         }
+    }
+
+    private void toggleXRayKeyPressed(){
+        // WARNING: Cheat method. Has no network capabilities and may generally be buggy. Will not be enabled in final build.
+        map.toggleFogOfWar();
+        map.setFogOfWarToVision(thisPlayerFowVision);
     }
 
     private void handleParticleEffects(double delta){

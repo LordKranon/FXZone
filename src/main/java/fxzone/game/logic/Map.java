@@ -472,9 +472,6 @@ public class Map {
      * @return boolean array of same size as map, with true = visible
      */
     public boolean[][] getVisionOfPlayer(int ownerId){
-        if(!fogOfWarEnabled){
-            return getVisionOfGod();
-        }
         boolean[][] tileVisible = new boolean[getWidth()][getHeight()];
         for(Unit unit : units){
             if(unit.getOwnerId() == ownerId){
@@ -518,6 +515,9 @@ public class Map {
         if(tileVisible.length != getWidth() || tileVisible[0].length != getHeight()){
             System.err.println("[MAP] [setFogOfWarToVision] Bad vision array");
             return;
+        }
+        if(!fogOfWarEnabled){
+            tileVisible = getVisionOfGod();
         }
         for (int i = 0; i < getWidth(); i++){
             for (int j = 0; j < getHeight(); j++){
@@ -643,5 +643,9 @@ public class Map {
     }
     public void setBiome(Biome biome){
         this.biome = biome;
+    }
+
+    public void toggleFogOfWar(){
+        fogOfWarEnabled = !fogOfWarEnabled;
     }
 }
