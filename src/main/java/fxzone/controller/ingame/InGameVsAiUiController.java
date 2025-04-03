@@ -51,6 +51,13 @@ public class InGameVsAiUiController extends InGameUiController{
     public InGameVsAiUiController(AbstractGameController gameController, GameSerializable initialGame, int campaignMission) {
         super(gameController, initialGame, 1);
         this.campaignMission = campaignMission;
+
+        // On first turn in campaign, display mission name
+        if(game.getTurnCount() == 1 && game.itsMyTurn(thisPlayer)){
+            globalMessageText.setText("MISSION "+campaignMission);
+            globalMessageName.setText("\n"+Codex.CAMPAIGN_MISSION_NAMES.get(campaignMission));
+            waitTimeForStartOfTurnEffects = UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION * 2.;
+        }
     }
 
     @Override
@@ -357,5 +364,10 @@ public class InGameVsAiUiController extends InGameUiController{
     @Override
     void returnToMenuButtonClicked(){
         gameController.setActiveUiController(new CampaignMenuUiController(gameController));
+    }
+
+    @Override
+    void onBeginTurnDoVisualEffect(){
+        super.onBeginTurnDoVisualEffect();
     }
 }

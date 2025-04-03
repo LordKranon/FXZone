@@ -333,7 +333,33 @@ public class Codex {
         UnitType.PLANE_JET
     );
 
+    public static final List<String> CAMPAIGN_MISSION_NAMES = Arrays.asList(
+        "Tutorial",
 
+        "Red Formation",
+        "Artillery Line",
+        "Reinforcement",
+        "Abandoned Factory",
+        "Crimson Peninsula",
+
+        "Shallow Strait",
+        "Superweapon",
+        "Sand Hills",
+        "Naval Battle",
+        "Beachhead",
+
+        "Whirlwind",
+        "Dogfight",
+        "Mountain Range",
+        "Riverhead",
+        "Crossing",
+
+        "Last Stand",
+        "Ashen Offensive",
+        "Skull Island",
+        "Magma Fleet",
+        "Human Enemy"
+    );
 
     public static class UnitProfile{
         public String NAME;

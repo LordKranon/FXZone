@@ -105,7 +105,7 @@ public class InGameUiController extends AbstractUiController {
     }
 
     private boolean startOfTurnVisualEffectInProgress;
-    private double cumulativeDeltaForStartOfTurnEffects;
+    double waitTimeForStartOfTurnEffects;
     final double UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION = Config.getDouble("UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION");
 
     /**
@@ -2015,11 +2015,11 @@ public class InGameUiController extends AbstractUiController {
 
     private void handleStartOfTurnVisualEffects(double delta){
         if(startOfTurnVisualEffectInProgress){
-            cumulativeDeltaForStartOfTurnEffects += delta;
-            if(cumulativeDeltaForStartOfTurnEffects >= UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION){
+            waitTimeForStartOfTurnEffects -= delta;
+            if(waitTimeForStartOfTurnEffects <= 0){
                 globalMessageTextFlow.setVisible(false);
                 startOfTurnVisualEffectInProgress = false;
-                cumulativeDeltaForStartOfTurnEffects = 0;
+                waitTimeForStartOfTurnEffects = UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION;
             }
         }
     }
@@ -2033,7 +2033,7 @@ public class InGameUiController extends AbstractUiController {
 
         globalMessageTextFlow.setVisible(true);
 
-        cumulativeDeltaForStartOfTurnEffects = 0;
+        waitTimeForStartOfTurnEffects = UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION;
         startOfTurnVisualEffectInProgress = true;
 
         if(playerWithTurn.getPathStartOfTurnJingle() != null){

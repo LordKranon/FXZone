@@ -216,4 +216,7 @@ public class Game {
         pendingEliminatedPlayers.clear();
         return list;
     }
+    public GameMode getGameMode(){
+        return gameMode;
+    }
 }

@@ -70,17 +70,17 @@ public class CampaignMenuUiController extends AbstractUiController {
         }
     }
     private void putButton(Pane container, int position, double prefWidth, double fontSize, int missionNumber){
-        Button button = new Button("MISSION " + missionNumber);
+        Button button = new Button(Codex.CAMPAIGN_MISSION_NAMES.get(missionNumber));
         button.setPrefWidth(prefWidth);
         button.setVisible(true);
 
         if(missionNumber > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
             button.setStyle("-fx-text-fill: #505050; -fx-font-size:"+fontSize);
+            button.setText("???");
         } else if(missionNumber <= Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN")){
             button.setStyle("-fx-text-fill: #386538; -fx-font-size:"+fontSize);
         } else if(missionNumber == Codex.TOTAL_CAMPAIGN_COLUMNS * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN){
             button.setStyle("-fx-text-fill: #ff4040; -fx-font-size:"+fontSize);
-            button.setText("FINAL MISSION");
         } else {
             button.setStyle("-fx-font-size:"+fontSize);
         }
