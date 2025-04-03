@@ -28,7 +28,7 @@ public class Server extends AbstractServer{
      * Statically give out rising id numbers to players.
      * ID 1 is reserved for the host.
      */
-    private static int playerIdDistributor = 2;
+    private int playerIdDistributor = 2;
 
     public Server(){
         super();
