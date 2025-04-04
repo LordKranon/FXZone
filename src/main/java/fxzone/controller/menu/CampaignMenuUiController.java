@@ -136,16 +136,25 @@ public class CampaignMenuUiController extends AbstractUiController {
 
     private void missionClicked(int mission){
         if(mission > Config.getInt("GAME_PROGRESS_HIGHEST_CAMPAIGN_MISSION_BEATEN") + 1){
-            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Mission not unlocked yet");
+            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Mission not unlocked yet.");
             return;
         }
         ArrayList<Player> playerList = new ArrayList<>();
-        playerList.add(new Player("You", Color.RED, 1, "arma"));
+        String playerName = Config.getString("ARMY_NAME");
+        Color playerColor;
+        try{
+            playerColor = Color.web(Config.getString("ARMY_COLOR"));
+        } catch (Exception e){
+            playerColor = Color.RED;
+            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR on getting player army color.");
+        }
+        String playerJingle = Config.getString("ARMY_JINGLE");
+        playerList.add(new Player(playerName, playerColor, 1, playerJingle));
         playerList.add(Codex.getEnemyPlayerOfCampaignMission(mission));
 
         MapSerializable loadedMap = Save.loadMap("campaign_"+mission);
         if(loadedMap == null){
-            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Could not load map on game start");
+            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Could not load map on game start.");
             return;
         }
 

@@ -25,7 +25,7 @@
         </Pane>
 
 
-        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="CAMPAIGN" textFill="WHITE"
+        <Label alignment="BASELINE_CENTER" contentDisplay="RIGHT" text="ARMY" textFill="WHITE"
           GridPane.halignment="CENTER" GridPane.valignment="CENTER">
           <font>
             <Font size="50.0"/>

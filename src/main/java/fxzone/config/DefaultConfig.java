@@ -52,5 +52,6 @@ public class DefaultConfig {
 
         {"ARMY_NAME", "Your Army"},
         {"ARMY_COLOR", "#ff0000"},
+        {"ARMY_JINGLE", "arma"},
     };
 }

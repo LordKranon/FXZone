@@ -1,10 +1,8 @@
 package fxzone.controller.menu;
 
 import fxzone.config.Config;
-import fxzone.controller.menu.CampaignMenuUiController.CampaignMenuUiControllerFxml;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
-import fxzone.game.logic.Codex;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -2037,7 +2037,13 @@ public class InGameUiController extends AbstractUiController {
         startOfTurnVisualEffectInProgress = true;
 
         if(playerWithTurn.getPathStartOfTurnJingle() != null){
-            ZoneMediaPlayer mediaPlayerStartOfTurnJingle = new ZoneMediaPlayer("/sounds/effects_musical/jingle/zone_jingle_"+playerWithTurn.getPathStartOfTurnJingle()+".mp3");
+            ZoneMediaPlayer mediaPlayerStartOfTurnJingle;
+            try{
+                mediaPlayerStartOfTurnJingle = new ZoneMediaPlayer("/sounds/effects_musical/jingle/zone_jingle_"+playerWithTurn.getPathStartOfTurnJingle()+".mp3");
+            } catch (Exception e){
+                System.err.println("[IN-GAME-UI-CONTROLLER] ERROR on loading start of turn jingle.");
+                return;
+            }
             mediaPlayerStartOfTurnJingle.play();
         }
 
