@@ -7,6 +7,7 @@ import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Codex.UnitType;
+import java.util.HashMap;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -96,11 +97,11 @@ public class ArmyUiController extends AbstractUiController {
         imageViewTank.setFitWidth(imageSize);
         imageViewTank.setFitHeight(imageSize);
         imageViewTank.setVisible(true);
-        ImageView imageViewHelicopter = new ImageView(AssetHandler.getImageUnit(new KeyUnit(UnitType.PLANE_JET, 0, FxUtils.toAwtColor(color))));
-        imageViewHelicopter.setScaleX(-1);
-        imageViewHelicopter.setFitWidth(imageSize);
-        imageViewHelicopter.setFitHeight(imageSize);
-        imageViewHelicopter.setVisible(true);
+        ImageView imageViewJet = new ImageView(AssetHandler.getImageUnit(new KeyUnit(UnitType.PLANE_JET, 0, FxUtils.toAwtColor(color))));
+        imageViewJet.setScaleX(-1);
+        imageViewJet.setFitWidth(imageSize);
+        imageViewJet.setFitHeight(imageSize);
+        imageViewJet.setVisible(true);
 
         VBox column1 = (VBox) hBox.getChildren().get(0);
 
@@ -113,7 +114,7 @@ public class ArmyUiController extends AbstractUiController {
 
         subRow1.getChildren().add(imageViewInfantry);
         subRow2.getChildren().add(imageViewTank);
-        subRow3.getChildren().add(imageViewHelicopter);
+        subRow3.getChildren().add(imageViewJet);
 
         column1.getChildren().add(subRow1);
         column1.getChildren().add(subRow2);
@@ -123,6 +124,7 @@ public class ArmyUiController extends AbstractUiController {
         textFieldName.setVisible(true);
         textFieldName.setFont(new Font(fontSize));
         textFieldName.setPromptText("Army Name");
+        textFieldName.setText(Config.getString("ARMY_NAME"));
         textFieldName.setPrefWidth(4*uiSizeInGameMenus);
         subRow1.getChildren().add(textFieldName);
 
@@ -130,10 +132,11 @@ public class ArmyUiController extends AbstractUiController {
         textFieldColor.setVisible(true);
         textFieldColor.setFont(new Font(fontSize));
         textFieldColor.setPromptText("Army Color");
+        textFieldColor.setText(Config.getString("ARMY_COLOR"));
         textFieldColor.setPrefWidth(4*uiSizeInGameMenus);
         subRow2.getChildren().add(textFieldColor);
 
-        Button buttonJingle = new Button("King of the Hill");
+        Button buttonJingle = new Button(armyJingles.get(Config.getString("ARMY_JINGLE")));
         buttonJingle.setVisible(true);
         buttonJingle.setStyle("-fx-font-size: "+fontSize);
         buttonJingle.setPrefWidth(4*uiSizeInGameMenus);
@@ -142,8 +145,38 @@ public class ArmyUiController extends AbstractUiController {
         VBox column2 = (VBox) hBox.getChildren().get(1);
         Button buttonApply = new Button("Apply");
         buttonApply.setVisible(true);
+        buttonApply.setStyle("-fx-font-size: "+fontSize);
         buttonApply.setPrefWidth(2*uiSizeInGameMenus);
         column2.getChildren().add(buttonApply);
 
+        buttonApply.setOnMouseClicked(mouseEvent -> {
+            String nameEntered = textFieldName.getText();
+            if(!nameEntered.equals("")){
+                Config.set("ARMY_NAME", nameEntered);
+                Config.saveConfig();
+            } else {
+                System.err.println("[ARMY-UI-CONTROLLER] ERROR Army name cannot be empty.");
+            }
+            String colorEntered = textFieldColor.getText();
+            try{
+                Color newColor = Color.web(colorEntered);
+                Config.set("ARMY_COLOR", colorEntered);
+                Config.saveConfig();
+
+                imageViewInfantry.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.INFANTRY, 0, FxUtils.toAwtColor(newColor))));
+                imageViewTank.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.TANK_BATTLE, 0, FxUtils.toAwtColor(newColor))));
+                imageViewJet.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.PLANE_JET, 0, FxUtils.toAwtColor(newColor))));
+
+            } catch (Exception e){
+                System.err.println("[ARMY-UI-CONTROLLER] ERROR on applying army color.");
+            }
+        });
     }
+
+    private static HashMap<String, String> armyJingles = new HashMap<>(){{
+        put("arma", "King of the Hill");
+        put("jr_1", "Realm Beyond");
+        put("lamour_tojours", "Savior of Europe");
+        put("socialist_world_republic", "Socialist World Republic");
+    }};
 }
