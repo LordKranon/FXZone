@@ -1,14 +1,10 @@
 package fxzone.controller.menu;
 
 import fxzone.config.Config;
-import fxzone.controller.ingame.InGameLocalUiController;
 import fxzone.controller.ingame.InGameVsAiUiController;
-import fxzone.controller.lobby.LobbyHostUiController;
-import fxzone.controller.lobby.LobbyLocalUiController;
-import fxzone.controller.menu.PlayMenuUiController.PlayMenuUiControllerFxml;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
-import fxzone.engine.utils.ViewOrder;
+import fxzone.engine.utils.FxUtils;
 import fxzone.game.logic.Codex;
 import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Player;
@@ -27,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class CampaignMenuUiController extends AbstractUiController {
 
@@ -55,21 +50,47 @@ public class CampaignMenuUiController extends AbstractUiController {
         GridPane gridPaneOuter = (GridPane) anchorPane.getChildren().get(0);
         GridPane gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
         VBox vBox = (VBox) gridPaneInner.getChildren().get(1);
-        HBox hBox = (HBox) vBox.getChildren().get(0);
+        HBox hBoxTutorial = (HBox) vBox.getChildren().get(0);
+        HBox hBoxMissions = (HBox) vBox.getChildren().get(1);
 
         double uiSizeInGameMenus = Config.getDouble("UI_SIZE_IN_GAME_MENUS");
         double fontSize = ((uiSizeInGameMenus) / 2.5);
 
-        putButton(vBox, 0, 4*uiSizeInGameMenus, fontSize, 0);
+        putMissionButton(hBoxTutorial, 0, 4*uiSizeInGameMenus, fontSize, 0);
+
+        String armyTextColor;
+        try{
+            Color armyColor = Color.web(Config.getString("ARMY_COLOR"));
+            armyTextColor = FxUtils.toRGBCode(FxUtils.easeColor(armyColor));
+        }catch (Exception e){
+            System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [initializeOuter] ERROR while trying to get army color.");
+            armyTextColor = "#ffffff";
+        }
+
+        Button buttonArmyMenu = new Button("Your Army");
+        buttonArmyMenu.setPrefWidth(4*uiSizeInGameMenus);
+        buttonArmyMenu.setVisible(true);
+        buttonArmyMenu.setStyle("-fx-text-fill: "+armyTextColor+"; -fx-font-size:"+fontSize);
+        buttonArmyMenu.setOnMouseClicked(mouseEvent -> {
+            gameController.setActiveUiController(new ArmyUiController(gameController));
+        });
+        hBoxTutorial.getChildren().add(1, buttonArmyMenu);
+
+        Button buttonMystery = new Button("???");
+        buttonMystery.setPrefWidth(4*uiSizeInGameMenus);
+        buttonMystery.setVisible(true);
+        buttonMystery.setStyle("-fx-text-fill: #505050; -fx-font-size:"+fontSize);
+        hBoxTutorial.getChildren().add(2, buttonMystery);
+
         for(int h = 0; h < Codex.TOTAL_CAMPAIGN_COLUMNS; h++) {
-            VBox vBoxInner = (VBox) hBox.getChildren().get(h);
+            VBox vBoxInner = (VBox) hBoxMissions.getChildren().get(h);
             for (int i = 0; i < Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN; i++) {
                 int missionNumber = i + h * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN + 1;
-                putButton(vBoxInner, i,4*uiSizeInGameMenus, fontSize, missionNumber);
+                putMissionButton(vBoxInner, i,4*uiSizeInGameMenus, fontSize, missionNumber);
             }
         }
     }
-    private void putButton(Pane container, int position, double prefWidth, double fontSize, int missionNumber){
+    private void putMissionButton(Pane container, int position, double prefWidth, double fontSize, int missionNumber){
         Button button = new Button(Codex.CAMPAIGN_MISSION_NAMES.get(missionNumber));
         button.setPrefWidth(prefWidth);
         button.setVisible(true);

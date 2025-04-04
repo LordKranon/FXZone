@@ -351,7 +351,7 @@ public class Codex {
         "Whirlwind",
         "Dogfight",
         "Mountain Range",
-        "Riverhead",
+        "Riverhead Assault",
         "Crossing",
 
         "Last Stand",

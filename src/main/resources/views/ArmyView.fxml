@@ -5,16 +5,17 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.text.Font?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/16"
   xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="fxzone.controller.menu.CampaignMenuUiController$CampaignMenuUiControllerFxml"
+  fx:controller="fxzone.controller.menu.ArmyUiController$ArmyUiControllerFxml"
   prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383838;"
   fx:id="anchorPane"
   maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
   stylesheets="@style.css"
 >
+
   <children>
     <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -56,15 +57,6 @@
             </GridPane>
             <VBox alignment="CENTER" spacing="40.0">
               <children>
-
-
-                <HBox alignment="CENTER" spacing="10.0">
-                  <children>
-
-                  </children>
-                </HBox>
-
-
                 <HBox alignment="CENTER" spacing="10.0">
                   <children>
                     <VBox alignment="CENTER" spacing="10.0">
@@ -85,8 +77,6 @@
                     </VBox>
                   </children>
                 </HBox>
-
-
                 <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
                   prefWidth="400.0" text="BACK"
                   onAction="#back" >
@@ -102,5 +92,4 @@
       </children>
     </GridPane>
   </children>
-
 </AnchorPane>
