@@ -4,10 +4,15 @@ import fxzone.config.Config;
 import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyBuilding;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.FxUtils;
+import fxzone.engine.utils.ZoneMediaPlayer;
+import fxzone.game.logic.Codex.BuildingType;
 import fxzone.game.logic.Codex.UnitType;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -16,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -25,6 +31,8 @@ import javafx.scene.text.Font;
 
 public class ArmyUiController extends AbstractUiController {
 
+    private int jingleSelectedCurrentIndex;
+    private boolean jingleSelectorActive = true;
 
     public ArmyUiController(AbstractGameController gameController) {
         super(gameController);
@@ -102,8 +110,22 @@ public class ArmyUiController extends AbstractUiController {
         imageViewJet.setFitWidth(imageSize);
         imageViewJet.setFitHeight(imageSize);
         imageViewJet.setVisible(true);
+        ImageView imageViewCity = new ImageView(AssetHandler.getImageBuilding(new KeyBuilding(BuildingType.CITY, FxUtils.toAwtColor(color))));
+        imageViewCity.setFitWidth(imageSize);
+        imageViewCity.setFitHeight(imageSize);
+        imageViewCity.setVisible(true);
+        ImageView imageViewFactory = new ImageView(AssetHandler.getImageBuilding(new KeyBuilding(BuildingType.FACTORY, FxUtils.toAwtColor(color))));
+        imageViewFactory.setFitWidth(imageSize);
+        imageViewFactory.setFitHeight(imageSize);
+        imageViewFactory.setVisible(true);
 
-        VBox column1 = (VBox) hBox.getChildren().get(0);
+        VBox column0 = (VBox) hBox.getChildren().get(0);
+        VBox column1 = (VBox) hBox.getChildren().get(1);
+
+        HBox subRow01 = new HBox();
+        subRow01.setAlignment(Pos.CENTER);
+        HBox subRow02 = new HBox();
+        subRow02.setAlignment(Pos.CENTER);
 
         HBox subRow1 = new HBox();
         subRow1.setAlignment(Pos.CENTER);
@@ -112,9 +134,14 @@ public class ArmyUiController extends AbstractUiController {
         HBox subRow3 = new HBox();
         subRow3.setAlignment(Pos.CENTER);
 
+        subRow01.getChildren().add(imageViewCity);
+        subRow02.getChildren().add(imageViewFactory);
         subRow1.getChildren().add(imageViewInfantry);
         subRow2.getChildren().add(imageViewTank);
         subRow3.getChildren().add(imageViewJet);
+
+        column0.getChildren().add(subRow01);
+        column0.getChildren().add(subRow02);
 
         column1.getChildren().add(subRow1);
         column1.getChildren().add(subRow2);
@@ -136,18 +163,51 @@ public class ArmyUiController extends AbstractUiController {
         textFieldColor.setPrefWidth(4*uiSizeInGameMenus);
         subRow2.getChildren().add(textFieldColor);
 
-        Button buttonJingle = new Button(armyJingles.get(Config.getString("ARMY_JINGLE")));
+        String currentJingle = Config.getString("ARMY_JINGLE");
+        Button buttonJingle = new Button(armyJinglesNames.get(currentJingle));
         buttonJingle.setVisible(true);
-        buttonJingle.setStyle("-fx-font-size: "+fontSize);
+        buttonJingle.setStyle("-fx-font-size: "+(armyJinglesNames.get(currentJingle).length() <= 16 ? fontSize : fontSize/2.));
         buttonJingle.setPrefWidth(4*uiSizeInGameMenus);
+        buttonJingle.setPrefHeight(0.85*uiSizeInGameMenus);
         subRow3.getChildren().add(buttonJingle);
+        for(int i = 0; i < armyJinglesList.size(); i++){
+            if(armyJinglesList.get(i).equals(currentJingle)){
+                jingleSelectedCurrentIndex = i;
+                break;
+            }
+        }
+        buttonJingle.setOnMouseClicked(mouseEvent -> {
+            if(jingleSelectorActive) {
 
-        VBox column2 = (VBox) hBox.getChildren().get(1);
+                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                    jingleSelectedCurrentIndex--;
+                    if(jingleSelectedCurrentIndex < 0){
+                        jingleSelectedCurrentIndex = armyJinglesList.size() - 1;
+                    }
+                } else {
+                    jingleSelectedCurrentIndex++;
+                    if(jingleSelectedCurrentIndex >= armyJinglesList.size()){
+                        jingleSelectedCurrentIndex = 0;
+                    }
+                }
+                buttonJingle.setStyle("-fx-font-size: "+(armyJinglesNames.get(armyJinglesList.get(jingleSelectedCurrentIndex)).length() <= 16 ? fontSize : fontSize/2.));
+                buttonJingle.setText(armyJinglesNames.get(armyJinglesList.get(jingleSelectedCurrentIndex)));
+
+                ZoneMediaPlayer jinglePreview = new ZoneMediaPlayer("/sounds/effects_musical/jingle/zone_jingle_"+armyJinglesList.get(jingleSelectedCurrentIndex)+".mp3");
+                jinglePreview.play();
+            } else {
+                jingleSelectorActive = true;
+                //buttonJingle.setStyle("-fx-font-size: "+fontSize+"; -fx-border-width: "+5*uiSizeInGameMenus/100+"; -fx-border-color: eeeeee;");
+            }
+        });
+
+        VBox column2 = (VBox) hBox.getChildren().get(2);
         Button buttonApply = new Button("Apply");
         buttonApply.setVisible(true);
         buttonApply.setStyle("-fx-font-size: "+fontSize);
         buttonApply.setPrefWidth(2*uiSizeInGameMenus);
         column2.getChildren().add(buttonApply);
+        column2.setPrefWidth(5*uiSizeInGameMenus);
 
         buttonApply.setOnMouseClicked(mouseEvent -> {
             String nameEntered = textFieldName.getText();
@@ -167,16 +227,28 @@ public class ArmyUiController extends AbstractUiController {
                 imageViewTank.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.TANK_BATTLE, 0, FxUtils.toAwtColor(newColor))));
                 imageViewJet.setImage(AssetHandler.getImageUnit(new KeyUnit(UnitType.PLANE_JET, 0, FxUtils.toAwtColor(newColor))));
 
+                imageViewCity.setImage(AssetHandler.getImageBuilding(new KeyBuilding(BuildingType.CITY, FxUtils.toAwtColor(newColor))));
+                imageViewFactory.setImage(AssetHandler.getImageBuilding(new KeyBuilding(BuildingType.FACTORY, FxUtils.toAwtColor(newColor))));
+
             } catch (Exception e){
                 System.err.println("[ARMY-UI-CONTROLLER] ERROR on applying army color.");
             }
+            String jingleSelected = armyJinglesList.get(jingleSelectedCurrentIndex);
+            Config.set("ARMY_JINGLE", jingleSelected);
+            Config.saveConfig();
         });
     }
 
-    private static HashMap<String, String> armyJingles = new HashMap<>(){{
+    private static HashMap<String, String> armyJinglesNames = new HashMap<>(){{
         put("arma", "King of the Hill");
         put("jr_1", "Realm Beyond");
         put("lamour_tojours", "Savior of Europe");
         put("socialist_world_republic", "Socialist World Republic");
     }};
+    private static List<String> armyJinglesList = Arrays.asList(
+        "arma",
+        "jr_1",
+        "lamour_tojours",
+        "socialist_world_republic"
+    );
 }

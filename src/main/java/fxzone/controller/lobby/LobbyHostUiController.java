@@ -35,7 +35,18 @@ public class LobbyHostUiController extends LobbyUiController implements ServerHo
         super(gameController);
         this.server = server;
         this.server.setLobbyHostUiController(this);
-        this.hostingPlayer = new Player("Alpha", Color.web("#ff0000"), 1, null);
+
+        String playerName = Config.getString("ARMY_NAME");
+        Color playerColor;
+        try{
+            playerColor = Color.web(Config.getString("ARMY_COLOR"));
+        } catch (Exception e){
+            playerColor = Color.RED;
+            System.err.println("[LOBBY-HOST-UI-CONTROLLER] [init] ERROR on getting player army color.");
+        }
+        String playerJingle = Config.getString("ARMY_JINGLE");
+
+        this.hostingPlayer = new Player(playerName, playerColor, 1, playerJingle);
         updatePlayerListOfHostLobby();
     }
 
