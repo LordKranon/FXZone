@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import com.codedisaster.steamworks.SteamAPI;
 
 public abstract class AbstractGameController extends AnimationTimer {
 
@@ -59,6 +60,12 @@ public abstract class AbstractGameController extends AnimationTimer {
         double deltaTime = (currentNanoTime - lastNanoTime) / 1e9f;
         lastNanoTime = currentNanoTime;
         framesCounter++;
+
+
+        // Steam SDK
+        if (SteamAPI.isSteamRunning()) {
+            SteamAPI.runCallbacks();
+        }
 
         // game logic
         //inputHandler.startFrame();

@@ -1,5 +1,6 @@
 package fxzone.main;
 
+import com.codedisaster.steamworks.SteamAPI;
 import fxzone.config.Config;
 import fxzone.engine.handler.AssetHandler;
 import fxzone.controller.GameController;
@@ -38,6 +39,7 @@ public class FXZoneGameApplication extends Application {
     public void stop(){
         gameController.close();
         Config.saveConfig();
+        SteamAPI.shutdown();
         System.exit(0);
     }
 }
