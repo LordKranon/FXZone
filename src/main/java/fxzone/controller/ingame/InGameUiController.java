@@ -7,6 +7,7 @@ import fxzone.engine.controller.AbstractGameController;
 import fxzone.engine.controller.AbstractUiController;
 import fxzone.engine.controller.button.ButtonBuildingBuyUnit;
 import fxzone.engine.handler.AssetHandler;
+import fxzone.engine.handler.KeyCharacter;
 import fxzone.engine.handler.KeyUnit;
 import fxzone.engine.utils.Direction;
 import fxzone.engine.utils.FxUtils;
@@ -15,6 +16,7 @@ import fxzone.engine.utils.ViewOrder;
 import fxzone.engine.utils.ZoneMediaPlayer;
 import fxzone.game.logic.Building;
 import fxzone.game.logic.Codex;
+import fxzone.game.logic.Codex.CharacterType;
 import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
@@ -36,6 +38,7 @@ import fxzone.game.render.GameObjectUiMoveCommandArrowTile;
 import fxzone.game.render.GameObjectUiMoveCommandGridTile;
 import fxzone.game.render.GameObjectUnit;
 import fxzone.game.render.particle.ParticleHandler;
+import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -106,6 +109,9 @@ public class InGameUiController extends AbstractUiController {
     }
 
     GameObjectCharacter character;
+    boolean characterVisible;
+    double timeLeftForCharacterOnScreen;
+    final double UI_CHARACTER_VISIBILITY_DURATION = 5;
 
     private boolean startOfTurnVisualEffectInProgress;
     double waitTimeForStartOfTurnEffects;
@@ -351,6 +357,7 @@ public class InGameUiController extends AbstractUiController {
         handleParticleEffects(delta);
         handleEndOfTurnGraphicalEffects(delta);
         handleStartOfTurnVisualEffects(delta);
+        handleCharacterDialog(delta);
     }
 
     class InGameUiControllerFxml{
@@ -427,7 +434,8 @@ public class InGameUiController extends AbstractUiController {
         buildingCaptureBar = new GameObjectCaptureBar(0, 0, 128, root2D);
         buildingCaptureBar.setVisible(false);
 
-        character = new GameObjectCharacter(0, 0, 1024. * UI_SIZE_IN_GAME_MENUS / 100., root2D);
+        character = new GameObjectCharacter(0, 0, 1024. * UI_SIZE_IN_GAME_MENUS / 100., root2D, new KeyCharacter(CharacterType.SOLDIER, Color.RED));
+        character.setVisible(false);
 
     }
 
@@ -585,8 +593,6 @@ public class InGameUiController extends AbstractUiController {
             adjustSelectedConstructionUI(selectedUnit.getX(), selectedUnit.getY());
         }
 
-        character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
-        character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
     }
     private void adjustSelectedConstructionUI(int x, int y){
         double buildingUIX = (double)(x+1)*map.getTileRenderSize() + map.getOffsetX();
@@ -2057,6 +2063,26 @@ public class InGameUiController extends AbstractUiController {
 
     }
 
+    private void initCharacterDialog(){
+        characterVisible = true;
+        character.setCharacter(new KeyCharacter(CharacterType.SOLDIER, FxUtils.toAwtColor(thisPlayer.getColor())));
+        character.setVisible(true);
+        timeLeftForCharacterOnScreen = UI_CHARACTER_VISIBILITY_DURATION;
+
+    }
+    private void handleCharacterDialog(double delta){
+        if(characterVisible){
+            character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
+            character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
+
+            timeLeftForCharacterOnScreen -= delta;
+            if(timeLeftForCharacterOnScreen <= 0){
+                characterVisible = false;
+                character.setVisible(false);
+            }
+        }
+    }
+
     /**
      * End the turn.
      */
@@ -2099,6 +2125,9 @@ public class InGameUiController extends AbstractUiController {
 
         if(game.itsMyTurn(thisPlayer)){
             endTurnButton.setVisible(true);
+
+            // Test character dialog
+            initCharacterDialog();
         }
         onBeginTurnDoVisualEffect();
     }

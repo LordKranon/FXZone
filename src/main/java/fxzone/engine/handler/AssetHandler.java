@@ -38,6 +38,7 @@ public class AssetHandler {
     private static final HashMap<KeyUnit, Image> imagesUnits = new HashMap<>();
     private static final HashMap<KeyBuilding, Image> imagesBuildings = new HashMap<>();
     private static final HashMap<KeyTile, Image> imagesTiles = new HashMap<>();
+    private static final HashMap<KeyCharacter, Image> imagesCharacters = new HashMap<>();
 
     private static final HashMap<KeyCaptureBar, Image> imagesCaptureBar = new HashMap<>();
 
@@ -535,6 +536,29 @@ public class AssetHandler {
 
         Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
         return imgFinished;
+    }
+
+    public static Image getImageCharacter(KeyCharacter keyCharacter){
+        if(!imagesCharacters.containsKey(keyCharacter)){
+            BufferedImage bImgColoredPartRaw = loadBufferedImage("/images/characters/character_"+Codex.CHARACTER_RESOURCE_NAMES.get(keyCharacter.keyCharacterType)+"_cp.png");
+            BufferedImage bImgUncoloredPartRaw = getBufferedImage("/images/characters/character_"+Codex.CHARACTER_RESOURCE_NAMES.get(keyCharacter.keyCharacterType)+"_up.png");
+            BufferedImage bImgColoredPartCopy = bImgColoredPartRaw.getSubimage(0, 0, 96, 96);
+            BufferedImage bImgColoredPartRecolored = applyColor(bImgColoredPartCopy, keyCharacter.keyColor);
+
+            java.awt.Image awtImgColoredPartResized = bImgColoredPartRecolored.getScaledInstance(1024, 1024, java.awt.Image.SCALE_DEFAULT);
+            java.awt.Image awtImgUncoloredPartResized = bImgUncoloredPartRaw.getScaledInstance(1024, 1024, java.awt.Image.SCALE_DEFAULT);
+
+            BufferedImage bImgCombined = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D graphics2D = bImgCombined.createGraphics();
+            graphics2D.drawImage(awtImgColoredPartResized, 0, 0, null);
+            graphics2D.drawImage(awtImgUncoloredPartResized, 0, 0, null);
+            graphics2D.dispose();
+
+            Image imgFinished = SwingFXUtils.toFXImage(bImgCombined, null);
+            imagesCharacters.put(keyCharacter, imgFinished);
+        }
+        return imagesCharacters.get(keyCharacter);
     }
 
     public static Image getImageCaptureBar(KeyCaptureBar keyCaptureBar){

@@ -299,6 +299,10 @@ public class Codex {
         put(BuildingType.PORT, "port");
         put(BuildingType.AIRPORT, "airport");
     }};
+    public static final HashMap<CharacterType, String> CHARACTER_RESOURCE_NAMES = new HashMap<>(){{
+        put(CharacterType.SOLDIER, "infantry");
+        put(CharacterType.GENERAL, "general");
+    }};
 
     public static final List<UnitType> BUILDABLE_UNIT_TYPES_FACTORY = Arrays.asList(
         UnitType.INFANTRY,
@@ -473,6 +477,10 @@ public class Codex {
         ARMORCLASS_INFANTRY,
         ARMORCLASS_ARMORED,
         ARMORCLASS_HEAVY_ARMOR
+    }
+    public enum CharacterType{
+        SOLDIER,
+        GENERAL
     }
 
     public enum TileSuperType {
