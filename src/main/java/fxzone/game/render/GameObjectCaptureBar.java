@@ -2,6 +2,7 @@ package fxzone.game.render;
 
 import fxzone.engine.handler.AssetHandler;
 import fxzone.engine.handler.KeyCaptureBar;
+import fxzone.engine.utils.ViewOrder;
 import fxzone.game.logic.Codex;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ public class GameObjectCaptureBar extends GameObjectInTileSpace{
 
     public GameObjectCaptureBar(int x, int y, double tileRenderSize, Group group) {
         super(null, x, y, tileRenderSize, group);
+        setViewOrder(ViewOrder.UI_SELECTOR);
     }
 
     public void initToPlayer(java.awt.Color color, int progress){

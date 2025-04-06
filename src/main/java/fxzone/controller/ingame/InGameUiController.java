@@ -28,6 +28,7 @@ import fxzone.game.logic.Unit.UnitState;
 import fxzone.game.logic.serializable.GameSerializable;
 import fxzone.game.logic.serializable.UnitSerializable;
 import fxzone.game.render.GameObjectCaptureBar;
+import fxzone.game.render.GameObjectCharacter;
 import fxzone.game.render.GameObjectInTileSpace;
 import fxzone.game.render.GameObjectTile;
 import fxzone.game.render.GameObjectTileSelector;
@@ -103,6 +104,8 @@ public class InGameUiController extends AbstractUiController {
         FINAL_WAIT,
         NONE,
     }
+
+    GameObjectCharacter character;
 
     private boolean startOfTurnVisualEffectInProgress;
     double waitTimeForStartOfTurnEffects;
@@ -321,7 +324,7 @@ public class InGameUiController extends AbstractUiController {
             e.printStackTrace();
         }
 
-        createTileSpaceObjectsUI();
+        createGameObjectsForUI();
         createFXSceneUI();
 
         this.particleHandler = new ParticleHandler(root2D);
@@ -418,12 +421,14 @@ public class InGameUiController extends AbstractUiController {
 
     }
 
-    private void createTileSpaceObjectsUI(){
+    private void createGameObjectsForUI(){
         tileSelector = new GameObjectTileSelector(0, 0, 128, root2D, "");
 
         buildingCaptureBar = new GameObjectCaptureBar(0, 0, 128, root2D);
         buildingCaptureBar.setVisible(false);
-        buildingCaptureBar.setViewOrder(ViewOrder.UI_SELECTOR);
+
+        character = new GameObjectCharacter(0, 0, 1024. * UI_SIZE_IN_GAME_MENUS / 100., root2D);
+
     }
 
     void createFXSceneUI(){
@@ -579,6 +584,9 @@ public class InGameUiController extends AbstractUiController {
         } else if(turnState == TurnState.UNIT_SELECTED_IN_CONSTRUCTION_MODE){
             adjustSelectedConstructionUI(selectedUnit.getX(), selectedUnit.getY());
         }
+
+        character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
+        character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
     }
     private void adjustSelectedConstructionUI(int x, int y){
         double buildingUIX = (double)(x+1)*map.getTileRenderSize() + map.getOffsetX();

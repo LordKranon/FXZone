@@ -1,6 +1,5 @@
 package fxzone.game.render.particle;
 
-import fxzone.config.Config;
 import fxzone.engine.utils.ViewOrder;
 import java.util.ArrayList;
 import javafx.scene.Group;
