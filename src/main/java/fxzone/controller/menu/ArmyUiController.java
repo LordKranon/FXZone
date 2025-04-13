@@ -248,7 +248,7 @@ public class ArmyUiController extends AbstractUiController {
     private static List<String> armyJinglesList = Arrays.asList(
         "arma",
         "jr_1",
-        "lamour_tojours",
+        //"lamour_tojours",
         "socialist_world_republic"
     );
 }

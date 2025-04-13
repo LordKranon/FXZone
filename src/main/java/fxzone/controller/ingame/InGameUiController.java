@@ -112,6 +112,10 @@ public class InGameUiController extends AbstractUiController {
     boolean characterVisible;
     double timeLeftForCharacterOnScreen;
     final double UI_CHARACTER_VISIBILITY_DURATION = 5;
+    Pane characterDialogBox;
+    TextFlow characterDialogTextFlow;
+    Text characterDialogText;
+    String characterDialogTextFull;
 
     private boolean startOfTurnVisualEffectInProgress;
     double waitTimeForStartOfTurnEffects;
@@ -537,6 +541,41 @@ public class InGameUiController extends AbstractUiController {
         globalMessageTextFlow.getChildren().add(globalMessageName);
 
         root2D.getChildren().add(globalMessageTextFlow);
+
+
+        characterDialogBox = new Pane();
+        characterDialogBox.setPrefWidth(10*UI_SIZE_IN_GAME_MENUS);
+        characterDialogBox.setPrefHeight(3*UI_SIZE_IN_GAME_MENUS);
+        characterDialogBox.setVisible(false);
+        characterDialogBox.setStyle("-fx-background-color:#404040");
+        characterDialogBox.setViewOrder(ViewOrder.UI_BUTTON);
+        root2D.getChildren().add(characterDialogBox);
+
+        characterDialogTextFlow = new TextFlow();
+        characterDialogTextFlow.setTranslateX(0);
+        characterDialogTextFlow.setTranslateY(0);
+        characterDialogTextFlow.setVisible(true);
+        characterDialogTextFlow.setViewOrder(ViewOrder.UI_BUTTON);
+        characterDialogTextFlow.setPrefWidth(10*UI_SIZE_IN_GAME_MENUS);
+        characterDialogBox.getChildren().add(characterDialogTextFlow);
+
+        characterDialogText = new Text("");
+        characterDialogText.setVisible(true);
+        characterDialogText.setStyle("-fx-fill: white; -fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        characterDialogTextFlow.getChildren().add(characterDialogText);
+
+        Button characterDialogButton = new Button("Dismiss");
+        characterDialogButton.setPrefWidth(2*UI_SIZE_IN_GAME_MENUS);
+        characterDialogButton.setPrefHeight(1*UI_SIZE_IN_GAME_MENUS);
+        characterDialogButton.setTranslateX(8*UI_SIZE_IN_GAME_MENUS);
+        characterDialogButton.setTranslateY(2*UI_SIZE_IN_GAME_MENUS);
+        characterDialogButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        characterDialogButton.setVisible(true);
+        characterDialogButton.setOnMouseClicked(mouseEvent -> {
+            onCharacterDialogButtonClicked();
+        });
+        characterDialogBox.getChildren().add(characterDialogButton);
+
     }
 
     void initializeGame(GameSerializable initialGame){
@@ -2067,20 +2106,32 @@ public class InGameUiController extends AbstractUiController {
         characterVisible = true;
         character.setCharacter(new KeyCharacter(CharacterType.SOLDIER, FxUtils.toAwtColor(thisPlayer.getColor())));
         character.setVisible(true);
+        characterDialogBox.setVisible(true);
         timeLeftForCharacterOnScreen = UI_CHARACTER_VISIBILITY_DURATION;
-
+        characterDialogTextFull = "Seit mehr als einhundert Jahrhunderten sitzt der Imperator reglos auf dem goldenen Thron von Terra.";
     }
     private void handleCharacterDialog(double delta){
         if(characterVisible){
             character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
             character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
 
+            characterDialogBox.setTranslateX(subScene2D.getWidth() - characterDialogBox.getWidth() - character.getFitWidth() - 24);
+            characterDialogBox.setTranslateY(subScene2D.getHeight() - characterDialogBox.getHeight() - hBoxBottomUiBar.getHeight() - 28);
+
             timeLeftForCharacterOnScreen -= delta;
-            if(timeLeftForCharacterOnScreen <= 0){
-                characterVisible = false;
-                character.setVisible(false);
+
+            double textFrac = (UI_CHARACTER_VISIBILITY_DURATION - timeLeftForCharacterOnScreen) / UI_CHARACTER_VISIBILITY_DURATION;
+            int strLength = (int)(textFrac * (double) characterDialogTextFull.length());
+            if(strLength > characterDialogTextFull.length()){
+                strLength = characterDialogTextFull.length();
             }
+            characterDialogText.setText(characterDialogTextFull.substring(0, strLength));
         }
+    }
+    private void onCharacterDialogButtonClicked(){
+        characterVisible = false;
+        character.setVisible(false);
+        characterDialogBox.setVisible(false);
     }
 
     /**
