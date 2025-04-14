@@ -386,6 +386,7 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(hBox);
         VBox vBox = (VBox) hBox.getChildren().get(0);
         hBoxBottomUiBar = (HBox) vBox.getChildren().get(2);
+        hBoxBottomUiBar.setPrefHeight(UI_SIZE_IN_GAME_MENUS * 2 + 20);
 
 
         textFlowsBottomUiBar = new TextFlow[4][3];
@@ -454,6 +455,7 @@ public class InGameUiController extends AbstractUiController {
         escapeMenuButton = new Button("Menu");
         escapeMenuButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
         escapeMenuButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        escapeMenuButton.setPrefHeight(UI_SIZE_IN_GAME_MENUS * .8);
         escapeMenuButton.setViewOrder(ViewOrder.UI_BUTTON);
         escapeMenuButton.setVisible(true);
         escapeMenuButton.setOnMouseClicked(mouseEvent -> {
@@ -464,6 +466,7 @@ public class InGameUiController extends AbstractUiController {
         endTurnButton = new Button("End Turn");
         endTurnButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
         endTurnButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+        endTurnButton.setPrefHeight(UI_SIZE_IN_GAME_MENUS * .8);
         endTurnButton.setViewOrder(ViewOrder.UI_BUTTON);
         endTurnButton.setVisible(false);
         endTurnButton.setOnMouseClicked(mouseEvent -> {
@@ -552,21 +555,21 @@ public class InGameUiController extends AbstractUiController {
         root2D.getChildren().add(characterDialogBox);
 
         characterDialogTextFlow = new TextFlow();
-        characterDialogTextFlow.setTranslateX(0);
-        characterDialogTextFlow.setTranslateY(0);
+        characterDialogTextFlow.setTranslateX(UI_SIZE_IN_GAME_MENUS/2.);
+        characterDialogTextFlow.setTranslateY(UI_SIZE_IN_GAME_MENUS/2.);
         characterDialogTextFlow.setVisible(true);
         characterDialogTextFlow.setViewOrder(ViewOrder.UI_BUTTON);
-        characterDialogTextFlow.setPrefWidth(10*UI_SIZE_IN_GAME_MENUS);
+        characterDialogTextFlow.setPrefWidth(9*UI_SIZE_IN_GAME_MENUS);
         characterDialogBox.getChildren().add(characterDialogTextFlow);
 
         characterDialogText = new Text("");
         characterDialogText.setVisible(true);
-        characterDialogText.setStyle("-fx-fill: white; -fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
+        characterDialogText.setStyle("-fx-fill: white; -fx-font-size:"+UI_SIZE_IN_GAME_MENUS*30/100);
         characterDialogTextFlow.getChildren().add(characterDialogText);
 
         Button characterDialogButton = new Button("Dismiss");
         characterDialogButton.setPrefWidth(2*UI_SIZE_IN_GAME_MENUS);
-        characterDialogButton.setPrefHeight(1*UI_SIZE_IN_GAME_MENUS);
+        characterDialogButton.setPrefHeight(UI_SIZE_IN_GAME_MENUS);
         characterDialogButton.setTranslateX(8*UI_SIZE_IN_GAME_MENUS);
         characterDialogButton.setTranslateY(2*UI_SIZE_IN_GAME_MENUS);
         characterDialogButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100);
@@ -615,7 +618,7 @@ public class InGameUiController extends AbstractUiController {
         escapeMenuButton.setTranslateX(subScene2D.getWidth() - escapeMenuButton.getWidth() - 24);
         escapeMenuButton.setTranslateY(subScene2D.getHeight() - escapeMenuButton.getHeight() - 46);
         endTurnButton.setTranslateX(subScene2D.getWidth() - endTurnButton.getWidth() - 24);
-        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 66 - escapeMenuButton.getHeight());
+        endTurnButton.setTranslateY(subScene2D.getHeight() - endTurnButton.getHeight() - 46 - escapeMenuButton.getHeight() - (20 * (UI_SIZE_IN_GAME_MENUS / 100.)));
 
         escapeMenu.setTranslateX((subScene2D.getWidth() - escapeMenu.getWidth())/2);
         escapeMenu.setTranslateY((subScene2D.getHeight() - escapeMenu.getHeight())/2);
@@ -1387,8 +1390,8 @@ public class InGameUiController extends AbstractUiController {
                 for(Unit transported : unit.getTransportLoadedUnits()){
                     textTransportedUnits.setText(textTransportedUnits.getText()+Codex.UNIT_PROFILE_VALUES.get(transported.getUnitType()).NAME+"   ");
                     ImageView imgTransportedUnit = new ImageView(AssetHandler.getImageUnit(new KeyUnit(transported.getUnitType(), 0, FxUtils.toAwtColor(game.getPlayer(transported.getOwnerId()).getColor()))));
-                    imgTransportedUnit.setFitWidth(96);
-                    imgTransportedUnit.setFitHeight(96);
+                    imgTransportedUnit.setFitWidth(96. * (UI_SIZE_IN_GAME_MENUS / 100.));
+                    imgTransportedUnit.setFitHeight(96. * (UI_SIZE_IN_GAME_MENUS / 100.));
                     textFlowsBottomUiBar[buildingCapTextVisible?3:2][1].getChildren().add(imgTransportedUnit);
                 }
                 textTransportedUnits.setFont(fontBottomUiBarSmall);
@@ -1473,8 +1476,8 @@ public class InGameUiController extends AbstractUiController {
         }
     }
     private void initialZoom(){
-        double bottomBarHeight = Math.max(fontBottomUiBar.getSize()*4+24, 220+24);
-        System.out.println(bottomBarHeight);
+        double bottomBarHeight = UI_SIZE_IN_GAME_MENUS*2 + 20 + 24;
+        //System.out.println(bottomBarHeight);
         double newTileRenderSize = (subScene2D.getHeight() - bottomBarHeight) / (double) map.getHeight();
         double drawOffsetX = (subScene2D.getWidth() - newTileRenderSize*map.getWidth())/2., drawOffsetY = 0;
         map.setTileRenderSize(newTileRenderSize);
