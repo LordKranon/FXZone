@@ -152,7 +152,7 @@ public class CampaignMenuUiController extends AbstractUiController {
         playerList.add(new Player(playerName, playerColor, 1, playerJingle));
         playerList.add(Codex.getEnemyPlayerOfCampaignMission(mission));
 
-        MapSerializable loadedMap = Save.loadMap("campaign_"+mission);
+        MapSerializable loadedMap = Save.loadMap("campaign/campaign_"+mission);
         if(loadedMap == null){
             System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] [missionClicked] ERROR Could not load map on game start.");
             return;

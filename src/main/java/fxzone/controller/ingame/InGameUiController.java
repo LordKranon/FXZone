@@ -2109,16 +2109,26 @@ public class InGameUiController extends AbstractUiController {
         characterVisible = true;
         character.setCharacter(new KeyCharacter(CharacterType.SOLDIER, FxUtils.toAwtColor(thisPlayer.getColor())));
         character.setVisible(true);
+        character.setScreenSideLeft(true);
         characterDialogBox.setVisible(true);
         timeLeftForCharacterOnScreen = UI_CHARACTER_VISIBILITY_DURATION;
         characterDialogTextFull = "Seit mehr als einhundert Jahrhunderten sitzt der Imperator reglos auf dem goldenen Thron von Terra.";
     }
     private void handleCharacterDialog(double delta){
         if(characterVisible){
-            character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
+
+            if(character.isScreenSideLeft()){
+                character.setX(-UI_SIZE_IN_GAME_MENUS);
+            } else {
+                character.setX(subScene2D.getWidth() - character.getFitWidth() - 24);
+            }
             character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
 
-            characterDialogBox.setTranslateX(subScene2D.getWidth() - characterDialogBox.getWidth() - character.getFitWidth() - 24);
+            if(character.isScreenSideLeft()){
+                characterDialogBox.setTranslateX((subScene2D.getWidth() - ((subScene2D.getHeight()-UI_SIZE_IN_GAME_MENUS*3)/map.getHeight())*map.getWidth())/2.);
+            } else{
+                characterDialogBox.setTranslateX(subScene2D.getWidth() - characterDialogBox.getWidth() - character.getFitWidth() - 24);
+            }
             characterDialogBox.setTranslateY(subScene2D.getHeight() - characterDialogBox.getHeight() - hBoxBottomUiBar.getHeight() - 28);
 
             timeLeftForCharacterOnScreen -= delta;

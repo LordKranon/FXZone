@@ -1,5 +1,7 @@
 /target/
 /.idea/
-/fxzone/
+/fxzone/*
+!/fxzone/**/
+!/fxzone/campaign/**
 /out
 /src/main/resources/META-INF/MANIFEST.MF
