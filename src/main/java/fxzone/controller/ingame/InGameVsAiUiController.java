@@ -58,6 +58,9 @@ public class InGameVsAiUiController extends InGameUiController{
             globalMessageName.setText("\n"+Codex.CAMPAIGN_MISSION_NAMES.get(campaignMission));
             waitTimeForStartOfTurnEffects = UI_START_OF_TURN_MESSAGE_VISIBILITY_DURATION * 2.;
         }
+
+        //Begin the first turn
+        beginTurn();
     }
 
     @Override
@@ -302,6 +305,16 @@ public class InGameVsAiUiController extends InGameUiController{
             map.handleStartOfTurnEffects(game, particleHandler);
             setLabelToPlayer(thisPlayer);
             super.beginTurn();
+
+            String characterDialog = "";
+            String[] missionDialog = Codex.getCampaignDialog(campaignMission);
+            if(missionDialog != null && game.getTurnCount() <= missionDialog.length){
+                characterDialog = missionDialog[game.getTurnCount()-1];
+            }
+            if(!characterDialog.equals("")){
+                initCharacterDialog(characterDialog);
+            }
+
         } else {
             if(verbose) System.out.println("[IN-GAME-VS-AI-UI-CONTROLLER] [beginTurn] AI begins turn.");
             super.beginTurn();

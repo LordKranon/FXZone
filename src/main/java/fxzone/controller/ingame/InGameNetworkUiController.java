@@ -14,6 +14,8 @@ public abstract class InGameNetworkUiController extends InGameUiController imple
 
     public InGameNetworkUiController(AbstractGameController gameController, GameSerializable gameSerializable, int thisPlayerId) {
         super(gameController, gameSerializable, thisPlayerId);
+        //Begin the first turn
+        beginTurn();
     }
 
     /**

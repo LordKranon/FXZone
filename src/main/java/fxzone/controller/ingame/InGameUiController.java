@@ -304,7 +304,8 @@ public class InGameUiController extends AbstractUiController {
         initializeGameSpecifics();
 
         //Begin the first turn
-        beginTurn();
+        // TODO This is being reworked
+        // beginTurn();
 
         //In-Game music
         mediaPlayer = new MediaPlayer(AssetHandler.getSound("/sounds/zone_jr_v1.2.mp3"));
@@ -2105,14 +2106,14 @@ public class InGameUiController extends AbstractUiController {
 
     }
 
-    private void initCharacterDialog(){
+    void initCharacterDialog(String text){
         characterVisible = true;
         character.setCharacter(new KeyCharacter(CharacterType.SOLDIER, FxUtils.toAwtColor(thisPlayer.getColor())));
         character.setVisible(true);
         character.setScreenSideLeft(true);
         characterDialogBox.setVisible(true);
         timeLeftForCharacterOnScreen = UI_CHARACTER_VISIBILITY_DURATION;
-        characterDialogTextFull = "Seit mehr als einhundert Jahrhunderten sitzt der Imperator reglos auf dem goldenen Thron von Terra.";
+        characterDialogTextFull = text;
     }
     private void handleCharacterDialog(double delta){
         if(characterVisible){
@@ -2191,7 +2192,7 @@ public class InGameUiController extends AbstractUiController {
             endTurnButton.setVisible(true);
 
             // Test character dialog
-            initCharacterDialog();
+            //initCharacterDialog();
         }
         onBeginTurnDoVisualEffect();
     }

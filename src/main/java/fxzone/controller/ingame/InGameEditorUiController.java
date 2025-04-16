@@ -96,6 +96,8 @@ public class InGameEditorUiController extends InGameUiController{
 
     public InGameEditorUiController(AbstractGameController gameController, GameSerializable initialGame) {
         super(gameController, initialGame, 1);
+
+        beginTurn();
     }
 
     @Override

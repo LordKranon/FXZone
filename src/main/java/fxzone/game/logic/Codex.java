@@ -3,6 +3,9 @@ package fxzone.game.logic;
 import fxzone.game.logic.Game.CustomGameRules;
 import fxzone.game.logic.Tile.TileType;
 import fxzone.game.logic.Unit.UnitState;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -710,6 +713,32 @@ public class Codex {
             return new Player("Stoll", Color.web("#0000ff"), 2, "jr_1");
         } else {
             return new Player("Enemy", Color.web("#000000"), 2, "horn_scary");
+        }
+    }
+
+    private static String readLineFromFile(String filePath, int lineNumber) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int currentLine = 0;
+
+            while ((line = reader.readLine()) != null) {
+                if (currentLine == lineNumber) {
+                    reader.close();
+                    return line;
+                }
+                currentLine++;
+            }
+        }
+        System.err.println("[CODEX] [readLineFromFile] ERROR");
+        return null;
+    }
+    public static String[] getCampaignDialog(int mission){
+        try {
+            String line = readLineFromFile("./fxzone/campaign/campaign_dialog.csv", mission);
+            return line.split(";");
+        } catch (IOException | NullPointerException e) {
+            System.err.println("[CODEX] [getCampaignDialog] ERROR");
+            return null;
         }
     }
 }
