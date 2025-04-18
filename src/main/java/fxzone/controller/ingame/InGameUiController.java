@@ -2106,11 +2106,11 @@ public class InGameUiController extends AbstractUiController {
 
     }
 
-    void initCharacterDialog(String text){
+    void initCharacterDialog(String text, boolean leftSide, CharacterType characterType){
         characterVisible = true;
-        character.setCharacter(new KeyCharacter(CharacterType.SOLDIER, FxUtils.toAwtColor(thisPlayer.getColor())));
+        character.setCharacter(new KeyCharacter(characterType, FxUtils.toAwtColor(thisPlayer.getColor())));
         character.setVisible(true);
-        character.setScreenSideLeft(true);
+        character.setScreenSideLeft(leftSide);
         characterDialogBox.setVisible(true);
         timeLeftForCharacterOnScreen = UI_CHARACTER_VISIBILITY_DURATION;
         characterDialogTextFull = text;
@@ -2126,7 +2126,7 @@ public class InGameUiController extends AbstractUiController {
             character.setY(subScene2D.getHeight() - character.getFitHeight() - hBoxBottomUiBar.getHeight() - 28);
 
             if(character.isScreenSideLeft()){
-                characterDialogBox.setTranslateX((subScene2D.getWidth() - ((subScene2D.getHeight()-UI_SIZE_IN_GAME_MENUS*3)/map.getHeight())*map.getWidth())/2.);
+                characterDialogBox.setTranslateX((subScene2D.getWidth() - ((subScene2D.getHeight()-UI_SIZE_IN_GAME_MENUS*3)/map.getHeight())*map.getWidth())/2. -5.);
             } else{
                 characterDialogBox.setTranslateX(subScene2D.getWidth() - characterDialogBox.getWidth() - character.getFitWidth() - 24);
             }

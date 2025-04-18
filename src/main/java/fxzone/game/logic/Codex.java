@@ -706,11 +706,15 @@ public class Codex {
         if(mission >= 0 && mission <= 5){
             return new Player("Enemy", Color.web("#a08000"), 2, "horn_scary");
         } else if(mission >= 6 && mission <= 10){
-            return new Player("Enemy", Color.web("#0080a0"), 2, "horn_scary");
+            return new Player("Neo-Glow Coast Guard", Color.web("#0080a0"), 2, "horn_scary");
         } else if(mission >= 11 && mission <= 15){
-            return new Player("Enemy", Color.web("#40a040"), 2, "horn_scary");
+            return new Player("Free Ponzia Army", Color.web("#40a040"), 2, "horn_scary");
+        } else if(mission >= 16 && mission <= 18){
+            return new Player("Quicksilver Army", Color.web("#000000"), 2, "horn_scary");
+        } else if(mission == 19){
+            return new Player("Quicksilver Fleet", Color.web("#000000"), 2, "horn_scary");
         } else if(mission == 20){
-            return new Player("Stoll", Color.web("#0000ff"), 2, "jr_1");
+            return new Player("Dr. Axel Stoll", Color.web("#0000ff"), 2, "horn_scary");
         } else {
             return new Player("Enemy", Color.web("#000000"), 2, "horn_scary");
         }
@@ -739,6 +743,27 @@ public class Codex {
         } catch (IOException | NullPointerException e) {
             System.err.println("[CODEX] [getCampaignDialog] ERROR");
             return null;
+        }
+    }
+    public static boolean getCampaignDialogScreenSideLeft(int mission){
+        switch (mission){
+            case 7:
+            case 9:
+            case 13:
+            case 19:
+                return false;
+            default:
+                return true;
+        }
+    }
+    public static CharacterType getCampaignDialogCharacterType(int mission){
+        switch (mission){
+            case 9:
+            case 10:
+            case 19:
+                return CharacterType.GENERAL;
+            default:
+                return CharacterType.SOLDIER;
         }
     }
 }

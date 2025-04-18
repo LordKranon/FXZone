@@ -312,7 +312,7 @@ public class InGameVsAiUiController extends InGameUiController{
                 characterDialog = missionDialog[game.getTurnCount()-1];
             }
             if(!characterDialog.equals("")){
-                initCharacterDialog(characterDialog);
+                initCharacterDialog(characterDialog, Codex.getCampaignDialogScreenSideLeft(campaignMission), Codex.getCampaignDialogCharacterType(campaignMission));
             }
 
         } else {
