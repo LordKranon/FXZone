@@ -279,9 +279,9 @@ public class Codex {
         put(UnitType.TANK_BATTLE, "tank");
         put(UnitType.ARTILLERY_ROCKET, "rocketartillery");
         put(UnitType.SHIP_LANDER, "ship_lander");
-        put(UnitType.SHIP_GUNBOAT, "ship_gunboat");
-        put(UnitType.SHIP_DESTROYER, "ship_destroyer");
-        put(UnitType.SHIP_BATTLESHIP, "ship_battleship");
+        put(UnitType.SHIP_GUNBOAT, "ship_gunboat2");
+        put(UnitType.SHIP_DESTROYER, "ship_destroyer2");
+        put(UnitType.SHIP_BATTLESHIP, "ship_battleship2");
         put(UnitType.SHIP_CARRIER, "ship_carrier");
 
         put(UnitType.PLANE_PROPELLER, "plane_1");
@@ -704,9 +704,9 @@ public class Codex {
     }
     public static Player getEnemyPlayerOfCampaignMission(int mission){
         if(mission >= 0 && mission <= 5){
-            return new Player("Enemy", Color.web("#a08000"), 2, "horn_scary");
+            return new Player("Marauders", Color.web("#a08000"), 2, "horn_scary");
         } else if(mission >= 6 && mission <= 10){
-            return new Player("Neo-Glow Coast Guard", Color.web("#0080a0"), 2, "horn_scary");
+            return new Player("Neoglow Coast Guard", Color.web("#0080a0"), 2, "horn_scary");
         } else if(mission >= 11 && mission <= 15){
             return new Player("Free Ponzia Army", Color.web("#40a040"), 2, "horn_scary");
         } else if(mission >= 16 && mission <= 18){
