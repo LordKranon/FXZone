@@ -735,10 +735,13 @@ public class InGameUiController extends AbstractUiController {
             if(
                 GeometryUtils.isPointNeighborOf(lastTileAddedToPathQueue, hoveredPoint) &&
                     selectedUnitQueuedPath.size() < Codex.getUnitProfile(selectedUnit.getUnitType()).SPEED &&
-                    moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
+                    moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y] &&
+                    !selectedUnitQueuedPath.contains(hoveredPoint)
             ){
                 // Player manually adds another tile to pathing arrow
                 // This temporarily creates an illegal path as final destination tile is an attackable square with another unit on it
+                // ADDITION: This only happens if the newly hovered tile is not already in path; BOMBER can not pass the same red tile twice.
+                // If red tile is already in path, auto-find new path instead.
                 addPointToSelectedUnitPathQueue(hoveredPoint);
             } else if(
                     moveCommandGridAttackableSquares[hoveredPoint.x][hoveredPoint.y]
