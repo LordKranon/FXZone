@@ -21,6 +21,7 @@ import fxzone.game.logic.Codex.UnitAttackType;
 import fxzone.game.logic.Codex.UnitSuperType;
 import fxzone.game.logic.Codex.UnitType;
 import fxzone.game.logic.Game;
+import fxzone.game.logic.Game.GameMode;
 import fxzone.game.logic.Map;
 import fxzone.game.logic.Player;
 import fxzone.game.logic.Tile;
@@ -87,6 +88,7 @@ public class InGameUiController extends AbstractUiController {
     private HBox hBoxBottomUiBar;
 
     Pane escapeMenu;
+    ArrayList<Button> escapeMenuPlayerInfoButtons = new ArrayList<>();
 
     static final int UI_SIZE_IN_GAME_MENUS = Config.getInt("UI_SIZE_IN_GAME_MENUS");
 
@@ -591,8 +593,27 @@ public class InGameUiController extends AbstractUiController {
     protected void toggleEscapeMenu(){
         if(escapeMenu.isVisible()){
             escapeMenu.setVisible(false);
+
+            for(Button b: escapeMenuPlayerInfoButtons){
+                escapeMenu.getChildren().remove(b);
+            }
+            escapeMenuPlayerInfoButtons.clear();
         } else{
             escapeMenu.setVisible(true);
+
+            if(game.getGameMode() == GameMode.CAMPAIGN || game.getGameMode() == GameMode.NORMAL){
+                for(Player p : game.getPlayers()){
+                    Button playerInfoButton = new Button(p.getName());
+                    playerInfoButton.setStyle("-fx-font-size:"+UI_SIZE_IN_GAME_MENUS*40/100+"; -fx-text-fill:"+FxUtils.toRGBCode(p.getTextColor()));
+                    playerInfoButton.setPrefWidth(4*UI_SIZE_IN_GAME_MENUS);
+                    playerInfoButton.setTranslateX(UI_SIZE_IN_GAME_MENUS);
+                    playerInfoButton.setTranslateY(p.getId()*UI_SIZE_IN_GAME_MENUS);
+                    playerInfoButton.setViewOrder(ViewOrder.UI_BUTTON);
+                    playerInfoButton.setVisible(true);
+                    escapeMenuPlayerInfoButtons.add(playerInfoButton);
+                    escapeMenu.getChildren().add(playerInfoButton);
+                }
+            }
         }
     }
 
