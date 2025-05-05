@@ -185,12 +185,16 @@ public class Game {
     }
 
     public void eliminatePlayer(Player player){
-        if(!players.remove(player)){
+        if(!players.contains(player)){
             System.err.println("[GAME] [eliminatePlayer] Could not eliminate "+player);
             return;
         }
+        int eliminatedPlayerPosition = players.indexOf(player);
+        players.remove(player);
+        if(eliminatedPlayerPosition <= whoseTurn){
+            whoseTurn -= 1;
+        }
         amountPlayers -= 1;
-        whoseTurn -= 1;
         pendingEliminatedPlayers.add(player);
         eliminationsPending = true;
     }
