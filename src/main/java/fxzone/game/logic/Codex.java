@@ -15,6 +15,7 @@ public class Codex {
 
     public static final int TOTAL_CAMPAIGN_COLUMNS = 4;
     public static final int TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN = 5;
+    public static final int TOTAL_CAMPAIGN_PAGES = 2;
 
     public static final int BUILDING_CAPTURE_TOTAL = 20;
 
@@ -365,7 +366,31 @@ public class Codex {
         "Ashen Offensive",
         "Skull Island",
         "Magma Fleet",
-        "Human Enemy"
+        "Human Enemy",
+
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
     );
 
     public static class UnitProfile{

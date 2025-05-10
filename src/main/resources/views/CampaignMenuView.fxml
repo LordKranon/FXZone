@@ -67,6 +67,11 @@
 
                 <HBox alignment="CENTER" spacing="10.0">
                   <children>
+                    <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                      prefWidth="50.0" text="⬅" style="-fx-font-size:14;" visible="true"
+                      onAction="#left"
+                    >
+                    </Button>
                     <VBox alignment="CENTER" spacing="10.0">
                       <children>
                       </children>
@@ -83,6 +88,11 @@
                       <children>
                       </children>
                     </VBox>
+                    <Button alignment="CENTER" graphicTextGap="20.0" mnemonicParsing="false"
+                      prefWidth="50.0" text="➡" style="-fx-font-size:14;" visible="true"
+                      onAction="#right"
+                    >
+                    </Button>
                   </children>
                 </HBox>
 

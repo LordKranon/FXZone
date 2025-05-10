@@ -28,6 +28,13 @@ public class CampaignMenuUiController extends AbstractUiController {
 
     AbstractGameController gameController;
 
+    double uiSizeInGameMenus;
+    double fontSize;
+
+    HBox hBoxMissions;
+
+    private int page = 0;
+
     public CampaignMenuUiController(AbstractGameController gameController) {
         super(gameController);
     }
@@ -51,10 +58,10 @@ public class CampaignMenuUiController extends AbstractUiController {
         GridPane gridPaneInner = (GridPane) gridPaneOuter.getChildren().get(2);
         VBox vBox = (VBox) gridPaneInner.getChildren().get(1);
         HBox hBoxTutorial = (HBox) vBox.getChildren().get(0);
-        HBox hBoxMissions = (HBox) vBox.getChildren().get(1);
+        hBoxMissions = (HBox) vBox.getChildren().get(1);
 
-        double uiSizeInGameMenus = Config.getDouble("UI_SIZE_IN_GAME_MENUS");
-        double fontSize = ((uiSizeInGameMenus) / 2.5);
+        uiSizeInGameMenus = Config.getDouble("UI_SIZE_IN_GAME_MENUS");
+        fontSize = ((uiSizeInGameMenus) / 2.5);
 
         putMissionButton(hBoxTutorial, 0, 4*uiSizeInGameMenus, fontSize, 0);
 
@@ -82,10 +89,17 @@ public class CampaignMenuUiController extends AbstractUiController {
         buttonMystery.setStyle("-fx-text-fill: #505050; -fx-font-size:"+fontSize);
         hBoxTutorial.getChildren().add(2, buttonMystery);
 
+        initCampaignMissionButtons(page, hBoxMissions);
+
+    }
+    private void initCampaignMissionButtons(int page, HBox hBoxMissions){
         for(int h = 0; h < Codex.TOTAL_CAMPAIGN_COLUMNS; h++) {
-            VBox vBoxInner = (VBox) hBoxMissions.getChildren().get(h);
+            VBox vBoxInner = (VBox) hBoxMissions.getChildren().get(h +1);
+
+            vBoxInner.getChildren().clear();
+
             for (int i = 0; i < Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN; i++) {
-                int missionNumber = i + h * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN + 1;
+                int missionNumber = i + h * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN + 1  + (page * Codex.TOTAL_CAMPAIGN_MISSIONS_PER_COLUMN*Codex.TOTAL_CAMPAIGN_COLUMNS);
                 putMissionButton(vBoxInner, i,4*uiSizeInGameMenus, fontSize, missionNumber);
             }
         }
@@ -131,6 +145,25 @@ public class CampaignMenuUiController extends AbstractUiController {
         @FXML
         private void back(){
             gameController.setActiveUiController(new PlayMenuUiController(gameController));
+        }
+
+        @FXML
+        private void left(){
+            if(page <= 0){
+                System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] ERROR Bad campaign page.");
+                return;
+            }
+            page--;
+            initCampaignMissionButtons(page, hBoxMissions);
+        }
+        @FXML
+        private void right(){
+            if(page >= Codex.TOTAL_CAMPAIGN_PAGES - 1){
+                System.err.println("[CAMPAIGN-MENU-UI-CONTROLLER] ERROR Bad campaign page.");
+                return;
+            }
+            page++;
+            initCampaignMissionButtons(page, hBoxMissions);
         }
     }
 
