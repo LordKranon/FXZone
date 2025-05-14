@@ -368,29 +368,29 @@ public class Codex {
         "Magma Fleet",
         "Human Enemy",
 
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
+        "Conquest",
+        "?",
+        "?",
+        "?",
+        "?",
 
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
+        "?",
+        "?",
+        "?",
+        "?",
+        "?",
 
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
+        "?",
+        "?",
+        "?",
+        "?",
+        "?",
 
-        "a",
-        "b",
-        "c",
-        "d",
-        "e"
+        "?",
+        "?",
+        "?",
+        "?",
+        "?"
     );
 
     public static class UnitProfile{
@@ -718,6 +718,13 @@ public class Codex {
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
                 Arrays.asList(UnitType.HELICOPTER_APACHE, UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
             );
+        } else if(mission >= 21 && mission <= 25){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_BATTLE, UnitType.ARTILLERY_ROCKET),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.HELICOPTER_APACHE, UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
+            );
         } else {
             return new CustomGameRules(
                 CITY_CASH_GENERATION,
@@ -740,7 +747,10 @@ public class Codex {
             return new Player("Quicksilver Fleet", Color.web("#000000"), 2, "horn_scary");
         } else if(mission == 20){
             return new Player("Dr. Axel Stoll", Color.web("#0000ff"), 2, "horn_scary");
-        } else {
+        } else if(mission >= 21 && mission <= 25){
+            return new Player("Quicksilver Wing", Color.web("#000000"), 2, "horn_scary");
+        }
+        else {
             return new Player("Enemy", Color.web("#000000"), 2, "horn_scary");
         }
     }
