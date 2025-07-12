@@ -369,7 +369,7 @@ public class Codex {
         "Human Enemy",
 
         "Conquest",
-        "?",
+        "Bombing Run",
         "?",
         "?",
         "?",
@@ -718,12 +718,19 @@ public class Codex {
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
                 Arrays.asList(UnitType.HELICOPTER_APACHE, UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
             );
-        } else if(mission >= 21 && mission <= 25){
+        } else if(mission == 21){
             return new CustomGameRules(
                 50,
                 Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_BATTLE, UnitType.ARTILLERY_ROCKET),
                 Arrays.asList(UnitType.SHIP_GUNBOAT),
-                Arrays.asList(UnitType.HELICOPTER_APACHE, UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
+                Arrays.asList(UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
+            );
+        } else if(mission >= 22 && mission <= 25){
+            return new CustomGameRules(
+                50,
+                Arrays.asList(UnitType.INFANTRY, UnitType.INFANTRY_RPG, UnitType.CAR_HUMVEE, UnitType.TANK_HUNTER, UnitType.ARTILLERY, UnitType.TANK_AA, UnitType.TANK_BATTLE, UnitType.ARTILLERY_ROCKET),
+                Arrays.asList(UnitType.SHIP_GUNBOAT),
+                Arrays.asList(UnitType.PLANE_PROPELLER, UnitType.PLANE_JET)
             );
         } else {
             return new CustomGameRules(
